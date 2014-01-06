@@ -4,13 +4,10 @@
         "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
 <tiles-definitions>
     <!--CLIENT-->
-
-    <definition name="com.ub.core.client.main" template="/WEB-INF/com/ub/core/client/main/main.jsp">
-        <put-attribute name="main.header.component" value="/WEB-INF/com/ub/core/client/main/component/header.jsp"/>
+    <definition name="com.ub.core.client.main" template="/WEB-INF/com/ub/core/client/main.jsp">
     </definition>
 
     <!--ADMIN-->
-
     <!--<definition name="com.ub.core.admin.main" template="/WEB-INF/com/ub/core/admin/main/main.jsp">-->
         <!--<put-attribute name="main.header.component" value="/WEB-INF/com/ub/core/admin/main/component/header.jsp"/>-->
     <!--</definition>-->
