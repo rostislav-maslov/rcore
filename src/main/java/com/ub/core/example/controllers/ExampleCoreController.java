@@ -1,6 +1,10 @@
 package com.ub.core.example.controllers;
 
 import com.ub.core.main.views.client.MainView;
+import com.ub.core.menu.form.MenuForm;
+import com.ub.core.menu.models.MenuDoc;
+import com.ub.core.utils.ClassMapping;
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +17,26 @@ public class ExampleCoreController {
         MainView mainView = new MainView();
         model.addAttribute("view", mainView);
     }
+
+    @RequestMapping(value = "test", method = RequestMethod.GET)
+    public String test(Model model){
+        MenuDoc menuDoc = new MenuDoc();
+        menuDoc.setId(new ObjectId());
+        menuDoc.setName("tetet");
+        menuDoc.setUrl("sdvsdv");
+        menuDoc.setParent(new MenuDoc());
+
+        MenuForm menuForm = new MenuForm();
+        menuForm.setId("sdfsd");
+        menuForm.setName("sdf dsf ");
+        menuForm.setParent("dsf sd fsd ");
+        menuForm.setUrl("sdfsd");
+        ClassMapping<MenuForm, MenuDoc> classMapping = new ClassMapping(MenuForm.class, MenuDoc.class);
+        classMapping.mapping(menuForm,menuDoc);
+
+        return "";
+    }
+
     @RequestMapping(value = "carousel", method = RequestMethod.GET)
     public String carousel(Model model){
         initMainModel(model);

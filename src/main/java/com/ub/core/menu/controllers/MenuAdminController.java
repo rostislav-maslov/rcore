@@ -20,20 +20,20 @@ public class MenuAdminController {
 
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.GET)
-    public String add(ModelMap modelMap){
-//        AddUserView addUserView = new AddUserView();
-//        modelMap.addAttribute("addUserView", addUserView);
+//    @RequestMapping(value = "/add", method = RequestMethod.GET)
+//    public String add(ModelMap modelMap){
+////        AddUserView addUserView = new AddUserView();
+////        modelMap.addAttribute("addUserView", addUserView);
+////        return "com.ub.core.admin.user.add";
+//    }
+//
+//    @RequestMapping(value = "/add", method = RequestMethod.POST)
+//    public String addUserPost(@ModelAttribute @Valid AddUserView addUserView, BindingResult bindingResult){
+//
+//        if(bindingResult.hasErrors()){
+//            return "com.ub.core.admin.user.add";
+//        }
+//
 //        return "com.ub.core.admin.user.add";
-    }
-
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public String addUserPost(@ModelAttribute @Valid AddUserView addUserView, BindingResult bindingResult){
-
-        if(bindingResult.hasErrors()){
-            return "com.ub.core.admin.user.add";
-        }
-
-        return "com.ub.core.admin.user.add";
-    }
+//    }
 }
