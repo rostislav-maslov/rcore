@@ -52,5 +52,7 @@
 
     <!-- Service -->
 
+    <!-- Starter -->
+    <!--<bean name="StarterName" init-method="init" class="com.ub.core.starter.CoreStarter"/>-->
 
 </beans>
