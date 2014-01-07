@@ -128,8 +128,8 @@
         </div>
         <div class="sub-sidebar-wrapper">
             <ul class="nav">
-                <li><a href="#widget_stats">Список пользователей</a></li>
-                <li><a href="<c:url value="/admin/user/addPost">">Добавить пользователя</a></li>
+                <li><a href="<c:url value="/admin/user/list" />">Список пользователей</a></li>
+                <li><a href="<c:url value="/admin/user/add" />">Добавить пользователя</a></li>
                 <%--<li><a href="#widget_tasks_list">Tasks List</a></li>--%>
                 <%--<li><a href="#widget_real_time_chart">Real Time Chart</a></li>--%>
                 <%--<li><a href="#widget_server_activity">Server Activity</a></li>--%>

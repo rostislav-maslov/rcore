@@ -22,8 +22,11 @@
 
                     <label for="role">Роль: </label>
                     <form:select path="role" cssClass="form-control"  id="role">
-                        <form:option value="ADMIN">администратор</form:option>
-                        <form:option value="SUPER_ADMIN">супер администратор</form:option>
+                        <%--<form:option value="ADMIN">администратор</form:option>--%>
+                        <%--<form:option value="SUPER_ADMIN">супер администратор</form:option>--%>
+                         <c:forEach items="${roles}" var="role">
+                            <form:option value="${role.id}">${role.roleTitle}</form:option>-
+                         </c:forEach>
                     </form:select>
 
                     <br>
