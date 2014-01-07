@@ -12,7 +12,10 @@
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
         ">
 
+    <mvc:annotation-driven />
     <context:component-scan base-package="com.ub"/>
+<!--TODO: уточнить по местуположению-->
+    <mvc:resources mapping="/static/**" location="/static/" />
 
     <bean id="viewResolver"
           class="org.springframework.web.servlet.view.UrlBasedViewResolver">
