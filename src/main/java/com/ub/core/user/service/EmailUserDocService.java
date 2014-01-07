@@ -55,6 +55,51 @@ public class EmailUserDocService {
         return Lists.newArrayList(emailUserDocService.findAll());
     }
 
+    public void deleteUser(ObjectId id){
+
+//        List<EmailUserDoc> userDocList = emailUserDocService.findByEmail(email);
+
+        emailUserDocService.delete(id);
+    }
+    public AddUserView getUser(ObjectId id){
+        AddUserView addUserView = new AddUserView();
+        EmailUserDoc emailUserDoc = emailUserDocService.findOne(id);
+
+        addUserView.setEmail(emailUserDoc.getEmail());
+
+//       TODO: поменять на множественный список
+        return addUserView;
+
+
+    }
+
+    public void updateUser(ObjectId id, AddUserView addUserView){
+
+        EmailUserDoc emailUserDoc = emailUserDocService.findOne(id);
+        UserDoc userDoc = new UserDoc();
+
+        userDoc.setStatus(Boolean.TRUE);
+        ArrayList<RoleDoc> roleDocArrayList = new ArrayList<RoleDoc>();
+        RoleDoc roleDoc = roleDocService.findOne(new ObjectId(addUserView.getRole()));
+        if(roleDoc == null){
+            //TODO: заменить на свой класс и вывести ошибку о том что такой роли нет
+            throw  new RuntimeException();
+        }
+        roleDocArrayList.add( roleDoc );
+
+        userDoc.setRoleDocList( roleDocArrayList );
+
+        emailUserDoc.setEmail(addUserView.getEmail());
+        emailUserDoc.setPassword(DigestUtils.md5Hex(addUserView.getPassword()));
+        userDocService.save(userDoc);
+
+        emailUserDoc.setUserDoc(userDoc);
+
+        emailUserDocService.save(emailUserDoc);
+
+
+    }
+
 
 
 }

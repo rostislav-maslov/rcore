@@ -1,5 +1,6 @@
 package com.ub.core.user.models;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -8,8 +9,9 @@ import javax.validation.constraints.NotNull;
 
 @Document
 public class EmailUserDoc{
-
     @Id
+    protected ObjectId id;
+
     protected String email;
 
     @DBRef
@@ -18,6 +20,14 @@ public class EmailUserDoc{
 
     @NotNull
     protected String password;
+
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
 
     public String getEmail() {
         return email;
