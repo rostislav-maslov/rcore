@@ -1,6 +1,6 @@
 package com.ub.core.example.controllers;
 
-import com.ub.core.views.client.main.MainView;
+import com.ub.core.main.views.client.MainView;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;

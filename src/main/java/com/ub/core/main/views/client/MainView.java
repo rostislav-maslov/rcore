@@ -1,4 +1,4 @@
-package com.ub.core.views.client.main;
+package com.ub.core.main.views.client;
 
 public class MainView {
     protected String htmlLang = "ru";
