@@ -1,4 +1,4 @@
-package com.ub.core.utils;
+package com.ub.core.base.utils;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

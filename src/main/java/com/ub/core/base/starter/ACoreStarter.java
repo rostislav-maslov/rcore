@@ -1,7 +1,7 @@
-package com.ub.core.starter;
+package com.ub.core.base.starter;
 
-import com.ub.core.starter.exceptions.StarterAlreadyInitException;
-import com.ub.core.starter.exceptions.StarterNameIsNullException;
+import com.ub.core.base.starter.exceptions.StarterAlreadyInitException;
+import com.ub.core.base.starter.exceptions.StarterNameIsNullException;
 
 public abstract class ACoreStarter {
     public void init() {

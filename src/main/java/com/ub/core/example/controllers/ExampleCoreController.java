@@ -1,9 +1,9 @@
 package com.ub.core.example.controllers;
 
-import com.ub.core.main.views.client.MainView;
+import com.ub.core.base.views.client.MainView;
 import com.ub.core.menu.form.MenuForm;
 import com.ub.core.menu.models.MenuDoc;
-import com.ub.core.utils.ClassMapping;
+import com.ub.core.base.utils.ClassMapping;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

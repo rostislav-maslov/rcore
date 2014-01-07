@@ -4,13 +4,14 @@ import com.ub.core.menu.form.MenuForm;
 import com.ub.core.menu.models.MenuDoc;
 import com.ub.core.menu.models.fields.MenuFields;
 import com.ub.core.menu.views.MenuView;
-import com.ub.core.utils.ClassMapping;
+import com.ub.core.base.utils.ClassMapping;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -40,15 +41,30 @@ public class MenuService {
         menuService.save(menuDoc);
     }
 
+    public void delete(ObjectId objectId){
+        menuService.delete(objectId);
+    }
+
     private MenuView getView(MenuDoc menuDoc){
         MenuView menuView = new MenuView();
         mapDocToView.mapping(menuDoc, menuView);
         return menuView;
     }
 
+    public List<MenuView> getAllForList(){
+        Iterable<MenuDoc> menuDocs = menuService.findAll();
+        List<MenuView> menuViews = new ArrayList<MenuView>();
+        for(MenuDoc menuDoc : menuDocs){
+            MenuView menuView = new MenuView();
+            mapDocToView.mapping(menuDoc,menuView);
+            menuViews.add(menuView);
+        }
+        return menuViews;
+    }
+
     public List<MenuView> getAll() {
         Query query = new Query(Criteria.where(MenuFields.PARENT).is(null));
-        //menuService.findAll(query);
+        //menuService. findAll(query);
         return null;  //To change body of implemented methods use File | Settings | File Templates.
     }
 

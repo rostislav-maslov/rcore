@@ -1,4 +1,4 @@
-package com.ub.core.starter.exceptions;
+package com.ub.core.base.starter.exceptions;
 
 public class StarterNameIsNullException  extends Exception{
     protected static String temp = " Starter name is null.";
