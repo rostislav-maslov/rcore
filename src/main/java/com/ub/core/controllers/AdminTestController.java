@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class AdminTestController {
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin", method = RequestMethod.GET)
     public String printWelcome() {
 
-        return "com.ub.core.client.main";
+        return "com.ub.core.admin.layout";
     }
 }

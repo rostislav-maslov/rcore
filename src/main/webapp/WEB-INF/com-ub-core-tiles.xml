@@ -12,6 +12,8 @@
         <!--<put-attribute name="main.header.component" value="/WEB-INF/com/ub/core/admin/main/component/header.jsp"/>-->
     <!--</definition>-->
 
+    <definition name="com.ub.core.admin.layout" template="/WEB-INF/com/ub/core/admin/layout.jsp">
+    </definition>
 
 
 </tiles-definitions>
