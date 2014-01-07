@@ -115,6 +115,9 @@
     <definition name="com.ub.core.admin.user.add" extends="com.ub.core.admin.layout">
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/AddUserView.jsp" />
     </definition>
+    
+    <definition name="com.ub.core.admin.file.add" template="/WEB-INF/com/ub/core/admin/file/add.jsp">
+    </definition>
 
 
 </tiles-definitions>
