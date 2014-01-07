@@ -1,4 +1,4 @@
-package com.ub.core.starter.example;
+package com.ub.core.example.starter;
 
 import com.ub.core.starter.ACoreStarter;
 
