@@ -12,10 +12,25 @@
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
         ">
 
-    <mvc:annotation-driven />
+
+    <mvc:annotation-driven>
+        <mvc:argument-resolvers>
+            <bean class="org.springframework.data.web.PageableArgumentResolver"/>
+        </mvc:argument-resolvers>
+    </mvc:annotation-driven>
     <context:component-scan base-package="com.ub"/>
-<!--TODO: уточнить по местуположению-->
     <mvc:resources mapping="/static/**" location="/static/" />
+
+    <!--Data base settings-->
+    <mongo:mongo host="127.0.0.1" port="27017" />
+    <mongo:db-factory dbname="UBCore" />
+
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory" />
+    </bean>
+
+    <mongo:repositories base-package="com.ub.*" />
+
 
     <bean id="viewResolver"
           class="org.springframework.web.servlet.view.UrlBasedViewResolver">
