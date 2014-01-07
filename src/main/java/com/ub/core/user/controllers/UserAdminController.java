@@ -1,7 +1,8 @@
 package com.ub.core.user.controllers;
 
-import com.ub.core.user.service.IEmailUserDocService;
+import com.ub.core.user.service.EmailUserDocService;
 import com.ub.core.user.views.AddUserView;
+import com.ub.core.user.views.UserListView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -17,12 +18,13 @@ import javax.validation.Valid;
 public class UserAdminController {
 
     @Autowired
-    private IEmailUserDocService emailUserDocService;
+    EmailUserDocService emailUserDocService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String userList(ModelMap modelMap){
-
-        return null;
+        modelMap.addAttribute("userList", emailUserDocService.getEmailUsers());
+        modelMap.addAttribute("userListTitle", new UserListView());
+        return "com.ub.core.admin.user.list";
 
     }
 
@@ -30,6 +32,9 @@ public class UserAdminController {
     public String addUserGet(ModelMap modelMap){
         AddUserView addUserView = new AddUserView();
         modelMap.addAttribute("addUserView", addUserView);
+        modelMap.addAttribute("roles", emailUserDocService.getAllRoles());
+
+
         return "com.ub.core.admin.user.add";
     }
 
@@ -38,6 +43,9 @@ public class UserAdminController {
 
         if(bindingResult.hasErrors()){
             return "com.ub.core.admin.user.add";
+        }
+        else{
+            emailUserDocService.saveEmailUser(addUserView);
         }
 
         return "com.ub.core.admin.user.add";

@@ -13,7 +13,7 @@ public class UserDoc {
     @Id
     protected ObjectId id;
 
-    protected Boolean isActive;
+    protected Boolean status;
 
     @DBRef
     protected List<RoleDoc> roleDocList;
@@ -34,11 +34,11 @@ public class UserDoc {
         this.roleDocList = roleDocList;
     }
 
-    public Boolean getActive() {
-        return isActive;
+    public Boolean getStatus() {
+        return status;
     }
 
-    public void setActive(Boolean active) {
-        isActive = active;
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 }
