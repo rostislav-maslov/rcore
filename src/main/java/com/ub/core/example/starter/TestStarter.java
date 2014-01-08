@@ -1,6 +1,6 @@
 package com.ub.core.example.starter;
 
-import com.ub.core.starter.ACoreStarter;
+import com.ub.core.base.starter.ACoreStarter;
 
 public class TestStarter extends ACoreStarter {
     @Override

@@ -16,6 +16,13 @@ public class MenuDoc {
     @DBRef
     protected MenuDoc parent;
 
+    public MenuDoc() {
+    }
+
+    public MenuDoc(ObjectId id) {
+        this.id = id;
+    }
+
     public ObjectId getId() {
         return id;
     }

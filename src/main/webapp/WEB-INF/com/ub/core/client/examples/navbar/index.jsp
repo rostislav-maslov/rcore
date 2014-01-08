@@ -1,3 +1,10 @@
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+﻿
+
 <div class="container">
 
     <!-- Static navbar -->
@@ -13,21 +20,24 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
-                <li><a href="#">Link</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li class="divider"></li>
-                        <li class="dropdown-header">Nav header</li>
-                        <li><a href="#">Separated link</a></li>
-                        <li><a href="#">One more separated link</a></li>
-                    </ul>
-                </li>
+                <c:forEach items="${menuViews}" var="m">
+                    <c:if test="${empty m.child}">
+                        <li><a href="<c:url value="${m.url}"/>">${m.name}</a></li>
+                    </c:if>
+
+                    <c:if test="${not empty m.child}">
+                        <li class="dropdown">
+                            <a href="<c:url value="${m.url}"/>" class="dropdown-toggle" data-toggle="dropdown">
+                                    ${m.name} <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <c:forEach items="${m.child}" var="c">
+                                    <li><a href="<c:url value="${c.url}"/>">${c.name}</a></li>
+                                </c:forEach>
+                            </ul>
+                        </li>
+                    </c:if>
+                </c:forEach>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="active"><a href="./">Default</a></li>
@@ -40,10 +50,11 @@
 
     <!-- Main component for a primary marketing message or call to action -->
     <div class="jumbotron">
-        <h1>Navbar example</h1>
+        <h1>Пример меню</h1>
 
-        <p>This example is a quick exercise to illustrate how the default, static navbar and fixed to top navbar work.
-            It includes the responsive CSS and HTML, so it also adapts to your viewport and device.</p>
+        <p>
+            Отредактировать меню можно в админе - <a href="<c:url value="/admin/menu/list"/>">Список меню</a>
+        </p>
 
         <p>
             <a class="btn btn-lg btn-primary" href="../../components/#navbar" role="button">View navbar docs &raquo;</a>

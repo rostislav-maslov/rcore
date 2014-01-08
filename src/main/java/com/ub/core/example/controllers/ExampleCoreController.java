@@ -1,18 +1,33 @@
 package com.ub.core.example.controllers;
 
-import com.ub.core.main.views.client.MainView;
+import com.ub.core.base.views.client.MainView;
+import com.ub.core.menu.services.MenuService;
+import com.ub.core.menu.views.MenuView;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.List;
+
 @Controller
 @RequestMapping(value = "/com/ub/core/controllers/ExampleCoreController/")
 public class ExampleCoreController {
+
+    @Autowired private MenuService menuService;
+
     private void initMainModel(Model model){
         MainView mainView = new MainView();
         model.addAttribute("view", mainView);
     }
+
+    @RequestMapping(value = "test", method = RequestMethod.GET)
+    public String test(Model model){
+        List<MenuView> menu = menuService.getAllForClient();
+        return "";
+    }
+
     @RequestMapping(value = "carousel", method = RequestMethod.GET)
     public String carousel(Model model){
         initMainModel(model);
@@ -41,6 +56,8 @@ public class ExampleCoreController {
     @RequestMapping(value = "navbar", method = RequestMethod.GET)
     public String navbar(Model model){
         initMainModel(model);
+        List<MenuView> menuViews = menuService.getAllForClient();
+        model.addAttribute("menuViews", menuViews);
         return "com.ub.core.client.examples.navbar";
     }
     @RequestMapping(value = "navbarfixedtop", method = RequestMethod.GET)

@@ -2,6 +2,7 @@ package com.ub.core.menu.views;
 
 import org.bson.types.ObjectId;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MenuView {
@@ -9,7 +10,26 @@ public class MenuView {
     protected ObjectId id;
     protected String name;
     protected String url;
-    protected List<MenuView> child;
+    protected List<MenuView> child = new ArrayList<MenuView>();
+    protected String parentName;
+    protected String parentId;
+
+    public String getParentId() {
+
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
+    public String getParentName() {
+        return parentName;
+    }
+
+    public void setParentName(String parentName) {
+        this.parentName = parentName;
+    }
 
     public ObjectId getId() {
         return id;
