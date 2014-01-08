@@ -8,4 +8,19 @@ import javax.persistence.Id;
 public class TagDoc {
     @Id
     protected String id;
+
+    public TagDoc() {
+    }
+
+    public TagDoc(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

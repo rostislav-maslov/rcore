@@ -1,62 +1,28 @@
-package com.ub.core.pages.models;
+package com.ub.core.pages.views;
 
-import com.ub.core.pages.models.enums.PageStatus;
-import com.ub.core.user.models.UserDoc;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
-@Document(collection = "ub_pages_module_page")
-public class PageDoc {
-
-    @Id
+public class PageView {
     protected String id;
-
-    @NotNull
     protected String title;
-
-    @DBRef
-    protected List<TagDoc> tags;
-
-    @NotNull
-    protected PageStatus status;
-
+    protected List<String> tags;
+    protected String tagsLine;
+    protected String status;
     protected Date startPublishing;
-
     protected Date finishPublishing;
-
-    @NotNull
     protected Date createdDate;
-
-    @NotNull
-    @DBRef
-    protected UserDoc createdBy;
-
+    protected String createdById;
+    protected String createdByName;
     protected String createdByAlias;
-
-    @NotNull
     protected Date modifiedDate;
-
-    @NotNull
-    @DBRef
-    protected UserDoc modifiedBy;
-
+    protected String modifiedById;
+    protected String modifiedByName;
     protected String metaDescription;
-
     protected String metaKeywords;
-
     protected String author;
-
     protected String contentRights;
-
     protected String content;
-
-    //Robots Use Global
-
 
     public String getContent() {
         return content;
@@ -64,6 +30,14 @@ public class PageDoc {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getTagsLine() {
+        return tagsLine;
+    }
+
+    public void setTagsLine(String tagsLine) {
+        this.tagsLine = tagsLine;
     }
 
     public String getId() {
@@ -82,19 +56,19 @@ public class PageDoc {
         this.title = title;
     }
 
-    public List<TagDoc> getTags() {
+    public List<String> getTags() {
         return tags;
     }
 
-    public void setTags(List<TagDoc> tags) {
+    public void setTags(List<String> tags) {
         this.tags = tags;
     }
 
-    public PageStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(PageStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -122,12 +96,20 @@ public class PageDoc {
         this.createdDate = createdDate;
     }
 
-    public UserDoc getCreatedBy() {
-        return createdBy;
+    public String getCreatedById() {
+        return createdById;
     }
 
-    public void setCreatedBy(UserDoc createdBy) {
-        this.createdBy = createdBy;
+    public void setCreatedById(String createdById) {
+        this.createdById = createdById;
+    }
+
+    public String getCreatedByName() {
+        return createdByName;
+    }
+
+    public void setCreatedByName(String createdByName) {
+        this.createdByName = createdByName;
     }
 
     public String getCreatedByAlias() {
@@ -146,12 +128,20 @@ public class PageDoc {
         this.modifiedDate = modifiedDate;
     }
 
-    public UserDoc getModifiedBy() {
-        return modifiedBy;
+    public String getModifiedById() {
+        return modifiedById;
     }
 
-    public void setModifiedBy(UserDoc modifiedBy) {
-        this.modifiedBy = modifiedBy;
+    public void setModifiedById(String modifiedById) {
+        this.modifiedById = modifiedById;
+    }
+
+    public String getModifiedByName() {
+        return modifiedByName;
+    }
+
+    public void setModifiedByName(String modifiedByName) {
+        this.modifiedByName = modifiedByName;
     }
 
     public String getMetaDescription() {

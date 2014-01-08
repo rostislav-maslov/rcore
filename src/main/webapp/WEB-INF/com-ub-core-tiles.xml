@@ -11,6 +11,10 @@
         <put-attribute name="main.body.js" value=""/>
     </definition>
 
+    <definition name="com.ub.core.client.pages.page" extends="com.ub.core.client.main">
+        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/pages/page.jsp"/>
+    </definition>
+
     <!-- Examples Twitter bootstrap -->
     <definition name="com.ub.core.client.examples.carousel" extends="com.ub.core.client.main">
         <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/carousel/component/header.css.jsp"/>
@@ -138,6 +142,21 @@
     <definition name="com.ub.core.admin.yandexmetrica.update" extends="com.ub.core.admin.layout">
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/yandexmetrica/update.jsp" />
         <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/yandexmetrica/subMenu.jsp" />
+    </definition>
+
+    <definition name="com.ub.core.admin.pages.add" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/pages/add.jsp" />
+        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/pages/subMenu.jsp" />
+    </definition>
+
+    <definition name="com.ub.core.admin.pages.list" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/pages/list.jsp" />
+        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/pages/subMenu.jsp" />
+    </definition>
+
+    <definition name="com.ub.core.admin.pages.delete" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/pages/delete.jsp" />
+        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/pages/subMenu.jsp" />
     </definition>
 
 </tiles-definitions>

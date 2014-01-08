@@ -1,15 +1,19 @@
 <%@ page import="com.ub.core.menu.models.fields.MenuFields" %>
+<%@ page import="com.ub.core.pages.routes.PagesAdminRoutes" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>﻿
 <%--<%@ taglib uri="/WEB-INF/widgets/contactForm" prefix="cf" %>--%>
+
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+
 <!DOCTYPE html>
 <html>
 
 <head>
 
-    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
@@ -98,7 +102,11 @@
                         <i class="icon-th-list"></i>
                     </a>
                 </li>
-
+                <li class=''>
+                    <a class='' href="<c:url value="<%= PagesAdminRoutes.ALL%>"/>" data-toggle="tooltip" data-placement="right" title="" data-original-title="Контент">
+                        <i class="icon-th-list"></i>
+                    </a>
+                </li>
             </ul>
         </div>
         <div class="sub-sidebar-wrapper">

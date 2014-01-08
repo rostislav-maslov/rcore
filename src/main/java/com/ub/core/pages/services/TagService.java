@@ -2,11 +2,13 @@ package com.ub.core.pages.services;
 
 import com.ub.core.pages.models.TagDoc;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+@Component
 public class TagService {
     @Autowired private ITagService tagService;
 
