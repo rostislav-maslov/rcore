@@ -5,7 +5,7 @@ import javax.validation.constraints.NotNull;
 public class MenuForm {
     protected String id;
     protected String name;
-    @NotNull
+    @NotNull(message = "Url не может быть пустым")
     protected String url;
     protected String parent;
 

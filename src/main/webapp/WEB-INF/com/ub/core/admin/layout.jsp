@@ -83,59 +83,20 @@
         <div class="sidebar-wrapper">
             <ul>
                 <li class='current'>
-                    <a class='current' href="index.html" data-toggle="tooltip" data-placement="right" title="" data-original-title="Пользователи">
+                    <a class='current' href="<c:url value="/admin/user/list"/>" data-toggle="tooltip" data-placement="right" title="" data-original-title="Пользователи">
                         <i class="icon-user"></i>
                     </a>
                 </li>
-                <%--<li>--%>
-                    <%--<a href="charts.html" data-toggle="tooltip" data-placement="right" title="" data-original-title="Charts">--%>
-                        <%--<i class="icon-bar-chart"></i>--%>
-                    <%--</a>--%>
-                <%--</li>--%>
-                <%--<li>--%>
-                    <%--<a href="forms.html" data-toggle="tooltip" data-placement="right" title="" data-original-title="AAA">--%>
-                        <%--<i class="icon-file-text-alt"></i>--%>
-                    <%--</a>--%>
-                <%--</li>--%>
-                <%--<li>--%>
-                    <%--<a href="elements.html" data-toggle="tooltip" data-placement="right" title="" data-original-title="UI Elements">--%>
-                        <%--<span class="badge"></span>--%>
-                        <%--<i class="icon-code-fork"></i>--%>
-                    <%--</a>--%>
-                <%--</li>--%>
-                <%--<li>--%>
-                    <%--<a href="table.html" data-toggle="tooltip" data-placement="right" title="" data-original-title="Tables">--%>
-                        <%--<i class="icon-th"></i>--%>
-                    <%--</a>--%>
-                <%--</li>--%>
-                <%--<li>--%>
-                    <%--<a href="grid.html" data-toggle="tooltip" data-placement="right" title="" data-original-title="Layouts">--%>
-                        <%--<i class="icon-font"></i>--%>
-                    <%--</a>--%>
-                <%--</li>--%>
-                <%--<li>--%>
-                    <%--<a href="calendar.html" data-toggle="tooltip" data-placement="right" title="" data-original-title="Calendar">--%>
-                        <%--<span class="badge">5</span>--%>
-                        <%--<i class="icon-calendar"></i>--%>
-                    <%--</a>--%>
-                <%--</li>--%>
-                <%--<li>--%>
-                    <%--<a href="page_search.html" data-toggle="tooltip" data-placement="right" title="" data-original-title="Extra Pages">--%>
-                        <%--<i class="icon-signin"></i>--%>
-                    <%--</a>--%>
-                <%--</li>--%>
+                <li class=''>
+                    <a class='' href="<c:url value="/admin/menu/list"/>" data-toggle="tooltip" data-placement="right" title="" data-original-title="Меню">
+                        <i class="icon-th-list"></i>
+                    </a>
+                </li>
+
             </ul>
         </div>
         <div class="sub-sidebar-wrapper">
-            <ul class="nav">
-                <li><a href="<c:url value="/admin/user/list" />">Список пользователей</a></li>
-                <li><a href="<c:url value="/admin/user/add" />">Добавить пользователя</a></li>
-                <%--<li><a href="#widget_tasks_list">Tasks List</a></li>--%>
-                <%--<li><a href="#widget_real_time_chart">Real Time Chart</a></li>--%>
-                <%--<li><a href="#widget_server_activity">Server Activity</a></li>--%>
-                <%--<li><a href="#widget_calendar">Calendar</a></li>--%>
-                <%--<li><a href="#widget_tabs">Tabs</a></li>--%>
-            </ul>
+            <tiles:insertAttribute name="subMenu"/>
         </div>
     </div>
     <div class="main-content">
