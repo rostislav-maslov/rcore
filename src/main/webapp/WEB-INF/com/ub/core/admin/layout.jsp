@@ -1,3 +1,4 @@
+<%@ page import="com.ub.core.menu.models.fields.MenuFields" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -89,6 +90,11 @@
                 </li>
                 <li class=''>
                     <a class='' href="<c:url value="/admin/menu/list"/>" data-toggle="tooltip" data-placement="right" title="" data-original-title="Меню">
+                        <i class="icon-th-list"></i>
+                    </a>
+                </li>
+                <li class=''>
+                    <a class='' href="<c:url value="/admin/yandexmetrica/update"/>" data-toggle="tooltip" data-placement="right" title="" data-original-title="Яндекс.Метрика">
                         <i class="icon-th-list"></i>
                     </a>
                 </li>

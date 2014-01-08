@@ -35,8 +35,6 @@ public class MenuAdminController {
         return "com.ub.core.admin.menu.add";
     }
 
-
-
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public String addPost(@ModelAttribute @Valid MenuForm menuForm, BindingResult bindingResult, Model model){
 

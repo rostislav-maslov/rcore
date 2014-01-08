@@ -43,5 +43,6 @@
 <script src="<c:url value="/static/c/js/bootstrap.min.js"/>"></script>
 <script src="<c:url value="/static/c/js/holder.js"/>"></script>
 <tiles:insertAttribute name="main.body.js"/>
+${yandexMetricaScript}
 </body>
 </html>
