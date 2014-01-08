@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+    <!-- Examples Twitter bootstrap -->
+    <definition name="com.ub.core.client.examples.carousel" extends="com.ub.core.client.main">
+        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/carousel/component/header.css.jsp"/>
+        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/carousel/component/header.js.jsp"/>
+        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/carousel/index.jsp"/>
+        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/carousel/component/body.js.jsp"/>
+    </definition>
+    <definition name="com.ub.core.client.examples.grid" extends="com.ub.core.client.main">
+        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/grid/component/header.css.jsp"/>
+        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/grid/component/header.js.jsp"/>
+        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/grid/index.jsp"/>
+        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/grid/component/body.js.jsp"/>
+    </definition>
+    <definition name="com.ub.core.client.examples.jumbotron" extends="com.ub.core.client.main">
+        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/jumbotron/component/header.css.jsp"/>
+        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/jumbotron/component/header.js.jsp"/>
+        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/jumbotron/index.jsp"/>
+        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/jumbotron/component/body.js.jsp"/>
+    </definition>
+    <definition name="com.ub.core.client.examples.jumbotronnarrow" extends="com.ub.core.client.main">
+        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/jumbotron-narrow/component/header.css.jsp"/>
+        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/jumbotron-narrow/component/header.js.jsp"/>
+        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/jumbotron-narrow/index.jsp"/>
+        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/jumbotron-narrow/component/body.js.jsp"/>
+    </definition>
+    <definition name="com.ub.core.client.examples.justifiednav" extends="com.ub.core.client.main">
+        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/justified-nav/component/header.css.jsp"/>
+        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/justified-nav/component/header.js.jsp"/>
+        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/justified-nav/index.jsp"/>
+        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/justified-nav/component/body.js.jsp"/>
+    </definition>
+    <definition name="com.ub.core.client.examples.navbar" extends="com.ub.core.client.main">
+        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/navbar/component/header.css.jsp"/>
+        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/navbar/component/header.js.jsp"/>
+        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/navbar/index.jsp"/>
+        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/navbar/component/body.js.jsp"/>
+    </definition>
+    <definition name="com.ub.core.client.examples.navbarfixedtop" extends="com.ub.core.client.main">
+        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/navbar-fixed-top/component/header.css.jsp"/>
+        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/navbar-fixed-top/component/header.js.jsp"/>
+        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/navbar-fixed-top/index.jsp"/>
+        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/navbar-fixed-top/component/body.js.jsp"/>
+    </definition>
+    <definition name="com.ub.core.client.examples.navbarstatictop" extends="com.ub.core.client.main">
+        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/navbar-static-top/component/header.css.jsp"/>
+        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/navbar-static-top/component/header.js.jsp"/>
+        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/navbar-static-top/index.jsp"/>
+        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/navbar-static-top/component/body.js.jsp"/>
+    </definition>
+    <definition name="com.ub.core.client.examples.nonresponse" extends="com.ub.core.client.main">
+        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/non-responsive/component/header.css.jsp"/>
+        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/non-responsive/component/header.js.jsp"/>
+        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/non-responsive/index.jsp"/>
+        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/non-responsive/component/body.js.jsp"/>
+    </definition>
+    <definition name="com.ub.core.client.examples.offcanvas" extends="com.ub.core.client.main">
+        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/offcanvas/component/header.css.jsp"/>
+        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/offcanvas/component/header.js.jsp"/>
+        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/offcanvas/index.jsp"/>
+        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/offcanvas/component/body.js.jsp"/>
+    </definition>
+    <definition name="com.ub.core.client.examples.signin" extends="com.ub.core.client.main">
+        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/signin/component/header.css.jsp"/>
+        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/signin/component/header.js.jsp"/>
+        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/signin/index.jsp"/>
+        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/signin/component/body.js.jsp"/>
+    </definition>
+    <definition name="com.ub.core.client.examples.startertemplate" extends="com.ub.core.client.main">
+        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/starter-template/component/header.css.jsp"/>
+        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/starter-template/component/header.js.jsp"/>
+        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/starter-template/index.jsp"/>
+        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/starter-template/component/body.js.jsp"/>
+    </definition>
+    <definition name="com.ub.core.client.examples.stickyfooter" extends="com.ub.core.client.main">
+        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/sticky-footer/component/header.css.jsp"/>
+        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/sticky-footer/component/header.js.jsp"/>
+        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/sticky-footer/index.jsp"/>
+        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/sticky-footer/component/body.js.jsp"/>
+    </definition>
+    <definition name="com.ub.core.client.examples.stickyfooternavbar" extends="com.ub.core.client.main">
+        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/sticky-footer-navbar/component/header.css.jsp"/>
+        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/sticky-footer-navbar/component/header.js.jsp"/>
+        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/sticky-footer-navbar/index.jsp"/>
+        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/sticky-footer-navbar/component/body.js.jsp"/>
+    </definition>
+    <definition name="com.ub.core.client.examples.theme" extends="com.ub.core.client.main">
+        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/theme/component/header.css.jsp"/>
+        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/theme/component/header.js.jsp"/>
+        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/theme/index.jsp"/>
+        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/theme/component/body.js.jsp"/>
+    </definition>
+</tiles-definitions>

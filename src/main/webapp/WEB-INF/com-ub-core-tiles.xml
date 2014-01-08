@@ -10,165 +10,19 @@
         <put-attribute name="main.content" value=""/>
         <put-attribute name="main.body.js" value=""/>
     </definition>
-
-    <definition name="com.ub.core.client.pages.page" extends="com.ub.core.client.main">
-        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/pages/page.jsp"/>
-    </definition>
-
-    <!-- Examples Twitter bootstrap -->
-    <definition name="com.ub.core.client.examples.carousel" extends="com.ub.core.client.main">
-        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/carousel/component/header.css.jsp"/>
-        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/carousel/component/header.js.jsp"/>
-        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/carousel/index.jsp"/>
-        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/carousel/component/body.js.jsp"/>
-    </definition>
-    <definition name="com.ub.core.client.examples.grid" extends="com.ub.core.client.main">
-        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/grid/component/header.css.jsp"/>
-        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/grid/component/header.js.jsp"/>
-        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/grid/index.jsp"/>
-        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/grid/component/body.js.jsp"/>
-    </definition>
-    <definition name="com.ub.core.client.examples.jumbotron" extends="com.ub.core.client.main">
-        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/jumbotron/component/header.css.jsp"/>
-        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/jumbotron/component/header.js.jsp"/>
-        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/jumbotron/index.jsp"/>
-        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/jumbotron/component/body.js.jsp"/>
-    </definition>
-    <definition name="com.ub.core.client.examples.jumbotronnarrow" extends="com.ub.core.client.main">
-        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/jumbotron-narrow/component/header.css.jsp"/>
-        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/jumbotron-narrow/component/header.js.jsp"/>
-        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/jumbotron-narrow/index.jsp"/>
-        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/jumbotron-narrow/component/body.js.jsp"/>
-    </definition>
-    <definition name="com.ub.core.client.examples.justifiednav" extends="com.ub.core.client.main">
-        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/justified-nav/component/header.css.jsp"/>
-        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/justified-nav/component/header.js.jsp"/>
-        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/justified-nav/index.jsp"/>
-        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/justified-nav/component/body.js.jsp"/>
-    </definition>
-    <definition name="com.ub.core.client.examples.navbar" extends="com.ub.core.client.main">
-        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/navbar/component/header.css.jsp"/>
-        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/navbar/component/header.js.jsp"/>
-        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/navbar/index.jsp"/>
-        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/navbar/component/body.js.jsp"/>
-    </definition>
-    <definition name="com.ub.core.client.examples.navbarfixedtop" extends="com.ub.core.client.main">
-        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/navbar-fixed-top/component/header.css.jsp"/>
-        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/navbar-fixed-top/component/header.js.jsp"/>
-        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/navbar-fixed-top/index.jsp"/>
-        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/navbar-fixed-top/component/body.js.jsp"/>
-    </definition>
-    <definition name="com.ub.core.client.examples.navbarstatictop" extends="com.ub.core.client.main">
-        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/navbar-static-top/component/header.css.jsp"/>
-        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/navbar-static-top/component/header.js.jsp"/>
-        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/navbar-static-top/index.jsp"/>
-        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/navbar-static-top/component/body.js.jsp"/>
-    </definition>
-    <definition name="com.ub.core.client.examples.nonresponse" extends="com.ub.core.client.main">
-        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/non-responsive/component/header.css.jsp"/>
-        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/non-responsive/component/header.js.jsp"/>
-        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/non-responsive/index.jsp"/>
-        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/non-responsive/component/body.js.jsp"/>
-    </definition>
-    <definition name="com.ub.core.client.examples.offcanvas" extends="com.ub.core.client.main">
-        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/offcanvas/component/header.css.jsp"/>
-        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/offcanvas/component/header.js.jsp"/>
-        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/offcanvas/index.jsp"/>
-        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/offcanvas/component/body.js.jsp"/>
-    </definition>
-    <definition name="com.ub.core.client.examples.signin" extends="com.ub.core.client.main">
-        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/signin/component/header.css.jsp"/>
-        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/signin/component/header.js.jsp"/>
-        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/signin/index.jsp"/>
-        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/signin/component/body.js.jsp"/>
-    </definition>
-    <definition name="com.ub.core.client.examples.startertemplate" extends="com.ub.core.client.main">
-        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/starter-template/component/header.css.jsp"/>
-        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/starter-template/component/header.js.jsp"/>
-        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/starter-template/index.jsp"/>
-        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/starter-template/component/body.js.jsp"/>
-    </definition>
-    <definition name="com.ub.core.client.examples.stickyfooter" extends="com.ub.core.client.main">
-        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/sticky-footer/component/header.css.jsp"/>
-        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/sticky-footer/component/header.js.jsp"/>
-        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/sticky-footer/index.jsp"/>
-        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/sticky-footer/component/body.js.jsp"/>
-    </definition>
-    <definition name="com.ub.core.client.examples.stickyfooternavbar" extends="com.ub.core.client.main">
-        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/sticky-footer-navbar/component/header.css.jsp"/>
-        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/sticky-footer-navbar/component/header.js.jsp"/>
-        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/sticky-footer-navbar/index.jsp"/>
-        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/sticky-footer-navbar/component/body.js.jsp"/>
-    </definition>
-    <definition name="com.ub.core.client.examples.theme" extends="com.ub.core.client.main">
-        <put-attribute name="main.header.css" value="/WEB-INF/com/ub/core/client/examples/theme/component/header.css.jsp"/>
-        <put-attribute name="main.header.js" value="/WEB-INF/com/ub/core/client/examples/theme/component/header.js.jsp"/>
-        <put-attribute name="main.content" value="/WEB-INF/com/ub/core/client/examples/theme/index.jsp"/>
-        <put-attribute name="main.body.js" value="/WEB-INF/com/ub/core/client/examples/theme/component/body.js.jsp"/>
-    </definition>
-
     <!--ADMIN-->
     <!--<definition name="com.ub.core.admin.main" template="/WEB-INF/com/ub/core/admin/main/main.jsp">-->
         <!--<put-attribute name="main.header.component" value="/WEB-INF/com/ub/core/admin/main/component/header.jsp"/>-->
     <!--</definition>-->
-
     <definition name="com.ub.core.admin.layout" template="/WEB-INF/com/ub/core/admin/layout.jsp">
         <put-attribute name="content" value="" />
     </definition>
-
     <definition name="com.ub.core.admin.user.addEdit" extends="com.ub.core.admin.layout">
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/AddEditUserView.jsp" />
         <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/user/SubMenu.jsp" />
     </definition>
-    
     <definition name="com.ub.core.admin.user.list" extends="com.ub.core.admin.layout">
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/UserListView.jsp" />
         <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/user/SubMenu.jsp" />
     </definition>
-
-    <definition name="com.ub.core.admin.file.add" extends="com.ub.core.admin.layout">
-        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/file/add.jsp" />
-        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/file/subMenu.jsp" />
-    </definition>
-
-    <definition name="com.ub.core.admin.file.delete" extends="com.ub.core.admin.layout">
-        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/file/delete.jsp" />
-        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/file/subMenu.jsp" />
-    </definition>
-
-    <definition name="com.ub.core.admin.file.list" extends="com.ub.core.admin.layout">
-        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/file/list.jsp" />
-        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/file/subMenu.jsp" />
-    </definition>
-
-    <definition name="com.ub.core.admin.menu.add" extends="com.ub.core.admin.layout">
-        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/menu/add.jsp" />
-        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/menu/subMenu.jsp" />
-    </definition>
-
-    <definition name="com.ub.core.admin.menu.list" extends="com.ub.core.admin.layout">
-        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/menu/list.jsp" />
-        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/menu/subMenu.jsp" />
-    </definition>
-
-    <definition name="com.ub.core.admin.yandexmetrica.update" extends="com.ub.core.admin.layout">
-        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/yandexmetrica/update.jsp" />
-        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/yandexmetrica/subMenu.jsp" />
-    </definition>
-
-    <definition name="com.ub.core.admin.pages.add" extends="com.ub.core.admin.layout">
-        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/pages/add.jsp" />
-        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/pages/subMenu.jsp" />
-    </definition>
-
-    <definition name="com.ub.core.admin.pages.list" extends="com.ub.core.admin.layout">
-        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/pages/list.jsp" />
-        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/pages/subMenu.jsp" />
-    </definition>
-
-    <definition name="com.ub.core.admin.pages.delete" extends="com.ub.core.admin.layout">
-        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/pages/delete.jsp" />
-        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/pages/subMenu.jsp" />
-    </definition>
-
 </tiles-definitions>

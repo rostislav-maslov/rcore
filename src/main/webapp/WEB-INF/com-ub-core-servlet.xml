@@ -12,7 +12,6 @@
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
         ">
 
-
     <mvc:annotation-driven>
         <mvc:argument-resolvers>
             <bean class="org.springframework.data.web.PageableArgumentResolver"/>
@@ -30,11 +29,9 @@
         <constructor-arg ref="mongoDbFactory" />
         <constructor-arg ref="converter" />
     </bean>
-
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
     </bean>
-
     <mongo:repositories base-package="com.ub.*"/>
 
 
@@ -52,15 +49,21 @@
         <property name="definitions">
             <list>
                 <value>/WEB-INF/com-ub-core-tiles.xml</value>
+                <value>/WEB-INF/tiles/com-ub-core-file-tiles.xml</value>
+                <value>/WEB-INF/tiles/com-ub-core-menu-tiles.xml</value>
+                <value>/WEB-INF/tiles/com-ub-core-example-tiles.xml</value>
+                <value>/WEB-INF/tiles/com-ub-core-pages-tiles.xml</value>
+                <value>/WEB-INF/tiles/com-ub-core-yandexmetrica-tiles.xml</value>
             </list>
         </property>
     </bean>
+
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="268435456"/>
         <!-- 256 megs -->
     </bean>
 
-
+    <!-- Starter -->
     <!--<bean name="StarterName" init-method="init" class="com.ub.core.base.starter.CoreStarter"/>-->
 
     <!-- Interseption -->
