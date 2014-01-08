@@ -8,7 +8,7 @@
     <form:errors path="*" cssClass="errorblock" element="div"/>
 
     Выберете файл для загрузки : <input type="file" name="file"/>
-    <input type="submit" value="upload"/>
+    <input type="submit" value="Загрузить"/>
 		<span><form:errors path="file" cssClass="error"/>
 		</span>
 

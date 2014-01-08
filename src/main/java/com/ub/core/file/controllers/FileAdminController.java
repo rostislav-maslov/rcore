@@ -5,6 +5,7 @@ import com.ub.core.file.FileRoutes;
 import com.ub.core.file.FileTiles;
 import com.ub.core.file.services.FileService;
 import com.ub.core.file.store.FileInfo;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,5 +51,18 @@ public class FileAdminController {
     protected String list(Model model) {
         model.addAttribute("files", fileService.getAllView());
         return FileTiles.LIST;
+    }
+
+    @RequestMapping(value = FileRoutes.DELETE, method = RequestMethod.GET)
+    protected String delete(@RequestParam(value = "id")String id, Model model) throws Exception {
+        model.addAttribute("id", id);
+        return FileTiles.DELETE;
+    }
+
+    @RequestMapping(value = FileRoutes.DELETE, method = RequestMethod.POST)
+    protected String deletePost(@RequestParam(value = "id")String id, Model model) throws Exception {
+        ObjectId objectId = new ObjectId(id);
+        fileService.delete(objectId);
+        return "redirect:"+FileRoutes.LIST;
     }
 }

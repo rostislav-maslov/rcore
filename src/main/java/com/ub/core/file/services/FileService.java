@@ -68,6 +68,6 @@ public class FileService {
     }
 
     public void delete(ObjectId objectId) {
-        gridFsTemplate.delete(new Query(Criteria.where("id").is(objectId)).limit(1));
+        gridFsTemplate.delete(new Query(Criteria.where("_id").is(objectId)).limit(1));
     }
 }

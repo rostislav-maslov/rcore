@@ -1,4 +1,5 @@
 <%@ page import="com.ub.core.user.views.UserListView" %>
+<%@ page import="com.ub.core.file.FileRoutes" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -29,11 +30,11 @@
         <td><a href="/files/${f.id}">/files/${f.id}</a></td>
         <td>${f.id}</td>
 
-            <c:url value="/admin/files/delete" var="deleteUrl">
+            <c:url value="<%= FileRoutes.DELETE%>" var="deleteUrl">
                 <c:param name="id"   value="${f.id}" />
             </c:url>
         <td class="text-right">
-            <a href="${deleteUrl}" class="btn btn-danger btn-xs remove-tr">
+            <a href="${deleteUrl}" class="btn btn-danger btn-xs ">
                 <i class="icon-remove"></i>
             </a>
         </td>
