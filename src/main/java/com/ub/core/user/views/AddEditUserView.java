@@ -4,7 +4,7 @@ import org.hibernate.validator.constraints.Email;
 
 import javax.validation.constraints.Size;
 
-public class AddUserView {
+public class AddEditUserView {
 
 
     @Email(message = "неверно задан email")

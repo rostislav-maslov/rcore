@@ -10,7 +10,7 @@
             </div>
             <div class="widget-content">
 
-                <form:form action="/UBCore/admin/user/addPost" modelAttribute="addUserView">
+                <form:form action="${backUrl}" modelAttribute="addEditUserView">
 
                     <form:errors path="*" cssClass="alert alert-warning" element="div" />
 

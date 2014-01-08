@@ -49,187 +49,20 @@
                     <td><span class="label label-danger">Disable</span></td>
                 </c:if>
                 <td class="text-right">
-                <c:forEach items="${user.userDoc.roleDocList}" var="roles">
-                    &nbsp ${roles}
+                <c:forEach items="${user.userDoc.roleDocList}" var="role">
+                    &nbsp ${role.roleTitle}
                 </c:forEach>
                 </td>
 
                 <td class="text-right">
-                    <a href="#" class="btn btn-default btn-xs">edit</a>
-                    <a href="<c:url value="/admin/user/delete/${user.email}" />" class="btn btn-danger btn-xs remove-tr"><i class="icon-remove"></i></a>
+                    <a href="<c:url value="/admin/user/edit/${user.id}" />" class="btn btn-default btn-xs">edit</a>
+                    <a href="<c:url value="/admin/user/delete/${user.id}" />" class="btn"><i class="icon-remove"></i></a>
                 </td>
             </tr>
             </c:forEach>
 
 
-            <tr>
-                <td><div class="checkbox"><input type="checkbox"></div></td>
-                <td>2</td>
-                <td>Petey Cruiser</td>
-                <td>Argentina</td>
-                <td class="text-right">$123.25</td>
-                <td><span class="label label-success">Active</span></td>
-                <td class="text-right">
-                    <a href="#" class="btn btn-default btn-xs">edit</a>
-                    <a href="#" class="btn btn-danger btn-xs remove-tr"><i class="icon-remove"></i></a>
-                </td>
-            </tr>
-            <tr>
-                <td><div class="checkbox"><input type="checkbox"></div></td>
-                <td>3</td>
-                <td>Anna Sthesia</td>
-                <td>Australia</td>
-                <td class="text-right">$523.45</td>
-                <td><span class="label label-danger">Closed</span></td>
-                <td class="text-right">
-                    <a href="#" class="btn btn-default btn-xs">edit</a>
-                    <a href="#" class="btn btn-danger btn-xs remove-tr"><i class="icon-remove"></i></a>
-                </td>
-            </tr>
-            <tr class="success">
-                <td><div class="checkbox"><input type="checkbox"></div></td>
-                <td>4</td>
-                <td>Paul Molive</td>
-                <td>Mexico</td>
-                <td class="text-right">$4664.43</td>
-                <td><span class="label label-warning">Pending</span></td>
-                <td class="text-right">
-                    <a href="#" class="btn btn-default btn-xs">edit</a>
-                    <a href="#" class="btn btn-danger btn-xs remove-tr"><i class="icon-remove"></i></a>
-                </td>
-            </tr>
-            <tr>
-                <td><div class="checkbox"><input type="checkbox"></div></td>
-                <td>5</td>
-                <td>Anna Mull</td>
-                <td>Chech Republic</td>
-                <td class="text-right">$3.54</td>
-                <td><span class="label label-success">Active</span></td>
-                <td class="text-right">
-                    <a href="#" class="btn btn-default btn-xs">edit</a>
-                    <a href="#" class="btn btn-danger btn-xs remove-tr"><i class="icon-remove"></i></a>
-                </td>
-            </tr>
-            <tr>
-                <td><div class="checkbox"><input type="checkbox"></div></td>
-                <td>6</td>
-                <td>Gail Forcewind</td>
-                <td>South Korea</td>
-                <td class="text-right">$754.23</td>
-                <td><span class="label label-danger">Closed</span></td>
-                <td class="text-right">
-                    <a href="#" class="btn btn-default btn-xs">edit</a>
-                    <a href="#" class="btn btn-danger btn-xs remove-tr"><i class="icon-remove"></i></a>
-                </td>
-            </tr>
-            <tr>
-                <td><div class="checkbox"><input type="checkbox"></div></td>
-                <td>7</td>
-                <td>Paige Turner</td>
-                <td>China</td>
-                <td class="text-right">$745.23</td>
-                <td><span class="label label-success">Active</span></td>
-                <td class="text-right">
-                    <a href="#" class="btn btn-default btn-xs">edit</a>
-                    <a href="#" class="btn btn-danger btn-xs remove-tr"><i class="icon-remove"></i></a>
-                </td>
-            </tr>
-            <tr class="warning">
-                <td><div class="checkbox"><input type="checkbox"></div></td>
-                <td>8</td>
-                <td>Bob Frapples</td>
-                <td>Uruguay</td>
-                <td class="text-right">$75.54</td>
-                <td><span class="label label-success">Active</span></td>
-                <td class="text-right">
-                    <a href="#" class="btn btn-default btn-xs">edit</a>
-                    <a href="#" class="btn btn-danger btn-xs remove-tr"><i class="icon-remove"></i></a>
-                </td>
-            </tr>
-            <tr>
-                <td><div class="checkbox"><input type="checkbox"></div></td>
-                <td>9</td>
-                <td>Walter Melon</td>
-                <td>Serbia</td>
-                <td class="text-right">$85.94</td>
-                <td><span class="label label-success">Active</span></td>
-                <td class="text-right">
-                    <a href="#" class="btn btn-default btn-xs">edit</a>
-                    <a href="#" class="btn btn-danger btn-xs remove-tr"><i class="icon-remove"></i></a>
-                </td>
-            </tr>
-            <tr>
-                <td><div class="checkbox"><input type="checkbox"></div></td>
-                <td>10</td>
-                <td>Nick R. Bocker</td>
-                <td>Sweden</td>
-                <td class="text-right">$33.23</td>
-                <td><span class="label label-warning">Pending</span></td>
-                <td class="text-right">
-                    <a href="#" class="btn btn-default btn-xs">edit</a>
-                    <a href="#" class="btn btn-danger btn-xs remove-tr"><i class="icon-remove"></i></a>
-                </td>
-            </tr>
-            <tr>
-                <td><div class="checkbox"><input type="checkbox"></div></td>
-                <td>11</td>
-                <td>Barb Ackue</td>
-                <td>New Zealand</td>
-                <td class="text-right">$25.94</td>
-                <td><span class="label label-danger">Closed</span></td>
-                <td class="text-right">
-                    <a href="#" class="btn btn-default btn-xs">edit</a>
-                    <a href="#" class="btn btn-danger btn-xs remove-tr"><i class="icon-remove"></i></a>
-                </td>
-            </tr>
-            <tr>
-                <td><div class="checkbox"><input type="checkbox"></div></td>
-                <td>12</td>
-                <td>Buck Kinnear</td>
-                <td>Brazil</td>
-                <td class="text-right">$25.94</td>
-                <td><span class="label label-warning">Pending</span></td>
-                <td class="text-right">
-                    <a href="#" class="btn btn-default btn-xs">edit</a>
-                    <a href="#" class="btn btn-danger btn-xs remove-tr"><i class="icon-remove"></i></a>
-                </td>
-            </tr>
-            <tr>
-                <td><div class="checkbox"><input type="checkbox"></div></td>
-                <td>13</td>
-                <td>Greta Life</td>
-                <td>Russia</td>
-                <td class="text-right">$25.94</td>
-                <td><span class="label label-success">Active</span></td>
-                <td class="text-right">
-                    <a href="#" class="btn btn-default btn-xs">edit</a>
-                    <a href="#" class="btn btn-danger btn-xs remove-tr"><i class="icon-remove"></i></a>
-                </td>
-            </tr>
-            <tr class="danger">
-                <td><div class="checkbox"><input type="checkbox"></div></td>
-                <td>14</td>
-                <td>Ira Membrit</td>
-                <td>United Kingdom</td>
-                <td class="text-right">$25.94</td>
-                <td><span class="label label-success">Active</span></td>
-                <td class="text-right">
-                    <a href="#" class="btn btn-default btn-xs">edit</a>
-                    <a href="#" class="btn btn-danger btn-xs remove-tr"><i class="icon-remove"></i></a>
-                </td>
-            </tr>
-            <tr>
-                <td><div class="checkbox"><input type="checkbox"></div></td>
-                <td>15</td>
-                <td>Shonda Leer</td>
-                <td>Croatia</td>
-                <td class="text-right">$25.94</td>
-                <td><span class="label label-danger">Closed</span></td>
-                <td class="text-right">
-                    <a href="#" class="btn btn-default btn-xs">edit</a>
-                    <a href="#" class="btn btn-danger btn-xs remove-tr"><i class="icon-remove"></i></a>
-                </td>
-            </tr>
+
             </tbody>
         </table>
     </div>
