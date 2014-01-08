@@ -24,6 +24,12 @@
     <!--Data base settings-->
     <mongo:mongo host="127.0.0.1" port="27017"/>
     <mongo:db-factory dbname="UBCore" username="admin" password="admin"/>
+    <mongo:mapping-converter id="converter" />
+    <bean name="gridFsTemplate"
+          class="org.springframework.data.mongodb.gridfs.GridFsTemplate">
+        <constructor-arg ref="mongoDbFactory" />
+        <constructor-arg ref="converter" />
+    </bean>
 
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
