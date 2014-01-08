@@ -11,4 +11,8 @@
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/menu/list.jsp" />
         <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/menu/subMenu.jsp" />
     </definition>
+    <definition name="com.ub.core.admin.menu.delete" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/menu/delete.jsp" />
+        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/menu/subMenu.jsp" />
+    </definition>
 </tiles-definitions>

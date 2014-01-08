@@ -1,4 +1,5 @@
 <%@ page import="com.ub.core.user.views.UserListView" %>
+<%@ page import="com.ub.core.menu.route.MenuRoute" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -29,15 +30,15 @@
         <td><a href="${menu.url}">${menu.url}</a></td>
         <td>${menu.parentName}</td>
 
-            <c:url value="/admin/menu/add" var="editUrl">
+            <c:url value="<%= MenuRoute.ADD%>" var="editUrl">
                 <c:param name="id"   value="${menu.id}" />
             </c:url>
-            <c:url value="/admin/menu/delete" var="deleteUrl">
+            <c:url value="<%= MenuRoute.DELETE%>" var="deleteUrl">
                 <c:param name="id"   value="${menu.id}" />
             </c:url>
         <td class="text-right">
             <a href="${editUrl}" class="btn btn-default btn-xs">Редактировать</a>
-            <a href="${deleteUrl}" class="btn btn-danger btn-xs remove-tr">
+            <a href="${deleteUrl}" class="btn btn-danger btn-xs ">
                 <i class="icon-remove"></i>
             </a>
         </td>

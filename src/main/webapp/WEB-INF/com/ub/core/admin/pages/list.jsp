@@ -33,11 +33,11 @@
                 <c:param name="url"   value="${page.id}" />
             </c:url>
             <c:url value="<%= PagesAdminRoutes.DELETE%>" var="deleteUrl">
-                <c:param name="url"   value="${menu.id}" />
+                <c:param name="id"   value="${page.id}" />
             </c:url>
         <td class="text-right">
             <a href="${editUrl}" class="btn btn-default btn-xs">Редактировать</a>
-            <a href="${deleteUrl}" class="btn btn-danger btn-xs remove-tr">
+            <a href="${deleteUrl}" class="btn btn-danger btn-xs ">
                 <i class="icon-remove"></i>
             </a>
         </td>

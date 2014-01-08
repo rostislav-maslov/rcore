@@ -1,15 +1,34 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
+﻿
+<div class="row">
+    <div class="col-md-12">
+        <div class="widget widget-green" id="widget_profit_chart">
+            <div class="widget-title">
+                <h3><i class="icon-tasks"></i> Загрузка файла на сервер</h3>
+            </div>
+            <div class="widget-content">
+                <form:form method="POST" commandName="fileUploadView"
+                           enctype="multipart/form-data">
 
-<h2>Загрузка файла на сервер</h2>
+                    <form:errors path="*" cssClass="errorblock" element="div"/>
 
-<form:form method="POST" commandName="fileUploadView"
-           enctype="multipart/form-data">
+                    <label for="file">Выберете файл для загрузки :</label>
+                    <input type="file" name="file"/>
 
-    <form:errors path="*" cssClass="errorblock" element="div"/>
+                    <div class="form-group">
+                        <button type="submit" id="contact-form-settings-submit" class="btn btn-primary">Сохранить
+                        </button>
+                    </div>
 
-    Выберете файл для загрузки : <input type="file" name="file"/>
-    <input type="submit" value="Загрузить"/>
-		<span><form:errors path="file" cssClass="error"/>
+		<span>
+            <form:errors path="file" cssClass="error"/>
 		</span>
 
-</form:form>
+                </form:form>
+            </div>
+        </div>
+    </div>
+</div>
