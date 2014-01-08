@@ -2,7 +2,9 @@ package com.ub.core.yandexmetrica.services;
 
 import com.ub.core.yandexmetrica.models.YandexMetricaDoc;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class YandexMetricaService {
     private static final Long STATIC_ID = 1L;
     @Autowired private IYandexMetricaService yandexMetricaService;

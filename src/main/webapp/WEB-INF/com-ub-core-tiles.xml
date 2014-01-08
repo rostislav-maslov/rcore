@@ -135,4 +135,9 @@
         <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/menu/subMenu.jsp" />
     </definition>
 
+    <definition name="com.ub.core.admin.yandexmetrica.update" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/yandexmetrica/update.jsp" />
+        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/yandexmetrica/subMenu.jsp" />
+    </definition>
+
 </tiles-definitions>
