@@ -1,13 +1,16 @@
 package com.ub.core.user.controllers;
 
-import com.ub.core.user.service.EmailUserDocService;
-import com.ub.core.user.views.AddUserView;
+import com.ub.core.user.service.UserService;
+import com.ub.core.user.service.exceptions.UserServiceException;
+import com.ub.core.user.views.AddEditUserView;
 import com.ub.core.user.views.UserListView;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,18 +18,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
 
-//TODO: переименовать. заменить template add на addEdit. Заменить имя сервиса на userService
 
 @Controller
 @RequestMapping("/admin/user/")
+@Secured(value = "ROLE_ADMIN")
 public class UserAdminController {
 
     @Autowired
-    EmailUserDocService emailUserDocService;
+    UserService userService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String userList(ModelMap modelMap){
-        modelMap.addAttribute("userList", emailUserDocService.getEmailUsers());
+        modelMap.addAttribute("userList", userService.getEmailUsers());
         modelMap.addAttribute("userListTitle", new UserListView());
         return "com.ub.core.admin.user.list";
 
@@ -34,23 +37,28 @@ public class UserAdminController {
 
     @RequestMapping(value = "/add", method = RequestMethod.GET)
     public String addUserGet(ModelMap modelMap){
-        AddUserView addUserView = new AddUserView();
-        modelMap.addAttribute("addUserView", addUserView);
-        modelMap.addAttribute("roles", emailUserDocService.getAllRoles());
+        AddEditUserView addEditUserView = new AddEditUserView();
+        modelMap.addAttribute("addEditUserView", addEditUserView);
+        modelMap.addAttribute("roles", userService.getAllRoles());
         modelMap.addAttribute("backUrl", "/UBCore/admin/user/addPost");
 
 
-        return "com.ub.core.admin.user.add";
+        return "com.ub.core.admin.user.addEdit";
     }
 
     @RequestMapping(value = "/addPost", method = RequestMethod.POST)
-    public String addUserPost(@ModelAttribute @Valid AddUserView addUserView, BindingResult bindingResult){
+    public String addUserPost(@ModelAttribute @Valid AddEditUserView addEditUserView, BindingResult bindingResult){
 
         if(bindingResult.hasErrors()){
-            return "com.ub.core.admin.user.add";
+            return "com.ub.core.admin.user.addEdit";
         }
         else{
-            emailUserDocService.saveEmailUser(addUserView);
+            try {
+                userService.saveEmailUser(addEditUserView);
+            } catch (UserServiceException e) {
+                ObjectError error = new ObjectError("role",e.getMessage());
+                bindingResult.addError(error);
+            }
         }
 
         return "redirect:/admin/user/list";
@@ -59,11 +67,11 @@ public class UserAdminController {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
     public String editUserGet(ModelMap modelMap, @PathVariable("id") ObjectId id){
 
-        if(emailUserDocService.getUser(id) != null){
-            modelMap.addAttribute("addUserView", emailUserDocService.getUser(id));
-            modelMap.addAttribute("roles", emailUserDocService.getAllRoles());
+        if(userService.getUser(id) != null){
+            modelMap.addAttribute("addEditUserView", userService.getUser(id));
+            modelMap.addAttribute("roles", userService.getAllRoles());
             modelMap.addAttribute("backUrl", "/UBCore/admin/user/editPost/" + id);
-            return "com.ub.core.admin.user.add";
+            return "com.ub.core.admin.user.addEdit";
         }
         else {
             return "redirect:/admin/user/list";
@@ -72,13 +80,18 @@ public class UserAdminController {
     }
 
     @RequestMapping(value = "/editPost/{id}", method = RequestMethod.POST)
-    public String editUserPost(@ModelAttribute @Valid AddUserView addUserView, BindingResult bindingResult, @PathVariable("id") ObjectId id){
+    public String editUserPost(@ModelAttribute @Valid AddEditUserView addEditUserView, BindingResult bindingResult, @PathVariable("id") ObjectId id){
 
         if(bindingResult.hasErrors()){
-            return "com.ub.core.admin.user.add";
+            return "com.ub.core.admin.user.addEdit";
         }
         else{
-            emailUserDocService.updateUser(id, addUserView);
+            try {
+                userService.updateUser(id, addEditUserView);
+            } catch (UserServiceException e) {
+                ObjectError error = new ObjectError("role",e.getMessage());
+                bindingResult.addError(error);
+            }
             return "redirect:/admin/user/list";
         }
 
@@ -90,7 +103,7 @@ public class UserAdminController {
 
 
 
-        emailUserDocService.deleteUser(id);
+        userService.deleteUser(id);
         return "redirect:/admin/user/list";
     }
 }

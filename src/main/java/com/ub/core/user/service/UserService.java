@@ -4,7 +4,8 @@ import com.google.common.collect.Lists;
 import com.ub.core.user.models.EmailUserDoc;
 import com.ub.core.user.models.RoleDoc;
 import com.ub.core.user.models.UserDoc;
-import com.ub.core.user.views.AddUserView;
+import com.ub.core.user.service.exceptions.UserServiceException;
+import com.ub.core.user.views.AddEditUserView;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 
 @Component
-public class EmailUserDocService {
+public class UserService {
     @Autowired
     private IEmailUserDocService emailUserDocService;
 
@@ -23,23 +24,23 @@ public class EmailUserDocService {
     @Autowired
     private IRoleDocService roleDocService;
 
-    public void saveEmailUser(AddUserView addUserView){
+    public void saveEmailUser(AddEditUserView addEditUserView) throws UserServiceException {
         EmailUserDoc emailUserDoc = new EmailUserDoc();
         UserDoc userDoc = new UserDoc();
 
         userDoc.setStatus(Boolean.TRUE);
         ArrayList<RoleDoc> roleDocArrayList = new ArrayList<RoleDoc>();
-        RoleDoc roleDoc = roleDocService.findOne(new ObjectId(addUserView.getRole()));
+        RoleDoc roleDoc = roleDocService.findOne(new ObjectId(addEditUserView.getRole()));
         if(roleDoc == null){
-            //TODO: заменить на свой класс и вывести ошибку о том что такой роли нет
-            throw  new RuntimeException();
+
+            throw  new UserServiceException("Данной роли не существует");
         }
         roleDocArrayList.add( roleDoc );
 
         userDoc.setRoleDocList( roleDocArrayList );
 
-        emailUserDoc.setEmail(addUserView.getEmail());
-        emailUserDoc.setPassword(DigestUtils.md5Hex(addUserView.getPassword()));
+        emailUserDoc.setEmail(addEditUserView.getEmail());
+        emailUserDoc.setPassword(DigestUtils.md5Hex(addEditUserView.getPassword()));
         userDocService.save(userDoc);
 
         emailUserDoc.setUserDoc(userDoc);
@@ -61,36 +62,35 @@ public class EmailUserDocService {
 
         emailUserDocService.delete(id);
     }
-    public AddUserView getUser(ObjectId id){
-        AddUserView addUserView = new AddUserView();
+    public AddEditUserView getUser(ObjectId id){
+        AddEditUserView addEditUserView = new AddEditUserView();
         EmailUserDoc emailUserDoc = emailUserDocService.findOne(id);
 
-        addUserView.setEmail(emailUserDoc.getEmail());
+        addEditUserView.setEmail(emailUserDoc.getEmail());
 
 //       TODO: поменять на множественный список
-        return addUserView;
+        return addEditUserView;
 
 
     }
 
-    public void updateUser(ObjectId id, AddUserView addUserView){
+    public void updateUser(ObjectId id, AddEditUserView addEditUserView) throws UserServiceException {
 
         EmailUserDoc emailUserDoc = emailUserDocService.findOne(id);
         UserDoc userDoc = new UserDoc();
 
         userDoc.setStatus(Boolean.TRUE);
         ArrayList<RoleDoc> roleDocArrayList = new ArrayList<RoleDoc>();
-        RoleDoc roleDoc = roleDocService.findOne(new ObjectId(addUserView.getRole()));
+        RoleDoc roleDoc = roleDocService.findOne(new ObjectId(addEditUserView.getRole()));
         if(roleDoc == null){
-            //TODO: заменить на свой класс и вывести ошибку о том что такой роли нет
-            throw  new RuntimeException();
+            throw  new UserServiceException("Данной роли не существует");
         }
         roleDocArrayList.add( roleDoc );
 
         userDoc.setRoleDocList( roleDocArrayList );
 
-        emailUserDoc.setEmail(addUserView.getEmail());
-        emailUserDoc.setPassword(DigestUtils.md5Hex(addUserView.getPassword()));
+        emailUserDoc.setEmail(addEditUserView.getEmail());
+        emailUserDoc.setPassword(DigestUtils.md5Hex(addEditUserView.getPassword()));
         userDocService.save(userDoc);
 
         emailUserDoc.setUserDoc(userDoc);
@@ -99,7 +99,6 @@ public class EmailUserDocService {
 
 
     }
-
 
 
 }

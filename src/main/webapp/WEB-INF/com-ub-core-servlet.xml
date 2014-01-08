@@ -53,9 +53,7 @@
         <property name="maxUploadSize" value="268435456"/> <!-- 256 megs -->
     </bean>
 
-    <!-- Service -->
 
-    <!-- Starter -->
     <!--<bean name="StarterName" init-method="init" class="com.ub.core.base.starter.CoreStarter"/>-->
 
 </beans>

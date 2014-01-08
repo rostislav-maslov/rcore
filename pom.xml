@@ -9,6 +9,7 @@
 
     <properties>
         <spring.version>3.2.0.RELEASE</spring.version>
+        <spring-security.version>3.1.4.RELEASE</spring-security.version>
     </properties>
 
     <repositories>
@@ -181,6 +182,25 @@
             <artifactId>guava</artifactId>
             <version>15.0</version>
         </dependency>
+
+        <!--Spring security-->
+        <!-- Spring Security Dependencies -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring-security.version}</version>
+        </dependency>
+        <!--/Spring security-->
 
 
     </dependencies>

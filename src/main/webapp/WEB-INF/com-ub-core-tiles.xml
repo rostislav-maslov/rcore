@@ -112,8 +112,8 @@
         <put-attribute name="content" value="" />
     </definition>
 
-    <definition name="com.ub.core.admin.user.add" extends="com.ub.core.admin.layout">
-        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/AddUserView.jsp" />
+    <definition name="com.ub.core.admin.user.addEdit" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/AddEditUserView.jsp" />
         <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/user/SubMenu.jsp" />
     </definition>
     
