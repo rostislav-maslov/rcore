@@ -34,8 +34,7 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            /WEB-INF/com-ub-core-servlet.xml
-            /WEB-INF/com-ub-core-security.xml
+            /ubcore/src/main/webapp/WEB-INF/mvc-dispatcher-servlet.xml
         </param-value>
     </context-param>
 
