@@ -234,6 +234,7 @@
                     <include>**/*.txt</include>
                     <include>**/*.png</include>
                     <include>**/*.jpg</include>
+                    <include>**/*.jpeg</include>
                     <include>**/*.eot</include>
                     <include>**/*.svg</include>
                     <include>**/*.ttf</include>
