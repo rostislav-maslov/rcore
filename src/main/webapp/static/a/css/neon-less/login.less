@@ -1,0 +1,404 @@
+.login-page {
+	@base-padding: 20px;
+	@content-padding: 100px;
+	
+	@header-bg: @default_text;
+	
+	background: @main_color;
+	
+	.center() {
+		width: 320px;
+		margin: 0 auto;
+		text-align: center;
+	}
+	
+	.login-content {
+		position: relative;
+		.center();
+		padding: @base-padding 0;
+		.transall(550ms);
+		
+		a {
+			color: @p_text_color;
+		}
+	}
+	
+	.login-header {
+		
+		position: relative;
+		background: @header-bg;
+		padding: @content-padding 0;
+		.transall(550ms);
+		
+		.logo {
+		}
+		
+		.description {
+			font-size: @p_size + 1;
+			margin-top: @base-padding;
+			margin-bottom: 0;
+			.transall(550ms);
+		}
+		
+		&.login-caret:after {
+			@s: 12.5px;
+			
+			position: absolute;
+			content: '';
+			left: 50%;
+			bottom: 0;
+			margin-left: -@s;
+			width: 0px;
+			height: 0px;
+			border-style: solid;
+			border-width: 13px 12.5px 0 12.5px;
+			border-color: @header-bg transparent transparent transparent;
+			bottom: -13px;
+			.transall(550ms);
+		}
+	}
+	
+	.login-form {
+		position: relative;
+		padding-top: 60px;
+		.transall(550ms);
+		.transall(550ms);
+		
+		.form-group {
+			margin-bottom: 20px;
+			.transall(550ms);
+			
+			.input-group {
+				background: @default_text;
+				border: 1px solid @default_text;
+				padding-top: 6px;
+				padding-bottom: 6px;
+				.transall;
+				.rounded;
+				
+				&.focused {
+					@border: lighten(@default_text, 20%);
+					border-color: @border;
+					border-color: fade(@border, 50%);
+				}
+				
+				&.validate-has-error {
+					border-color: @secondary_color;
+					border-color: fade(@secondary_color, 50%);
+					
+					.error {
+						position: absolute;
+						right: 10px;
+						top: 50%;
+						margin-top: -8px;
+						font-size: 10px;
+					}
+				}
+				
+				.input-group-addon, .form-control {
+					background: transparent;
+					border: 0;
+				}
+				
+				.input-group-addon {
+					position: relative;
+					
+					&:after {
+						position: absolute;
+						display: block;
+						content: '';
+						right: 0;
+						top: 0;
+						height: 100%;
+						width: 1px;
+						background: @main_border_color;
+						.transform(~"scaleY(.56)");
+					}
+				}
+				
+				.form-control {
+					color: @main_text_acitve_color;
+				
+					&:focus {
+						.box-shadow(none);
+					}
+				}
+			}				
+			
+			&.lockscreen-input {
+				margin-top: -155px;
+				
+				.lockscreen-thumb {
+					position: relative;
+					display: inline-block;
+					
+					img {
+						border: 5px solid @default_text;
+					}
+				
+					.lockscreen-progress-indicator {
+						display: block;
+						position: absolute;
+						margin: 5px;
+						left: 0;
+						top: 0;
+						right: 0;
+						bottom: 0;
+						color: @main_text_acitve_color;
+						font-size: 19px;
+						text-align: center;
+						line-height: 145px;
+						background: fade(#000, 30%);
+						visibility: hidden;
+						.border-radius(50%);
+						.transall(550ms);
+						.opacity(0);
+					}
+					
+					canvas {
+						position: absolute;
+						left: 0;
+						top: 0;
+					}
+				}
+				
+				.lockscreen-details {
+					position: relative;
+					padding-top: 5px;
+					
+					h4 {
+						color: @main_text_acitve_color;
+					}
+					
+					span {
+						display: block;
+						padding-bottom: 5px;
+					}
+				}
+			}
+			
+			.btn-login {
+				border: 1px solid @main_border_color;
+				text-align: left;
+				padding: 15px @base-padding;
+				font-size: @p_size + 2;
+				.transall;
+				
+				i {
+					float: right;
+				}
+				
+				&:hover, &:active {
+					background: @default_text;
+				}
+			}
+		}
+	}
+	
+	.login-bottom-links {
+		padding-top: 40px;
+		padding-bottom: 30px;
+		
+		a {
+			.transall;
+			
+			&:hover {
+				color: lighten(@p_text_color, 10%);
+			}
+		}
+		
+		.link {
+			font-size: @p_size + 2;
+			display: inline-block;
+			margin-bottom: 10px;
+			color: fade(@main_text_acitve_color, 70%);
+			.transall(550ms);
+			
+			&:hover {
+				color: @main_text_acitve_color;
+			}
+		}
+	}
+	
+	.login-progressbar {
+		height: 0px;
+		width: 100%;
+		overflow: hidden;
+		.transall(550ms);
+		
+		div {
+			width: 0%;
+			.transition(~"700ms all cubic-bezier(0.770, 0.000, 0.175, 1.000)");
+		}
+	}
+	
+	.login-progressbar-indicator {
+		position: absolute;
+		width: 100%;
+		text-align: center;
+		top: 100%;
+		margin-top: 80px;
+		visibility: hidden;
+		.opacity(0);
+		.transform(~"translateY(100px) scale(0.2)");
+		.transall(550ms);
+		
+		h3 {
+			color: #fff;
+			margin: 0;
+			margin-bottom: 10px;
+			font-size: 20px;
+			//font-weight: bold;
+		}
+	}
+	
+	
+	// Logging in
+	&.logging-in {
+	
+		.login-header {
+			padding-top: @content-padding + @content-padding * .7;
+			padding-bottom: @content-padding * .3;
+			
+			&.login-caret:after {
+				.opacity(0);
+			}
+			
+			.description {
+				.opacity(0);
+			}
+		}
+		
+		.login-form {
+			
+			form, .link {
+				.opacity(0);
+				.transform(~"translateY(-200px) scale(0.8)");
+			}
+		}
+		
+		.login-progressbar {
+			background: lighten(@default_text, 12%);
+			height: 2px;
+			
+			div {
+				background: @main_color_inv;
+				//background: #00b19d;
+				height: 2px;
+			}
+		}
+		
+		.login-progressbar-indicator {
+			visibility: visible;
+			.opacity(1);
+			.transform(~"translateY(0px) scale(1)");
+		}
+	}
+	
+	
+	// Lockscreen login
+	&.logging-in-lockscreen {
+		
+		.login-form .form-group.lockscreen-input .lockscreen-thumb .lockscreen-progress-indicator {
+			.opacity(1);
+			visibility: visible;
+		}
+		
+		.login-form {
+			
+			.form-group:nth-child(n + 2), .link {
+				.opacity(0);
+				.transform(~"translateY(-50px) scale(0.5)");
+			}
+		}
+	}
+	
+	
+	// Form effect
+	&.login-form-fall {
+		
+		.login-form {
+			.opacity(0);
+			top: -100px;
+			.transall(550ms);
+		
+			.form-group {
+				.transall(550ms);
+				.transition-delay(250ms);
+				.opacity(0);
+				
+				&:nth-child(2) { // Password
+					.transition-delay(350ms);
+				}
+				
+				&:nth-child(3) { // Submit
+					.transition-delay(450ms);
+				}
+			}
+		}
+		
+		&-init {
+			
+			.login-form {
+				.opacity(1);
+				top: 0;
+				
+				.form-group {
+					.opacity(1);
+				}
+			}
+		}
+	}
+}
+
+
+
+// Small Screens
+@media (max-width: @screen-sm-max) {
+	
+	.login-page {
+		@content-padding: 20px;
+		
+		.login-header {
+			padding: @content-padding 0;
+		}
+	
+		.login-form {
+			padding-top: 30px;
+			
+			.form-group.lockscreen-input {
+				margin-top: 0;
+			}
+		}
+		
+		&.logging-in {
+			
+			.login-header {
+				padding-top: @content-padding + @content-padding * .7;
+				padding-bottom: @content-padding * .3;
+			}
+			
+			.login-progressbar-indicator {
+				margin-top: 60px;
+			}
+		
+			.login-form {
+				
+				form, .link {
+					.transform(~"translateY(-100px) scale(0.6)");
+				}
+			}
+		}
+	}
+}
+
+
+@media (max-width: 350px) {
+		
+	.login-page {
+	
+		.login-content {
+			width: 280px;
+		}
+	}
+}

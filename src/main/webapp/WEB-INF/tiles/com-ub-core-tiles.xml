@@ -14,7 +14,7 @@
     <!--<definition name="com.ub.core.admin.main" template="/WEB-INF/com/ub/core/admin/main/main.jsp">-->
         <!--<put-attribute name="main.header.component" value="/WEB-INF/com/ub/core/admin/main/component/header.jsp"/>-->
     <!--</definition>-->
-    <definition name="com.ub.core.admin.layout" template="/WEB-INF/com/ub/core/admin/layout.jsp">
+    <definition name="com.ub.core.admin.layout" template="/WEB-INF/com/ub/core/admin/main/main.jsp">
         <put-attribute name="content" value="" />
     </definition>
     <definition name="com.ub.core.admin.user.addEdit" extends="com.ub.core.admin.layout">
@@ -25,4 +25,9 @@
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/UserListView.jsp" />
         <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/user/SubMenu.jsp" />
     </definition>
+    <definition name="com.ub.core.admin.main" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/UserListView.jsp" />
+        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/user/SubMenu.jsp" />
+    </definition>
+
 </tiles-definitions>
