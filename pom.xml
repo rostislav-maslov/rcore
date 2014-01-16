@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ub</groupId>
     <artifactId>UBCore</artifactId>
-    <!--<packaging>war</packaging>-->
+    <packaging>war</packaging>
     <version>0.1.0</version>
     <name>UBCore</name>
 
