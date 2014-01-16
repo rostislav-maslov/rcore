@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @Controller
 public class MainController {
 
-        @RequestMapping(value = "/admin", method = RequestMethod.GET)
-        protected String add(Model model) throws Exception {
-            return "com.ub.core.admin.layout";
-        }
+    @RequestMapping(value = "/admin", method = RequestMethod.GET)
+    protected String main(Model model) throws Exception {
+
+        return "com.ub.core.admin.layout";
+    }
 
 }

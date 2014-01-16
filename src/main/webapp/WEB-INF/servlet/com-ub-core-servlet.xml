@@ -58,4 +58,6 @@
             <bean class="com.ub.core.yandexmetrica.controllers.YandexMetricaInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
+
+
 </beans>

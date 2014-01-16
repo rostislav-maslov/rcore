@@ -16,6 +16,7 @@
     <!--</definition>-->
     <definition name="com.ub.core.admin.layout" template="/WEB-INF/com/ub/core/admin/main/main.jsp">
         <put-attribute name="content" value="" />
+        <put-attribute name="mainMenu" value="/WEB-INF/com/ub/core/admin/main/menu/mainMenu.jsp" />
     </definition>
     <definition name="com.ub.core.admin.user.addEdit" extends="com.ub.core.admin.layout">
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/AddEditUserView.jsp" />
