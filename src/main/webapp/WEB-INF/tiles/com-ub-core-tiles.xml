@@ -20,15 +20,12 @@
     </definition>
     <definition name="com.ub.core.admin.user.addEdit" extends="com.ub.core.admin.layout">
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/AddEditUserView.jsp" />
-        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/user/SubMenu.jsp" />
     </definition>
     <definition name="com.ub.core.admin.user.list" extends="com.ub.core.admin.layout">
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/UserListView.jsp" />
-        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/user/SubMenu.jsp" />
     </definition>
     <definition name="com.ub.core.admin.main" extends="com.ub.core.admin.layout">
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/UserListView.jsp" />
-        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/user/SubMenu.jsp" />
     </definition>
 
 </tiles-definitions>

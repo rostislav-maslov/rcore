@@ -9,27 +9,30 @@
 
 <c:forEach items="<%= MenuBoost.allMenu()%>" var="menu">
     <li>
-    <a href="">
-        <i class="entypo-gauge"></i>
-        <span>${menu.name}</span>
-    </a>
-    <ul>
-    <c:forEach items="${menu.subMenus}" var="subMenu">
-        <li>
-        <a href="${subMenu.url}">
-            <span>${subMenu.name}</span>
+        <a href="">
+            <i class="entypo-gauge"></i>
+            <span>${menu.name}</span>
         </a>
-        <ul>
-        <c:forEach items="${subMenu.subMenus}" var="menuLevel2">
-            <li>
-                <a href="${menuLevel2.url}">
-                    <span>${menuLevel2.name}</span>
-                </a>
-            </li>
-        </c:forEach>
+        <c:if test="${not empty menu.child}">
+            <ul>
+                <c:forEach items="${menu.child}" var="subMenu">
+                    <li>
+                        <a href="${subMenu.url}">
+                            <span>${subMenu.name}</span>
+                        </a> <c:if test="${not empty subMenu.child}">
+                        <ul>
+                            <c:forEach items="${subMenu.child}" var="menuLevel2">
+                                <li>
+                                    <a href="${menuLevel2.url}">
+                                        <span>${menuLevel2.name}</span>
+                                    </a>
+                                </li>
+                            </c:forEach>
+                        </ul>
+                    </c:if>
+                    </li>
+                </c:forEach>
             </ul>
-        </li>
-    </c:forEach>
-    </ul>
+        </c:if>
     </li>
 </c:forEach>

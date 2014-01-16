@@ -8,14 +8,11 @@
     </definition>
     <definition name="com.ub.core.admin.pages.add" extends="com.ub.core.admin.layout">
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/pages/add.jsp" />
-        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/pages/subMenu.jsp" />
     </definition>
     <definition name="com.ub.core.admin.pages.list" extends="com.ub.core.admin.layout">
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/pages/list.jsp" />
-        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/pages/subMenu.jsp" />
     </definition>
     <definition name="com.ub.core.admin.pages.delete" extends="com.ub.core.admin.layout">
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/pages/delete.jsp" />
-        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/pages/subMenu.jsp" />
     </definition>
 </tiles-definitions>

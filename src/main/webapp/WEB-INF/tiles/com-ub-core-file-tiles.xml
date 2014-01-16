@@ -5,16 +5,13 @@
 <tiles-definitions>
     <definition name="com.ub.core.admin.file.add" extends="com.ub.core.admin.layout">
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/file/add.jsp" />
-        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/file/subMenu.jsp" />
     </definition>
 
     <definition name="com.ub.core.admin.file.delete" extends="com.ub.core.admin.layout">
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/file/delete.jsp" />
-        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/file/subMenu.jsp" />
     </definition>
 
     <definition name="com.ub.core.admin.file.list" extends="com.ub.core.admin.layout">
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/file/list.jsp" />
-        <put-attribute name="subMenu" value="/WEB-INF/com/ub/core/admin/file/subMenu.jsp" />
     </definition>
 </tiles-definitions>

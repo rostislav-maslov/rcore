@@ -114,7 +114,7 @@
     <hr/>
 
     <selection id="main_content">
-
+        <tiles:insertAttribute name="content"/>
     </selection>
 
     <!-- Footer -->
