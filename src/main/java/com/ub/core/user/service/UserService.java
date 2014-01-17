@@ -5,7 +5,6 @@ import com.ub.core.user.models.EmailUserDoc;
 import com.ub.core.user.models.RoleDoc;
 import com.ub.core.user.models.UserDoc;
 import com.ub.core.user.service.exceptions.UserServiceException;
-import com.ub.core.user.views.AddEditRoleView;
 import com.ub.core.user.views.AddEditUserView;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.bson.types.ObjectId;
@@ -25,23 +24,20 @@ public class UserService {
     @Autowired
     private IRoleDocService roleDocService;
 
-    public EmailUserDoc getUserByEmail(String email){
-        return emailUserDocService.findByEmail(email).get(0);
-    }
-
     public void saveEmailUser(AddEditUserView addEditUserView) throws UserServiceException {
         EmailUserDoc emailUserDoc = new EmailUserDoc();
         UserDoc userDoc = new UserDoc();
 
         userDoc.setStatus(Boolean.TRUE);
         ArrayList<RoleDoc> roleDocArrayList = new ArrayList<RoleDoc>();
-        RoleDoc roleDoc = roleDocService.findOne(new ObjectId(addEditUserView.getRole()));
-
-        if(roleDoc == null){
-
-            throw  new UserServiceException("Данной роли не существует");
+        RoleDoc roleDoc = null;
+        if(addEditUserView.getRole()!=null){
+            roleDoc = roleDocService.findOne(new ObjectId(addEditUserView.getRole()));
+            if(roleDoc == null){
+                throw  new UserServiceException("Данной роли не существует");
+            }
+            roleDocArrayList.add( roleDoc );
         }
-        roleDocArrayList.add( roleDoc );
 
         userDoc.setRoleDocList( roleDocArrayList );
 
@@ -104,14 +100,6 @@ public class UserService {
         emailUserDocService.save(emailUserDoc);
 
 
-    }
-
-    public void saveRole(AddEditRoleView addEditRoleView){
-        RoleDoc roleDoc = new RoleDoc();
-        roleDoc.setRoleTitle(addEditRoleView.getRoleTitle());
-        roleDoc.setRoleDescription(addEditRoleView.getRoleDescription());
-
-        roleDocService.save(roleDoc);
     }
 
 
