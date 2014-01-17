@@ -5,6 +5,7 @@ import com.ub.core.user.models.EmailUserDoc;
 import com.ub.core.user.models.RoleDoc;
 import com.ub.core.user.models.UserDoc;
 import com.ub.core.user.service.exceptions.UserServiceException;
+import com.ub.core.user.views.AddEditRoleView;
 import com.ub.core.user.views.AddEditUserView;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.bson.types.ObjectId;
@@ -100,6 +101,13 @@ public class UserService {
         emailUserDocService.save(emailUserDoc);
 
 
+    }
+    public void saveRole(AddEditRoleView addEditRoleView){
+        RoleDoc roleDoc = new RoleDoc();
+        roleDoc.setRoleTitle(addEditRoleView.getRoleTitle());
+        roleDoc.setRoleDescription(addEditRoleView.getRoleDescription());
+
+        roleDocService.save(roleDoc);
     }
 
 
