@@ -23,7 +23,7 @@ var neonLogin = neonLogin || {};
 				
 				password: {
 					required: true
-				},
+				}
 				
 			},
 			
@@ -92,7 +92,7 @@ var neonLogin = neonLogin || {};
 				
 					password: {
 						required: true
-					},
+					}
 					
 				},
 				
