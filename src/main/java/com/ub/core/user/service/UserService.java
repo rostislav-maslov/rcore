@@ -30,12 +30,14 @@ public class UserService {
 
         userDoc.setStatus(Boolean.TRUE);
         ArrayList<RoleDoc> roleDocArrayList = new ArrayList<RoleDoc>();
-        RoleDoc roleDoc = roleDocService.findOne(new ObjectId(addEditUserView.getRole()));
-        if(roleDoc == null){
-
-            throw  new UserServiceException("Данной роли не существует");
+        RoleDoc roleDoc = null;
+        if(addEditUserView.getRole()!=null){
+            roleDoc = roleDocService.findOne(new ObjectId(addEditUserView.getRole()));
+            if(roleDoc == null){
+                throw  new UserServiceException("Данной роли не существует");
+            }
+            roleDocArrayList.add( roleDoc );
         }
-        roleDocArrayList.add( roleDoc );
 
         userDoc.setRoleDocList( roleDocArrayList );
 

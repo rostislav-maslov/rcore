@@ -40,7 +40,7 @@ public class UserAdminController {
         AddEditUserView addEditUserView = new AddEditUserView();
         modelMap.addAttribute("addEditUserView", addEditUserView);
         modelMap.addAttribute("roles", userService.getAllRoles());
-        modelMap.addAttribute("backUrl", "/UBCore/admin/user/addPost");
+        modelMap.addAttribute("backUrl", "/admin/user/addPost");
 
 
         return "com.ub.core.admin.user.addEdit";
