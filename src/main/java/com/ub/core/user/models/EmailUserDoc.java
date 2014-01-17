@@ -1,6 +1,7 @@
 package com.ub.core.user.models;
 
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,7 +12,7 @@ import javax.validation.constraints.NotNull;
 public class EmailUserDoc{
     @Id
     protected ObjectId id;
-
+    @Indexed(unique = true)
     protected String email;
 
     @DBRef
