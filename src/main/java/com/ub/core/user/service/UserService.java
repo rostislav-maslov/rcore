@@ -109,6 +109,9 @@ public class UserService {
 
         roleDocService.save(roleDoc);
     }
+    public EmailUserDoc getUserByEmail(String email){
+        return emailUserDocService.findByEmail(email).get(0);
+    }
 
 
 }
