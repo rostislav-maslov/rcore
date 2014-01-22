@@ -6,6 +6,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 
-public interface IEmailUserDocService extends PagingAndSortingRepository<EmailUserDoc, ObjectId> {
+public interface IEmailUserDocService extends PagingAndSortingRepository<EmailUserDoc, String> {
     List<EmailUserDoc> findByEmail(String email);
 }

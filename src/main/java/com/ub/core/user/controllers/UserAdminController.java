@@ -64,7 +64,7 @@ public class UserAdminController {
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public String editUserGet(ModelMap modelMap, @PathVariable("id") ObjectId id){
+    public String editUserGet(ModelMap modelMap, @PathVariable("id") String id){
 
         if(userService.getUser(id) != null){
             modelMap.addAttribute("addEditUserView", userService.getUser(id));
@@ -79,7 +79,7 @@ public class UserAdminController {
     }
 
     @RequestMapping(value = "/editPost/{id}", method = RequestMethod.POST)
-    public String editUserPost(@ModelAttribute @Valid AddEditUserView addEditUserView, BindingResult bindingResult, @PathVariable("id") ObjectId id){
+    public String editUserPost(@ModelAttribute @Valid AddEditUserView addEditUserView, BindingResult bindingResult, @PathVariable("id") String id){
 
         if(bindingResult.hasErrors()){
             return "com.ub.core.admin.user.addEdit";
@@ -98,7 +98,7 @@ public class UserAdminController {
 
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    public String deleteUser(@PathVariable("id") ObjectId id){
+    public String deleteUser(@PathVariable("id") String id){
         userService.deleteUser(id);
         return "redirect:/admin/user/list";
     }

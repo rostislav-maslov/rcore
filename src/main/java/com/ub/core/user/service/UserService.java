@@ -17,7 +17,7 @@ import java.util.ArrayList;
 @Component
 public class UserService {
     @Autowired
-    private IEmailUserDocService emailUserDocService;
+    protected IEmailUserDocService emailUserDocService;
 
     @Autowired
     private IUserDocService userDocService;
@@ -59,13 +59,13 @@ public class UserService {
         return Lists.newArrayList(emailUserDocService.findAll());
     }
 
-    public void deleteUser(ObjectId id){
+    public void deleteUser(String id){
 
 //        List<EmailUserDoc> userDocList = emailUserDocService.findByEmail(email);
 
         emailUserDocService.delete(id);
     }
-    public AddEditUserView getUser(ObjectId id){
+    public AddEditUserView getUser(String id){
         AddEditUserView addEditUserView = new AddEditUserView();
         EmailUserDoc emailUserDoc = emailUserDocService.findOne(id);
 
@@ -77,7 +77,7 @@ public class UserService {
 
     }
 
-    public void updateUser(ObjectId id, AddEditUserView addEditUserView) throws UserServiceException {
+    public void updateUser(String id, AddEditUserView addEditUserView) throws UserServiceException {
 
         EmailUserDoc emailUserDoc = emailUserDocService.findOne(id);
         UserDoc userDoc = new UserDoc();
@@ -111,6 +111,10 @@ public class UserService {
     }
     public EmailUserDoc getUserByEmail(String email){
         return emailUserDocService.findByEmail(email).get(0);
+    }
+    protected String generateVerificationCode(String email){
+        return DigestUtils.md5Hex(email + "42");
+
     }
 
 

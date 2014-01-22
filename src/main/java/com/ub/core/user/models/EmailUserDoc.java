@@ -1,9 +1,11 @@
 package com.ub.core.user.models;
 
 import org.bson.types.ObjectId;
+import org.hibernate.validator.constraints.Email;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
@@ -11,9 +13,13 @@ import javax.validation.constraints.NotNull;
 @Document
 public class EmailUserDoc{
     @Id
-    protected ObjectId id;
-    @Indexed(unique = true)
+    @Email
+    @Field(value = "_id")
     protected String email;
+
+    protected   UserDocStatuses userDocStatuses;
+
+    protected String vericationCode;
 
     @DBRef
     @NotNull
@@ -21,14 +27,6 @@ public class EmailUserDoc{
 
     @NotNull
     protected String password;
-
-    public ObjectId getId() {
-        return id;
-    }
-
-    public void setId(ObjectId id) {
-        this.id = id;
-    }
 
     public String getEmail() {
         return email;
@@ -52,5 +50,21 @@ public class EmailUserDoc{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public UserDocStatuses getUserDocStatuses() {
+        return userDocStatuses;
+    }
+
+    public void setUserDocStatuses(UserDocStatuses userDocStatuses) {
+        this.userDocStatuses = userDocStatuses;
+    }
+
+    public String getVericationCode() {
+        return vericationCode;
+    }
+
+    public void setVericationCode(String vericationCode) {
+        this.vericationCode = vericationCode;
     }
 }
