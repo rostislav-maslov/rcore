@@ -34,6 +34,7 @@ public class UserController {
         if(emailUserDoc.getUserDocStatuses().equals(UserDocStatuses.EMAIL_NOT_VERIFICATED)){
             if(emailUserDoc.getVericationCode().equals(code)){
                 emailUserDoc.setUserDocStatuses(UserDocStatuses.EMAIL_VERIFICATED);
+                userService.updateEmailUser(emailUserDoc);
                 //TODO: поставить сюда страницу с информацией что email верифицирован
                 return "redirect: /";
 
