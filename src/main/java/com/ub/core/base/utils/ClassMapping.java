@@ -39,4 +39,18 @@ public class ClassMapping<FROM, TO> {
             }
         }
     }
+
+    public void revertMapping(TO tv, FROM fv){
+        for(Field t : map.keySet()){
+            Field f = map.get(t);
+            try {
+                t.setAccessible(true);
+                f.setAccessible(true);
+                f.set(fv, t.get(tv));
+                t.setAccessible(false);
+                f.setAccessible(false);
+            } catch (Exception e) {
+            }
+        }
+    }
 }
