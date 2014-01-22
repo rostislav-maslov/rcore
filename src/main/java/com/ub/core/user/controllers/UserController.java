@@ -36,6 +36,7 @@ public class UserController {
                 emailUserDoc.setUserDocStatuses(UserDocStatuses.EMAIL_VERIFICATED);
                 userService.updateEmailUser(emailUserDoc);
                 //TODO: поставить сюда страницу с информацией что email верифицирован
+                //Думаю не нужно так делать. Нужно обсудить.
                 return "redirect: /";
 
             }
@@ -46,6 +47,6 @@ public class UserController {
         }
 
 
-        return "";
+        return "redirect:/";
     }
 }

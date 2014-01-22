@@ -111,8 +111,8 @@ public class UserService {
         roleDocService.save(roleDoc);
     }
     public EmailUserDoc getUserByEmail(String email){
-        if(emailUserDocService.findByEmail(email).size() != 0) {
-            return emailUserDocService.findByEmail(email).get(0);
+        if(emailUserDocService. findById(email).size() != 0) {
+            return emailUserDocService.findById(email).get(0);
         }
         else{
             return null;
@@ -122,7 +122,7 @@ public class UserService {
 
     public EmailUserDoc getAuthenticatedUser(HttpSession session){
         if(session.getAttribute("userEmail")!=null){
-            return emailUserDocService.findByEmail(session.getAttribute("userEmail").toString()).get(0) ;
+            return emailUserDocService.findById(session.getAttribute("userEmail").toString()).get(0) ;
 
         }
         else {

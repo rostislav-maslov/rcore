@@ -14,7 +14,7 @@ public class EmailUserDoc implements Serializable{
     @Id
     @Email
     @Field(value = "_id")
-    protected String email;
+    protected String id;
 
     protected   UserDocStatuses userDocStatuses;
 
@@ -34,22 +34,30 @@ public class EmailUserDoc implements Serializable{
 
         EmailUserDoc that = (EmailUserDoc) o;
 
-        if (email != null ? !email.equals(that.email) : that.email != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
 
         return true;
     }
 
     @Override
     public int hashCode() {
-        return email != null ? email.hashCode() : 0;
+        return id != null ? id.hashCode() : 0;
+    }
+
+    public String getId(){
+        return id;
+    }
+
+    public void setId(String id){
+        this.id = id;
     }
 
     public String getEmail() {
-        return email;
+        return id;
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.id = email;
     }
 
     public UserDoc getUserDoc() {
