@@ -7,9 +7,10 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Document
-public class EmailUserDoc{
+public class EmailUserDoc implements Serializable{
     @Id
     @Email
     @Field(value = "_id")
