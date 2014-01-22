@@ -145,5 +145,16 @@
 <script src="<c:url value="/static/a/js/neon-custom.js"/>"></script>
 <script src="<c:url value="/static/a/js/neon-demo.js"/>"></script>
 
+
+<script src="<c:url value="/static/a/js/select2/select2.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/bootstrap-tagsinput.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/typeahead.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/selectboxit/jquery.selectBoxIt.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/bootstrap-datepicker.js"/>"></script>
+<script src="<c:url value="/static/a/js/bootstrap-timepicker.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/bootstrap-colorpicker.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/daterangepicker/moment.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/daterangepicker/daterangepicker.js"/>"></script>
+
 </body>
 </html>
