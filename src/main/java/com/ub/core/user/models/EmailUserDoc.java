@@ -1,8 +1,6 @@
 package com.ub.core.user.models;
 
-import org.bson.types.ObjectId;
 import org.hibernate.validator.constraints.Email;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -27,6 +25,23 @@ public class EmailUserDoc{
 
     @NotNull
     protected String password;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        EmailUserDoc that = (EmailUserDoc) o;
+
+        if (email != null ? !email.equals(that.email) : that.email != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return email != null ? email.hashCode() : 0;
+    }
 
     public String getEmail() {
         return email;
