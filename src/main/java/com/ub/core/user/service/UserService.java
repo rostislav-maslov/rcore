@@ -12,18 +12,19 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 
 @Component
 public class UserService {
     @Autowired
-    private IEmailUserDocService emailUserDocService;
+    protected IEmailUserDocService emailUserDocService;
 
     @Autowired
-    private IUserDocService userDocService;
+    protected IUserDocService userDocService;
 
     @Autowired
-    private IRoleDocService roleDocService;
+    protected IRoleDocService roleDocService;
 
     public void saveEmailUser(AddEditUserView addEditUserView) throws UserServiceException {
         EmailUserDoc emailUserDoc = new EmailUserDoc();
@@ -59,13 +60,13 @@ public class UserService {
         return Lists.newArrayList(emailUserDocService.findAll());
     }
 
-    public void deleteUser(ObjectId id){
+    public void deleteUser(String id){
 
 //        List<EmailUserDoc> userDocList = emailUserDocService.findByEmail(email);
 
         emailUserDocService.delete(id);
     }
-    public AddEditUserView getUser(ObjectId id){
+    public AddEditUserView getUser(String id){
         AddEditUserView addEditUserView = new AddEditUserView();
         EmailUserDoc emailUserDoc = emailUserDocService.findOne(id);
 
@@ -77,7 +78,7 @@ public class UserService {
 
     }
 
-    public void updateUser(ObjectId id, AddEditUserView addEditUserView) throws UserServiceException {
+    public void updateUser(String id, AddEditUserView addEditUserView) throws UserServiceException {
 
         EmailUserDoc emailUserDoc = emailUserDocService.findOne(id);
         UserDoc userDoc = new UserDoc();
@@ -110,8 +111,54 @@ public class UserService {
         roleDocService.save(roleDoc);
     }
     public EmailUserDoc getUserByEmail(String email){
-        return emailUserDocService.findByEmail(email).get(0);
+        if(emailUserDocService. findById(email).size() != 0) {
+            return emailUserDocService.findById(email).get(0);
+        }
+        else{
+            return null;
+        }
+
     }
 
+    public EmailUserDoc getAuthenticatedUser(HttpSession session){
+        if(session.getAttribute("userEmail")!=null){
+            return emailUserDocService.findById(session.getAttribute("userEmail").toString()).get(0) ;
 
+        }
+        else {
+            return null;
+        }
+    }
+    protected String generateVerificationCode(String email){
+        return DigestUtils.md5Hex(email + "42");
+
+    }
+
+    public IEmailUserDocService getEmailUserDocService() {
+        return emailUserDocService;
+    }
+
+    public void setEmailUserDocService(IEmailUserDocService emailUserDocService) {
+        this.emailUserDocService = emailUserDocService;
+    }
+
+    public IUserDocService getUserDocService() {
+        return userDocService;
+    }
+
+    public void setUserDocService(IUserDocService userDocService) {
+        this.userDocService = userDocService;
+    }
+
+    public IRoleDocService getRoleDocService() {
+        return roleDocService;
+    }
+
+    public void setRoleDocService(IRoleDocService roleDocService) {
+        this.roleDocService = roleDocService;
+    }
+
+    public void updateEmailUser(EmailUserDoc emailUserDoc) {
+        emailUserDocService.save(emailUserDoc);
+    }
 }

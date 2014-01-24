@@ -4,15 +4,38 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class MenuBoost {
 
     protected static final String BASE_PACKAGE = "com.ub";
     protected static List<CoreMenu> menu = null;
+
+    synchronized
+    public static Map<String, CoreMenu> getExcludeMenu() {
+        ClassPathScanningCandidateComponentProvider scanner =
+                new ClassPathScanningCandidateComponentProvider(false);
+
+        Map<String, CoreMenu> result = new HashMap<String, CoreMenu>();
+        scanner.addIncludeFilter(new AssignableTypeFilter(ExcludeCoreMenu.class));
+
+        for (BeanDefinition bd : scanner.findCandidateComponents(BASE_PACKAGE)) {
+            try {
+                Class aClass = Class.forName(bd.getBeanClassName());
+                ExcludeCoreMenu mainMenu = (ExcludeCoreMenu) aClass.newInstance();
+                List<CoreMenu> coreMenus = mainMenu.getMenu();
+                if (coreMenus == null) continue;
+                for (CoreMenu coreMenu : coreMenus) {
+                    result.put(coreMenu.getId(), coreMenu);
+                }
+            } catch (ClassNotFoundException e) {
+            } catch (InstantiationException e) {
+            } catch (IllegalAccessException e) {
+            }
+        }
+
+        return result;
+    }
 
     synchronized
     public static void generateMenu() {
@@ -22,12 +45,16 @@ public class MenuBoost {
         Set<CoreMenu> menuSet = new HashSet<CoreMenu>();
         List<CoreMenu> result = new ArrayList<CoreMenu>();
 
+        Map<String, CoreMenu> exMenu = getExcludeMenu();
+
         scanner.addIncludeFilter(new AssignableTypeFilter(CoreMenu.class));
         for (BeanDefinition bd : scanner.findCandidateComponents(BASE_PACKAGE)) {
             try {
                 Class aClass = Class.forName(bd.getBeanClassName());
                 CoreMenu mainMenu = (CoreMenu) aClass.newInstance();
-                if(mainMenu.getParent() == null)
+                if (exMenu.get(mainMenu.getId()) != null)
+                    continue;
+                if (mainMenu.getParent() == null)
                     result.add(mainMenu);
                 menuSet.add(mainMenu);
             } catch (ClassNotFoundException e) {
@@ -36,9 +63,9 @@ public class MenuBoost {
             }
         }
 
-        for(CoreMenu coreMenu : result){
+        for (CoreMenu coreMenu : result) {
             coreMenu.setChild(getChildMenu(coreMenu, menuSet));
-            for(CoreMenu scm : coreMenu.getChild()){
+            for (CoreMenu scm : coreMenu.getChild()) {
                 scm.setChild(getChildMenu(scm, menuSet));
             }
         }
@@ -46,10 +73,10 @@ public class MenuBoost {
         menu = result;
     }
 
-    private static List<CoreMenu> getChildMenu(CoreMenu coreMenu, Set<CoreMenu> set){
+    private static List<CoreMenu> getChildMenu(CoreMenu coreMenu, Set<CoreMenu> set) {
         ArrayList<CoreMenu> subMenu = new ArrayList<CoreMenu>();
-        for(CoreMenu scm : set){
-            if(scm.getParent()!=null && scm.getParent().getId().equals(coreMenu.getId())){
+        for (CoreMenu scm : set) {
+            if (scm.getParent() != null && scm.getParent().getId().equals(coreMenu.getId())) {
                 subMenu.add(scm);
             }
         }

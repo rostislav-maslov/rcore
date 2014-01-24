@@ -80,14 +80,14 @@
 <!-- add class "multiple-expanded" to allow multiple submenus to open -->
 <!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
 <!-- Search Bar -->
-<li id="search">
-    <form method="get" action="">
-        <input type="text" name="q" class="search-input" placeholder="Search something..."/>
-        <button type="submit">
-            <i class="entypo-search"></i>
-        </button>
-    </form>
-</li>
+<%--<li id="search">--%>
+    <%--<form method="get" action="">--%>
+        <%--<input type="text" name="q" class="search-input" placeholder="Search something..."/>--%>
+        <%--<button type="submit">--%>
+            <%--<i class="entypo-search"></i>--%>
+        <%--</button>--%>
+    <%--</form>--%>
+<%--</li>--%>
      <tiles:insertAttribute name="mainMenu"/>
 </ul>
 
@@ -144,6 +144,17 @@
 <script src="<c:url value="/static/a/js/neon-chat.js"/>"></script>
 <script src="<c:url value="/static/a/js/neon-custom.js"/>"></script>
 <script src="<c:url value="/static/a/js/neon-demo.js"/>"></script>
+
+
+<script src="<c:url value="/static/a/js/select2/select2.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/bootstrap-tagsinput.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/typeahead.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/selectboxit/jquery.selectBoxIt.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/bootstrap-datepicker.js"/>"></script>
+<script src="<c:url value="/static/a/js/bootstrap-timepicker.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/bootstrap-colorpicker.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/daterangepicker/moment.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/daterangepicker/daterangepicker.js"/>"></script>
 
 </body>
 </html>
