@@ -133,6 +133,7 @@
 </div>
 
 
+<link rel="stylesheet" href="<c:url value="/static/a/js/wysihtml5/bootstrap-wysihtml5.css"/>">
 <!-- Bottom Scripts -->
 <script src="<c:url value="/static/a/js/gsap/main-gsap.js"/>"></script>
 <script src="<c:url value="/static/a/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"/>"></script>
@@ -144,7 +145,8 @@
 <script src="<c:url value="/static/a/js/neon-chat.js"/>"></script>
 <script src="<c:url value="/static/a/js/neon-custom.js"/>"></script>
 <script src="<c:url value="/static/a/js/neon-demo.js"/>"></script>
-
+<script src="<c:url value="/static/a/js/wysihtml5/wysihtml5-0.4.0pre.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/wysihtml5/bootstrap-wysihtml5.js"/>"></script>
 
 <script src="<c:url value="/static/a/js/select2/select2.min.js"/>"></script>
 <script src="<c:url value="/static/a/js/bootstrap-tagsinput.min.js"/>"></script>
