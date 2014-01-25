@@ -134,6 +134,10 @@
 
 
 <link rel="stylesheet" href="<c:url value="/static/a/js/wysihtml5/bootstrap-wysihtml5.css"/>">
+<link rel="stylesheet" href="<c:url value="/static/a/js/datatables/responsive/css/datatables.responsive.css"/>">
+<link rel="stylesheet" href="<c:url value="/static/a/js/select2/select2-bootstrap.css"/>">
+<link rel="stylesheet" href="<c:url value="/static/a/js/select2/select2.css"/>">
+
 <!-- Bottom Scripts -->
 <script src="<c:url value="/static/a/js/gsap/main-gsap.js"/>"></script>
 <script src="<c:url value="/static/a/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"/>"></script>
@@ -142,6 +146,13 @@
 <script src="<c:url value="/static/a/js/resizeable.js"/>"></script>
 <script src="<c:url value="/static/a/js/neon-api.js"/>"></script>
 <script src="<c:url value="/static/a/js/bootstrap-switch.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/jquery.dataTables.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/datatables/TableTools.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/dataTables.bootstrap.js"/>"></script>
+<script src="<c:url value="/static/a/js/datatables/jquery.dataTables.columnFilter.js"/>"></script>
+<script src="<c:url value="/static/a/js/datatables/lodash.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/datatables/responsive/js/datatables.responsive.js"/>"></script>
+
 <script src="<c:url value="/static/a/js/neon-chat.js"/>"></script>
 <script src="<c:url value="/static/a/js/neon-custom.js"/>"></script>
 <script src="<c:url value="/static/a/js/neon-demo.js"/>"></script>
