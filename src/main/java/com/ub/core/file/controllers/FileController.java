@@ -30,6 +30,8 @@ public class FileController {
             IOUtils.copy(is, response.getOutputStream());
             response.flushBuffer();
             is.close();
+            response.setContentType(gridFSDBFile.getContentType());
+            response.addHeader("Content-Disposition", "attachment; filename=" + gridFSDBFile.getFilename());
         } catch (IOException ex) {
             //log.info("Error writing file to output stream. Filename was '" + fileName + "'");
             //throw new RuntimeException("IOError writing file to output stream");
