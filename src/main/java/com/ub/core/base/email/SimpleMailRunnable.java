@@ -1,9 +1,13 @@
 package com.ub.core.base.email;
 
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class SimpleMailRunnable implements Runnable {
@@ -33,14 +37,30 @@ public class SimpleMailRunnable implements Runnable {
 
     @Override
     public void run() {
-        SimpleMailMessage emailM = new SimpleMailMessage();
-        String[] ms = new String[emails.size()];
-        for (int i = 0; i < emails.size(); i++)
-            ms[i] = emails.get(i);
-        emailM.setTo(ms);
-        emailM.setSubject(title);
-        emailM.setText(body);
-        mailSender.send(emailM);
+        MimeMessage mimeMessage = mailSender.createMimeMessage();
+
+
+        List<InternetAddress> ms = new ArrayList<InternetAddress>();
+        for (int i = 0; i < emails.size(); i++) {
+            try {
+                ms.add(new InternetAddress(emails.get(i)));
+            } catch (Exception e) {
+            }
+        }
+        InternetAddress[] ims = new InternetAddress[ms.size()];
+        for (int i = 0; i < ms.size(); i++)
+            ims[i] = ms.get(i);
+
+        try {
+            mimeMessage.setRecipients(Message.RecipientType.TO ,ims);
+            mimeMessage.setSubject(title);
+            mimeMessage.setSentDate(new Date());
+            mimeMessage.setContent(body,"text/html");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+        mailSender.send(mimeMessage);
     }
 
     public void start() {
