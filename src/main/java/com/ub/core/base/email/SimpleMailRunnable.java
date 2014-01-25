@@ -54,8 +54,10 @@ public class SimpleMailRunnable implements Runnable {
         try {
             mimeMessage.setRecipients(Message.RecipientType.TO ,ims);
             mimeMessage.setSubject(title);
+            String encodingOptions = "text/html; charset=UTF-8";
+            mimeMessage.setHeader("Content-Type", encodingOptions);
             mimeMessage.setSentDate(new Date());
-            mimeMessage.setContent(body,"text/html");
+            mimeMessage.setContent(body,"UTF-8");
         } catch (MessagingException e) {
             e.printStackTrace();
         }
