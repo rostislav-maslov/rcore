@@ -103,8 +103,8 @@
 
             <ul class="list-inline links-list pull-right">
                 <li>
-                    <a href="extra-login.html">
-                        Log Out <i class="entypo-logout right"></i>
+                    <a href="<c:url value="/logout" />">
+                        Выйти <i class="entypo-logout right"></i>
                     </a>
                 </li>
             </ul>
