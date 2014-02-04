@@ -207,7 +207,7 @@
     </dependencies>
 
     <build>
-        <finalName>UBCore</finalName>
+        <finalName>ROOT</finalName>
 
         <!--<resources>-->
             <!--<resource>-->
