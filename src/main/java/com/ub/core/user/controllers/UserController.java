@@ -37,12 +37,12 @@ public class UserController {
                 userService.updateEmailUser(emailUserDoc);
                 //TODO: поставить сюда страницу с информацией что email верифицирован
                 //Думаю не нужно так делать. Нужно обсудить.
-                return "redirect: /";
+                return "redirect:/";
 
             }
         }
         else {
-            return "redirect: /";
+            return "redirect:/";
 
         }
 
