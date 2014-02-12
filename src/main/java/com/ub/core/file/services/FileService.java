@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsOperations;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,6 +26,23 @@ public class FileService {
         List<GridFSDBFile> l = gridFsTemplate.find(new Query(Criteria.where("_id").is(objectId)).limit(1));
         if (l.size() > 0)
             return l.get(0);
+        return null;
+    }
+
+    public GridFSDBFile save(MultipartFile multipartFile) {
+        try {
+            if(multipartFile.getSize() == 0) return null;
+            FileInfo fileInfo = new FileInfo();
+            fileInfo.setFileMeta(multipartFile.getContentType());
+            fileInfo.setFileName(multipartFile.getOriginalFilename());
+            fileInfo.setInputStream(multipartFile.getInputStream());
+
+            GridFSDBFile gridFSDBFile = save(fileInfo);
+            return gridFSDBFile;
+        } catch (IOException ex) {
+            //log.info("Error writing file to output stream. Filename was '" + fileName + "'");
+
+        }
         return null;
     }
 
