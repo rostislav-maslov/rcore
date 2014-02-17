@@ -16,7 +16,7 @@
                     <form:errors path="*" cssClass="errorblock" element="div"/>
 
                     <label for="file">Выберете файл для загрузки :</label>
-                    <input type="file" name="file"/>
+                    <input type="file" name="file" id="file"/>
 
                     <div class="form-group">
                         <button type="submit" id="contact-form-settings-submit" class="btn btn-primary">Сохранить
