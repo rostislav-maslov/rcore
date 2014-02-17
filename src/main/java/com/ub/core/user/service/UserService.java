@@ -33,15 +33,15 @@ public class UserService {
         userDoc.setStatus(Boolean.TRUE);
         ArrayList<RoleDoc> roleDocArrayList = new ArrayList<RoleDoc>();
         RoleDoc roleDoc = null;
-        if(addEditUserView.getRole()!=null){
+        if (addEditUserView.getRole() != null) {
             roleDoc = roleDocService.findOne(new ObjectId(addEditUserView.getRole()));
-            if(roleDoc == null){
-                throw  new UserServiceException("Данной роли не существует");
+            if (roleDoc == null) {
+                throw new UserServiceException("Данной роли не существует");
             }
-            roleDocArrayList.add( roleDoc );
+            roleDocArrayList.add(roleDoc);
         }
 
-        userDoc.setRoleDocList( roleDocArrayList );
+        userDoc.setRoleDocList(roleDocArrayList);
 
         emailUserDoc.setEmail(addEditUserView.getEmail());
         emailUserDoc.setPassword(DigestUtils.md5Hex(addEditUserView.getPassword()));
@@ -52,21 +52,38 @@ public class UserService {
         emailUserDocService.save(emailUserDoc);
     }
 
-    public ArrayList<RoleDoc> getAllRoles(){
-        return Lists.newArrayList(roleDocService.findAll());
+    public ArrayList<RoleDoc> getAllRoles() {
+        ArrayList<RoleDoc> roleDocs = new ArrayList<RoleDoc>();
+
+        Iterable<RoleDoc> roleDocIterable = roleDocService.findAll();
+        for(RoleDoc roleDoc : roleDocIterable){
+            Boolean hasElement = false;
+            for(RoleDoc roleDocList : roleDocs){
+                if(roleDoc.getRoleTitle().equals(roleDocList.getRoleTitle())){
+                    hasElement = true;
+                    break;
+                }
+            }
+            if(hasElement == false){
+                roleDocs.add(roleDoc);
+            }
+        }
+
+        return roleDocs;
     }
 
-    public ArrayList<EmailUserDoc> getEmailUsers(){
+    public ArrayList<EmailUserDoc> getEmailUsers() {
         return Lists.newArrayList(emailUserDocService.findAll());
     }
 
-    public void deleteUser(String id){
+    public void deleteUser(String id) {
 
 //        List<EmailUserDoc> userDocList = emailUserDocService.findByEmail(email);
 
         emailUserDocService.delete(id);
     }
-    public AddEditUserView getUser(String id){
+
+    public AddEditUserView getUser(String id) {
         AddEditUserView addEditUserView = new AddEditUserView();
         EmailUserDoc emailUserDoc = emailUserDocService.findOne(id);
 
@@ -81,20 +98,22 @@ public class UserService {
     public void updateUser(String id, AddEditUserView addEditUserView) throws UserServiceException {
 
         EmailUserDoc emailUserDoc = emailUserDocService.findOne(id);
-        UserDoc userDoc = new UserDoc();
+        UserDoc userDoc = userDocService.findOne(emailUserDoc.getUserDoc().getId());
 
         userDoc.setStatus(Boolean.TRUE);
         ArrayList<RoleDoc> roleDocArrayList = new ArrayList<RoleDoc>();
         RoleDoc roleDoc = roleDocService.findOne(new ObjectId(addEditUserView.getRole()));
-        if(roleDoc == null){
-            throw  new UserServiceException("Данной роли не существует");
+        if (roleDoc == null) {
+            throw new UserServiceException("Данной роли не существует");
         }
-        roleDocArrayList.add( roleDoc );
+        roleDocArrayList.add(roleDoc);
 
-        userDoc.setRoleDocList( roleDocArrayList );
+        userDoc.setRoleDocList(roleDocArrayList);
 
-        emailUserDoc.setEmail(addEditUserView.getEmail());
-        emailUserDoc.setPassword(DigestUtils.md5Hex(addEditUserView.getPassword()));
+        //emailUserDoc.setEmail(addEditUserView.getEmail());
+        if (addEditUserView.getPassword() != null && addEditUserView.getPassword().length() > 6) {
+            emailUserDoc.setPassword(DigestUtils.md5Hex(addEditUserView.getPassword()));
+        }
         userDocService.save(userDoc);
 
         emailUserDoc.setUserDoc(userDoc);
@@ -103,33 +122,34 @@ public class UserService {
 
 
     }
-    public void saveRole(AddEditRoleView addEditRoleView){
+
+    public void saveRole(AddEditRoleView addEditRoleView) {
         RoleDoc roleDoc = new RoleDoc();
         roleDoc.setRoleTitle(addEditRoleView.getRoleTitle());
         roleDoc.setRoleDescription(addEditRoleView.getRoleDescription());
 
         roleDocService.save(roleDoc);
     }
-    public EmailUserDoc getUserByEmail(String email){
-        if(emailUserDocService. findById(email).size() != 0) {
+
+    public EmailUserDoc getUserByEmail(String email) {
+        if (emailUserDocService.findById(email).size() != 0) {
             return emailUserDocService.findById(email).get(0);
-        }
-        else{
+        } else {
             return null;
         }
 
     }
 
-    public EmailUserDoc getAuthenticatedUser(HttpSession session){
-        if(session.getAttribute("userEmail")!=null){
-            return emailUserDocService.findById(session.getAttribute("userEmail").toString()).get(0) ;
+    public EmailUserDoc getAuthenticatedUser(HttpSession session) {
+        if (session.getAttribute("userEmail") != null) {
+            return emailUserDocService.findById(session.getAttribute("userEmail").toString()).get(0);
 
-        }
-        else {
+        } else {
             return null;
         }
     }
-    protected String generateVerificationCode(String email){
+
+    protected String generateVerificationCode(String email) {
         return DigestUtils.md5Hex(email + "42");
 
     }

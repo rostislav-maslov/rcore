@@ -43,20 +43,26 @@
                 <td><div class="checkbox"><input type="checkbox"></div></td>
                 <td>${user.email}</td>
                 <c:if test="${user.userDoc.status == true}">
-                <td><span class="label label-success">Active</span></td>
+                <td><span class="label label-success">Активный</span></td>
                 </c:if>
                 <c:if test="${user.userDoc.status == false}">
-                    <td><span class="label label-danger">Disable</span></td>
+                    <td><span class="label label-danger">Не активный</span></td>
                 </c:if>
                 <td class="text-right">
                 <c:forEach items="${user.userDoc.roleDocList}" var="role">
-                    &nbsp ${role.roleTitle}
+                    &nbsp ${role.roleDescription}
                 </c:forEach>
                 </td>
 
                 <td class="text-right">
-                    <a href="<c:url value="/admin/user/edit/${user.id}" />" class="btn btn-default btn-xs">edit</a>
-                    <a href="<c:url value="/admin/user/delete/${user.id}" />" class="btn"><i class="icon-remove"></i></a>
+                    <c:url value="/admin/user/edit" var="editUsr" >
+                        <c:param name="id" value="${user.id}"/>
+                    </c:url>
+                    <a href="${editUsr}" class="btn btn-default btn-xs">Редактировать</a>
+                    <c:url value="/admin/user/delete" var="deleteUsr" >
+                        <c:param name="id" value="${user.id}"/>
+                    </c:url>
+                    <a href="${deleteUsr}" class="btn"><i class="icon-remove"></i></a>
                 </td>
             </tr>
             </c:forEach>
