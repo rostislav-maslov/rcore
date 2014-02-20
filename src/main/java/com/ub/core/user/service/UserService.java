@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.ub.core.user.models.EmailUserDoc;
 import com.ub.core.user.models.RoleDoc;
 import com.ub.core.user.models.UserDoc;
+import com.ub.core.user.models.UserStatusEnum;
 import com.ub.core.user.service.exceptions.UserServiceException;
 import com.ub.core.user.views.AddEditRoleView;
 import com.ub.core.user.views.AddEditUserView;
@@ -25,6 +26,18 @@ public class UserService {
 
     @Autowired
     protected IRoleDocService roleDocService;
+
+    public void block(ObjectId id){
+        UserDoc userDoc = userDocService.findOne(id);
+        userDoc.setUserStatus(UserStatusEnum.BLOCK);
+        userDocService.save(userDoc);
+    }
+
+    public void active(ObjectId id){
+        UserDoc userDoc = userDocService.findOne(id);
+        userDoc.setUserStatus(UserStatusEnum.ACTIVE);
+        userDocService.save(userDoc);
+    }
 
     public void saveEmailUser(AddEditUserView addEditUserView) throws UserServiceException {
         EmailUserDoc emailUserDoc = new EmailUserDoc();

@@ -2,6 +2,7 @@ package com.ub.core.user.service;
 
 import com.ub.core.user.models.EmailUserDoc;
 import com.ub.core.user.models.RoleDoc;
+import com.ub.core.user.models.UserStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -11,7 +12,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -33,21 +33,21 @@ public class UserSecurityService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         EmailUserDoc emailUserDoc = userService.getUserByEmail(username);
-
-        org.springframework.security.core.userdetails.User userDetail = new org.springframework.security.core.userdetails.User(emailUserDoc.getEmail(),emailUserDoc.getPassword(),true,true,true,true,getAuthorities(emailUserDoc.getUserDoc().getRoleDocList()));
+        if (emailUserDoc.getUserDoc() == null || emailUserDoc.getUserDoc().getUserStatus().equals(UserStatusEnum.BLOCK))
+            emailUserDoc = null;
+        org.springframework.security.core.userdetails.User userDetail = new org.springframework.security.core.userdetails.User(emailUserDoc.getEmail(), emailUserDoc.getPassword(), true, true, true, true, getAuthorities(emailUserDoc.getUserDoc().getRoleDocList()));
         return userDetail;
     }
 
     public List<GrantedAuthority> getAuthorities(List<RoleDoc> roleDocList) {
         List<GrantedAuthority> authList = new ArrayList<GrantedAuthority>();
-        for(Iterator<RoleDoc> i = roleDocList.iterator(); i.hasNext(); ) {
+        for (Iterator<RoleDoc> i = roleDocList.iterator(); i.hasNext(); ) {
             RoleDoc item = i.next();
             authList.add(new SimpleGrantedAuthority(item.getRoleTitle()));
 
         }
         return authList;
     }
-
 
 
 }
