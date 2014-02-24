@@ -28,12 +28,12 @@
             <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title=""
                data-original-title="Remove"><i class="icon-remove-sign"></i></a>
         </div>
-        <h3><i class="icon-table"></i> Users Table</h3>
+        <h3><i class="icon-table"></i> Пользователи</h3>
     </div>
     <div class="widget-content">
         <p>Всего - ${userList.size()}</p>
         <div class="table-responsive">
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered datatable" id="table-1">
                 <thead>
                 <tr>
                     <th>
@@ -108,3 +108,46 @@
         </div>
     </div>
 </div>
+
+
+<script type="text/javascript">
+    var responsiveHelper;
+    var breakpointDefinition = {
+        tablet: 1024,
+        phone: 480
+    };
+    var tableContainer;
+
+    jQuery(document).ready(function ($) {
+        tableContainer = $("#table-1");
+
+        tableContainer.dataTable({
+            "sPaginationType": "bootstrap",
+            "aLengthMenu": [
+                [10, 25, 50, -1],
+                [10, 25, 50, "All"]
+            ],
+            "bStateSave": true,
+
+
+            // Responsive Settings
+            bAutoWidth: false,
+            fnPreDrawCallback: function () {
+                // Initialize the responsive datatables helper once.
+                if (!responsiveHelper) {
+                    responsiveHelper = new ResponsiveDatatablesHelper(tableContainer, breakpointDefinition);
+                }
+            },
+            fnRowCallback: function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                responsiveHelper.createExpandIcon(nRow);
+            },
+            fnDrawCallback: function (oSettings) {
+                responsiveHelper.respond();
+            }
+        });
+
+        $(".dataTables_wrapper select").select2({
+            minimumResultsForSearch: -1
+        });
+    });
+</script>
