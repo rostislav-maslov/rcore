@@ -29,24 +29,18 @@ public class UserController {
     public String verificateUser(@PathVariable String email, @PathVariable String code,  ModelMap modelMap){
         EmailUserDoc emailUserDoc = userService.getUserByEmail(email);
         if(emailUserDoc == null){
-            return "redirect:/";
+            return "com.ub.bitcoin.client.verification.email.error";
         }
         if(emailUserDoc.getUserDocStatuses().equals(UserDocStatuses.EMAIL_NOT_VERIFICATED)){
             if(emailUserDoc.getVericationCode().equals(code)){
                 emailUserDoc.setUserDocStatuses(UserDocStatuses.EMAIL_VERIFICATED);
                 userService.updateEmailUser(emailUserDoc);
-                //TODO: поставить сюда страницу с информацией что email верифицирован
-                //Думаю не нужно так делать. Нужно обсудить.
-                return "redirect: /";
-
+                return "com.ub.bitcoin.client.verification.email.done";
             }
         }
         else {
-            return "redirect: /";
-
+            return "redirect:/user/settings";
         }
-
-
         return "redirect:/";
     }
 }

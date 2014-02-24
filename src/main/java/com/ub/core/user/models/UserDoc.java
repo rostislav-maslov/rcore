@@ -13,10 +13,21 @@ public class UserDoc {
     @Id
     protected ObjectId id;
 
-    protected Boolean status;
+    protected Boolean status ;
 
     @DBRef
     protected List<RoleDoc> roleDocList;
+
+    protected UserStatusEnum userStatus = UserStatusEnum.ACTIVE;
+
+
+    public UserStatusEnum getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(UserStatusEnum userStatus) {
+        this.userStatus = userStatus;
+    }
 
     public ObjectId getId() {
         return id;
