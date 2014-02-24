@@ -1,11 +1,12 @@
 package com.ub.core.base.menu;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ExcludeCoreMenu {
 
     protected String id = getClass().getCanonicalName();
-    protected List<CoreMenu> menu;
+    protected List<CoreMenu> menu = new ArrayList<CoreMenu>();
 
     public String getId() {
         return id;

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class UserService {
@@ -32,13 +33,13 @@ public class UserService {
 
         userDoc.setStatus(Boolean.TRUE);
         ArrayList<RoleDoc> roleDocArrayList = new ArrayList<RoleDoc>();
-        RoleDoc roleDoc = null;
+        List<RoleDoc> roleDoc = new ArrayList<RoleDoc>();
         if(addEditUserView.getRole()!=null){
-            roleDoc = roleDocService.findOne(new ObjectId(addEditUserView.getRole()));
-            if(roleDoc == null){
+            roleDoc = roleDocService.findByRoleTitle((addEditUserView.getRole()));
+            if(roleDoc == null || roleDoc.size() == 0){
                 throw  new UserServiceException("Данной роли не существует");
             }
-            roleDocArrayList.add( roleDoc );
+            roleDocArrayList.add( roleDoc.get(0) );
         }
 
         userDoc.setRoleDocList( roleDocArrayList );
