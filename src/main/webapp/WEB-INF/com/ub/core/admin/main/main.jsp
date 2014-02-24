@@ -42,92 +42,92 @@
 <body class="page-body" data-url="">
 
 <div class="page-container">
-<!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
+    <!-- add class "sidebar-collapsed" to close sidebar by default, "chat-visible" to make chat appear always -->
 
-<div class="sidebar-menu">
-
-
-<header class="logo-env">
-
-    <!-- logo -->
-    <div class="logo">
-        <a href="/">
-            <img src="<c:url value="/static/a/images/logo@2x.png"/>" width="95" alt=""/>
-        </a>
-    </div>
-
-    <!-- logo collapse icon -->
-
-    <div class="sidebar-collapse">
-        <a href="#" class="sidebar-collapse-icon with-animation">
-            <!-- add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition -->
-            <i class="entypo-menu"></i>
-        </a>
-    </div>
+    <div class="sidebar-menu">
 
 
-    <!-- open/close menu icon (do not remove if you want to enable menu on mobile devices) -->
-    <div class="sidebar-mobile-menu visible-xs">
-        <a href="#" class="with-animation"><!-- add class "with-animation" to support animation -->
-            <i class="entypo-menu"></i>
-        </a>
-    </div>
+        <header class="logo-env">
 
-</header>
+            <!-- logo -->
+            <div class="logo">
+                <a href="/">
+                    <img src="<c:url value="/static/a/images/logo@2x.png"/>" width="95" alt=""/>
+                </a>
+            </div>
+
+            <!-- logo collapse icon -->
+
+            <div class="sidebar-collapse">
+                <a href="#" class="sidebar-collapse-icon with-animation">
+                    <!-- add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition -->
+                    <i class="entypo-menu"></i>
+                </a>
+            </div>
 
 
-<ul id="main-menu" class="">
-<!-- add class "multiple-expanded" to allow multiple submenus to open -->
-<!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
-<!-- Search Bar -->
-<%--<li id="search">--%>
-    <%--<form method="get" action="">--%>
-        <%--<input type="text" name="q" class="search-input" placeholder="Search something..."/>--%>
-        <%--<button type="submit">--%>
+            <!-- open/close menu icon (do not remove if you want to enable menu on mobile devices) -->
+            <div class="sidebar-mobile-menu visible-xs">
+                <a href="#" class="with-animation"><!-- add class "with-animation" to support animation -->
+                    <i class="entypo-menu"></i>
+                </a>
+            </div>
+
+        </header>
+
+
+        <ul id="main-menu" class="">
+            <!-- add class "multiple-expanded" to allow multiple submenus to open -->
+            <!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
+            <!-- Search Bar -->
+            <%--<li id="search">--%>
+            <%--<form method="get" action="">--%>
+            <%--<input type="text" name="q" class="search-input" placeholder="Search something..."/>--%>
+            <%--<button type="submit">--%>
             <%--<i class="entypo-search"></i>--%>
-        <%--</button>--%>
-    <%--</form>--%>
-<%--</li>--%>
-     <tiles:insertAttribute name="mainMenu"/>
-</ul>
-
-</div>
-<div class="main-content">
-    <div class="row">
-
-        <!-- Profile Info and Notifications -->
-        <div class="col-md-6 col-sm-8 clearfix">
-        </div>
-        <!-- Raw Links -->
-        <div class="col-md-6 col-sm-4 clearfix hidden-xs">
-
-            <ul class="list-inline links-list pull-right">
-                <li>
-                    <a href="<c:url value="/logout" />">
-                        Выйти <i class="entypo-logout right"></i>
-                    </a>
-                </li>
-            </ul>
-
-        </div>
+            <%--</button>--%>
+            <%--</form>--%>
+            <%--</li>--%>
+            <tiles:insertAttribute name="mainMenu"/>
+        </ul>
 
     </div>
+    <div class="main-content">
+        <div class="row">
 
-    <hr/>
+            <!-- Profile Info and Notifications -->
+            <div class="col-md-6 col-sm-8 clearfix">
+            </div>
+            <!-- Raw Links -->
+            <div class="col-md-6 col-sm-4 clearfix hidden-xs">
 
-    <selection id="main_content">
-        <tiles:insertAttribute name="content"/>
-    </selection>
+                <ul class="list-inline links-list pull-right">
+                    <li>
+                        <a href="<c:url value="/logout" />">
+                            Выйти <i class="entypo-logout right"></i>
+                        </a>
+                    </li>
+                </ul>
 
-    <!-- Footer -->
-    <footer class="main">
+            </div>
+
+        </div>
+
+        <hr/>
+
+        <selection id="main_content">
+            <tiles:insertAttribute name="content"/>
+        </selection>
+
+        <!-- Footer -->
+        <footer class="main">
 
 
-        &copy; 2014 <strong>UBCore</strong> Admin Engine by <a href="http://unitbean.com" target="_blank">LLC
-        UnitBean</a>
+            &copy; 2014 <strong>UBCore</strong> Admin Engine by <a href="http://unitbean.com" target="_blank">LLC
+            UnitBean</a>
 
-    </footer>
-</div>
+        </footer>
+    </div>
 
 
 </div>
@@ -141,6 +141,7 @@
 <!-- Bottom Scripts -->
 <script src="<c:url value="/static/a/js/gsap/main-gsap.js"/>"></script>
 <script src="<c:url value="/static/a/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/menu/autoopenmenu.js" />" type="text/javascript"></script>
 <script src="<c:url value="/static/a/js/bootstrap.min.js"/>"></script>
 <script src="<c:url value="/static/a/js/joinable.js"/>"></script>
 <script src="<c:url value="/static/a/js/resizeable.js"/>"></script>

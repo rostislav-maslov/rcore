@@ -10,7 +10,7 @@
 <c:forEach items="<%= MenuBoost.allMenu()%>" var="menu">
     <li>
         <a href="">
-            <i class="entypo-gauge"></i>
+            <i class="${menu.icon}"></i>
             <span>${menu.name}</span>
         </a>
         <c:if test="${not empty menu.child}">

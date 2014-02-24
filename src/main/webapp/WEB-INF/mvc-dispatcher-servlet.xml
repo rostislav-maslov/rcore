@@ -11,7 +11,7 @@
         http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
 
     <mongo:mongo host="127.0.0.1" port="27017"/>
-    <mongo:db-factory dbname="UBCore" username="" password=""/>
+    <mongo:db-factory dbname="UBCore" username="admin" password="1qaZXsw2"/>
 
     <import resource="classpath:/WEB-INF/servlet/*servlet.xml" />
     <import resource="/WEB-INF/servlet/*servlet.xml" />

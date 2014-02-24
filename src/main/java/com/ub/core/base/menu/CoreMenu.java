@@ -1,5 +1,7 @@
 package com.ub.core.base.menu;
 
+import com.ub.core.menu.models.fields.MenuIcons;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +11,7 @@ public abstract class CoreMenu {
     protected CoreMenu parent;
     protected String name = "";
     protected String url = "";
+    protected String icon = MenuIcons.ENTYPO_GAUGE;
     protected List<CoreMenu> child = new ArrayList<CoreMenu>();
 
     public String getId() {
@@ -49,5 +52,13 @@ public abstract class CoreMenu {
 
     public void setChild(List<CoreMenu> child) {
         this.child = child;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }
