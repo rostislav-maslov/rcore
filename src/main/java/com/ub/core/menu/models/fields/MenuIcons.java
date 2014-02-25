@@ -14,11 +14,21 @@ public class MenuIcons {
 
     public static final String ENTYPO_GAUGE = "entypo-gauge";//before ; // content";// '\e8de'; } /* '' */
     public static final String ENTYPO_STAR_EMPTY = "entypo-star-empty";//before ; // content";// '\e809'; } /* '' */
-    public static final String ENTYPO_MENU ="entypo-menu";//before ; // content";// '\e811'; } /* '' */
+    public static final String ENTYPO_MENU = "entypo-menu";//before ; // content";// '\e811'; } /* '' */
 
-    //    public static final String ENTYPO_ ="entypo-users";//before ; // content";// '\e80b'; } /* '' */
-// public static final String ENTYPO_ ="entypo-user";//before ; // content";// '\e80a'; } /* '' */
-//    public static final String ENTYPO_ ="entypo-user-add";//before ; // content";// '\e80c'; } /* '' */
+    public static final String ENTYPO_USERS = "entypo-users";//before ; // content";// '\e80b'; } /* '' */
+    public static final String ENTYPO_USER = "entypo-user";//before ; // content";// '\e80a'; } /* '' */
+    public static final String ENTYPO_USER_ADD = "entypo-user-add";//before ; // content";// '\e80c'; } /* '' */
+
+    public static final String ENTYPO_DOC = "entypo-doc";//before ; // content";// '\e848'; } /* '' */
+    public static final String ENTYPO_DOCS = "entypo-docs";//before ; // content";// '\e849'; } /* '' */
+    public static final String ENTYPO_DOC_LANDSCAPE = "entypo-doc-landscape";//before ; // content";// '\e84a'; } /* '' */
+    public static final String ENTYPO_DOC_TEXT = "entypo-doc-text";//before ; // content";// '\e84b'; } /* '' */
+    public static final String ENTYPO_DOC_TEXT_INV = "entypo-doc-text-inv";//before ; // content";// '\e84c'; } /* '' */
+
+    public static final String ENTYPO_BOOK_OPEN = "entypo-book-open";//before ; // content";// '\e84e'; } /* '' */
+    public static final String ENTYPO_BOOK = "entypo-book";//before ; // content";// '\e84f'; } /* '' */
+
 //    public static final String ENTYPO_ ="entypo-video";//before ; // content";// '\e80d'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-picture";//before ; // content";// '\e80e'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-camera";//before ; // content";// '\e80f'; } /* '' */
@@ -78,14 +88,9 @@ public class MenuIcons {
 //    public static final String ENTYPO_ ="entypo-compass";//before ; // content";// '\e845'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-cup";//before ; // content";// '\e846'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-trash";//before ; // content";// '\e847'; } /* '' */
-//    public static final String ENTYPO_ ="entypo-doc";//before ; // content";// '\e848'; } /* '' */
-//    public static final String ENTYPO_ ="entypo-docs";//before ; // content";// '\e849'; } /* '' */
-//    public static final String ENTYPO_ ="entypo-doc-landscape";//before ; // content";// '\e84a'; } /* '' */
-//    public static final String ENTYPO_ ="entypo-doc-text";//before ; // content";// '\e84b'; } /* '' */
-//    public static final String ENTYPO_ ="entypo-doc-text-inv";//before ; // content";// '\e84c'; } /* '' */
+
 //    public static final String ENTYPO_ ="entypo-newspaper";//before ; // content";// '\e84d'; } /* '' */
-//    public static final String ENTYPO_ ="entypo-book-open";//before ; // content";// '\e84e'; } /* '' */
-//    public static final String ENTYPO_ ="entypo-book";//before ; // content";// '\e84f'; } /* '' */
+
 //    public static final String ENTYPO_ ="entypo-folder";//before ; // content";// '\e850'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-archive";//before ; // content";// '\e851'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-box";//before ; // content";// '\e852'; } /* '' */
