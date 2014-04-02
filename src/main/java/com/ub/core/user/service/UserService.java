@@ -1,198 +1,154 @@
 package com.ub.core.user.service;
 
 import com.google.common.collect.Lists;
-import com.ub.core.user.models.EmailUserDoc;
-import com.ub.core.user.models.RoleDoc;
+import com.ub.core.base.role.Role;
+import com.ub.core.base.role.RoleBoost;
 import com.ub.core.user.models.UserDoc;
 import com.ub.core.user.models.UserStatusEnum;
-import com.ub.core.user.service.exceptions.UserServiceException;
-import com.ub.core.user.views.AddEditRoleView;
+import com.ub.core.user.service.exceptions.UserExistException;
+import com.ub.core.user.service.exceptions.UserNotExistException;
 import com.ub.core.user.views.AddEditUserView;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
 public class UserService {
-    @Autowired
-    protected IEmailUserDocService emailUserDocService;
 
     @Autowired
     protected IUserDocService userDocService;
 
-    @Autowired
-    protected IRoleDocService roleDocService;
-
-    public void block(ObjectId id){
+    /**
+     * Блокировка пользотеля
+     *
+     * @param id
+     */
+    public void block(ObjectId id) {
         UserDoc userDoc = userDocService.findOne(id);
         userDoc.setUserStatus(UserStatusEnum.BLOCK);
         userDocService.save(userDoc);
     }
 
-    public void active(ObjectId id){
+    /**
+     * Активация пользователя
+     *
+     * @param id
+     */
+    public void active(ObjectId id) {
         UserDoc userDoc = userDocService.findOne(id);
         userDoc.setUserStatus(UserStatusEnum.ACTIVE);
         userDocService.save(userDoc);
     }
 
-    public void saveEmailUser(AddEditUserView addEditUserView) throws UserServiceException {
-        EmailUserDoc emailUserDoc = new EmailUserDoc();
+    /**
+     * Создание нового пользователя по email
+     *
+     * @param addEditUserView
+     * @throws UserExistException
+     */
+    public void createUserByEmail(AddEditUserView addEditUserView) throws UserExistException {
         UserDoc userDoc = new UserDoc();
 
-        userDoc.setStatus(Boolean.TRUE);
-        ArrayList<RoleDoc> roleDocArrayList = new ArrayList<RoleDoc>();
-        List<RoleDoc> roleDoc = new ArrayList<RoleDoc>();
-        if (addEditUserView.getRole() != null) {
-            roleDoc = roleDocService.findByRoleTitle((addEditUserView.getRole()));
-            if(roleDoc == null || roleDoc.size() == 0){
-                throw  new UserServiceException("Данной роли не существует");
-            }
-            roleDocArrayList.add( roleDoc.get(0) );
+        UserDoc check = userDocService.findByEmail(addEditUserView.getEmail());
+        if (check != null) {
+            throw new UserExistException();
         }
 
-        userDoc.setRoleDocList(roleDocArrayList);
-
-        emailUserDoc.setEmail(addEditUserView.getEmail());
-        emailUserDoc.setPassword(DigestUtils.md5Hex(addEditUserView.getPassword()));
-        userDocService.save(userDoc);
-
-        emailUserDoc.setUserDoc(userDoc);
-
-        emailUserDocService.save(emailUserDoc);
-    }
-
-    public ArrayList<RoleDoc> getAllRoles() {
-        ArrayList<RoleDoc> roleDocs = new ArrayList<RoleDoc>();
-
-        Iterable<RoleDoc> roleDocIterable = roleDocService.findAll();
-        for(RoleDoc roleDoc : roleDocIterable){
-            Boolean hasElement = false;
-            for(RoleDoc roleDocList : roleDocs){
-                if(roleDoc.getRoleTitle().equals(roleDocList.getRoleTitle())){
-                    hasElement = true;
+        if (addEditUserView.getRole() != null) {
+            List<Role> roles = getAllRoles();
+            Role role = null;
+            for (Role r : roles) {
+                if (r.getId().equals(addEditUserView.getRole())) {
+                    role = r;
                     break;
                 }
             }
-            if(hasElement == false){
-                roleDocs.add(roleDoc);
+            if (role != null) {
+                userDoc.getRoles().add(role);
             }
         }
 
-        return roleDocs;
-    }
-
-    public ArrayList<EmailUserDoc> getEmailUsers() {
-        return Lists.newArrayList(emailUserDocService.findAll());
-    }
-
-    public void deleteUser(String id) {
-
-//        List<EmailUserDoc> userDocList = emailUserDocService.findByEmail(email);
-
-        emailUserDocService.delete(id);
-    }
-
-    public AddEditUserView getUser(String id) {
-        AddEditUserView addEditUserView = new AddEditUserView();
-        EmailUserDoc emailUserDoc = emailUserDocService.findOne(id);
-
-        addEditUserView.setEmail(emailUserDoc.getEmail());
-
-//       TODO: поменять на множественный список
-        return addEditUserView;
-
-
-    }
-
-    public void updateUser(String id, AddEditUserView addEditUserView) throws UserServiceException {
-
-        EmailUserDoc emailUserDoc = emailUserDocService.findOne(id);
-        UserDoc userDoc = userDocService.findOne(emailUserDoc.getUserDoc().getId());
-
-        userDoc.setStatus(Boolean.TRUE);
-        ArrayList<RoleDoc> roleDocArrayList = new ArrayList<RoleDoc>();
-        RoleDoc roleDoc = roleDocService.findOne(new ObjectId(addEditUserView.getRole()));
-        if (roleDoc == null) {
-            throw new UserServiceException("Данной роли не существует");
-        }
-        roleDocArrayList.add(roleDoc);
-
-        userDoc.setRoleDocList(roleDocArrayList);
-
-        //emailUserDoc.setEmail(addEditUserView.getEmail());
-        if (addEditUserView.getPassword() != null && addEditUserView.getPassword().length() > 6) {
-            emailUserDoc.setPassword(DigestUtils.md5Hex(addEditUserView.getPassword()));
-        }
+        userDoc.setEmail(addEditUserView.getEmail());
+        userDoc.setPasswordAsHex(addEditUserView.getPassword());
         userDocService.save(userDoc);
-
-        emailUserDoc.setUserDoc(userDoc);
-
-        emailUserDocService.save(emailUserDoc);
-
-
     }
 
-    public void saveRole(AddEditRoleView addEditRoleView) {
-        RoleDoc roleDoc = new RoleDoc();
-        roleDoc.setRoleTitle(addEditRoleView.getRoleTitle());
-        roleDoc.setRoleDescription(addEditRoleView.getRoleDescription());
 
-        roleDocService.save(roleDoc);
+    /**
+     * Получить все доступные роли в системе
+     *
+     * @return
+     */
+    public List<Role> getAllRoles() {
+        return RoleBoost.allRoles();
     }
 
-    public EmailUserDoc getUserByEmail(String email) {
-        if (emailUserDocService.findById(email).size() != 0) {
-            return emailUserDocService.findById(email).get(0);
-        } else {
-            return null;
+    /**
+     * Получить всех пользователей
+     *
+     * @return
+     */
+    public ArrayList<UserDoc> getAllUsers() {
+        return Lists.newArrayList(userDocService.findAll());
+    }
+
+    /**
+     * Удалить пользователя
+     *
+     * @param id
+     */
+    public void deleteUser(ObjectId id) {
+        userDocService.delete(id);
+    }
+
+    /**
+     * @param id
+     * @return
+     */
+    public UserDoc getUser(ObjectId id) {
+        return userDocService.findOne(id);
+    }
+
+    /**
+     * Обновляем информацию о пользователе
+     *
+     * @param userDoc
+     * @throws UserNotExistException
+     */
+    public void updateUserInfo(UserDoc userDoc) throws UserNotExistException {
+        UserDoc currUser = userDocService.findOne(userDoc.getId());
+        if (currUser == null) {
+            throw new UserNotExistException();
         }
 
+        currUser.setFirstName(userDoc.getFirstName());
+        currUser.setLastName(userDoc.getLastName());
+
+        userDocService.save(userDoc);
     }
 
-    public EmailUserDoc getAuthenticatedUser(HttpSession session) {
-        if (session.getAttribute("userEmail") != null) {
-            return emailUserDocService.findById(session.getAttribute("userEmail").toString()).get(0);
-
-        } else {
-            return null;
-        }
+    /**
+     * Получить пользователя по email
+     *
+     * @param email
+     * @return
+     */
+    public UserDoc getUserByEmail(String email) {
+        return userDocService.findByEmail(email);
     }
 
-    protected String generateVerificationCode(String email) {
-        return DigestUtils.md5Hex(email + "42");
-
-    }
-
-    public IEmailUserDocService getEmailUserDocService() {
-        return emailUserDocService;
-    }
-
-    public void setEmailUserDocService(IEmailUserDocService emailUserDocService) {
-        this.emailUserDocService = emailUserDocService;
-    }
-
-    public IUserDocService getUserDocService() {
-        return userDocService;
-    }
-
-    public void setUserDocService(IUserDocService userDocService) {
-        this.userDocService = userDocService;
-    }
-
-    public IRoleDocService getRoleDocService() {
-        return roleDocService;
-    }
-
-    public void setRoleDocService(IRoleDocService roleDocService) {
-        this.roleDocService = roleDocService;
-    }
-
-    public void updateEmailUser(EmailUserDoc emailUserDoc) {
-        emailUserDocService.save(emailUserDoc);
+    public String restorePassword(String email) throws UserNotExistException{
+        String pass = DigestUtils.md2Hex(new Date().toString());
+        UserDoc userDoc = getUserByEmail(email);
+        if(userDoc == null)
+            throw new UserNotExistException();
+        userDoc.setPasswordAsHex(pass);
+        userDocService.save(userDoc);
+        return pass;
     }
 }

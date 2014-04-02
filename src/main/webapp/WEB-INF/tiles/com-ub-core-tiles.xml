@@ -27,6 +27,9 @@
     <definition name="com.ub.core.admin.user.addEdit" extends="com.ub.core.admin.layout">
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/AddEditUserView.jsp" />
     </definition>
+    <definition name="com.ub.core.admin.user.editUserInfo" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/editUserInfo.jsp" />
+    </definition>
     <definition name="com.ub.core.admin.user.list" extends="com.ub.core.admin.layout">
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/UserListView.jsp" />
     </definition>

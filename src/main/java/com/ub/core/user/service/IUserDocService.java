@@ -5,4 +5,5 @@ import org.bson.types.ObjectId;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 public interface IUserDocService extends PagingAndSortingRepository<UserDoc, ObjectId> {
+    public UserDoc findByEmail(String email);
 }

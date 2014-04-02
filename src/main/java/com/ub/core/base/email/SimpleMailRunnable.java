@@ -27,6 +27,13 @@ public class SimpleMailRunnable implements Runnable {
         this.mailSender = mailSender;
     }
 
+    public SimpleMailRunnable(String email, String title, String body, JavaMailSender mailSender) {
+        this.emails.add(email);
+        this.title = title;
+        this.body = body;
+        this.mailSender = mailSender;
+    }
+
     public SimpleMailRunnable(String[] emails, String title, String body, JavaMailSender mailSender) {
         for (String m : emails)
             this.emails.add(m);
@@ -52,12 +59,12 @@ public class SimpleMailRunnable implements Runnable {
             ims[i] = ms.get(i);
 
         try {
-            mimeMessage.setRecipients(Message.RecipientType.TO ,ims);
+            mimeMessage.setRecipients(Message.RecipientType.TO, ims);
             String encodingOptions = "text/html;charset=UTF-8";
             mimeMessage.setHeader("Content-Type", encodingOptions);
             mimeMessage.setSentDate(new Date());
             mimeMessage.setSubject(title);
-            mimeMessage.setContent(body,encodingOptions);
+            mimeMessage.setContent(body, encodingOptions);
         } catch (MessagingException e) {
             e.printStackTrace();
         }

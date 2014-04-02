@@ -55,22 +55,24 @@
                 <c:forEach items="${userList}" var="user">
                     <tr>
                         <td>
+
                             <div class="checkbox"><input type="checkbox"></div>
+
                         </td>
                         <td>${user.email}</td>
-                        <c:if test="${user.userDoc.userStatus == active}">
+                        <c:if test="${user.userStatus == active}">
                             <td>
                                 <span class="label label-success">Активный</span>
                             </td>
                         </c:if>
-                        <c:if test="${user.userDoc.userStatus == block}">
+                        <c:if test="${user.userStatus == block}">
                             <td>
                                 <span class="label label-danger">Не активный</span>
                             </td>
                         </c:if>
                         <td class="text-right">
-                            <c:forEach items="${user.userDoc.roleDocList}" var="role">
-                                &nbsp ${role.roleDescription}
+                            <c:forEach items="${user.roles}" var="role">
+                                &nbsp ${role.roleTitle}
                             </c:forEach>
                         </td>
 
@@ -85,14 +87,14 @@
                             <a href="${deleteUsr}" class="btn"><i class="icon-remove"></i></a>
 
                             <form action="<%= UserAdminRoutes.BLOCK%>" method="POST">
-                                <input type="hidden" name="id" value="${user.userDoc.id}"/>
+                                <input type="hidden" name="id" value="${user.id}"/>
                                 <button type="submit" class="btn btn-default btn-xs">
                                     Заблокировать
                                 </button>
                             </form>
 
                             <form action="<%= UserAdminRoutes.ACTIVE%>" method="POST">
-                                <input type="hidden" name="id" value="${user.userDoc.id}"/>
+                                <input type="hidden" name="id" value="${user.id}"/>
                                 <button type="submit" class="btn btn-default btn-xs">
                                     Активировать
                                 </button>

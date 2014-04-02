@@ -42,7 +42,7 @@ public class RoleAdminController {
             return "com.ub.core.admin.role.addEdit";
         }
         else{
-            userService.saveRole(addEditRoleView);
+           // userService.saveRole(addEditRoleView);
 
         }
 

@@ -1,11 +1,12 @@
 package com.ub.core.user.service;
 
-import com.ub.core.user.models.EmailUserDoc;
-import com.ub.core.user.models.RoleDoc;
+import com.ub.core.base.role.Role;
+import com.ub.core.user.models.UserDoc;
 import com.ub.core.user.models.UserStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,14 +15,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Anton
- * Date: 1/16/14
- * Time: 11:52 AM
- * To change this template use File | Settings | File Templates.
- */
 
 @Service
 public class UserSecurityService implements UserDetailsService {
@@ -32,17 +27,21 @@ public class UserSecurityService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        EmailUserDoc emailUserDoc = userService.getUserByEmail(username);
-        if (emailUserDoc.getUserDoc() == null || emailUserDoc.getUserDoc().getUserStatus().equals(UserStatusEnum.BLOCK))
-            emailUserDoc = null;
-        org.springframework.security.core.userdetails.User userDetail = new org.springframework.security.core.userdetails.User(emailUserDoc.getEmail(), emailUserDoc.getPassword(), true, true, true, true, getAuthorities(emailUserDoc.getUserDoc().getRoleDocList()));
+        UserDoc userDoc = userService.getUserByEmail(username);
+        if (userDoc == null || userDoc.getUserStatus().equals(UserStatusEnum.BLOCK))
+            userDoc = null;
+        org.springframework.security.core.userdetails.User userDetail = new User(
+                userDoc.getEmail(),
+                userDoc.getPassword(), true, true, true, true,
+                getAuthorities(userDoc.getRoles())
+        );
         return userDetail;
     }
 
-    public List<GrantedAuthority> getAuthorities(List<RoleDoc> roleDocList) {
+    public List<GrantedAuthority> getAuthorities(Set<Role> roleDocList) {
         List<GrantedAuthority> authList = new ArrayList<GrantedAuthority>();
-        for (Iterator<RoleDoc> i = roleDocList.iterator(); i.hasNext(); ) {
-            RoleDoc item = i.next();
+        for (Iterator<Role> i = roleDocList.iterator(); i.hasNext(); ) {
+            Role item = i.next();
             authList.add(new SimpleGrantedAuthority(item.getRoleTitle()));
 
         }

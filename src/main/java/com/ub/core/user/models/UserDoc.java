@@ -1,33 +1,38 @@
 package com.ub.core.user.models;
 
 
+import com.ub.core.base.role.Role;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Document
 public class UserDoc {
     @Id
     protected ObjectId id;
 
-    protected Boolean status ;
+    protected Set<Role> roles = new HashSet<Role>();
 
-    @DBRef
-    protected List<RoleDoc> roleDocList;
-
+    protected String email;
+    protected String password;
     protected UserStatusEnum userStatus = UserStatusEnum.ACTIVE;
 
+    protected String firstName;
+    protected String lastName;
 
-    public UserStatusEnum getUserStatus() {
-        return userStatus;
+
+    public static String generateHexPassword(String email, String password) {
+        return DigestUtils.md5Hex(email + ";" + password + "42");
     }
 
-    public void setUserStatus(UserStatusEnum userStatus) {
-        this.userStatus = userStatus;
+    public void setPasswordAsHex(String notHexPassword) {
+        this.password = generateHexPassword(email, notHexPassword);
     }
+
 
     public ObjectId getId() {
         return id;
@@ -37,19 +42,51 @@ public class UserDoc {
         this.id = id;
     }
 
-    public List<RoleDoc> getRoleDocList() {
-        return roleDocList;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRoleDocList(List<RoleDoc> roleDocList) {
-        this.roleDocList = roleDocList;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
-    public Boolean getStatus() {
-        return status;
+    public String getEmail() {
+        return email;
     }
 
-    public void setStatus(Boolean status) {
-        this.status = status;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public UserStatusEnum getUserStatus() {
+        return userStatus;
+    }
+
+    public void setUserStatus(UserStatusEnum userStatus) {
+        this.userStatus = userStatus;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 }

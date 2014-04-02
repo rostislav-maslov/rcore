@@ -2,7 +2,6 @@ package com.ub.core.user.views;
 
 import org.hibernate.validator.constraints.Email;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class AddEditUserView {
@@ -13,7 +12,7 @@ public class AddEditUserView {
     @Size(min = 6, message = "пароль должен быть более 6 символов")
     private String password;
 
-    @NotNull(message = "укажите роль")
+    //@NotNull(message = "укажите роль")
     private String role;
 
     public String getEmail() {
