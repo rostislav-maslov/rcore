@@ -142,6 +142,10 @@ public class UserService {
         return userDocService.findByEmail(email);
     }
 
+    public UserDoc getUserByVkId(String vkId){
+        return userDocService.findByUserVkId(vkId);
+    }
+
     public String restorePassword(String email) throws UserNotExistException{
         String pass = DigestUtils.md2Hex(new Date().toString());
         UserDoc userDoc = getUserByEmail(email);
@@ -150,5 +154,13 @@ public class UserService {
         userDoc.setPasswordAsHex(pass);
         userDocService.save(userDoc);
         return pass;
+    }
+
+    public IUserDocService getUserDocService() {
+        return userDocService;
+    }
+
+    public void setUserDocService(IUserDocService userDocService) {
+        this.userDocService = userDocService;
     }
 }

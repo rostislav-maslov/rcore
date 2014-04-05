@@ -24,6 +24,24 @@ public class UserDoc {
     protected String firstName;
     protected String lastName;
 
+    private String userVkId;
+    private String userVkEmail;
+
+    public String getUserVkId() {
+        return userVkId;
+    }
+
+    public void setUserVkId(String userVkId) {
+        this.userVkId = userVkId;
+    }
+
+    public String getUserVkEmail() {
+        return userVkEmail;
+    }
+
+    public void setUserVkEmail(String userVkEmail) {
+        this.userVkEmail = userVkEmail;
+    }
 
     public static String generateHexPassword(String email, String password) {
         return DigestUtils.md5Hex(email + ";" + password + "42");
