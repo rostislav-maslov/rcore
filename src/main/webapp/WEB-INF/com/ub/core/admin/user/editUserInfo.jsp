@@ -1,3 +1,4 @@
+<%@ page import="com.ub.core.user.routes.RoleAdminRoutes" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -24,6 +25,18 @@
 
                     <label for="lastName">Фамилия </label>
                     <form:input path="lastName" cssClass="form-control" id="lastName" />
+
+                    <label for="lastName">Добавить роль: </label>
+                    <c:url value="<%= RoleAdminRoutes.ADD%>" var="roleAdd">
+                        <c:param name="id" value="${userDoc.id}"></c:param>
+                    </c:url>
+                    <a href="${roleAdd}"> добавить </a>
+
+
+                    <c:forEach items="${userDoc.roles}" var="r">
+                        <p>${r.roleTitle}</p>
+                    </c:forEach>
+
 
                     <br>
                     <div class="form-group">

@@ -8,4 +8,6 @@ public class UserAdminRoutes {
     public static final String LIST = "/admin/user/list";
     public static final String LIST_BLOCK = "/admin/user/list/block";
     public static final String LIST_ACTIVE = "/admin/user/list/active";
+
+    public static final String ADD = "/admin/user/add";
 }

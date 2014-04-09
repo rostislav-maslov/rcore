@@ -49,6 +49,7 @@
 
     <!-- Starter -->
     <!--<bean name="StarterName" init-method="init" class="com.ub.core.base.starter.CoreStarter"/>-->
+    <bean name="InitMainUsersStarter" init-method="init" class="com.ub.core.base.starter.InitMainUsersStarter"/>
 
     <!-- Interseption -->
     <mvc:interceptors>

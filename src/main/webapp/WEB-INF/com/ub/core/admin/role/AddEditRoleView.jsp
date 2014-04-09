@@ -1,3 +1,4 @@
+<%@ page import="com.ub.core.user.routes.RoleAdminRoutes" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -6,19 +7,22 @@
     <div class="col-md-6">
         <div class="widget widget-green" id="widget_profit_chart">
             <div class="widget-title">
-                <h3><i class="icon-tasks"></i> </h3>
+                <h3><i class="icon-tasks"></i></h3>
             </div>
             <div class="widget-content">
 
-                <form:form action="${backUrl}" modelAttribute="addEditRoleView">
+                <form action="<%= RoleAdminRoutes.ADD%>" method="post">
 
                     <form:errors path="*" cssClass="alert alert-warning" element="div" />
 
-                    <label for="roleTitle">Название </label>
-                    <form:input path="roleTitle" cssClass="form-control" id="roleTitle" />
+                    <label for="role">Выбрать роль: </label>
+                    <select name="role" id="role" class="form-control">
+                        <c:forEach items="${roles}" var="role">
+                            <option value="${role.id}">${role.roleTitle}</option>
+                        </c:forEach>
+                    </select>
 
-                    <label for="roleDescription">Описание </label>
-                    <form:textarea path="roleDescription" cssClass="form-control" id="roleDescription" />
+                    <input name="user" value="${userId}" type="hidden"/>
 
                     <br>
                     <div class="form-group">
@@ -26,7 +30,7 @@
                     </div>
 
 
-                </form:form>
+                </form>
 
             </div>
         </div>

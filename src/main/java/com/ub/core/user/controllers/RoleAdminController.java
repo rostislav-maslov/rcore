@@ -1,16 +1,23 @@
 package com.ub.core.user.controllers;
 
+import com.ub.core.base.role.Role;
+import com.ub.core.base.role.RoleBoost;
+import com.ub.core.base.utils.RouteUtils;
+import com.ub.core.user.models.UserDoc;
+import com.ub.core.user.routes.RoleAdminRoutes;
+import com.ub.core.user.routes.UserAdminRoutes;
+import com.ub.core.user.service.IUserDocService;
 import com.ub.core.user.service.UserService;
 import com.ub.core.user.views.AddEditRoleView;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,51 +27,37 @@ import javax.validation.Valid;
  * To change this template use File | Settings | File Templates.
  */
 @Controller
-@RequestMapping("/admin/role/")
+
 public class RoleAdminController {
 
 
-    @Autowired
-    UserService userService;
+    @Autowired private UserService userService;
+    @Autowired private IUserDocService iUserDocService;
 
-    @RequestMapping(value = "/add")
-    public String addRole(ModelMap modelMap){
+    @RequestMapping(value = RoleAdminRoutes.ADD, method = RequestMethod.GET)
+    public String addRole(@RequestParam ObjectId id, ModelMap modelMap) {
         AddEditRoleView addEditRoleView = new AddEditRoleView();
-        modelMap.addAttribute("addEditRoleView", addEditRoleView);
-        modelMap.addAttribute("backUrl", "/admin/role/addPost");
-
+        modelMap.addAttribute("roles", RoleBoost.allRoles());
+        modelMap.addAttribute("userId", id);
         return "com.ub.core.admin.role.addEdit";
     }
 
-    @RequestMapping(value = "addPost", method = RequestMethod.POST)
-    public String addRolePost(ModelMap modelMap, @ModelAttribute @Valid AddEditRoleView addEditRoleView, BindingResult bindingResult){
-        if(bindingResult.hasErrors()){
-            return "com.ub.core.admin.role.addEdit";
-        }
-        else{
-           // userService.saveRole(addEditRoleView);
+    @RequestMapping(value = RoleAdminRoutes.ADD, method = RequestMethod.POST)
+    public String addRolePost(@RequestParam ObjectId user, @RequestParam String role, ModelMap modelMap) {
 
+        List<Role> roles = RoleBoost.allRoles();
+
+        for (Role r : roles) {
+            if (r.getId().equals(role)) {
+                UserDoc userDoc = userService.getUser(user);
+                userDoc.getRoles().add(r);
+                iUserDocService.save(userDoc);
+                break;
+            }
         }
 
-        return "redirect:/admin/user/list";
+        return RouteUtils.redirectTo(UserAdminRoutes.LIST);
     }
 
-//    @RequestMapping(value = "/addPost", method = RequestMethod.POST)
-//    public String addUserPost(@ModelAttribute @Valid AddEditUserView addEditUserView, BindingResult bindingResult){
-//
-//        if(bindingResult.hasErrors()){
-//            return "com.ub.core.admin.user.addEdit";
-//        }
-//        else{
-//            try {
-//                userService.saveEmailUser(addEditUserView);
-//            } catch (UserServiceException e) {
-//                ObjectError error = new ObjectError("role",e.getMessage());
-//                bindingResult.addError(error);
-//            }
-//        }
-//
-//        return "redirect:/admin/user/list";
-//    }
 
 }

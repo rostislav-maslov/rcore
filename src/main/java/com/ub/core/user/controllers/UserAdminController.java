@@ -31,7 +31,7 @@ public class UserAdminController {
     @Autowired
     UserService userService;
 
-    @RequestMapping(value = "/admin/user/list", method = RequestMethod.GET)
+    @RequestMapping(value = UserAdminRoutes.LIST, method = RequestMethod.GET)
     public String userList(ModelMap modelMap) {
         modelMap.addAttribute("active", UserStatusEnum.ACTIVE);
         modelMap.addAttribute("block", UserStatusEnum.BLOCK);
@@ -70,7 +70,7 @@ public class UserAdminController {
 
     }
 
-    @RequestMapping(value = "/admin/user/add", method = RequestMethod.GET)
+    @RequestMapping(value = UserAdminRoutes.ADD, method = RequestMethod.GET)
     public String addUserGet(ModelMap modelMap) {
         AddEditUserView addEditUserView = new AddEditUserView();
         modelMap.addAttribute("addEditUserView", addEditUserView);
