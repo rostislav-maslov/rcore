@@ -2,6 +2,7 @@
 <%@ page import="com.ub.core.menu.models.fields.MenuFields" %>
 <%@ page import="com.ub.core.pages.routes.PagesAdminRoutes" %>
 <%@ page import="com.ub.core.file.FileRoutes" %>
+<%@ page import="com.ub.core.user.routes.UserLoginRoutes" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -66,7 +67,7 @@
 
         <div class="login-content">
 
-            <form method="post" role="form" action="<c:url value="j_spring_security_check" />"  id="form_login">
+            <form method="post" role="form" action="<%= UserLoginRoutes.LOGIN%>"  id="form_login">
                 <c:if test="${not empty error}">
                     <div class="errorblock">
                         Your login attempt was not successful, try again.<br /> Caused :
@@ -80,7 +81,7 @@
                             <i class="entypo-user"></i>
                         </div>
 
-                        <input type="text" class="form-control" name='j_username' id="username" placeholder="Username" autocomplete="off" />
+                        <input type="text" class="form-control" name='email' id="username" placeholder="Username" autocomplete="off" />
                     </div>
 
                 </div>
@@ -92,7 +93,7 @@
                             <i class="entypo-key"></i>
                         </div>
 
-                        <input type="password" class="form-control" name='j_password' id="password" placeholder="Password" autocomplete="off" />
+                        <input type="password" class="form-control" name='password' id="password" placeholder="Password" autocomplete="off" />
                     </div>
 
                 </div>

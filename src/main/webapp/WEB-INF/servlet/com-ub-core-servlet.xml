@@ -53,10 +53,12 @@
 
     <!-- Interseption -->
     <mvc:interceptors>
-        <!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/admin/**"/>-->
-            <!--<bean class="com.ub.core.user.security.AdminSecurity"/>-->
-        <!--</mvc:interceptor>-->
+        <mvc:interceptor>
+            <mvc:mapping path="/admin/**"/>
+            <mvc:exclude-mapping path="/admin/login**"/>
+            <mvc:exclude-mapping path="/admin/logout**"/>
+            <bean class="com.ub.core.user.security.AdminSecurity"/>
+        </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/com/ub/core/controllers/ExampleCoreController/**"/>
             <!--<mvc:exclude-mapping path="/admin/**"/>-->
