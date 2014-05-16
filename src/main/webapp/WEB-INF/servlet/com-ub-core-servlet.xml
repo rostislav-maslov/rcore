@@ -51,7 +51,7 @@
     <!--<bean name="StarterName" init-method="init" class="com.ub.core.base.starter.CoreStarter"/>-->
     <bean name="InitMainUsersStarter" init-method="init" class="com.ub.core.base.starter.InitMainUsersStarter"/>
 
-    <!-- Interseption -->
+
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/admin/**"/>
@@ -59,11 +59,11 @@
             <mvc:exclude-mapping path="/admin/logout**"/>
             <bean class="com.ub.core.user.security.AdminSecurity"/>
         </mvc:interceptor>
-        <mvc:interceptor>
-            <mvc:mapping path="/com/ub/core/controllers/ExampleCoreController/**"/>
-            <!--<mvc:exclude-mapping path="/admin/**"/>-->
-            <bean class="com.ub.core.yandexmetrica.controllers.YandexMetricaInterceptor"/>
-        </mvc:interceptor>
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/com/ub/core/controllers/ExampleCoreController/**"/>-->
+            <!--&lt;!&ndash;<mvc:exclude-mapping path="/admin/**"/>&ndash;&gt;-->
+            <!--<bean class="com.ub.core.yandexmetrica.controllers.YandexMetricaInterceptor"/>-->
+        <!--</mvc:interceptor>-->
     </mvc:interceptors>
 
 
