@@ -137,6 +137,9 @@
 <link rel="stylesheet" href="<c:url value="/static/a/js/datatables/responsive/css/datatables.responsive.css"/>">
 <link rel="stylesheet" href="<c:url value="/static/a/js/select2/select2-bootstrap.css"/>">
 <link rel="stylesheet" href="<c:url value="/static/a/js/select2/select2.css"/>">
+<link rel="stylesheet" href="<c:url value="/static/a/js/selectboxit/jquery.selectBoxIt.css"/>">
+<link rel="stylesheet" href="<c:url value="/static/a/css/font-icons/font-awesome/css/font-awesome.min.css"/>">
+
 
 <!-- Bottom Scripts -->
 <script src="<c:url value="/static/a/js/gsap/main-gsap.js"/>"></script>
@@ -169,6 +172,6 @@
 <script src="<c:url value="/static/a/js/bootstrap-colorpicker.min.js"/>"></script>
 <script src="<c:url value="/static/a/js/daterangepicker/moment.min.js"/>"></script>
 <script src="<c:url value="/static/a/js/daterangepicker/daterangepicker.js"/>"></script>
-
+<script src="<c:url value="/static/a/js/selectboxit/jquery.selectBoxIt.min.js"/>"></script>
 </body>
 </html>
