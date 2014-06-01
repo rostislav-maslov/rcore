@@ -3,6 +3,7 @@ package com.ub.core.file.controllers;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.ub.core.file.FileRoutes;
 import com.ub.core.file.services.FileService;
+import com.ub.core.utils.StringUtils;
 import org.apache.commons.io.IOUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,12 +27,12 @@ public class FileController {
                            @PathVariable(value = FileRoutes.GET_FILE_FATH_VAR) String parPath) throws Exception {
         try {
             GridFSDBFile gridFSDBFile = fileService.getFile(new ObjectId(parPath));
+            response.setHeader("Content-Disposition", "filename=\"" + StringUtils.cyrillicToLatin(gridFSDBFile.getFilename())+"\"");
+            response.setContentType(gridFSDBFile.getContentType());
             InputStream is = gridFSDBFile.getInputStream();
             IOUtils.copy(is, response.getOutputStream());
             response.flushBuffer();
             is.close();
-            response.setContentType(gridFSDBFile.getContentType());
-            response.addHeader("Content-Disposition", "attachment; filename=" + gridFSDBFile.getFilename());
         } catch (IOException ex) {
             //log.info("Error writing file to output stream. Filename was '" + fileName + "'");
             //throw new RuntimeException("IOError writing file to output stream");
