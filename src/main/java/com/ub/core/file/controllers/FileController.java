@@ -27,6 +27,11 @@ public class FileController {
                            @PathVariable(value = FileRoutes.GET_FILE_FATH_VAR) String parPath) throws Exception {
         try {
             GridFSDBFile gridFSDBFile = fileService.getFile(new ObjectId(parPath));
+
+//            response.setHeader("Cache-Control", "cache, store"); // HTTP 1.1.
+//            response.setHeader("Pragma", "ache"); // HTTP 1.0.
+//            response.setDateHeader("Expires", 5000); // Proxies.
+
             response.setHeader("Content-Disposition", "filename=\"" + StringUtils.cyrillicToLatin(gridFSDBFile.getFilename())+"\"");
             response.setContentType(gridFSDBFile.getContentType());
             InputStream is = gridFSDBFile.getInputStream();
