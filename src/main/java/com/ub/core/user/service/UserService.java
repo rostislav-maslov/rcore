@@ -8,9 +8,16 @@ import com.ub.core.user.models.UserStatusEnum;
 import com.ub.core.user.service.exceptions.UserExistException;
 import com.ub.core.user.service.exceptions.UserNotExistException;
 import com.ub.core.user.views.AddEditUserView;
+import com.ub.vk.response.AccessTokenResponse;
+import com.ub.vk.response.users.get.UserInfo;
+import com.ub.vk.response.users.get.UsersGetResponse;
+import com.ub.vk.services.UserVkService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -20,8 +27,8 @@ import java.util.List;
 @Component
 public class UserService {
 
-    @Autowired
-    protected IUserDocService userDocService;
+    @Autowired protected MongoTemplate mongoTemplate;
+    @Autowired protected UserVkService userVkService;
 
     /**
      * Блокировка пользотеля
@@ -29,9 +36,9 @@ public class UserService {
      * @param id
      */
     public void block(ObjectId id) {
-        UserDoc userDoc = userDocService.findOne(id);
+        UserDoc userDoc = mongoTemplate.findById(id, UserDoc.class);
         userDoc.setUserStatus(UserStatusEnum.BLOCK);
-        userDocService.save(userDoc);
+        mongoTemplate.save(userDoc);
     }
 
     /**
@@ -40,9 +47,21 @@ public class UserService {
      * @param id
      */
     public void active(ObjectId id) {
-        UserDoc userDoc = userDocService.findOne(id);
+        UserDoc userDoc = mongoTemplate.findById(id, UserDoc.class);
         userDoc.setUserStatus(UserStatusEnum.ACTIVE);
-        userDocService.save(userDoc);
+        mongoTemplate.save(userDoc);
+    }
+
+    public UserDoc findByEmail(String email){
+        return mongoTemplate.findOne(new Query(Criteria.where("email").is(email)), UserDoc.class);
+    }
+
+    public void addRoleToUser(ObjectId idUser, Role role){
+        UserDoc userDoc = mongoTemplate.findById(idUser, UserDoc.class);
+        if(userDoc != null){
+            userDoc.getRoles().add(role);
+            mongoTemplate.save(userDoc);
+        }
     }
 
     /**
@@ -54,7 +73,7 @@ public class UserService {
     public void createUserByEmail(AddEditUserView addEditUserView) throws UserExistException {
         UserDoc userDoc = new UserDoc();
 
-        UserDoc check = userDocService.findByEmail(addEditUserView.getEmail());
+        UserDoc check = findByEmail(addEditUserView.getEmail());
         if (check != null) {
             throw new UserExistException();
         }
@@ -75,9 +94,45 @@ public class UserService {
 
         userDoc.setEmail(addEditUserView.getEmail());
         userDoc.setPasswordAsHex(addEditUserView.getPassword());
-        userDocService.save(userDoc);
+        mongoTemplate.save(userDoc);
     }
 
+    /**
+     * Создание нового пользователя по vk
+     *
+     * @param accessTokenResponse
+     * @throws UserExistException
+     */
+    public UserDoc createUserByVk(AccessTokenResponse accessTokenResponse) throws UserExistException {
+        UserDoc userDoc = new UserDoc();
+
+        UserDoc check = getUserByVkId(accessTokenResponse.getUser_id());
+        if (check != null) {
+            throw new UserExistException();
+        }
+
+        userDoc.setVkAccessToken(accessTokenResponse.getAccess_token());
+        userDoc.setVkEmail(accessTokenResponse.getEmail());
+        userDoc.setVkId(accessTokenResponse.getUser_id());
+        userDoc.setUserStatus(UserStatusEnum.ACTIVE);
+
+        UsersGetResponse usersGetResponse = userVkService.get(accessTokenResponse.getUser_id());
+        if(usersGetResponse != null && usersGetResponse.getResponse()!=null && usersGetResponse.getResponse().size()==1){
+            UserInfo userInfo = usersGetResponse.getResponse().get(0);
+
+            userDoc.setFirstName(userInfo.getFirst_name());
+            userDoc.setLastName(userInfo.getLast_name());
+        }
+
+        mongoTemplate.save(userDoc);
+        return userDoc;
+    }
+
+    public UserDoc updateVkAccessToken(UserDoc userDoc, String accessToken){
+        userDoc.setVkAccessToken(accessToken);
+        mongoTemplate.save(accessToken);
+        return userDoc;
+    }
 
     /**
      * Получить все доступные роли в системе
@@ -94,7 +149,7 @@ public class UserService {
      * @return
      */
     public ArrayList<UserDoc> getAllUsers() {
-        return Lists.newArrayList(userDocService.findAll());
+        return Lists.newArrayList(mongoTemplate.findAll(UserDoc.class));
     }
 
     /**
@@ -103,7 +158,8 @@ public class UserService {
      * @param id
      */
     public void deleteUser(ObjectId id) {
-        userDocService.delete(id);
+        UserDoc userDoc = mongoTemplate.findById(id, UserDoc.class);
+        mongoTemplate.remove(userDoc);
     }
 
     /**
@@ -111,7 +167,7 @@ public class UserService {
      * @return
      */
     public UserDoc getUser(ObjectId id) {
-        return userDocService.findOne(id);
+        return mongoTemplate.findById(id, UserDoc.class);
     }
 
     /**
@@ -121,7 +177,7 @@ public class UserService {
      * @throws UserNotExistException
      */
     public void updateUserInfo(UserDoc userDoc) throws UserNotExistException {
-        UserDoc currUser = userDocService.findOne(userDoc.getId());
+        UserDoc currUser = mongoTemplate.findById(userDoc.getId(), UserDoc.class);
         if (currUser == null) {
             throw new UserNotExistException();
         }
@@ -129,7 +185,7 @@ public class UserService {
         currUser.setFirstName(userDoc.getFirstName());
         currUser.setLastName(userDoc.getLastName());
 
-        userDocService.save(userDoc);
+        mongoTemplate.save(userDoc);
     }
 
     /**
@@ -139,11 +195,11 @@ public class UserService {
      * @return
      */
     public UserDoc getUserByEmail(String email) {
-        return userDocService.findByEmail(email);
+        return findByEmail(email);
     }
 
     public UserDoc getUserByVkId(String vkId){
-        return userDocService.findByUserVkId(vkId);
+        return mongoTemplate.findOne(new Query(Criteria.where("vkId").is(vkId)), UserDoc.class);
     }
 
     public String restorePassword(String email) throws UserNotExistException{
@@ -152,15 +208,9 @@ public class UserService {
         if(userDoc == null)
             throw new UserNotExistException();
         userDoc.setPasswordAsHex(pass);
-        userDocService.save(userDoc);
+        mongoTemplate.save(userDoc);
         return pass;
     }
 
-    public IUserDocService getUserDocService() {
-        return userDocService;
-    }
 
-    public void setUserDocService(IUserDocService userDocService) {
-        this.userDocService = userDocService;
-    }
 }

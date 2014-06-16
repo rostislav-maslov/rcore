@@ -3,3 +3,4 @@
 /UBCore.iml
 
 /target
+/src/main/webapp/resources/database.properties

@@ -6,25 +6,6 @@
           http://www.springframework.org/schema/security
           http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
-    <http auto-config='true' use-expressions="true">
-        <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')" />
-        <intercept-url pattern="/login" access="permitAll"/>
-        <form-login login-page="/login"  authentication-failure-url="/loginfailed" default-target-url="/admin" />
-        <logout logout-success-url="/login" logout-url="/logout"/>
-    </http>
 
-    <authentication-manager>
-        <authentication-provider user-service-ref="userSecurityService" >
-            <password-encoder hash="md5" />
-        </authentication-provider>
-
-        <!--<authentication-provider>-->
-            <!--<user-service>-->
-                <!--<user name="admin" password="123456" authorities="ROLE_USER" />-->
-            <!--</user-service>-->
-        <!--</authentication-provider>-->
-    </authentication-manager>
-
-    <beans:bean id="userSecurityService" class="com.ub.core.user.service.UserSecurityService"/>
 
 </beans:beans>

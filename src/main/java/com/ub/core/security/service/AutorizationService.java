@@ -1,27 +1,20 @@
 package com.ub.core.security.service;
 
-import com.ub.core.user.models.UserDoc;
-import com.ub.core.user.models.UserStatusEnum;
-import com.ub.core.user.service.UserService;
 import com.ub.core.security.service.exceptions.UserNotAutorizedException;
 import com.ub.core.security.session.SessionModel;
 import com.ub.core.security.session.SessionType;
-import com.ub.core.social.vk.support.HttpsConnectionHelper;
+import com.ub.core.user.models.UserDoc;
+import com.ub.core.user.service.UserService;
+import com.ub.core.user.service.exceptions.UserExistException;
+import com.ub.vk.response.AccessTokenResponse;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Enumeration;
-import java.util.Map;
 
 @Component
 public class AutorizationService {
@@ -38,6 +31,11 @@ public class AutorizationService {
         return DigestUtils.md5Hex(t);
     }
 
+    public String getTokenVk(UserDoc userDoc) {
+        String t = userDoc.getVkId() + ";" + userDoc.getVkAccessToken() + "42";
+        return DigestUtils.md5Hex(t);
+    }
+
     public SessionModel getSessionModelEmailType(UserDoc userDoc) {
         SessionModel sessionModel = new SessionModel();
         sessionModel.setIdUser(userDoc.getId());
@@ -45,18 +43,19 @@ public class AutorizationService {
         sessionModel.setToken(getTokenEmail(userDoc));
         return sessionModel;
     }
-    public SessionModel getSessionModelVkType(UserDoc userDoc, String token) {
+
+    public SessionModel getSessionModelVkType(UserDoc userDoc) {
         SessionModel sessionModel = new SessionModel();
         sessionModel.setIdUser(userDoc.getId());
         sessionModel.setType(SessionType.VK);
-        sessionModel.setToken(token);
+        sessionModel.setToken(getTokenVk(userDoc));
         return sessionModel;
     }
 
-    public void logout(){
+    public void logout() {
         HttpSession httpSession = getSession();
         Enumeration enumerator = httpSession.getAttributeNames();
-        while (enumerator.hasMoreElements()){
+        while (enumerator.hasMoreElements()) {
             Object o = enumerator.nextElement();
             httpSession.removeAttribute(o.toString());
         }
@@ -76,19 +75,21 @@ public class AutorizationService {
         httpSession.setMaxInactiveInterval(60 * 60 * 24 * 3);
     }
 
-    public void authorizeVk(String accessToken, String userVkId){
-        UserDoc userDoc = userService.getUserByVkId(userVkId);
-
+    public void authorizeVk(AccessTokenResponse accessTokenResponse) {
+        UserDoc userDoc = userService.getUserByVkId(accessTokenResponse.getUser_id());
         if (userDoc == null) {
-            userDoc = new UserDoc();
-            userDoc.setUserVkId(userVkId);
-            userDoc.setUserStatus(UserStatusEnum.ACTIVE);
-            userService.getUserDocService().save(userDoc);
+            try {
+                userDoc = userService.createUserByVk(accessTokenResponse);
+            } catch (UserExistException e) {
+                e.printStackTrace();
+            }
+        }else{
+            userDoc = userService.updateVkAccessToken(userDoc, accessTokenResponse.getAccess_token());
         }
-
-        SessionModel sessionModel = getSessionModelVkType(userDoc,accessToken);
+        SessionModel sessionModel = getSessionModelVkType(userDoc);
         HttpSession httpSession = getSession();
         httpSession = sessionModel.fillSession(httpSession);
+        httpSession.setMaxInactiveInterval(60 * 60 * 24 * 30);
     }
 
     public UserDoc getUserFromSession() throws UserNotAutorizedException {
@@ -102,19 +103,18 @@ public class AutorizationService {
         if (sessionModel.getType() == null) throw new UserNotAutorizedException();
         if (sessionModel.getToken() == null) throw new UserNotAutorizedException();
         if (sessionModel.getIdUser() == null) throw new UserNotAutorizedException();
-        if((sessionModel.getType().equals(SessionType.EMAIL))){
+        if ((sessionModel.getType().equals(SessionType.EMAIL))) {
             UserDoc user = userService.getUser(sessionModel.getIdUser());
             if (user == null) throw new UserNotAutorizedException();
             if (sessionModel.getType().equals(SessionType.EMAIL) && getTokenEmail(user).equals(sessionModel.getToken()))
                 return user;
         }
-        if((sessionModel.getType().equals(SessionType.VK))){
+        if ((sessionModel.getType().equals(SessionType.VK))) {
             UserDoc user = userService.getUser(sessionModel.getIdUser());
             if (user == null) throw new UserNotAutorizedException();
-            if(checkAccessTokenVk(user) == false){
+            if (checkAccessTokenVk(user,sessionModel.getToken()) == false) {
                 throw new UserNotAutorizedException();
-            }
-            else {
+            } else {
                 return user;
             }
         }
@@ -122,37 +122,9 @@ public class AutorizationService {
         throw new UserNotAutorizedException();
     }
 
-    private Boolean checkAccessTokenVk(UserDoc userDoc){
-        HttpSession httpSession = getSession();
-        SessionModel sessionModel = null;
-        try {
-            sessionModel = new SessionModel(httpSession);
-
-            HttpsConnectionHelper helper = new HttpsConnectionHelper();
-            String https_url = "https://api.vkontakte.ru/method/isAppUser?uid="+ userDoc.getUserVkId()
-                    +"&access_token="+ sessionModel.getToken();
-            URL url;
-            try {
-                url = new URL(https_url);
-                HttpsURLConnection con = (HttpsURLConnection)url.openConnection();
-                helper.print_https_cert(con);
-                String result = helper.print_content(con);
-                Map json = (JSONObject)new JSONValue().parse(result);
-                if(json.get("response").toString().equals("1")){
-                    return true;
-                }
-                else {
-                    return false;
-                }
-            } catch (MalformedURLException ex) {
-                return false;
-            } catch (IOException er) {
-                return false;
-            }
-        } catch (NullPointerException e) {
-
-        }
-
+    private Boolean checkAccessTokenVk(UserDoc userDoc, String ourToken) {
+        if(ourToken.equals(getTokenVk(userDoc)))
+            return true;
         return false;
     }
 

@@ -24,24 +24,11 @@ public class UserDoc {
     protected String firstName;
     protected String lastName;
 
-    private String userVkId;
-    private String userVkEmail;
+    private String vkId;
+    private String vkAccessToken;
+    private String vkEmail;
 
-    public String getUserVkId() {
-        return userVkId;
-    }
 
-    public void setUserVkId(String userVkId) {
-        this.userVkId = userVkId;
-    }
-
-    public String getUserVkEmail() {
-        return userVkEmail;
-    }
-
-    public void setUserVkEmail(String userVkEmail) {
-        this.userVkEmail = userVkEmail;
-    }
 
     public static String generateHexPassword(String email, String password) {
         return DigestUtils.md5Hex(email + ";" + password + "42");
@@ -106,5 +93,29 @@ public class UserDoc {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getVkId() {
+        return vkId;
+    }
+
+    public void setVkId(String vkId) {
+        this.vkId = vkId;
+    }
+
+    public String getVkAccessToken() {
+        return vkAccessToken;
+    }
+
+    public void setVkAccessToken(String vkAccessToken) {
+        this.vkAccessToken = vkAccessToken;
+    }
+
+    public String getVkEmail() {
+        return vkEmail;
+    }
+
+    public void setVkEmail(String vkEmail) {
+        this.vkEmail = vkEmail;
     }
 }

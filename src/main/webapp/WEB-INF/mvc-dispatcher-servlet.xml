@@ -10,16 +10,60 @@
         http://www.springframework.org/schema/mvc
         http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd">
 
-    <mongo:mongo host="127.0.0.1" port="27017"/>
-    <mongo:db-factory dbname="UBCore" username="admin" password="1qaZXsw2"/>
+    <mvc:annotation-driven />
 
-    <import resource="classpath:/WEB-INF/servlet/*servlet.xml" />
-    <import resource="/WEB-INF/servlet/*servlet.xml" />
-    <import resource="classpath:/WEB-INF/security/*security.xml" />
-    <import resource="/WEB-INF/security/*security.xml" />
+    <context:annotation-config/>
+    <!--<mvc:resources mapping="/robots.txt" location="/static/robots.txt" />-->
+
+
+    <context:property-placeholder location="resources/database.properties"/>
+
+    <mongo:mongo host="127.0.0.1" port="27017" />
+    <mongo:db-factory
+            username="${mongo.username}"
+            password="${mongo.password}"
+            dbname="${mongo.db}"/>
+
+    <import resource="classpath*:WEB-INF/servlet/com-ub-core-servlet.xml" />
+    <!--<import resource="/servlet/com-ub-core-servlet.xml" />-->
+
+    <!--<mvc:interceptors>-->
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/**"/>-->
+            <!--<mvc:exclude-mapping path="/login**"/>-->
+            <!--<mvc:exclude-mapping path="/activeProgram/add**"/>-->
+            <!--<mvc:exclude-mapping path="/workDelay/add**"/>-->
+            <!--<mvc:exclude-mapping path="/logout**"/>-->
+            <!--<mvc:exclude-mapping path="/admin/**"/>-->
+            <!--<mvc:exclude-mapping path="/static/**"/>-->
+            <!--<mvc:exclude-mapping path="/files/**"/>-->
+            <!--<mvc:exclude-mapping path="/index/**"/>-->
+            <!--<mvc:exclude-mapping path="/question/**"/>-->
+            <!--<mvc:exclude-mapping path="/"/>-->
+            <!--<mvc:exclude-mapping path="/in"/>-->
+            <!--<bean class="com.ub.timetracker.base.interseptions.SecurityInterseption"/>-->
+        <!--</mvc:interceptor>-->
+    <!--</mvc:interceptors>-->
+
+    <!-- MAIL -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="smtp.gmail.com" />
+        <property name="port" value="587" />
+        <property name="username" value="info@unitbean.com" />
+        <property name="password" value="1qazinfoXSW@" />
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.transport.protocol">smtp</prop>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+            </props>
+        </property>
+    </bean>
+
+
 
     <bean id="tilesConfigurer"
-    class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+          class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
         <property name="definitions">
             <list>
                 <value>classpath:/WEB-INF/tiles/*tiles.xml</value>

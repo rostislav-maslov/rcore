@@ -289,7 +289,7 @@ public class MenuIcons {
 //    public static final String ENTYPO_ ="entypo-mixi";//before ; // content";// '\e914'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-behance";//before ; // content";// '\e915'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-google-circles";//before ; // content";// '\e916'; } /* '' */
-//    public static final String ENTYPO_ ="entypo-vkontakte";//before ; // content";// '\e917'; } /* '' */
+    public static final String ENTYPO_VKONTAKTE ="entypo-vkontakte";//before ; // content";// '\e917'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-smashing";//before ; // content";// '\e918'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-sweden";//before ; // content";// '\e919'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-db-shape";//before ; // content";// '\e91a'; } /* '' */

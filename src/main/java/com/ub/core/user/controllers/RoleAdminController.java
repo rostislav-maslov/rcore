@@ -3,10 +3,8 @@ package com.ub.core.user.controllers;
 import com.ub.core.base.role.Role;
 import com.ub.core.base.role.RoleBoost;
 import com.ub.core.base.utils.RouteUtils;
-import com.ub.core.user.models.UserDoc;
 import com.ub.core.user.routes.RoleAdminRoutes;
 import com.ub.core.user.routes.UserAdminRoutes;
-import com.ub.core.user.service.IUserDocService;
 import com.ub.core.user.service.UserService;
 import com.ub.core.user.views.AddEditRoleView;
 import org.bson.types.ObjectId;
@@ -32,7 +30,7 @@ public class RoleAdminController {
 
 
     @Autowired private UserService userService;
-    @Autowired private IUserDocService iUserDocService;
+   // @Autowired private IUserDocService iUserDocService;
 
     @RequestMapping(value = RoleAdminRoutes.ADD, method = RequestMethod.GET)
     public String addRole(@RequestParam ObjectId id, ModelMap modelMap) {
@@ -49,9 +47,7 @@ public class RoleAdminController {
 
         for (Role r : roles) {
             if (r.getId().equals(role)) {
-                UserDoc userDoc = userService.getUser(user);
-                userDoc.getRoles().add(r);
-                iUserDocService.save(userDoc);
+                userService.addRoleToUser(user, r);
                 break;
             }
         }

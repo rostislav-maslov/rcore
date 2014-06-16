@@ -2,16 +2,16 @@ package com.ub.core.base.starter;
 
 import com.ub.core.base.role.BaseAdminRole;
 import com.ub.core.user.models.UserDoc;
-import com.ub.core.user.service.IUserDocService;
 import com.ub.core.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
 public class InitMainUsersStarter extends ACoreStarter {
 
     @Autowired private UserService userService;
-    @Autowired private IUserDocService iUserDocService;
+    @Autowired private MongoTemplate mongoTemplate;
 
     @Override
     protected void onStart() {
@@ -30,6 +30,6 @@ public class InitMainUsersStarter extends ACoreStarter {
         userDoc.setFirstName(name);
         userDoc.setLastName(lastName);
 
-        iUserDocService.save(userDoc);
+        mongoTemplate.save(userDoc);
     }
 }
