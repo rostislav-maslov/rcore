@@ -133,6 +133,8 @@
 </div>
 
 
+<tiles:insertAttribute name="contentModals" defaultValue=""/>
+
 <link rel="stylesheet" href="<c:url value="/static/a/js/wysihtml5/bootstrap-wysihtml5.css"/>">
 <link rel="stylesheet" href="<c:url value="/static/a/js/datatables/responsive/css/datatables.responsive.css"/>">
 <link rel="stylesheet" href="<c:url value="/static/a/js/select2/select2-bootstrap.css"/>">
