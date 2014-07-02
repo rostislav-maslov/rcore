@@ -29,6 +29,17 @@ public class FileService {
         return null;
     }
 
+    public ObjectId saveWithDelete(MultipartFile file, ObjectId oldId){
+        if(file != null && file.getSize() != 0){
+            if(oldId != null) delete(oldId);
+
+            GridFSDBFile gridFSDBFile = save(file);
+            return (ObjectId)gridFSDBFile.getId();
+        }
+
+        return null;
+    }
+
     public GridFSDBFile save(MultipartFile multipartFile) {
         try {
             if(multipartFile.getSize() == 0) return null;
