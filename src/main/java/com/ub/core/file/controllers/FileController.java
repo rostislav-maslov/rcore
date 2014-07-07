@@ -16,6 +16,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 @Controller
 public class FileController {
@@ -33,6 +35,13 @@ public class FileController {
 //            response.setDateHeader("Expires", 5000); // Proxies.
 
             response.setHeader("Content-Disposition", "filename=\"" + StringUtils.cyrillicToLatin(gridFSDBFile.getFilename())+"\"");
+            //Кеширование
+            GregorianCalendar gc = new GregorianCalendar();
+            gc.setTime(new Date());
+            gc.add(GregorianCalendar.HOUR_OF_DAY, 72);
+            long ex = gc.getTime().getTime();
+            response.setDateHeader("Expires",ex);
+            //конец кеширования
             response.setContentType(gridFSDBFile.getContentType());
             InputStream is = gridFSDBFile.getInputStream();
             IOUtils.copy(is, response.getOutputStream());
