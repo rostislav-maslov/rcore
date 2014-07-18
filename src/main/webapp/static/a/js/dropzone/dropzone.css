@@ -54,7 +54,7 @@
   width: 100px;
   height: 100px;
   position: relative;
-  background: #ebebeb;
+  background: rgb(180, 180, 180);;
   padding: 5px;
   margin-bottom: 22px;
 }
