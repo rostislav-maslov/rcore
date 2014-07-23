@@ -17,6 +17,7 @@ public class InitMainUsersStarter extends ACoreStarter {
     protected void onStart() {
         create("maslov@unitbean.com", "4rfVBgt5","Ростислав","Маслов");
         create("nabiullin@unitbean.com","4rfVBgt5","Антон","Набиуллин");
+        create("kornev@unitbean.com","4rfVBgt5","Эдуард","Корнев");
     }
 
     private void create(String email, String password, String name, String lastName){
