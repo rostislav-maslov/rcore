@@ -12,6 +12,8 @@ import org.springframework.data.mongodb.gridfs.GridFsOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -19,6 +21,8 @@ import java.util.List;
 
 @Component
 public class FileService {
+    public static final String IMG_CONTENT_TYPE = "image/jpeg";
+
     @Autowired
     private GridFsOperations gridFsTemplate;
 
@@ -40,6 +44,17 @@ public class FileService {
         return null;
     }
 
+    public ObjectId saveWithDelete(File file, ObjectId oldId){
+        if(file != null && file.length() != 0){
+            if(oldId != null) delete(oldId);
+
+            GridFSDBFile gridFSDBFile = save(file);
+            return (ObjectId)gridFSDBFile.getId();
+        }
+
+        return null;
+    }
+
     public GridFSDBFile save(MultipartFile multipartFile) {
         try {
             if(multipartFile.getSize() == 0) return null;
@@ -47,6 +62,24 @@ public class FileService {
             fileInfo.setFileMeta(multipartFile.getContentType());
             fileInfo.setFileName(multipartFile.getOriginalFilename());
             fileInfo.setInputStream(multipartFile.getInputStream());
+
+            GridFSDBFile gridFSDBFile = save(fileInfo);
+            return gridFSDBFile;
+        } catch (IOException ex) {
+            //log.info("Error writing file to output stream. Filename was '" + fileName + "'");
+
+        }
+        return null;
+    }
+
+    public GridFSDBFile save(File file) {
+        try {
+            if(file.length() == 0) return null;
+            FileInfo fileInfo = new FileInfo();
+            fileInfo.setFileMeta(IMG_CONTENT_TYPE);
+            fileInfo.setFileName(file.getName());
+            InputStream inputStream = new FileInputStream(file);
+            fileInfo.setInputStream(inputStream);
 
             GridFSDBFile gridFSDBFile = save(fileInfo);
             return gridFSDBFile;
