@@ -28,6 +28,10 @@ public class SearchResponse {
 
     public Integer nextNum() {
         Integer allPages = all/pageSize;
+        if(allPages == 0){
+            return 0;
+        }
+
         if(all%pageSize != 0)allPages++;
 
         if (currentPage + 1 <= allPages - 1)
