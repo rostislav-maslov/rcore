@@ -64,6 +64,16 @@ public class AutorizationService {
         //httpSession.removeAttribute(SessionModel.TYPE);
     }
 
+    public void autorizeEmailHashedPassword(String email, String hashedPassword) throws UserNotAutorizedException {
+        UserDoc userDoc = userService.getUserByEmail(email);
+        if (userDoc == null || userDoc.getPassword() == null) throw new UserNotAutorizedException();
+        if (!userDoc.getPassword().equals(hashedPassword))
+            throw new UserNotAutorizedException();
+        SessionModel sessionModel = getSessionModelEmailType(userDoc);
+        HttpSession httpSession = getSession();
+        httpSession = sessionModel.fillSession(httpSession);
+        httpSession.setMaxInactiveInterval(60 * 60 * 24 * 3);
+    }
     public void autorizeEmail(String email, String password) throws UserNotAutorizedException {
         UserDoc userDoc = userService.getUserByEmail(email);
         if (userDoc == null || userDoc.getPassword() == null) throw new UserNotAutorizedException();
