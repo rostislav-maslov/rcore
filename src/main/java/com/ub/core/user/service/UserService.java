@@ -8,6 +8,8 @@ import com.ub.core.user.models.UserStatusEnum;
 import com.ub.core.user.service.exceptions.UserExistException;
 import com.ub.core.user.service.exceptions.UserNotExistException;
 import com.ub.core.user.views.AddEditUserView;
+import com.ub.core.user.views.modalUserSearch.all.SearchUserAdminRequest;
+import com.ub.core.user.views.modalUserSearch.all.SearchUserAdminResponse;
 import com.ub.vk.response.AccessTokenResponse;
 import com.ub.vk.response.users.get.UserInfo;
 import com.ub.vk.response.users.get.UsersGetResponse;
@@ -15,6 +17,9 @@ import com.ub.vk.services.UserVkService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -212,5 +217,36 @@ public class UserService {
         return pass;
     }
 
+    /**
+     *
+     * @param searchUserAdminRequest
+     * @return
+     */
+    public SearchUserAdminResponse findAll(SearchUserAdminRequest searchUserAdminRequest) {
+        Sort sort = new Sort(Sort.Direction.DESC, "id");
+        Pageable pageable = new PageRequest(
+                searchUserAdminRequest.getCurrentPage(),
+                searchUserAdminRequest.getPageSize(),
+                sort);
 
+        Criteria criteria =new Criteria();
+        criteria = criteria.orOperator(
+                Criteria.where("lastName").regex(searchUserAdminRequest.getQuery(), "i"),
+                Criteria.where("firstName").regex(searchUserAdminRequest.getQuery(), "i")
+        );
+
+
+        Query query = new Query(criteria);
+        Long count = mongoTemplate.count(query, UserDoc.class);
+        query = query.with(pageable);
+
+        List<UserDoc> result = mongoTemplate.find(query, UserDoc.class);
+        SearchUserAdminResponse searchUserAdminResponse = new SearchUserAdminResponse(
+                searchUserAdminRequest.getCurrentPage(),
+                searchUserAdminRequest.getPageSize(),
+                result);
+        searchUserAdminResponse.setAll(count.intValue());
+        searchUserAdminResponse.setQuery(searchUserAdminRequest.getQuery());
+        return searchUserAdminResponse;
+    }
 }

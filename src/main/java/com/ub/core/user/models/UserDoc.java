@@ -38,6 +38,13 @@ public class UserDoc {
         this.password = generateHexPassword(email, notHexPassword);
     }
 
+    public boolean containsRole(Role role){
+        for(Role r :roles){
+            if(r.getId().equals(role.getId()))
+                return true;
+        }
+        return false;
+    }
 
     public ObjectId getId() {
         return id;

@@ -9,9 +9,11 @@ import com.ub.core.user.service.exceptions.UserExistException;
 import com.ub.core.user.service.exceptions.UserNotExistException;
 import com.ub.core.user.views.AddEditUserView;
 import com.ub.core.user.views.UserListView;
+import com.ub.core.user.views.modalUserSearch.all.SearchUserAdminRequest;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -149,5 +151,14 @@ public class UserAdminController {
         return RouteUtils.redirectTo(UserAdminRoutes.LIST);
     }
 
+    @RequestMapping(value = UserAdminRoutes.LIST_MODAL_SEARCH, method = RequestMethod.GET)
+    public String all(@RequestParam(required = false, defaultValue = "0") Integer currentPage,
+                      @RequestParam(required = false, defaultValue = "") String query,
+                      Model model) {
+        SearchUserAdminRequest searchCompanyAdminRequest = new SearchUserAdminRequest(currentPage);
+        searchCompanyAdminRequest.setQuery(query);
+        model.addAttribute("searchUserAdminResponse", userService.findAll(searchCompanyAdminRequest));
+        return "com.ub.core.admin.user.modal.search.content";
+    }
 
 }
