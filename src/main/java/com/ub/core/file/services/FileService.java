@@ -41,7 +41,7 @@ public class FileService {
             return (ObjectId)gridFSDBFile.getId();
         }
 
-        return null;
+        return oldId;
     }
 
     public ObjectId saveWithDelete(File file, ObjectId oldId){

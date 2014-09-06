@@ -152,7 +152,7 @@ public class UserAdminController {
     }
 
     @RequestMapping(value = UserAdminRoutes.LIST_MODAL_SEARCH, method = RequestMethod.GET)
-    public String all(@RequestParam(required = false, defaultValue = "0") Integer currentPage,
+    public String modalSearch(@RequestParam(required = false, defaultValue = "0") Integer currentPage,
                       @RequestParam(required = false, defaultValue = "") String query,
                       Model model) {
         SearchUserAdminRequest searchCompanyAdminRequest = new SearchUserAdminRequest(currentPage);

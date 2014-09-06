@@ -37,18 +37,18 @@
         <ul class="pagination pagination-sm">
 
             <li>
-                <a href="#" onclick="modalUserSearchUpdateContent(${searchCompanyAdminResponse.prevNum()});return false;">
+                <a href="#" onclick="modalUserSearchUpdateContent(${searchUserAdminResponse.prevNum()});return false;">
                     <i class="entypo-left-open-mini"></i>
                 </a>
             </li>
 
-            <c:forEach items="${searchCompanyAdminResponse.paginator()}" var="page">
-                <li class="<c:if test="${searchCompanyAdminResponse.currentPage eq page}">active</c:if>">
+            <c:forEach items="${searchUserAdminResponse.paginator()}" var="page">
+                <li class="<c:if test="${searchUserAdminResponse.currentPage eq page}">active</c:if>">
                     <a href="#" onclick="modalUserSearchUpdateContent(${page});return false;">${page + 1}</a>
                 </li>
             </c:forEach>
 
-            <li><a href="#" onclick="modalUserSearchUpdateContent(${searchCompanyAdminResponse.nextNum()});return false;">
+            <li><a href="#" onclick="modalUserSearchUpdateContent(${searchUserAdminResponse.nextNum()});return false;">
                 <i class="entypo-right-open-mini"></i></a>
             </li>
         </ul>
