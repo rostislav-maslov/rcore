@@ -37,10 +37,13 @@
     <definition name="com.ub.core.admin.main" extends="com.ub.core.admin.layout">
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/UserListView.jsp" />
     </definition>
+    <definition name="com.ub.core.admin.user.modal.search.content" template="/WEB-INF/com/ub/core/admin/user/modal/modalUserSearchContent.jsp">
+    </definition>
     <!--roles-->
     <definition name="com.ub.core.admin.role.addEdit" extends="com.ub.core.admin.layout">
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/role/AddEditRoleView.jsp" />
     </definition>
+
     <!--/roles-->
 
 </tiles-definitions>
