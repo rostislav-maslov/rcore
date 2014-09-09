@@ -59,6 +59,7 @@
             <mvc:exclude-mapping path="/admin/logout**"/>
             <bean class="com.ub.core.user.security.AdminSecurity"/>
         </mvc:interceptor>
+      
         <!--<mvc:interceptor>-->
             <!--<mvc:mapping path="/com/ub/core/controllers/ExampleCoreController/**"/>-->
             <!--&lt;!&ndash;<mvc:exclude-mapping path="/admin/**"/>&ndash;&gt;-->
