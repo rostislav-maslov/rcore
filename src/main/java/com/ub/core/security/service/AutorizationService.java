@@ -74,7 +74,7 @@ public class AutorizationService {
         httpSession = sessionModel.fillSession(httpSession);
         httpSession.setMaxInactiveInterval(60 * 60 * 24 * 3);
     }
-    public void autorizeEmail(String email, String password) throws UserNotAutorizedException {
+    public UserDoc autorizeEmail(String email, String password) throws UserNotAutorizedException {
         UserDoc userDoc = userService.getUserByEmail(email);
         if (userDoc == null || userDoc.getPassword() == null) throw new UserNotAutorizedException();
         if (!userDoc.getPassword().equals(UserDoc.generateHexPassword(email, password)))
@@ -83,6 +83,7 @@ public class AutorizationService {
         HttpSession httpSession = getSession();
         httpSession = sessionModel.fillSession(httpSession);
         httpSession.setMaxInactiveInterval(60 * 60 * 24 * 3);
+        return userDoc;
     }
 
     public void authorizeVk(AccessTokenResponse accessTokenResponse) {
