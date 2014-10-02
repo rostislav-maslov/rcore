@@ -190,7 +190,7 @@ public class UserService {
         currUser.setFirstName(userDoc.getFirstName());
         currUser.setLastName(userDoc.getLastName());
 
-        mongoTemplate.save(userDoc);
+        mongoTemplate.save(currUser);
     }
 
     /**
