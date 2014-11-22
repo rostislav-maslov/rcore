@@ -164,7 +164,8 @@
 <script src="<c:url value="/static/a/js/neon-demo.js"/>"></script>
 <script src="<c:url value="/static/a/js/wysihtml5/wysihtml5-0.4.0pre.min.js"/>"></script>
 <script src="<c:url value="/static/a/js/wysihtml5/bootstrap-wysihtml5.js"/>"></script>
-
+<script src="<c:url value="/static/a/js/ckeditor/ckeditor.js"/>"></script>
+<script src="<c:url value="/static/a/js/ckeditor/adapters/jquery.js"/>"></script>
 <script src="<c:url value="/static/a/js/select2/select2.min.js"/>"></script>
 <script src="<c:url value="/static/a/js/bootstrap-tagsinput.min.js"/>"></script>
 <script src="<c:url value="/static/a/js/typeahead.min.js"/>"></script>
