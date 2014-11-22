@@ -25,25 +25,6 @@
             dbname="${mongo.db}"/>
 
     <import resource="classpath*:WEB-INF/servlet/com-ub-core-servlet.xml" />
-    <!--<import resource="/servlet/com-ub-core-servlet.xml" />-->
-
-    <!--<mvc:interceptors>-->
-        <!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/**"/>-->
-            <!--<mvc:exclude-mapping path="/login**"/>-->
-            <!--<mvc:exclude-mapping path="/activeProgram/add**"/>-->
-            <!--<mvc:exclude-mapping path="/workDelay/add**"/>-->
-            <!--<mvc:exclude-mapping path="/logout**"/>-->
-            <!--<mvc:exclude-mapping path="/admin/**"/>-->
-            <!--<mvc:exclude-mapping path="/static/**"/>-->
-            <!--<mvc:exclude-mapping path="/files/**"/>-->
-            <!--<mvc:exclude-mapping path="/index/**"/>-->
-            <!--<mvc:exclude-mapping path="/question/**"/>-->
-            <!--<mvc:exclude-mapping path="/"/>-->
-            <!--<mvc:exclude-mapping path="/in"/>-->
-            <!--<bean class="com.ub.timetracker.base.interseptions.SecurityInterseption"/>-->
-        <!--</mvc:interceptor>-->
-    <!--</mvc:interceptors>-->
 
     <!-- MAIL -->
     <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
@@ -59,8 +40,6 @@
             </props>
         </property>
     </bean>
-
-
 
     <bean id="tilesConfigurer"
           class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
