@@ -5,7 +5,7 @@ import com.ub.core.picture.routes.PictureColorAdminRoutes;
 
 public class PictureColorAddMenu extends CoreMenu {
     public PictureColorAddMenu() {
-        this.name ="Добавить";
+        this.name ="Добавить цвет";
         this.parent = new PictureMenu();
         this.url = PictureColorAdminRoutes.ADD;
     }

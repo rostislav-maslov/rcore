@@ -135,6 +135,10 @@
 
 <tiles:insertAttribute name="contentModals" defaultValue=""/>
 
+<tiles:useAttribute id="contentModalsListItems" name="contentModalsList" classname="java.util.List" />
+<c:forEach var="contentModalsListItem" items="${contentModalsListItems}">
+    <tiles:insertAttribute value="${contentModalsListItem}" flush="true" />
+</c:forEach>
 <link rel="stylesheet" href="<c:url value="/static/a/js/wysihtml5/bootstrap-wysihtml5.css"/>">
 <link rel="stylesheet" href="<c:url value="/static/a/js/datatables/responsive/css/datatables.responsive.css"/>">
 <link rel="stylesheet" href="<c:url value="/static/a/js/select2/select2-bootstrap.css"/>">
@@ -176,5 +180,6 @@
 <script src="<c:url value="/static/a/js/daterangepicker/moment.min.js"/>"></script>
 <script src="<c:url value="/static/a/js/daterangepicker/daterangepicker.js"/>"></script>
 <script src="<c:url value="/static/a/js/selectboxit/jquery.selectBoxIt.min.js"/>"></script>
+<script src="<c:url value="/static/a/js/toastr.js"/>"></script>
 </body>
 </html>

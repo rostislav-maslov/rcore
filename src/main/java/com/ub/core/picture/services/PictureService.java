@@ -35,6 +35,9 @@ public class PictureService {
     public void delete(ObjectId objectId) {
         PictureDoc pictureDoc = findById(objectId);
 
+        if(pictureDoc == null)
+            return;
+
         fileService.delete(pictureDoc.getOriginFileId());
         for (PictureSize pictureSize : pictureDoc.getSizes().values()) {
             fileService.delete(pictureSize.getFileId());
@@ -88,6 +91,8 @@ public class PictureService {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        mongoTemplate.save(pictureDoc);
         return pictureDoc;
     }
 

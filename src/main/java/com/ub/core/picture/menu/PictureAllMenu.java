@@ -5,7 +5,7 @@ import com.ub.core.picture.routes.PicturesAdminRoutes;
 
 public class PictureAllMenu extends CoreMenu {
     public PictureAllMenu(){
-        this.name = "Все";
+        this.name = "Все изображения";
         this.parent = new PictureMenu();
         this.url = PicturesAdminRoutes.ALL;
     }

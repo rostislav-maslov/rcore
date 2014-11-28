@@ -27,7 +27,7 @@ public class PictureController {
     @Autowired private FileService fileService;
 
     @RequestMapping(value = PicturesRoutes.PIC, method = RequestMethod.GET)
-    protected void addPost(HttpServletResponse response, @PathVariable ObjectId id) {
+    protected void pics(HttpServletResponse response, @PathVariable(value = "id") ObjectId id) {
         try {
             PictureDoc pictureDoc = pictureService.findById(id);
 
