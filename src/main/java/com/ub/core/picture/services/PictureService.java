@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.InputStream;
 import java.util.List;
 
 @Component
@@ -96,6 +97,30 @@ public class PictureService {
         return pictureDoc;
     }
 
+    public PictureDoc save(InputStream inputStream) {
+        GridFSDBFile gridFSDBFile = fileService.save(inputStream);
+        if (gridFSDBFile == null) return null;
+
+        PictureDoc pictureDoc = new PictureDoc();
+
+        pictureDoc.setContentType("");
+        pictureDoc.setFileName("");
+        pictureDoc.setOriginFileId((ObjectId) gridFSDBFile.getId());
+        pictureDoc.setUrl("");
+
+        PictureSize pictureSize = getPictureSize(pictureDoc.getOriginFileId());
+        pictureDoc.addSize(pictureSize);
+
+        //Определение среднего цвета изображения
+        try {
+            pictureDoc.setColor(pictureColorService.getDominantColor(gridFSDBFile.getInputStream()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        mongoTemplate.save(pictureDoc);
+        return pictureDoc;
+    }
 
     public SearchAdminResponse findAll(SearchAdminRequest searchAdminRequest) {
         Sort sort = new Sort(Sort.Direction.DESC, "id");
