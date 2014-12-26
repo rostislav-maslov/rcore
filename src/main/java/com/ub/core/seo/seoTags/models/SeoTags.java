@@ -6,6 +6,18 @@ public class SeoTags {
     private String metaKeywords;
     private String title;
 
+    public SeoTags() {
+    }
+
+    public SeoTags(String title) {
+        this.title = title;
+    }
+
+    public SeoTags(String metaTitle, String title) {
+        this.metaTitle = metaTitle;
+        this.title = title;
+    }
+
     public String getMetaTitle() {
         return metaTitle;
     }
