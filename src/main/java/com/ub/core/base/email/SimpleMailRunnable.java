@@ -14,6 +14,7 @@ public class SimpleMailRunnable implements Runnable {
     protected List<String> emails = new ArrayList<String>();
     protected String title;
     protected String body;
+    protected String from;
 
     private JavaMailSender mailSender;
 
@@ -64,6 +65,9 @@ public class SimpleMailRunnable implements Runnable {
             mimeMessage.setHeader("Content-Type", encodingOptions);
             mimeMessage.setSentDate(new Date());
             mimeMessage.setSubject(title);
+            if (from != null) {
+                mimeMessage.setFrom(new InternetAddress(from));
+            }
             mimeMessage.setContent(body, encodingOptions);
         } catch (MessagingException e) {
             e.printStackTrace();
@@ -107,5 +111,13 @@ public class SimpleMailRunnable implements Runnable {
 
     public void setMailSender(JavaMailSender mailSender) {
         this.mailSender = mailSender;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
     }
 }
