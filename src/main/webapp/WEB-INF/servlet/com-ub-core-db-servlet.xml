@@ -16,11 +16,4 @@
         <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
     </bean>
 
-    <bean id="ubDaoBase"
-          class="com.ub.core.base.dao.UBDaoBase" abstract="true">
-        <property name="mongoTemplate">
-            <ref bean="mongoTemplate"/>
-        </property>
-    </bean>
-
 </beans>

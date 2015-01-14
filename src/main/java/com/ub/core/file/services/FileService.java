@@ -55,6 +55,22 @@ public class FileService {
         return null;
     }
 
+    public GridFSDBFile save(InputStream inputStream) {
+        try {
+            FileInfo fileInfo = new FileInfo();
+            fileInfo.setFileMeta("");
+            fileInfo.setFileName("");
+            fileInfo.setInputStream(inputStream);
+
+            GridFSDBFile gridFSDBFile = save(fileInfo);
+            return gridFSDBFile;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+
     public GridFSDBFile save(MultipartFile multipartFile) {
         try {
             if(multipartFile.getSize() == 0) return null;
