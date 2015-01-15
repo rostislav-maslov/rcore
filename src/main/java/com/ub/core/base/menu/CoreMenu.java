@@ -13,6 +13,7 @@ public abstract class CoreMenu {
     protected String url = "";
     protected String icon = MenuIcons.ENTYPO_GAUGE;
     protected List<CoreMenu> child = new ArrayList<CoreMenu>();
+    protected Integer position = 100;
 
     public String getId() {
         return id;

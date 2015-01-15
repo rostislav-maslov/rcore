@@ -70,6 +70,20 @@ public class MenuBoost {
             }
         }
 
+        Collections.sort(result, new Comparator<CoreMenu>() {
+            @Override
+            public int compare(CoreMenu menu1, CoreMenu menu2) {
+                int position1 = menu1.position;
+                int position2 = menu2.position;
+                if (position1 > position2) {
+                    return 1;
+                } else if (position1 < position2) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
         menu = result;
     }
 
