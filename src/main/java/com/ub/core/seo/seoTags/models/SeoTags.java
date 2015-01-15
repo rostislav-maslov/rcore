@@ -5,6 +5,7 @@ public class SeoTags {
     private String metaDescription;
     private String metaKeywords;
     private String title;
+    private String h1;
 
     public SeoTags() {
     }
@@ -48,5 +49,13 @@ public class SeoTags {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getH1() {
+        return h1;
+    }
+
+    public void setH1(String h1) {
+        this.h1 = h1;
     }
 }
