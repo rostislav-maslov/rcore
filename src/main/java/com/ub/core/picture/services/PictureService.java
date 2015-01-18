@@ -33,6 +33,10 @@ public class PictureService {
         return mongoTemplate.findById(id, PictureDoc.class);
     }
 
+    public PictureDoc findByUrl(String url) {
+        return mongoTemplate.findOne(new Query(Criteria.where("url").is(url)),PictureDoc.class);
+    }
+
     public void delete(ObjectId objectId) {
         PictureDoc pictureDoc = findById(objectId);
 

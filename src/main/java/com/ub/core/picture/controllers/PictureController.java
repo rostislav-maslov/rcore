@@ -26,10 +26,23 @@ public class PictureController {
 
     @Autowired private FileService fileService;
 
+
     @RequestMapping(value = PicturesRoutes.PIC, method = RequestMethod.GET)
-    protected void pics(HttpServletResponse response, @PathVariable(value = "id") ObjectId id) {
+    protected void pics(HttpServletResponse response, @PathVariable(value = "id") String id) {
         try {
-            PictureDoc pictureDoc = pictureService.findById(id);
+            PictureDoc pictureDoc = null;
+            try {
+                ObjectId objectId = new ObjectId(id);
+                pictureDoc = pictureService.findById(objectId);
+            } catch (Exception e) {
+            }
+            if(pictureDoc == null){
+                pictureDoc = pictureService.findByUrl(id);
+            }
+            if(pictureDoc == null){
+                response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+                response.setHeader("Location", "/404");
+            }
 
             GridFSDBFile gridFSDBFile = fileService.getFile(pictureDoc.getOriginFileId());
             response.setHeader("Content-Disposition", "filename=\"" + StringUtils.cyrillicToLatin(gridFSDBFile.getFilename()) + "\"");
