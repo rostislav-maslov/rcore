@@ -9,8 +9,10 @@ public class PicturesAdminRoutes {
     private static final String ROOT = BaseRoutes.ADMIN + "/pictures";
 
     public final static String ADD = ROOT +"/add";
+    public final static String CKEDITOR_ADD = ROOT +"/ckeditor/add";
     public final static String EDIT = ROOT +"/edit";
     public final static String ALL = ROOT +"/all";
     public final static String DELETE = ROOT +"/delete";
+
 
 }
