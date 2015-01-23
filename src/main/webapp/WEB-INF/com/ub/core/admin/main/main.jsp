@@ -155,6 +155,7 @@
 <script src="<c:url value="/static/a/js/joinable.js"/>"></script>
 <script src="<c:url value="/static/a/js/resizeable.js"/>"></script>
 <script src="<c:url value="/static/a/js/neon-api.js"/>"></script>
+<script src="<c:url value="/static/a/js/jquery.nestable.js"/>"></script>
 <script src="<c:url value="/static/a/js/bootstrap-switch.min.js"/>"></script>
 <script src="<c:url value="/static/a/js/jquery.dataTables.min.js"/>"></script>
 <script src="<c:url value="/static/a/js/datatables/TableTools.min.js"/>"></script>
