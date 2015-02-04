@@ -23,12 +23,17 @@ public class AutorizationController {
         return "com.ub.core.admin.login";
     }
 
+    @RequestMapping(value = UserLoginRoutes.ACCESS_DENIED, method = RequestMethod.GET)
+    public String accessDenied(Model model) {
+        return "com.ub.core.admin.access_denied";
+    }
+
     @RequestMapping(value = UserLoginRoutes.LOGIN, method = RequestMethod.POST)
     public String loginToAdmin(@RequestParam String email, @RequestParam String password, Model model) {
         try {
             autorizationService.autorizeEmail(email, password);
         } catch (UserNotAutorizedException e) {
-            return RouteUtils.redirectTo("/admin/login");
+            return RouteUtils.redirectTo(UserLoginRoutes.LOGIN);
         }
         return RouteUtils.redirectTo("/admin");
     }

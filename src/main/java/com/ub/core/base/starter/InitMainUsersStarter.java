@@ -1,6 +1,7 @@
 package com.ub.core.base.starter;
 
 import com.ub.core.base.role.BaseAdminRole;
+import com.ub.core.base.role.SuperUser;
 import com.ub.core.user.models.UserDoc;
 import com.ub.core.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class InitMainUsersStarter extends ACoreStarter {
         userDoc.setEmail(email);
         userDoc.setPasswordAsHex(password);
         userDoc.getRoles().add(new BaseAdminRole());
+        userDoc.getRoles().add(new SuperUser());
         userDoc.setFirstName(name);
         userDoc.setLastName(lastName);
 

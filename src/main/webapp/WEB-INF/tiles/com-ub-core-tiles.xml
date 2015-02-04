@@ -26,6 +26,10 @@
         <put-attribute name="mainMenu" value="/WEB-INF/com/ub/core/admin/main/menu/mainMenu.jsp"/>
     </definition>
 
+    <definition name="com.ub.core.admin.access_denied" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/accessDenied.jsp"/>
+    </definition>
+
     <definition name="com.ub.core.admin.user.addEdit" extends="com.ub.core.admin.layout">
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/AddEditUserView.jsp"/>
     </definition>

@@ -2,7 +2,8 @@ package com.ub.core.user.service;
 
 import com.google.common.collect.Lists;
 import com.ub.core.base.role.Role;
-import com.ub.core.base.role.RoleBoost;
+import com.ub.core.role.models.RoleDoc;
+import com.ub.core.role.service.RoleService;
 import com.ub.core.user.models.UserDoc;
 import com.ub.core.user.models.UserStatusEnum;
 import com.ub.core.user.service.exceptions.UserExistException;
@@ -34,6 +35,7 @@ public class UserService {
 
     @Autowired protected MongoTemplate mongoTemplate;
     @Autowired protected UserVkService userVkService;
+    @Autowired private RoleService roleService;
 
     /**
      * Блокировка пользотеля
@@ -61,12 +63,34 @@ public class UserService {
         return mongoTemplate.findOne(new Query(Criteria.where("email").is(email)), UserDoc.class);
     }
 
+    public void deleteRoleToUser(ObjectId idUser, Role role){
+        UserDoc userDoc = mongoTemplate.findById(idUser, UserDoc.class);
+        if(userDoc != null){
+            List<Role> toDelete = new ArrayList<Role>();
+            for(Role r : userDoc.getRoles()){
+                if(r.getId().equals(role.getId())) toDelete.add(r);
+            }
+            userDoc.getRoles().removeAll(toDelete);
+            mongoTemplate.save(userDoc);
+        }
+    }
+
     public void addRoleToUser(ObjectId idUser, Role role){
         UserDoc userDoc = mongoTemplate.findById(idUser, UserDoc.class);
         if(userDoc != null){
             userDoc.getRoles().add(role);
             mongoTemplate.save(userDoc);
         }
+    }
+
+    public void addRoleToUser(ObjectId idUser, RoleDoc roleDoc){
+        Role role = new Role(roleDoc);
+        addRoleToUser(idUser,role);
+    }
+
+    public void deleteRoleToUser(ObjectId idUser, RoleDoc roleDoc){
+        Role role = new Role(roleDoc);
+        deleteRoleToUser(idUser,role);
     }
 
     /**
@@ -84,11 +108,11 @@ public class UserService {
         }
 
         if (addEditUserView.getRole() != null) {
-            List<Role> roles = getAllRoles();
+            List<RoleDoc> roles = roleService.findAllRoles();
             Role role = null;
-            for (Role r : roles) {
-                if (r.getId().equals(addEditUserView.getRole())) {
-                    role = r;
+            for (RoleDoc roleDoc : roles) {
+                if (roleDoc.getId().equals(addEditUserView.getRole())) {
+                    role = new Role(roleDoc);
                     break;
                 }
             }
@@ -137,15 +161,6 @@ public class UserService {
         userDoc.setVkAccessToken(accessToken);
         mongoTemplate.save(accessToken);
         return userDoc;
-    }
-
-    /**
-     * Получить все доступные роли в системе
-     *
-     * @return
-     */
-    public List<Role> getAllRoles() {
-        return RoleBoost.allRoles();
     }
 
     /**
@@ -215,6 +230,12 @@ public class UserService {
         userDoc.setPasswordAsHex(pass);
         mongoTemplate.save(userDoc);
         return pass;
+    }
+
+    public void changePassword(ObjectId id, String password){
+        UserDoc userDoc = getUser(id);
+        userDoc.setPasswordAsHex(password);
+        mongoTemplate.save(userDoc);
     }
 
     /**

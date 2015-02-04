@@ -52,6 +52,7 @@
     <bean name="InitMainUsersStarter" init-method="init" class="com.ub.core.base.starter.InitMainUsersStarter"/>
     <bean name="PictureColorsForItemStarter" init-method="init" class="com.ub.core.picture.starter.PictureColorsForItemStarter"/>
     <bean name="CheckEngineStarter" init-method="init" class="com.ub.core.engine.starter.CheckEngineStarter"/>
+    <bean name="RoleBoost" init-method="init" class="com.ub.core.role.service.RoleBoost"/>
 
 
     <mvc:interceptors>
@@ -59,7 +60,14 @@
             <mvc:mapping path="/admin/**"/>
             <mvc:exclude-mapping path="/admin/login**"/>
             <mvc:exclude-mapping path="/admin/logout**"/>
-            <bean class="com.ub.core.user.security.AdminSecurity"/>
+            <bean class="com.ub.core.security.service.AdminSecurity"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/static/**"/>
+            <mvc:exclude-mapping path="/admin/login**"/>
+            <mvc:exclude-mapping path="/admin/logout**"/>
+            <bean class="com.ub.core.security.service.SecurityInterception"/>
         </mvc:interceptor>
       
         <!--<mvc:interceptor>-->

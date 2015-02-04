@@ -11,4 +11,7 @@ public class UserAdminRoutes {
     public static final String LIST_ACTIVE = "/admin/user/list/active";
 
     public static final String ADD = "/admin/user/add";
+
+    public static final String EDIT = "/admin/user/edit";
+    public static final String EDIT_PASSWORD = "/admin/user/edit/password";
 }

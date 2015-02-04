@@ -1,8 +1,7 @@
-package com.ub.core.user.security;
+package com.ub.core.security.service;
 
 import com.ub.core.base.role.BaseAdminRole;
 import com.ub.core.base.role.Role;
-import com.ub.core.security.service.AutorizationService;
 import com.ub.core.security.service.exceptions.UserNotAutorizedException;
 import com.ub.core.user.models.UserDoc;
 import com.ub.core.user.routes.UserLoginRoutes;
@@ -13,8 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class AdminSecurity extends HandlerInterceptorAdapter {
-    @Autowired
-    private AutorizationService autorizationService;
+    @Autowired    private AutorizationService autorizationService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -25,11 +23,10 @@ public class AdminSecurity extends HandlerInterceptorAdapter {
                 if(role.getId().equals(baseAdminRole.getId()))
                     return true;
             }
-
         } catch (UserNotAutorizedException e) {
-
         }
         response.sendRedirect(UserLoginRoutes.LOGIN);
+
         return false;
     }
 

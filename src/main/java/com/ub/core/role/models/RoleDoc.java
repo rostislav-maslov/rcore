@@ -1,23 +1,25 @@
-package com.ub.core.base.role;
+package com.ub.core.role.models;
 
-import com.ub.core.role.models.RoleDoc;
-import com.ub.core.user.routes.UserLoginRoutes;
+import com.ub.core.base.role.Role;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-public class Role {
+@Document
+public class RoleDoc {
+    @Id
+    private String id;
+    private String roleTitle;
+    private String roleDescription;
+    private String goAfterFail;
 
-    protected String id = this.getClass().getName();
-    protected String roleTitle = "";
-    protected String roleDescription = "";
-    protected String goAfterFail = UserLoginRoutes.LOGIN;
-
-    public Role() {
+    public RoleDoc() {
     }
 
-    public Role(RoleDoc roleDoc) {
-        this.id = roleDoc.getId();
-        this.roleTitle = roleDoc.getRoleTitle();
-        this.roleDescription = roleDoc.getRoleDescription();
-        this.goAfterFail = roleDoc.getGoAfterFail();
+    public RoleDoc(Role role) {
+        this.id = role.getId();
+        this.roleTitle = role.getRoleTitle();
+        this.roleDescription = role.getRoleDescription();
+        this.goAfterFail = role.getGoAfterFail();
     }
 
     public String getId() {
@@ -25,7 +27,7 @@ public class Role {
     }
 
     public void setId(String id) {
-       this.id = id;
+        this.id = id;
     }
 
     public String getRoleTitle() {

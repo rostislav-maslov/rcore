@@ -32,20 +32,25 @@
     </div>
     <div class="widget-content">
         <p>Всего - ${userList.size()}</p>
+
         <div class="table-responsive">
             <table class="table table-bordered datatable" id="table-1">
                 <thead>
                 <tr>
                     <th>
-                        <div class="checkbox"><input type="checkbox"></div>
+                        Email
                     </th>
-                    <th><%= UserListView.TITLE_EMAIL %>
+                    <th>
+                        Имя
                     </th>
-                    <th><%= UserListView.TITLE_STATUS %>
+                    <th>
+                        Статус
                     </th>
-                    <th><%= UserListView.TITLE_ROLE %>
+                    <th>
+                        Роли
                     </th>
-                    <th><%= UserListView.TITLE_CONFIGURATION %>
+                    <th>
+                        Действия
                     </th>
 
                 </tr>
@@ -54,12 +59,8 @@
 
                 <c:forEach items="${userList}" var="user">
                     <tr>
-                        <td>
-
-                            <div class="checkbox"><input type="checkbox"></div>
-
-                        </td>
                         <td>${user.email}</td>
+                        <td>${user.firstName} ${user.lastName}</td>
                         <c:if test="${user.userStatus == active}">
                             <td>
                                 <span class="label label-success">Активный</span>
@@ -72,7 +73,7 @@
                         </c:if>
                         <td class="text-right">
                             <c:forEach items="${user.roles}" var="role">
-                                &nbsp ${role.roleTitle}
+                                ${role.roleTitle}<br/>
                             </c:forEach>
                         </td>
 
