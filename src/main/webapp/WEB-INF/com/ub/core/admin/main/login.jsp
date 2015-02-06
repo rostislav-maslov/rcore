@@ -1,4 +1,3 @@
-
 <%@ page import="com.ub.core.menu.models.fields.MenuFields" %>
 <%@ page import="com.ub.core.pages.routes.PagesAdminRoutes" %>
 <%@ page import="com.ub.core.file.FileRoutes" %>
@@ -7,7 +6,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
-
+<s:htmlEscape defaultHtmlEscape="true" />
 
 <!DOCTYPE html>
 <html lang="en">

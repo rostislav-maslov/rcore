@@ -1,5 +1,8 @@
 package com.ub.core.language.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
  */
@@ -9,10 +12,26 @@ public class LanguageCode {
     private String code2;
     private String code3;
 
-    public static final LanguageCode English = new LanguageCode("English","English","en","eng");
-    public static final LanguageCode Russian = new LanguageCode("Russian","Русский","ru","rus");
+
+    public static final LanguageCode English = new LanguageCode("English", "English", "en", "eng");
+    public static final LanguageCode Russian = new LanguageCode("Russian", "Русский", "ru", "rus");
 
     public static LanguageCode defaultLanguage = Russian;
+
+    public static LanguageCode getLangbyCode2(String code2){
+        for(LanguageCode languageCode : all()){
+            if(languageCode.getCode2().equals(code2))
+                return languageCode;
+        }
+        return null;
+    }
+
+    public static List<LanguageCode> all() {
+        List<LanguageCode> all = new ArrayList<LanguageCode>();
+        all.add(Russian);
+        all.add(English);
+        return all;
+    }
 
     @Override
     public boolean equals(Object o) {

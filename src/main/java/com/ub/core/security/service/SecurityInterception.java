@@ -17,18 +17,21 @@ public class SecurityInterception extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if(!(handler instanceof HandlerMethod)){
+
+
+        if (!(handler instanceof HandlerMethod)) {
             return true;
         }
 
-        CheckAvailable checkAvailable = autorizationService.checkAccess((HandlerMethod)handler);
 
-        if(checkAvailable.getLogged() == false){
+        CheckAvailable checkAvailable = autorizationService.checkAccess((HandlerMethod) handler);
+
+        if (checkAvailable.getLogged() == false) {
             response.sendRedirect(checkAvailable.getGoAfterFailLogin());
             return false;
         }
 
-        if(checkAvailable.getNeedRole() == true){
+        if (checkAvailable.getNeedRole() == true) {
             RoleDoc roleDoc = roleService.findById(checkAvailable.getRole().getId());
             response.sendRedirect(roleDoc.getGoAfterFail());
             return false;
@@ -36,4 +39,6 @@ public class SecurityInterception extends HandlerInterceptorAdapter {
 
         return true;
     }
+
+
 }

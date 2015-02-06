@@ -20,30 +20,36 @@ public class DifferentLanguagesService {
 
     @Autowired private MongoTemplate mongoTemplate;
 
-    public void addNewDoc(ObjectId id, LanguageCode languageCode, String classPath) {
+    public void addNewDoc(ObjectId id, LanguageCode languageCode, Class clazz) {
         if (useLanguagePackage == false)return;
 
-        DocumentsInDifferentLanguages didl = findByDiffDoc(id, classPath);
-        if (didl != null) return;
+        DocumentsInDifferentLanguages didl = findByDiffDoc(id, clazz);
+        if (didl != null && didl.getDiffDocById(id).getLanguageCode().equals(languageCode)) return;
+
+        if(didl != null){
+            didl.getDiffDocById(id).setLanguageCode(languageCode);
+            save(didl);
+            return;
+        }
 
         didl = new DocumentsInDifferentLanguages();
-        didl.setClassPath(classPath);
+        didl.setClassPath(clazz.getName());
         didl.getDocsIds().add(new DiffDoc(languageCode, id));
         save(didl);
     }
 
-    public void addTo(ObjectId idTo, ObjectId idNew, LanguageCode languageCode, String classPath) {
+    public void addTo(ObjectId idTo, ObjectId idNew, LanguageCode languageCode, Class clazz) {
         if (useLanguagePackage == false)return;
 
-        DocumentsInDifferentLanguages didl = findByDiffDoc(idTo, classPath);
+        DocumentsInDifferentLanguages didl = findByDiffDoc(idTo, clazz);
         didl.addDiffDoc(languageCode, idNew);
         save(didl);
     }
 
-    public void delete(ObjectId idDoc, String classPath) {
+    public void delete(ObjectId idDoc, Class clazz) {
         if (useLanguagePackage == false)return;
 
-        DocumentsInDifferentLanguages didl = findByDiffDoc(idDoc, classPath);
+        DocumentsInDifferentLanguages didl = findByDiffDoc(idDoc, clazz);
         didl.deleteDiffDoc(idDoc);
         if (didl.getDocsIds() == null || didl.getDocsIds().size() == 0) {
             mongoTemplate.remove(didl);
@@ -52,10 +58,10 @@ public class DifferentLanguagesService {
         }
     }
 
-    public List<DiffDoc> findDiffDoc(ObjectId idDoc, String classPath) {
+    public List<DiffDoc> findDiffDoc(ObjectId idDoc, Class clazz) {
         if (useLanguagePackage == false)return new ArrayList<DiffDoc>();
 
-        Criteria criteria = new Criteria().where("docsIds.docId").is(idDoc).and("classPath").is(classPath);
+        Criteria criteria = new Criteria().where("docsIds.docId").is(idDoc).and("classPath").is(clazz.getName());
         DocumentsInDifferentLanguages didls = mongoTemplate.findOne(new Query(criteria), DocumentsInDifferentLanguages.class);
         if(didls == null)return new ArrayList<DiffDoc>();
         return didls.getDocsIds();
@@ -65,8 +71,8 @@ public class DifferentLanguagesService {
 //        return mongoTemplate.findById(id, DocumentsInDifferentLanguages.class);
 //    }
 
-    private DocumentsInDifferentLanguages findByDiffDoc(ObjectId idDoc, String classPath) {
-        Criteria criteria = new Criteria().where("docsIds.docId").is(idDoc).and("classPath").is(classPath);
+    public DocumentsInDifferentLanguages findByDiffDoc(ObjectId idDoc, Class clazz) {
+        Criteria criteria = new Criteria().where("docsIds.docId").is(idDoc).and("classPath").is(clazz.getName());
         return mongoTemplate.findOne(new Query(criteria), DocumentsInDifferentLanguages.class);
     }
 
