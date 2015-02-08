@@ -4,6 +4,6 @@
  *
 */
 
-body {
-	
+.ckeditor{
+    min-height: 300px;
 }
