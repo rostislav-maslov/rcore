@@ -18,6 +18,7 @@
         <put-attribute name="content" value=""/>
         <put-attribute name="contentModals" value=""/>
         <put-attribute name="mainMenu" value="/WEB-INF/com/ub/core/admin/main/menu/mainMenu.jsp"/>
+        <put-attribute name="footerJs" value=""/>
         <put-list-attribute name="contentModalsList"/>
     </definition>
 

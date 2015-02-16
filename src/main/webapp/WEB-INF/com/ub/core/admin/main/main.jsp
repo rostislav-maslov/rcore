@@ -180,5 +180,6 @@
 <script src="<c:url value="/static/a/js/daterangepicker/daterangepicker.js"/>"></script>
 <script src="<c:url value="/static/a/js/selectboxit/jquery.selectBoxIt.min.js"/>"></script>
 <script src="<c:url value="/static/a/js/toastr.js"/>"></script>
+<tiles:insertAttribute name="footerJs"/>
 </body>
 </html>
