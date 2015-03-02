@@ -1,9 +1,11 @@
 package com.ub.core.base.utils;
 
+import com.ub.core.base.httpResponse.ResourceNotFoundException;
+
 public class RouteUtils {
 
     public static String redirectTo404() {
-        return redirectTo("/404");
+        throw new ResourceNotFoundException();
     }
 
     public static String redirectTo500() {
