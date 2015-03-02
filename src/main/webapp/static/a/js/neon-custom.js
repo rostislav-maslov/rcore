@@ -1140,7 +1140,9 @@ var public_vars = public_vars || {};
 		// CKeditor WYSIWYG
 		if($.isFunction($.fn.ckeditor))
 		{
-			$(".ckeditor").ckeditor();
+			$(".ckeditor").each(function(){
+				$(this).ckeditor();
+			});
 		}
 		
 		
