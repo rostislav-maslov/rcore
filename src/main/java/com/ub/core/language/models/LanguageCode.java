@@ -1,5 +1,7 @@
 package com.ub.core.language.models;
 
+import com.ub.core.base.httpResponse.ResourceNotFoundException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +26,14 @@ public class LanguageCode {
                 return languageCode;
         }
         return null;
+    }
+
+    public static LanguageCode getLangbyCode2ThrowException(String code2){
+        for(LanguageCode languageCode : all()){
+            if(languageCode.getCode2().equals(code2))
+                return languageCode;
+        }
+        throw new ResourceNotFoundException();
     }
 
     public static List<LanguageCode> all() {
