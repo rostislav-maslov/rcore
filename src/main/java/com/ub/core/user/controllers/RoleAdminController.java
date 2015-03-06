@@ -45,7 +45,7 @@ public class RoleAdminController {
     }
 
     @RequestMapping(value = RoleAdminRoutes.ADD, method = RequestMethod.POST)
-    public String addRolePost(@RequestParam ObjectId user, @RequestParam String role, ModelMap modelMap) {
+    public String addRolePost(@RequestParam ObjectId user, @RequestParam String role, RedirectAttributes ra) {
 
         List<RoleDoc> roles = roleService.findAllRoles();
 
@@ -56,7 +56,8 @@ public class RoleAdminController {
             }
         }
 
-        return RouteUtils.redirectTo(UserAdminRoutes.LIST);
+        ra.addAttribute("id",user);
+        return RouteUtils.redirectTo(UserAdminRoutes.EDIT);
     }
 
     @RequestMapping(value = RoleAdminRoutes.DELETE, method = RequestMethod.POST)
