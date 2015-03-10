@@ -5,6 +5,7 @@ import com.ub.core.base.role.Role;
 import com.ub.core.role.models.RoleDoc;
 import com.ub.core.role.service.RoleService;
 import com.ub.core.user.models.UserDoc;
+import com.ub.core.user.models.UserEmailPasswordRecoverDoc;
 import com.ub.core.user.models.UserEmailVerifiedDoc;
 import com.ub.core.user.models.UserStatusEnum;
 import com.ub.core.user.service.exceptions.UserExistException;
@@ -40,6 +41,7 @@ public class UserService {
     @Autowired protected UserVkService userVkService;
     @Autowired private RoleService roleService;
     @Autowired private UserEmailVerifiedService userEmailVerifiedService;
+    @Autowired private UserEmailPasswordRecoveryService userEmailPasswordRecoveryService;
 
     /**
      * Блокировка пользотеля
@@ -383,5 +385,21 @@ public class UserService {
         searchUserAdminResponse.setAll(count.intValue());
         searchUserAdminResponse.setQuery(searchUserAdminRequest.getQuery());
         return searchUserAdminResponse;
+    }
+
+    public UserEmailPasswordRecoverDoc createPasswordRecover(String email) throws UserNotExistException{
+        return userEmailPasswordRecoveryService.createRecovery(email);
+    }
+
+    public Boolean passwordRecovery(ObjectId recoveryId, String code, String password) throws UserExistException{
+        UserEmailPasswordRecoverDoc userEmailPasswordRecoverDoc = userEmailPasswordRecoveryService.findByCodeAndId(recoveryId,code);
+        if( userEmailPasswordRecoverDoc == null || userEmailPasswordRecoverDoc.getIsRecovered()) return false;
+
+        UserDoc userDoc = getUser(userEmailPasswordRecoverDoc.getUserId());
+        userDoc.setPasswordAsHex(password);
+        save(userDoc);
+        userEmailPasswordRecoverDoc.setIsRecovered(true);
+        userEmailPasswordRecoveryService.save(userEmailPasswordRecoverDoc);
+        return true;
     }
 }
