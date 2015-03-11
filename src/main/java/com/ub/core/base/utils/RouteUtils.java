@@ -4,6 +4,7 @@ import com.ub.core.base.httpResponse.ResourceNotFoundException;
 
 public class RouteUtils {
 
+    @Deprecated
     public static String redirectTo404() {
         throw new ResourceNotFoundException();
     }
