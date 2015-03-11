@@ -5,9 +5,13 @@ import com.ub.core.base.role.Role;
 import com.ub.core.role.models.RoleDoc;
 import com.ub.core.role.service.RoleService;
 import com.ub.core.user.models.UserDoc;
+import com.ub.core.user.models.UserEmailPasswordRecoverDoc;
+import com.ub.core.user.models.UserEmailVerifiedDoc;
 import com.ub.core.user.models.UserStatusEnum;
 import com.ub.core.user.service.exceptions.UserExistException;
 import com.ub.core.user.service.exceptions.UserNotExistException;
+import com.ub.core.user.service.exceptions.UserVerifiedErrorCodeException;
+import com.ub.core.user.service.exceptions.UserVerifiedLimitException;
 import com.ub.core.user.views.AddEditUserView;
 import com.ub.core.user.views.modalUserSearch.all.SearchUserAdminRequest;
 import com.ub.core.user.views.modalUserSearch.all.SearchUserAdminResponse;
@@ -36,6 +40,8 @@ public class UserService {
     @Autowired protected MongoTemplate mongoTemplate;
     @Autowired protected UserVkService userVkService;
     @Autowired private RoleService roleService;
+    @Autowired private UserEmailVerifiedService userEmailVerifiedService;
+    @Autowired private UserEmailPasswordRecoveryService userEmailPasswordRecoveryService;
 
     /**
      * Блокировка пользотеля
@@ -45,7 +51,11 @@ public class UserService {
     public void block(ObjectId id) {
         UserDoc userDoc = mongoTemplate.findById(id, UserDoc.class);
         userDoc.setUserStatus(UserStatusEnum.BLOCK);
-        mongoTemplate.save(userDoc);
+        try {
+            save(userDoc);
+        }catch (UserExistException e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -56,41 +66,75 @@ public class UserService {
     public void active(ObjectId id) {
         UserDoc userDoc = mongoTemplate.findById(id, UserDoc.class);
         userDoc.setUserStatus(UserStatusEnum.ACTIVE);
-        mongoTemplate.save(userDoc);
+        try {
+            save(userDoc);
+        } catch (UserExistException e) {
+            e.printStackTrace();
+        }
     }
 
-    public UserDoc findByEmail(String email){
+    public UserDoc findByEmail(String email) {
         return mongoTemplate.findOne(new Query(Criteria.where("email").is(email)), UserDoc.class);
     }
 
-    public void deleteRoleToUser(ObjectId idUser, Role role){
+    public UserDoc save(UserDoc userDoc) throws UserExistException {
+        if (userDoc.getId() == null && userDoc.getEmail() != null) {
+            UserDoc old = findByEmail(userDoc.getEmail());
+            if (old != null) {
+                throw new UserExistException();
+            }
+        }
+
+        if (userDoc.getId() != null && userDoc.getEmail() != null) {
+            UserDoc oldDoc = getUser(userDoc.getId());
+            if (oldDoc == null) {
+                UserDoc old = findByEmail(userDoc.getEmail());
+                if (old != null) {
+                    throw new UserExistException();
+                }
+            }
+        }
+
+        mongoTemplate.save(userDoc);
+        return userDoc;
+    }
+
+    public void deleteRoleToUser(ObjectId idUser, Role role) {
         UserDoc userDoc = mongoTemplate.findById(idUser, UserDoc.class);
-        if(userDoc != null){
+        if (userDoc != null) {
             List<Role> toDelete = new ArrayList<Role>();
-            for(Role r : userDoc.getRoles()){
-                if(r.getId().equals(role.getId())) toDelete.add(r);
+            for (Role r : userDoc.getRoles()) {
+                if (r.getId().equals(role.getId())) toDelete.add(r);
             }
             userDoc.getRoles().removeAll(toDelete);
-            mongoTemplate.save(userDoc);
+            try {
+                save(userDoc);
+            }catch (UserExistException e){
+                e.printStackTrace();
+            }
         }
     }
 
-    public void addRoleToUser(ObjectId idUser, Role role){
+    public void addRoleToUser(ObjectId idUser, Role role) {
         UserDoc userDoc = mongoTemplate.findById(idUser, UserDoc.class);
-        if(userDoc != null){
+        if (userDoc != null) {
             userDoc.getRoles().add(role);
-            mongoTemplate.save(userDoc);
+            try {
+                save(userDoc);
+            }catch (UserExistException e){
+                e.printStackTrace();
+            }
         }
     }
 
-    public void addRoleToUser(ObjectId idUser, RoleDoc roleDoc){
+    public void addRoleToUser(ObjectId idUser, RoleDoc roleDoc) {
         Role role = new Role(roleDoc);
-        addRoleToUser(idUser,role);
+        addRoleToUser(idUser, role);
     }
 
-    public void deleteRoleToUser(ObjectId idUser, RoleDoc roleDoc){
+    public void deleteRoleToUser(ObjectId idUser, RoleDoc roleDoc) {
         Role role = new Role(roleDoc);
-        deleteRoleToUser(idUser,role);
+        deleteRoleToUser(idUser, role);
     }
 
     /**
@@ -99,19 +143,55 @@ public class UserService {
      * @param addEditUserView
      * @throws UserExistException
      */
+    @Deprecated
     public void createUserByEmail(AddEditUserView addEditUserView) throws UserExistException {
-        UserDoc userDoc = new UserDoc();
+        createUserByEmail(addEditUserView.getEmail(), addEditUserView.getPassword(), addEditUserView.getRole());
+    }
 
-        UserDoc check = findByEmail(addEditUserView.getEmail());
+    public UserDoc userVerifiedEmail(String email, String code) throws UserExistException, UserVerifiedErrorCodeException, UserVerifiedLimitException {
+        UserEmailVerifiedDoc userEmailVerifiedDoc = userEmailVerifiedService.verified(email, code);
+        UserDoc userDoc = new UserDoc();
+        userDoc.setRoles(userEmailVerifiedDoc.getRoles());
+        userDoc.setEmail(userEmailVerifiedDoc.getEmail());
+        userDoc.setPassword(userEmailVerifiedDoc.getPassword());
+        userDoc.setUserStatus(userEmailVerifiedDoc.getUserStatus());
+        userDoc.setLastName(userEmailVerifiedDoc.getLastName());
+        userDoc.setFirstName(userEmailVerifiedDoc.getFirstName());
+        return save(userDoc);
+    }
+
+    /**
+     * @param email
+     * @param password
+     * @return
+     * @throws UserExistException
+     */
+    public UserDoc createUserByEmail(String email, String password) throws UserExistException {
+        UserDoc userDoc = new UserDoc();
+        UserDoc check = findByEmail(email);
         if (check != null) {
             throw new UserExistException();
         }
+        userDoc.setEmail(email);
+        userDoc.setPasswordAsHex(password);
+        save(userDoc);
+        return userDoc;
+    }
 
-        if (addEditUserView.getRole() != null) {
+    /**
+     * @param email
+     * @param password
+     * @param roleString
+     * @return
+     * @throws UserExistException
+     */
+    public UserDoc createUserByEmail(String email, String password, String roleString) throws UserExistException {
+        UserDoc userDoc = createUserByEmail(email, password);
+        if (roleString != null) {
             List<RoleDoc> roles = roleService.findAllRoles();
             Role role = null;
             for (RoleDoc roleDoc : roles) {
-                if (roleDoc.getId().equals(addEditUserView.getRole())) {
+                if (roleDoc.getId().equals(roleString)) {
                     role = new Role(roleDoc);
                     break;
                 }
@@ -120,10 +200,35 @@ public class UserService {
                 userDoc.getRoles().add(role);
             }
         }
+        return save(userDoc);
+    }
 
-        userDoc.setEmail(addEditUserView.getEmail());
-        userDoc.setPasswordAsHex(addEditUserView.getPassword());
-        mongoTemplate.save(userDoc);
+    /**
+     * @param email
+     * @param password
+     * @return
+     * @throws UserExistException
+     */
+    public UserEmailVerifiedDoc createUserByEmailWithVerified(String email, String password) throws UserExistException {
+        return createUserByEmailWithVerified(email, password, "", "");
+    }
+
+    /**
+     * @param email
+     * @param password
+     * @param lastName
+     * @param firstName
+     * @return
+     * @throws UserExistException
+     */
+    public UserEmailVerifiedDoc createUserByEmailWithVerified(String email, String password, String lastName,
+                                                              String firstName) throws UserExistException {
+        UserEmailVerifiedDoc userEmailVerifiedDoc = new UserEmailVerifiedDoc();
+        userEmailVerifiedDoc.setEmail(email);
+        userEmailVerifiedDoc.setPasswordAsHex(password);
+        userEmailVerifiedDoc.setLastName(lastName);
+        userEmailVerifiedDoc.setFirstName(firstName);
+        return userEmailVerifiedService.create(userEmailVerifiedDoc);
     }
 
     /**
@@ -146,20 +251,24 @@ public class UserService {
         userDoc.setUserStatus(UserStatusEnum.ACTIVE);
 
         UsersGetResponse usersGetResponse = userVkService.get(accessTokenResponse.getUser_id());
-        if(usersGetResponse != null && usersGetResponse.getResponse()!=null && usersGetResponse.getResponse().size()==1){
+        if (usersGetResponse != null && usersGetResponse.getResponse() != null && usersGetResponse.getResponse().size() == 1) {
             UserInfo userInfo = usersGetResponse.getResponse().get(0);
 
             userDoc.setFirstName(userInfo.getFirst_name());
             userDoc.setLastName(userInfo.getLast_name());
         }
 
-        mongoTemplate.save(userDoc);
+        save(userDoc);
         return userDoc;
     }
 
-    public UserDoc updateVkAccessToken(UserDoc userDoc, String accessToken){
+    public UserDoc updateVkAccessToken(UserDoc userDoc, String accessToken) {
         userDoc.setVkAccessToken(accessToken);
-        mongoTemplate.save(accessToken);
+        try {
+            save(userDoc);
+        }catch (UserExistException e){
+            e.printStackTrace();
+        }
         return userDoc;
     }
 
@@ -205,7 +314,11 @@ public class UserService {
         currUser.setFirstName(userDoc.getFirstName());
         currUser.setLastName(userDoc.getLastName());
 
-        mongoTemplate.save(currUser);
+        try {
+            save(currUser);
+        }catch (UserExistException e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -218,28 +331,31 @@ public class UserService {
         return findByEmail(email);
     }
 
-    public UserDoc getUserByVkId(String vkId){
+    public UserDoc getUserByVkId(String vkId) {
         return mongoTemplate.findOne(new Query(Criteria.where("vkId").is(vkId)), UserDoc.class);
     }
 
-    public String restorePassword(String email) throws UserNotExistException{
+    public String restorePassword(String email) throws UserNotExistException, UserExistException {
         String pass = DigestUtils.md2Hex(new Date().toString());
         UserDoc userDoc = getUserByEmail(email);
-        if(userDoc == null)
+        if (userDoc == null)
             throw new UserNotExistException();
         userDoc.setPasswordAsHex(pass);
-        mongoTemplate.save(userDoc);
+        save(userDoc);
         return pass;
     }
 
-    public void changePassword(ObjectId id, String password){
+    public void changePassword(ObjectId id, String password) {
         UserDoc userDoc = getUser(id);
         userDoc.setPasswordAsHex(password);
-        mongoTemplate.save(userDoc);
+        try {
+            save(userDoc);
+        }catch (UserExistException e){
+            e.printStackTrace();
+        }
     }
 
     /**
-     *
      * @param searchUserAdminRequest
      * @return
      */
@@ -250,7 +366,7 @@ public class UserService {
                 searchUserAdminRequest.getPageSize(),
                 sort);
 
-        Criteria criteria =new Criteria();
+        Criteria criteria = new Criteria();
         criteria = criteria.orOperator(
                 Criteria.where("lastName").regex(searchUserAdminRequest.getQuery(), "i"),
                 Criteria.where("firstName").regex(searchUserAdminRequest.getQuery(), "i")
@@ -269,5 +385,21 @@ public class UserService {
         searchUserAdminResponse.setAll(count.intValue());
         searchUserAdminResponse.setQuery(searchUserAdminRequest.getQuery());
         return searchUserAdminResponse;
+    }
+
+    public UserEmailPasswordRecoverDoc createPasswordRecover(String email) throws UserNotExistException{
+        return userEmailPasswordRecoveryService.createRecovery(email);
+    }
+
+    public Boolean passwordRecovery(ObjectId recoveryId, String code, String password) throws UserExistException{
+        UserEmailPasswordRecoverDoc userEmailPasswordRecoverDoc = userEmailPasswordRecoveryService.findByCodeAndId(recoveryId,code);
+        if( userEmailPasswordRecoverDoc == null || userEmailPasswordRecoverDoc.getIsRecovered()) return false;
+
+        UserDoc userDoc = getUser(userEmailPasswordRecoverDoc.getUserId());
+        userDoc.setPasswordAsHex(password);
+        save(userDoc);
+        userEmailPasswordRecoverDoc.setIsRecovered(true);
+        userEmailPasswordRecoveryService.save(userEmailPasswordRecoverDoc);
+        return true;
     }
 }

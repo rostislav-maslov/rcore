@@ -35,7 +35,11 @@ public class PathVariableLocaleChangeInterceptor extends HandlerInterceptorAdapt
             if (localeResolver == null) {
                 throw new IllegalStateException("No LocaleResolver found.");
             }
-            localeResolver.setLocale(request, response, locale);
+            try {
+                localeResolver.setLocale(request, response, locale);
+            }catch(IllegalArgumentException e){
+
+            }
         }
         return true;
     }
