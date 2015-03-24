@@ -1,11 +1,11 @@
 package com.ub.core.picture.controllers;
 
 import com.mongodb.gridfs.GridFSDBFile;
+import com.ub.core.base.utils.StringUtils;
 import com.ub.core.file.services.FileService;
 import com.ub.core.picture.models.PictureDoc;
 import com.ub.core.picture.routes.PicturesRoutes;
 import com.ub.core.picture.services.PictureService;
-import com.ub.core.utils.StringUtils;
 import org.apache.commons.io.IOUtils;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
