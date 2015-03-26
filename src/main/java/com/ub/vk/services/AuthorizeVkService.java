@@ -14,7 +14,12 @@ public class AuthorizeVkService {
 
     @Autowired private AppPropertiesVkService appPropertiesVkService;
 
-    public AccessTokenResponse getAccessToken(String code) throws VkNotAuthorizedException{
+    public AccessTokenResponse getAccessToken(String code) throws VkNotAuthorizedException {
+        AppPropertiesVkDoc appPropertiesVkDoc = appPropertiesVkService.getVkProp();
+        return getAccessToken(code, appPropertiesVkDoc.getREDIRECT_URI());
+    }
+
+    public AccessTokenResponse getAccessToken(String code, String redirectUrl) throws VkNotAuthorizedException {
         HttpsUtils httpsUtils = new HttpsUtils(AuthorizeVkStatic.ACCESS_TOKEN_URL);
 
         AppPropertiesVkDoc appPropertiesVkDoc = appPropertiesVkService.getVkProp();
@@ -22,13 +27,13 @@ public class AuthorizeVkService {
         httpsUtils.addParam(AuthorizeVkStatic.P_CLIENT_ID, appPropertiesVkDoc.getAPP_ID());
         httpsUtils.addParam(AuthorizeVkStatic.P_CLIENT_SECRET, appPropertiesVkDoc.getAPP_SECRET());
         httpsUtils.addParam(AuthorizeVkStatic.P_CODE, code);
-        httpsUtils.addParam(AuthorizeVkStatic.P_REDIRECT_URL, appPropertiesVkDoc.getREDIRECT_URI());
+        httpsUtils.addParam(AuthorizeVkStatic.P_REDIRECT_URL, redirectUrl);
 
         try {
             String response = httpsUtils.sendGet();
             AccessTokenResponse accessTokenResponse = new ObjectMapper().readValue(response, AccessTokenResponse.class);
             return accessTokenResponse;
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new VkNotAuthorizedException();
         }
     }
