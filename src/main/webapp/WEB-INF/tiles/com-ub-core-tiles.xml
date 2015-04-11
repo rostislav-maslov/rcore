@@ -50,7 +50,9 @@
     <definition name="com.ub.core.admin.role.addEdit" extends="com.ub.core.admin.layout">
         <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/role/AddEditRoleView.jsp"/>
     </definition>
-
+    <definition name="com.ub.core.admin.user.init" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/init.jsp"/>
+    </definition>
     <!--/roles-->
 
 </tiles-definitions>
