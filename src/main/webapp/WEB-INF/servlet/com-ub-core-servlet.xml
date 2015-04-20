@@ -49,7 +49,6 @@
 
     <!-- Starter -->
     <!--<bean name="StarterName" init-method="init" class="com.ub.core.base.starter.CoreStarter"/>-->
-    <bean name="InitMainUsersStarter" init-method="init" class="com.ub.core.base.starter.InitMainUsersStarter"/>
     <bean name="PictureColorsForItemStarter" init-method="init" class="com.ub.core.picture.starter.PictureColorsForItemStarter"/>
     <bean name="CheckEngineStarter" init-method="init" class="com.ub.core.engine.starter.CheckEngineStarter"/>
     <bean name="RoleBoost" init-method="init" class="com.ub.core.role.service.RoleBoost"/>
