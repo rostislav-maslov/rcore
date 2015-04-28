@@ -6,6 +6,7 @@ import com.ub.core.file.store.FileInfo;
 import com.ub.core.file.view.FileView;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsOperations;
@@ -127,7 +128,7 @@ public class FileService {
     }
 
     public List<GridFSDBFile> getAll() {
-        return gridFsTemplate.find(new Query(new Criteria()));
+        return gridFsTemplate.find(new Query(new Criteria()).with(new Sort(Sort.Direction.DESC, "_id")));
     }
 
     private FileView getView(GridFSDBFile gridFSDBFile){
