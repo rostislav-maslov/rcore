@@ -160,6 +160,10 @@ public class AutorizationService {
         if (userDoc == null || userDoc.getPassword() == null) throw new UserNotAutorizedException();
         if (!userDoc.getPassword().equals(UserDoc.generateHexPassword(email, password)))
             throw new UserNotAutorizedException();
+        return authorizeUserDoc(userDoc);
+    }
+
+    public UserDoc authorizeUserDoc(UserDoc userDoc){
         SessionModel sessionModel = getSessionModelEmailType(userDoc);
         HttpSession httpSession = getSession();
         httpSession = sessionModel.fillSession(httpSession);
