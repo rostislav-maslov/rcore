@@ -16,6 +16,7 @@
     <%--<th>#</th>--%>
     <th>Имя файла</th>
     <th>URL</th>
+    <th>URL attach</th>
     <th>id</th>
     <th>Действия</th>
 
@@ -28,6 +29,7 @@
         <%--<td>1</td>--%>
         <td>${f.name}</td>
         <td><a href="/files/${f.id}">/files/${f.id}</a></td>
+        <td><a href="/files-attach/${f.id}">/files-attach/${f.id}</a></td>
         <td>${f.id}</td>
 
             <c:url value="<%= FileRoutes.DELETE%>" var="deleteUrl">

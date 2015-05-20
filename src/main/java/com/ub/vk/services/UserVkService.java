@@ -30,6 +30,7 @@ public class UserVkService {
         }
         httpsUtils.addParam(UserVkStatic.P_USER_IDS, stringBuffer.toString());
         try {
+            String result = httpsUtils.sendGet();
             UsersGetResponse usersGetResponse = new ObjectMapper().readValue(httpsUtils.sendGet(), UsersGetResponse.class);
             return usersGetResponse;
         } catch (Exception e) {

@@ -3,6 +3,7 @@ package com.ub.core.base.utils;
 import org.apache.commons.codec.digest.DigestUtils;
 
 public class StringUtils {
+
     public static boolean isEmpty(String s){
         if(s == null || s.equals(""))
             return true;

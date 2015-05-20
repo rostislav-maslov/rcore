@@ -49,6 +49,6 @@ public class HttpsUtils {
             response.append(inputLine);
         }
         in.close();
-        return response.toString();
+        return new String(response.toString().getBytes(), "UTF-8");
     }
 }

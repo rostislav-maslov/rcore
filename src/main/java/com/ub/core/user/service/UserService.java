@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.ub.core.base.role.Role;
 import com.ub.core.role.models.RoleDoc;
 import com.ub.core.role.service.RoleService;
+import com.ub.core.security.service.AutorizationService;
 import com.ub.core.user.models.UserDoc;
 import com.ub.core.user.models.UserEmailPasswordRecoverDoc;
 import com.ub.core.user.models.UserEmailVerifiedDoc;
@@ -42,6 +43,7 @@ public class UserService {
     @Autowired private RoleService roleService;
     @Autowired private UserEmailVerifiedService userEmailVerifiedService;
     @Autowired private UserEmailPasswordRecoveryService userEmailPasswordRecoveryService;
+    @Autowired private AutorizationService autorizationService;
 
     /**
      * Блокировка пользотеля
@@ -157,7 +159,11 @@ public class UserService {
         userDoc.setUserStatus(userEmailVerifiedDoc.getUserStatus());
         userDoc.setLastName(userEmailVerifiedDoc.getLastName());
         userDoc.setFirstName(userEmailVerifiedDoc.getFirstName());
-        return save(userDoc);
+
+
+        userDoc = save(userDoc);
+        autorizationService.authorizeUserDoc(userDoc);
+        return userDoc;
     }
 
     /**

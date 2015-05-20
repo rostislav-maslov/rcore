@@ -58,4 +58,39 @@ public class FileController {
         }
     }
 
+
+    @RequestMapping(value = FileRoutes.GET_FILE_ATTACH, method = RequestMethod.GET)
+    protected void fileAttach(HttpServletRequest request, HttpServletResponse response,
+                           @PathVariable(value = FileRoutes.GET_FILE_FATH_VAR) String parPath) throws Exception {
+        try {
+            GridFSDBFile gridFSDBFile = fileService.getFile(new ObjectId(parPath));
+
+//            response.setHeader("Cache-Control", "cache, store"); // HTTP 1.1.
+//            response.setHeader("Pragma", "ache"); // HTTP 1.0.
+//            response.setDateHeader("Expires", 5000); // Proxies.
+
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + StringUtils.cyrillicToLatin(gridFSDBFile.getFilename())+"\"");
+            //Кеширование
+            GregorianCalendar gc = new GregorianCalendar();
+            gc.setTime(new Date());
+            gc.add(GregorianCalendar.HOUR_OF_DAY, 72);
+            long ex = gc.getTime().getTime();
+            response.setDateHeader("Expires",ex);
+            //конец кеширования
+            response.setContentType(gridFSDBFile.getContentType());
+            InputStream is = gridFSDBFile.getInputStream();
+            IOUtils.copy(is, response.getOutputStream());
+            response.flushBuffer();
+            is.close();
+        } catch (IOException ex) {
+            //log.info("Error writing file to output stream. Filename was '" + fileName + "'");
+            //throw new RuntimeException("IOError writing file to output stream");
+            response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+            response.setHeader("Location", "/404");
+        } catch (Exception e) {
+            response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
+            response.setHeader("Location", "/404");
+        }
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.ub.core.utils;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -23,7 +24,7 @@ public class HttpUtils {
         params.put(name, value);
     }
 
-    public String sendGet() throws Exception {
+    public String sendGet() throws IOException{
         String url = this.url;
 
         StringBuffer stringBuffer = new StringBuffer();
@@ -52,6 +53,6 @@ public class HttpUtils {
             response.append(inputLine);
         }
         in.close();
-        return response.toString();
+        return new String(response.toString().getBytes(),"UTF-8");
     }
 }

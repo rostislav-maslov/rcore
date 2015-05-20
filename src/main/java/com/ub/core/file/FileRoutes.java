@@ -7,6 +7,8 @@ public class FileRoutes {
     public final static String DELETE = ROOT +"delete";
     public final static String GET_FILE_FATH_VAR = "file";
     public final static String GET_FILE = "/files/{"+GET_FILE_FATH_VAR+"}";
+    public final static String GET_FILE_ATTACH = "/files-attach/{"+GET_FILE_FATH_VAR+"}";
 
-    public static String GET_FILE(String fileId) {return "/file/"+fileId;}
+    public static String GET_FILE(String fileId) {return "/files/"+fileId;}
+    public static String GET_FILE_ATTACH(String fileId) {return "/files-attach/"+fileId;}
 }

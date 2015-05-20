@@ -2,7 +2,7 @@ package com.ub.core.user.routes;
 
 public class UserAdminRoutes {
 
-
+    public static final String INIT_USER = "/init-admin";
     public static final String BLOCK = "/admin/user/block";
     public static final String ACTIVE = "/admin/user/active";
     public static final String LIST = "/admin/user/list";
