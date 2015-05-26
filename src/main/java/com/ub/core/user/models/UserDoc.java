@@ -28,6 +28,9 @@ public class UserDoc {
     private String vkAccessToken;
     private String vkEmail;
 
+    private String fbId;
+    private String fbAccessToken;
+
 
 
     public static String generateHexPassword(String email, String password) {
@@ -124,5 +127,21 @@ public class UserDoc {
 
     public void setVkEmail(String vkEmail) {
         this.vkEmail = vkEmail;
+    }
+
+    public String getFbId() {
+        return fbId;
+    }
+
+    public void setFbId(String fbId) {
+        this.fbId = fbId;
+    }
+
+    public String getFbAccessToken() {
+        return fbAccessToken;
+    }
+
+    public void setFbAccessToken(String fbAccessToken) {
+        this.fbAccessToken = fbAccessToken;
     }
 }

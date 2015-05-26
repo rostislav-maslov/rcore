@@ -16,6 +16,7 @@ import com.ub.core.user.service.exceptions.UserVerifiedLimitException;
 import com.ub.core.user.views.AddEditUserView;
 import com.ub.core.user.views.modalUserSearch.all.SearchUserAdminRequest;
 import com.ub.core.user.views.modalUserSearch.all.SearchUserAdminResponse;
+import com.ub.facebook.response.FBUserInfo;
 import com.ub.vk.response.AccessTokenResponse;
 import com.ub.vk.response.users.get.UserInfo;
 import com.ub.vk.response.users.get.UsersGetResponse;
@@ -268,11 +269,41 @@ public class UserService {
         return userDoc;
     }
 
+    public UserDoc createUserByFb(FBUserInfo userInfo) throws UserExistException {
+        UserDoc userDoc = new UserDoc();
+
+        UserDoc check = getUserByFbId(userInfo.getId());
+        if (check != null) {
+            throw new UserExistException();
+        }
+
+        userDoc.setFbAccessToken(userInfo.getAccessToken());
+        userDoc.setEmail(userInfo.getEmail());
+        userDoc.setFbId(userInfo.getId());
+        userDoc.setUserStatus(UserStatusEnum.ACTIVE);
+
+        userDoc.setFirstName(userInfo.getFirst_name());
+        userDoc.setLastName(userInfo.getLast_name());
+
+        save(userDoc);
+        return userDoc;
+    }
+
     public UserDoc updateVkAccessToken(UserDoc userDoc, String accessToken) {
         userDoc.setVkAccessToken(accessToken);
         try {
             save(userDoc);
         }catch (UserExistException e){
+            e.printStackTrace();
+        }
+        return userDoc;
+    }
+
+    public UserDoc updateFbAccessToken(UserDoc userDoc, String accessToken) {
+        userDoc.setFbAccessToken(accessToken);
+        try {
+            save(userDoc);
+        } catch (UserExistException e) {
             e.printStackTrace();
         }
         return userDoc;
@@ -339,6 +370,10 @@ public class UserService {
 
     public UserDoc getUserByVkId(String vkId) {
         return mongoTemplate.findOne(new Query(Criteria.where("vkId").is(vkId)), UserDoc.class);
+    }
+
+    public UserDoc getUserByFbId(String fbId) {
+        return mongoTemplate.findOne(new Query(new Criteria("fbId").is(fbId)), UserDoc.class);
     }
 
     public String restorePassword(String email) throws UserNotExistException, UserExistException {

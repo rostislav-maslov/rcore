@@ -12,6 +12,7 @@ import com.ub.core.security.session.SessionType;
 import com.ub.core.user.models.UserDoc;
 import com.ub.core.user.service.UserService;
 import com.ub.core.user.service.exceptions.UserExistException;
+import com.ub.facebook.response.FBUserInfo;
 import com.ub.vk.response.AccessTokenResponse;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -181,6 +182,23 @@ public class AutorizationService {
             }
         } else {
             userDoc = userService.updateVkAccessToken(userDoc, accessTokenResponse.getAccess_token());
+        }
+        SessionModel sessionModel = getSessionModelVkType(userDoc);
+        HttpSession httpSession = getSession();
+        httpSession = sessionModel.fillSession(httpSession);
+        httpSession.setMaxInactiveInterval(60 * 60 * 24 * 30);
+    }
+
+    public void authorizeFb(FBUserInfo userInfo) {
+        UserDoc userDoc = userService.getUserByFbId(userInfo.getId());
+        if (userDoc == null) {
+            try {
+                userDoc = userService.createUserByFb(userInfo);
+            } catch (UserExistException e) {
+                e.printStackTrace();
+            }
+        } else {
+            userDoc = userService.updateVkAccessToken(userDoc, userInfo.getAccessToken());
         }
         SessionModel sessionModel = getSessionModelVkType(userDoc);
         HttpSession httpSession = getSession();
