@@ -43,8 +43,6 @@ public class AuthorizeFbService {
     public void getUserInfo(String accessToken) {
         HttpsUtils httpsUtils = new HttpsUtils(AuthorizeFbStatic.ME_URL);
 
-        AppPropertiesFbDoc appPropertiesFbDoc = appPropertiesFbService.getFbProp();
-
         httpsUtils.addParam(AuthorizeFbStatic.P_ACCESS_TOKEN, accessToken);
         try {
             String response = httpsUtils.sendGet();
