@@ -45,7 +45,7 @@ public class PictureColorService {
                 searchItemColorAdminRequest.getCurrentPage(),
                 searchItemColorAdminRequest.getPageSize(),
                 result);
-        searchItemColorAdminResponse.setAll(count.intValue());
+        searchItemColorAdminResponse.setAll(count);
         searchItemColorAdminResponse.setQuery(searchItemColorAdminRequest.getQuery());
         return searchItemColorAdminResponse;
     }

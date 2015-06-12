@@ -423,7 +423,7 @@ public class UserService {
                 searchUserAdminRequest.getCurrentPage(),
                 searchUserAdminRequest.getPageSize(),
                 result);
-        searchUserAdminResponse.setAll(count.intValue());
+        searchUserAdminResponse.setAll(count);
         searchUserAdminResponse.setQuery(searchUserAdminRequest.getQuery());
         return searchUserAdminResponse;
     }

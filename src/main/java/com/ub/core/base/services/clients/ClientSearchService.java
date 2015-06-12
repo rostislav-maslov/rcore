@@ -17,7 +17,7 @@ import java.util.List;
 @Component
 public class ClientSearchService {
 
-    @Autowired private MongoTemplate mongoTemplate;
+    @Autowired protected MongoTemplate mongoTemplate;
 
     public Long count(Criteria criteria, Class entityClass) {
         Query query = new Query(criteria);

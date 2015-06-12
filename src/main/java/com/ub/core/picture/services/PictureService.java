@@ -144,7 +144,7 @@ public class PictureService {
                 searchAdminRequest.getCurrentPage(),
                 searchAdminRequest.getPageSize(),
                 result);
-        searchAdminResponse.setAll(count.intValue());
+        searchAdminResponse.setAll(count);
         searchAdminResponse.setQuery(searchAdminRequest.getQuery());
         return searchAdminResponse;
     }
