@@ -198,7 +198,7 @@ public class AutorizationService {
                 e.printStackTrace();
             }
         } else {
-            userDoc = userService.updateVkAccessToken(userDoc, userInfo.getAccessToken());
+            userDoc = userService.updateFbAccessToken(userDoc, userInfo.getAccessToken());
         }
         SessionModel sessionModel = getSessionModelVkType(userDoc);
         HttpSession httpSession = getSession();
