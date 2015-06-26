@@ -3,7 +3,7 @@ function autoOpenMenu() {
     var currLink = window.location.pathname;
     for (var i = 0;i< allA.length; i++) {
         try {
-            if(currLink.indexOf($(allA[i]).attr('href')) != -1){
+            if($(allA[i]).attr('href') != '' && currLink.indexOf($(allA[i]).attr('href')) != -1){
                 $(allA[i]).parent().addClass('active');
                 $(allA[i]).parent().parent().parent().addClass('opened');
             }
