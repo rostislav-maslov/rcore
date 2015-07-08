@@ -20,6 +20,21 @@ public class Role {
         this.goAfterFail = roleDoc.getGoAfterFail();
     }
 
+    @Override
+    public int hashCode() {
+        return this.getId().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Role that = (Role) o;
+
+        return this.id.equals(that.getId());
+    }
+
     public String getId() {
         return id;
     }
