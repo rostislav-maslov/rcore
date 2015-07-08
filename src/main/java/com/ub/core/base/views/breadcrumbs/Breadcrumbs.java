@@ -7,6 +7,11 @@ public class Breadcrumbs {
     private List<BreadcrumbsLink> links = new ArrayList<BreadcrumbsLink>();
     private String currentPageTitle = "";
 
+    public String cutBreadcrumbsCurrentTitle(Integer size){
+        if( currentPageTitle.length() <= size )return currentPageTitle;
+        return currentPageTitle.substring(0, size-1) + "...";
+    }
+
     public void addLink(String link, String title){
         links.add(new BreadcrumbsLink(link,title));
     }

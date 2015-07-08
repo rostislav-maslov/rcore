@@ -21,8 +21,8 @@ public class UserDoc {
     protected String password;
     protected UserStatusEnum userStatus = UserStatusEnum.ACTIVE;
 
-    protected String firstName;
-    protected String lastName;
+    protected String firstName = "";
+    protected String lastName = "";
 
     private String vkId;
     private String vkAccessToken;
