@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.List;
 
 @Component
@@ -99,6 +100,16 @@ public class PictureService {
 
         mongoTemplate.save(pictureDoc);
         return pictureDoc;
+    }
+
+    public PictureDoc saveByUrl(String url) {
+        try {
+            InputStream str = new URL(url).openStream();
+            return save(str);
+        }catch (Exception e){
+
+        }
+        return null;
     }
 
     public PictureDoc save(InputStream inputStream) {
