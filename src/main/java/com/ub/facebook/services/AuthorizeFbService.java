@@ -10,6 +10,9 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.InputStream;
+import java.net.URL;
+
 @Component
 public class AuthorizeFbService {
     @Autowired private AppPropertiesFbService appPropertiesFbService;
@@ -53,6 +56,31 @@ public class AuthorizeFbService {
         } catch (Exception e) {
             e.printStackTrace();
             // TODO: продумать эксепшн
+        }
+    }
+
+    public FBUserInfo get(String accessToken) {
+        HttpsUtils httpsUtils = new HttpsUtils(AuthorizeFbStatic.ME_URL);
+
+        httpsUtils.addParam(AuthorizeFbStatic.P_ACCESS_TOKEN, accessToken);
+        try {
+            String response = httpsUtils.sendGet();
+            FBUserInfo userInfo = new ObjectMapper().readValue(response, FBUserInfo.class);
+            userInfo.setAccessToken(accessToken);
+
+            return userInfo;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public InputStream getImage(FBUserInfo userInfo) {
+        try {
+            URL url = new URL(AuthorizeFbStatic.GRAPH_URL + userInfo.getId() + "/picture");
+
+            return url.openConnection().getInputStream();
+        } catch (Exception e) {
+            return null;
         }
     }
 
