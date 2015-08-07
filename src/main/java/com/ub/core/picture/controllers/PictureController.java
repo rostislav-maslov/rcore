@@ -15,12 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -65,7 +60,19 @@ public class PictureController {
             InputStream is = gridFSDBFile.getInputStream();
 
             if (width != null && width > 0) {
-                IOUtils.copy(resizeImage(is, width), response.getOutputStream());
+//                IOUtils.copy(pictureService.resizeImage(is, width), response.getOutputStream());
+                IOUtils.copy(is, response.getOutputStream());
+//                if(pictureDoc.hasSizeWidth(width) ==  false){
+//                    pictureDoc = pictureService.addNewSizeToPicture(pictureDoc.getId(), width);
+//                }
+//                for(PictureSize pictureSize : pictureDoc.getSizes().values()){
+//                    if(pictureSize.getWidth().equals(width)){
+//                        GridFSDBFile newSizeGrid = fileService.getFile(pictureSize.getFileId());
+//                        IOUtils.copy(newSizeGrid.getInputStream(), response.getOutputStream());
+//                        newSizeGrid.getInputStream().close();
+//                        break;
+//                    }
+//                }
             } else {
                 IOUtils.copy(is, response.getOutputStream());
             }
@@ -82,20 +89,5 @@ public class PictureController {
     }
 
 
-    private InputStream resizeImage(InputStream is, int width) throws IOException {
-        BufferedImage originalImage = ImageIO.read(is);
 
-        int height = width * originalImage.getHeight() / originalImage.getWidth();
-
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = image.createGraphics();
-        g.drawImage(originalImage, 0, 0, width, height, null);
-        g.dispose();
-
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ImageIO.write(image, "png", os);
-        is = new ByteArrayInputStream(os.toByteArray());
-
-        return is;
-    }
 }

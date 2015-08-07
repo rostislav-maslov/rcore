@@ -20,10 +20,18 @@ public class PictureDoc {
 
     private String color;
 
+    public Boolean hasSizeWidth(Integer width){
+        for(PictureSize pictureSize : sizes.values()){
+            if(pictureSize.getWidth().equals(width)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void addSize(PictureSize pictureSize){
         sizes.put(pictureSize.getStringSize(),pictureSize);
     }
-
 
     public ObjectId getId() {
         return id;

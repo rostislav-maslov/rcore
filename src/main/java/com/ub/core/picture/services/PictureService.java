@@ -18,7 +18,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
@@ -35,13 +39,13 @@ public class PictureService {
     }
 
     public PictureDoc findByUrl(String url) {
-        return mongoTemplate.findOne(new Query(Criteria.where("url").is(url)),PictureDoc.class);
+        return mongoTemplate.findOne(new Query(Criteria.where("url").is(url)), PictureDoc.class);
     }
 
     public void delete(ObjectId objectId) {
         PictureDoc pictureDoc = findById(objectId);
 
-        if(pictureDoc == null)
+        if (pictureDoc == null)
             return;
 
         fileService.delete(pictureDoc.getOriginFileId());
@@ -50,6 +54,54 @@ public class PictureService {
         }
 
         mongoTemplate.remove(pictureDoc);
+    }
+
+    public PictureDoc addNewSizeToPicture(ObjectId pictureId, Integer width) throws IOException {
+        PictureDoc pictureDoc = findById(pictureId);
+        if (pictureDoc.getSizes() != null) {
+            for (PictureSize pictureSize : pictureDoc.getSizes().values()) {
+                if (pictureSize.getWidth().equals(width)) {
+                    return pictureDoc;
+                }
+            }
+        }
+
+        GridFSDBFile gridFSDBFile = fileService.getFile(pictureDoc.getOriginFileId());
+        InputStream is = gridFSDBFile.getInputStream();
+        BufferedImage originalImage = ImageIO.read(is);
+        InputStream newSize = resizeImage(is, width);
+
+        //BufferedImage originalImage = ImageIO.read(newSize);
+        GridFSDBFile newSizeFile = fileService.save(newSize);
+        PictureSize pictureSize = new PictureSize();
+        pictureSize.setFileId((ObjectId)newSizeFile.getId());
+        pictureSize.setWidth(width);
+        pictureSize.setHieght(originalImage.getHeight());
+        pictureDoc.addSize(pictureSize);
+
+        mongoTemplate.save(pictureDoc);
+
+        return pictureDoc;
+    }
+
+    public InputStream resizeImage(InputStream is, int width) throws IOException {
+        BufferedImage originalImage = ImageIO.read(is);
+
+        int height = width * originalImage.getHeight() / originalImage.getWidth();
+
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = image.createGraphics();
+        g.drawImage(originalImage, 0, 0, width, height, null);
+        g.dispose();
+
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", os);
+        image.flush();
+        is.close();
+        is = new ByteArrayInputStream(os.toByteArray());
+        os.flush();
+        os.close();
+        return is;
     }
 
     public PictureSize getPictureSize(ObjectId fileId) {
@@ -106,7 +158,7 @@ public class PictureService {
         try {
             InputStream str = new URL(url).openStream();
             return save(str);
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         return null;
