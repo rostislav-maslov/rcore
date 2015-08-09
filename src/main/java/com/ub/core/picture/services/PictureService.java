@@ -76,7 +76,7 @@ public class PictureService {
         return newSize;
     }
 
-    public synchronized InputStream resizeImage(InputStream is, int width) throws IOException {
+    public static synchronized InputStream resizeImage(InputStream is, int width) throws IOException {
         BufferedImage originalImage = ImageIO.read(is);
 
         int height = width * originalImage.getHeight() / originalImage.getWidth();
