@@ -75,6 +75,7 @@ public class PictureController {
 //                    IOUtils.copy(newIs, response.getOutputStream());
 //                    newIs.close();
 //                }
+                System.gc();
             } else {
                 IOUtils.copy(is, response.getOutputStream());
                 is.close();
