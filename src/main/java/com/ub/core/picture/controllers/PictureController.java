@@ -9,6 +9,7 @@ import com.ub.core.picture.routes.PicturesRoutes;
 import com.ub.core.picture.services.PictureService;
 import org.apache.commons.io.IOUtils;
 import org.bson.types.ObjectId;
+import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -64,6 +66,7 @@ public class PictureController {
                 InputStream newIs = pictureService.resizeImage(is, width);
                 IOUtils.copy(newIs, response.getOutputStream());
                 newIs.close();
+                is.close();
 //                IOUtils.copy(is, response.getOutputStream());
 //                PictureSize pictureSize = pictureDoc.hasSizeWidth(width);
 //                if(pictureSize != null) {

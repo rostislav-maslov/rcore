@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import javax.imageio.stream.ImageInputStream;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -76,7 +77,7 @@ public class PictureService {
         return newSize;
     }
 
-    public InputStream resizeImage(InputStream is, int width) throws IOException {
+    public synchronized InputStream resizeImage(InputStream is, int width) throws IOException {
         BufferedImage originalImage = ImageIO.read(is);
 
         int height = width * originalImage.getHeight() / originalImage.getWidth();
@@ -89,7 +90,7 @@ public class PictureService {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         ImageIO.write(image, "png", os);
         image.flush();
-        
+
         is.close();
         is = new ByteArrayInputStream(os.toByteArray());
         os.flush();
