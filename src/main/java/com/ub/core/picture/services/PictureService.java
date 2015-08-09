@@ -56,23 +56,13 @@ public class PictureService {
         mongoTemplate.remove(pictureDoc);
     }
 
-    public PictureDoc addNewSizeToPicture(ObjectId pictureId, Integer width) throws IOException {
-        PictureDoc pictureDoc = findById(pictureId);
-        if (pictureDoc.getSizes() != null) {
-            for (PictureSize pictureSize : pictureDoc.getSizes().values()) {
-                if (pictureSize.getWidth().equals(width)) {
-                    return pictureDoc;
-                }
-            }
-        }
-
-        GridFSDBFile gridFSDBFile = fileService.getFile(pictureDoc.getOriginFileId());
-        InputStream is = gridFSDBFile.getInputStream();
-        BufferedImage originalImage = ImageIO.read(is);
+    public InputStream addNewSizeToPicture(InputStream is, PictureDoc pictureDoc, Integer width) throws IOException {
         InputStream newSize = resizeImage(is, width);
 
-        //BufferedImage originalImage = ImageIO.read(newSize);
+        BufferedImage originalImage = ImageIO.read(newSize);
         GridFSDBFile newSizeFile = fileService.save(newSize);
+
+        // сохраняем еще один ресайз в картинке
         PictureSize pictureSize = new PictureSize();
         pictureSize.setFileId((ObjectId)newSizeFile.getId());
         pictureSize.setWidth(width);
@@ -81,7 +71,9 @@ public class PictureService {
 
         mongoTemplate.save(pictureDoc);
 
-        return pictureDoc;
+        is.close();
+
+        return newSize;
     }
 
     public InputStream resizeImage(InputStream is, int width) throws IOException {

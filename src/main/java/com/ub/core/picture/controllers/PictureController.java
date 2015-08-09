@@ -4,6 +4,7 @@ import com.mongodb.gridfs.GridFSDBFile;
 import com.ub.core.base.utils.StringUtils;
 import com.ub.core.file.services.FileService;
 import com.ub.core.picture.models.PictureDoc;
+import com.ub.core.picture.models.PictureSize;
 import com.ub.core.picture.routes.PicturesRoutes;
 import com.ub.core.picture.services.PictureService;
 import org.apache.commons.io.IOUtils;
@@ -60,25 +61,26 @@ public class PictureController {
             InputStream is = gridFSDBFile.getInputStream();
 
             if (width != null && width > 0) {
-//                IOUtils.copy(pictureService.resizeImage(is, width), response.getOutputStream());
-                IOUtils.copy(is, response.getOutputStream());
-//                if(pictureDoc.hasSizeWidth(width) ==  false){
-//                    pictureDoc = pictureService.addNewSizeToPicture(pictureDoc.getId(), width);
-//                }
-//                for(PictureSize pictureSize : pictureDoc.getSizes().values()){
-//                    if(pictureSize.getWidth().equals(width)){
-//                        GridFSDBFile newSizeGrid = fileService.getFile(pictureSize.getFileId());
-//                        IOUtils.copy(newSizeGrid.getInputStream(), response.getOutputStream());
-//                        newSizeGrid.getInputStream().close();
-//                        break;
-//                    }
+                InputStream newIs = pictureService.resizeImage(is, width);
+                IOUtils.copy(newIs, response.getOutputStream());
+                newIs.close();
+//                IOUtils.copy(is, response.getOutputStream());
+//                PictureSize pictureSize = pictureDoc.hasSizeWidth(width);
+//                if(pictureSize != null) {
+//                    GridFSDBFile newSizeGrid = fileService.getFile(pictureSize.getFileId());
+//                    IOUtils.copy(newSizeGrid.getInputStream(), response.getOutputStream());
+//                    newSizeGrid.getInputStream().close();
+//                } else {
+//                    InputStream newIs = pictureService.addNewSizeToPicture(is, pictureDoc, width);
+//                    IOUtils.copy(newIs, response.getOutputStream());
+//                    newIs.close();
 //                }
             } else {
                 IOUtils.copy(is, response.getOutputStream());
+                is.close();
             }
 
             response.flushBuffer();
-            is.close();
         } catch (IOException ex) {
             response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
             response.setHeader("Location", "/404");

@@ -20,13 +20,13 @@ public class PictureDoc {
 
     private String color;
 
-    public Boolean hasSizeWidth(Integer width){
+    public PictureSize hasSizeWidth(Integer width){
         for(PictureSize pictureSize : sizes.values()){
             if(pictureSize.getWidth().equals(width)){
-                return true;
+                return pictureSize;
             }
         }
-        return false;
+        return null;
     }
 
     public void addSize(PictureSize pictureSize){
