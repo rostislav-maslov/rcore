@@ -89,10 +89,14 @@ public class PictureService {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         ImageIO.write(image, "png", os);
         image.flush();
+        
         is.close();
         is = new ByteArrayInputStream(os.toByteArray());
         os.flush();
         os.close();
+
+        originalImage.flush();
+
         return is;
     }
 
