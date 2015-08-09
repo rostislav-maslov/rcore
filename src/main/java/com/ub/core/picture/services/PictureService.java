@@ -97,6 +97,8 @@ public class PictureService {
 
         originalImage.flush();
 
+        System.gc();
+
         return is;
     }
 
