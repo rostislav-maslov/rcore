@@ -1,5 +1,6 @@
 package com.ub.core.picture.models;
 
+import com.ub.core.picture.services.PictureService;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -30,6 +31,9 @@ public class PictureDoc {
     }
 
     public void addSize(PictureSize pictureSize){
+        if(sizes.size() >= PictureService.LIMIT_OF_IMAGE_SIZES){
+            return;
+        }
         sizes.put(pictureSize.getStringSize(),pictureSize);
     }
 

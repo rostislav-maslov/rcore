@@ -7,6 +7,7 @@ import com.ub.core.picture.models.PictureSize;
 import com.ub.core.picture.view.all.SearchAdminRequest;
 import com.ub.core.picture.view.all.SearchAdminResponse;
 import org.bson.types.ObjectId;
+import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -29,6 +29,9 @@ import java.util.List;
 
 @Component
 public class PictureService {
+    public static final Integer LIMIT_OF_IMAGE_SIZES = 5;
+    public static final Boolean RETURN_ORIGIN_IF_LIMIT = true;
+
 
     @Autowired private FileService fileService;
     @Autowired private MongoTemplate mongoTemplate;
@@ -57,49 +60,53 @@ public class PictureService {
     }
 
     public InputStream addNewSizeToPicture(InputStream is, PictureDoc pictureDoc, Integer width) throws IOException {
+        if(pictureDoc.getSizes().size() >= LIMIT_OF_IMAGE_SIZES){
+            GridFSDBFile gridFSDBFile = fileService.getFile(pictureDoc.getOriginFileId());
+            return gridFSDBFile.getInputStream();
+        }
+
         InputStream newSize = resizeImage(is, width);
 
-        BufferedImage originalImage = ImageIO.read(newSize);
         GridFSDBFile newSizeFile = fileService.save(newSize);
+
+        BufferedImage originalImage = ImageIO.read(newSizeFile.getInputStream());
 
         // сохраняем еще один ресайз в картинке
         PictureSize pictureSize = new PictureSize();
-        pictureSize.setFileId((ObjectId)newSizeFile.getId());
+        pictureSize.setFileId((ObjectId) newSizeFile.getId());
         pictureSize.setWidth(width);
         pictureSize.setHieght(originalImage.getHeight());
-        pictureDoc.addSize(pictureSize);
 
+
+        pictureDoc.addSize(pictureSize);
         mongoTemplate.save(pictureDoc);
 
         is.close();
 
-        return newSize;
+        return newSizeFile.getInputStream();
     }
 
     public static synchronized InputStream resizeImage(InputStream is, int width) throws IOException {
-        BufferedImage originalImage = ImageIO.read(is);
+        try {
+            BufferedImage originalImage = ImageIO.read(is);
+            BufferedImage thumbnail = Scalr.resize(originalImage, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_WIDTH, width);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(thumbnail, "png", os);
+            thumbnail.flush();
 
-        int height = width * originalImage.getHeight() / originalImage.getWidth();
+            is.close();
+            os.flush();
+            os.close();
+            originalImage.flush();
+            System.gc();
 
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g = image.createGraphics();
-        g.drawImage(originalImage, 0, 0, width, height, null);
-        g.dispose();
-
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ImageIO.write(image, "png", os);
-        image.flush();
-
-        is.close();
-        is = new ByteArrayInputStream(os.toByteArray());
-        os.flush();
-        os.close();
-
-        originalImage.flush();
-
-        System.gc();
-
-        return is;
+            InputStream resultStream = new ByteArrayInputStream(os.toByteArray());
+            return resultStream;
+        } catch (IOException ex) {
+            //http://stackoverflow.com/questions/2408613/unable-to-read-jpeg-image-using-imageio-readfile-file
+            ex.printStackTrace();
+            throw ex;
+        }
     }
 
     public PictureSize getPictureSize(ObjectId fileId) {

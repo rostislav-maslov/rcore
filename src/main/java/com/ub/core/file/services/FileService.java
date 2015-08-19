@@ -112,7 +112,6 @@ public class FileService {
         try {
             inputStream = filePath.getInputStream();
             GridFSFile gridFSFile = gridFsTemplate.store(inputStream, filePath.getFileName(), filePath.getFileMeta(), filePath.getMetaData());
-
             return getFile((ObjectId) gridFSFile.getId());
         } catch (Exception e) {
         } finally {
