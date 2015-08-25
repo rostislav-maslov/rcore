@@ -278,7 +278,7 @@ public class UserService {
         }
 
         userDoc.setFbAccessToken(userInfo.getAccessToken());
-        userDoc.setEmail(userInfo.getEmail());
+        userDoc.setFbEmail(userInfo.getEmail());
         userDoc.setFbId(userInfo.getId());
         userDoc.setUserStatus(UserStatusEnum.ACTIVE);
 
