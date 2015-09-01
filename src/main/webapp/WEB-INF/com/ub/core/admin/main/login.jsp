@@ -43,7 +43,7 @@
 
         <div class="login-content">
 
-            <a href="#" class="logo">
+            <a href="/admin" class="logo">
                 <img src="<c:url value="/static/a/images/logo@2x.png"/>" width="95" alt=""/>
             </a>
 

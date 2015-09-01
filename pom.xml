@@ -101,8 +101,6 @@
             <scope>compile</scope>
         </dependency>
 
-
-
         <dependency>
             <groupId>org.apache.tiles</groupId>
             <artifactId>tiles-template</artifactId>
@@ -215,6 +213,14 @@
         </dependency>
         <!--/Spring security-->
 
+        <!-- Image scale -->
+        <dependency>
+            <groupId>org.imgscalr</groupId>
+            <artifactId>imgscalr-lib</artifactId>
+            <version>4.2</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
 
     </dependencies>
 

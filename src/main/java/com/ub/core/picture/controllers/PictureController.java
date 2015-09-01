@@ -4,6 +4,7 @@ import com.mongodb.gridfs.GridFSDBFile;
 import com.ub.core.base.utils.StringUtils;
 import com.ub.core.file.services.FileService;
 import com.ub.core.picture.models.PictureDoc;
+import com.ub.core.picture.models.PictureSize;
 import com.ub.core.picture.routes.PicturesRoutes;
 import com.ub.core.picture.services.PictureService;
 import org.apache.commons.io.IOUtils;
@@ -38,17 +39,13 @@ public class PictureController {
                 pictureDoc = pictureService.findById(objectId);
             } catch (Exception e) {
             }
-            if(pictureDoc == null){
+            if (pictureDoc == null) {
                 pictureDoc = pictureService.findByUrl(id);
             }
-            if(pictureDoc == null){
+            if (pictureDoc == null) {
                 response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
                 response.setHeader("Location", "/404");
             }
-
-            GridFSDBFile gridFSDBFile = fileService.getFile(pictureDoc.getOriginFileId());
-            response.setHeader("Content-Disposition", "filename=\"" + StringUtils.cyrillicToLatin(gridFSDBFile.getFilename()) + "\"");
-
             //Кеширование
             GregorianCalendar gc = new GregorianCalendar();
             gc.setTime(new Date());
@@ -56,27 +53,38 @@ public class PictureController {
             long ex = gc.getTime().getTime();
             response.setDateHeader("Expires", ex);
             //конец кеширования
-            response.setContentType(gridFSDBFile.getContentType());
-            InputStream is = gridFSDBFile.getInputStream();
 
+            GridFSDBFile gridFSDBFile = fileService.getFile(pictureDoc.getOriginFileId());
+            response.setHeader("Content-Disposition", "filename=\"" + StringUtils.cyrillicToLatin(gridFSDBFile.getFilename()) + "\"");
+            response.setContentType(gridFSDBFile.getContentType());
             if (width != null && width > 0) {
-                InputStream newIs = pictureService.resizeImage(is, width);
-                IOUtils.copy(newIs, response.getOutputStream());
-                newIs.close();
-                is.close();
-//                IOUtils.copy(is, response.getOutputStream());
-//                PictureSize pictureSize = pictureDoc.hasSizeWidth(width);
-//                if(pictureSize != null) {
-//                    GridFSDBFile newSizeGrid = fileService.getFile(pictureSize.getFileId());
-//                    IOUtils.copy(newSizeGrid.getInputStream(), response.getOutputStream());
-//                    newSizeGrid.getInputStream().close();
-//                } else {
-//                    InputStream newIs = pictureService.addNewSizeToPicture(is, pictureDoc, width);
-//                    IOUtils.copy(newIs, response.getOutputStream());
-//                    newIs.close();
-//                }
-                System.gc();
+                try {
+                    PictureSize pictureSize = pictureDoc.hasSizeWidth(width);
+                    if (pictureSize != null ) {
+                        GridFSDBFile newSizeGrid = fileService.getFile(pictureSize.getFileId());
+                        InputStream isFile = newSizeGrid.getInputStream();
+                        IOUtils.copy(isFile, response.getOutputStream());
+                        isFile.close();
+                    } else {
+                        InputStream is = gridFSDBFile.getInputStream();
+                        //InputStream newIs = pictureService.resizeImage(is, width);
+
+                        InputStream newIs = pictureService.addNewSizeToPicture(is, pictureDoc, width);
+                        IOUtils.copy(newIs, response.getOutputStream());
+
+                        newIs.close();
+                        is.close();
+                        //response.setContentType("image/png");//gridFSDBFile.getContentType());
+                    }
+                } catch (IOException ioEx) {
+                    InputStream is = gridFSDBFile.getInputStream();
+                    IOUtils.copy(is, response.getOutputStream());
+                    is.close();
+                } finally {
+                    System.gc();
+                }
             } else {
+                InputStream is = gridFSDBFile.getInputStream();
                 IOUtils.copy(is, response.getOutputStream());
                 is.close();
             }
@@ -90,7 +98,6 @@ public class PictureController {
             response.setHeader("Location", "/404");
         }
     }
-
 
 
 }

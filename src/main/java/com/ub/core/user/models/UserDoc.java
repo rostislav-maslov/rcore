@@ -30,6 +30,7 @@ public class UserDoc {
 
     private String fbId;
     private String fbAccessToken;
+    private String fbEmail;
 
 
 
@@ -143,5 +144,13 @@ public class UserDoc {
 
     public void setFbAccessToken(String fbAccessToken) {
         this.fbAccessToken = fbAccessToken;
+    }
+
+    public String getFbEmail() {
+        return fbEmail;
+    }
+
+    public void setFbEmail(String fbEmail) {
+        this.fbEmail = fbEmail;
     }
 }
