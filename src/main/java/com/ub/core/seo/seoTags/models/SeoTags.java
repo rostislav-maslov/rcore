@@ -25,6 +25,14 @@ public class SeoTags {
         this.h1 = h1;
     }
 
+    public SeoTags(String metaTitle, String metaDescription, String metaKeywords, String title, String h1) {
+        this.metaTitle = metaTitle;
+        this.metaDescription = metaDescription;
+        this.metaKeywords = metaKeywords;
+        this.title = title;
+        this.h1 = h1;
+    }
+
     public String getMetaTitle() {
         return metaTitle;
     }
