@@ -1,0 +1,1 @@
+<link rel="image_src" href="${faceBookMetaTagsView.ogImage}" />

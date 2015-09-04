@@ -6,6 +6,7 @@ public class SeoTags {
     private String metaKeywords;
     private String title;
     private String h1;
+    private String relCanonical;
 
     public SeoTags() {
     }
@@ -71,5 +72,13 @@ public class SeoTags {
 
     public void setH1(String h1) {
         this.h1 = h1;
+    }
+
+    public String getRelCanonical() {
+        return relCanonical;
+    }
+
+    public void setRelCanonical(String relCanonical) {
+        this.relCanonical = relCanonical;
     }
 }
