@@ -32,7 +32,9 @@ public class UserDoc {
     private String fbAccessToken;
     private String fbEmail;
 
-
+    private String login;
+    private String passwordForLogin;
+    private String emailForLogin;
 
     public static String generateHexPassword(String email, String password) {
         return DigestUtils.md5Hex(email + ";" + password + "42");
@@ -40,6 +42,10 @@ public class UserDoc {
 
     public void setPasswordAsHex(String notHexPassword) {
         this.password = generateHexPassword(email, notHexPassword);
+    }
+
+    public void setPasswordForLoginAsHex(String notHexPassword){
+        this.passwordForLogin = generateHexPassword(login, notHexPassword);
     }
 
     public boolean containsRole(Role role){
@@ -152,5 +158,29 @@ public class UserDoc {
 
     public void setFbEmail(String fbEmail) {
         this.fbEmail = fbEmail;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPasswordForLogin() {
+        return passwordForLogin;
+    }
+
+    public void setPasswordForLogin(String passwordForLogin) {
+        this.passwordForLogin = passwordForLogin;
+    }
+
+    public String getEmailForLogin() {
+        return emailForLogin;
+    }
+
+    public void setEmailForLogin(String emailForLogin) {
+        this.emailForLogin = emailForLogin;
     }
 }

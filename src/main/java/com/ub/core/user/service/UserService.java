@@ -76,6 +76,10 @@ public class UserService {
         }
     }
 
+    public UserDoc findByLogin(String login){
+        return mongoTemplate.findOne(new Query(Criteria.where("login").is(login)), UserDoc.class);
+    }
+
     public UserDoc findByEmail(String email) {
         return mongoTemplate.findOne(new Query(Criteria.where("email").is(email)), UserDoc.class);
     }
@@ -92,6 +96,23 @@ public class UserService {
             UserDoc oldDoc = getUser(userDoc.getId());
             if (oldDoc == null) {
                 UserDoc old = findByEmail(userDoc.getEmail());
+                if (old != null) {
+                    throw new UserExistException();
+                }
+            }
+        }
+
+        if(userDoc.getId() == null && userDoc.getLogin() != null){
+            UserDoc old = findByLogin(userDoc.getLogin());
+            if(old != null){
+                throw new UserExistException();
+            }
+        }
+
+        if (userDoc.getId() != null && userDoc.getLogin() != null) {
+            UserDoc oldDoc = getUser(userDoc.getId());
+            if (oldDoc == null) {
+                UserDoc old = findByLogin(userDoc.getLogin());
                 if (old != null) {
                     throw new UserExistException();
                 }
@@ -208,6 +229,18 @@ public class UserService {
             }
         }
         return save(userDoc);
+    }
+
+    public UserDoc createUserByLogin(String login, String password) throws UserExistException {
+        UserDoc userDoc = new UserDoc();
+        UserDoc check = findByLogin(login);
+        if (check != null) {
+            throw new UserExistException();
+        }
+        userDoc.setLogin(login);
+        userDoc.setPasswordForLoginAsHex(password);
+        save(userDoc);
+        return userDoc;
     }
 
     /**
