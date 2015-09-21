@@ -49,7 +49,7 @@
 
             <!-- logo -->
             <div class="logo">
-                <a href="/">
+                <a href="/admin">
                     <img src="<c:url value="/static/a/images/logo@2x.png"/>" width="95" alt=""/>
                 </a>
             </div>

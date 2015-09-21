@@ -112,6 +112,11 @@ public class AutorizationService {
         return DigestUtils.md5Hex(t);
     }
 
+    public String getTokenLogin(UserDoc userDoc) {
+        String t = userDoc.getLogin() + ";" + userDoc.getPasswordForLogin() + "42";
+        return DigestUtils.md5Hex(t);
+    }
+
     public String getTokenVk(UserDoc userDoc) {
         String t = userDoc.getVkId() + ";" + userDoc.getVkAccessToken() + "42";
         return DigestUtils.md5Hex(t);
@@ -122,6 +127,15 @@ public class AutorizationService {
         sessionModel.setIdUser(userDoc.getId());
         sessionModel.setType(SessionType.EMAIL);
         sessionModel.setToken(getTokenEmail(userDoc));
+        return sessionModel;
+    }
+
+    public SessionModel getSessionModelLoginType(UserDoc userDoc){
+        SessionModel sessionModel = new SessionModel();
+        sessionModel.setIdUser(userDoc.getId());
+        sessionModel.setType(SessionType.LOGIN);
+        sessionModel.setToken(getTokenLogin(userDoc));
+
         return sessionModel;
     }
 
@@ -140,9 +154,6 @@ public class AutorizationService {
             Object o = enumerator.nextElement();
             httpSession.removeAttribute(o.toString());
         }
-        //httpSession.removeAttribute(SessionModel.ID_USER);
-        //httpSession.removeAttribute(SessionModel.TOKEN);
-        //httpSession.removeAttribute(SessionModel.TYPE);
     }
 
     public void autorizeEmailHashedPassword(String email, String hashedPassword) throws UserNotAutorizedException {
@@ -160,6 +171,14 @@ public class AutorizationService {
         UserDoc userDoc = userService.getUserByEmail(email);
         if (userDoc == null || userDoc.getPassword() == null) throw new UserNotAutorizedException();
         if (!userDoc.getPassword().equals(UserDoc.generateHexPassword(email, password)))
+            throw new UserNotAutorizedException();
+        return authorizeUserDoc(userDoc);
+    }
+
+    public UserDoc authorizeLogin(String login, String password) throws UserNotAutorizedException {
+        UserDoc userDoc = userService.findByLogin(login);
+        if (userDoc == null || userDoc.getPasswordForLogin() == null) throw new UserNotAutorizedException();
+        if (!userDoc.getPasswordForLogin().equals(UserDoc.generateHexPassword(login, password)))
             throw new UserNotAutorizedException();
         return authorizeUserDoc(userDoc);
     }
@@ -221,6 +240,12 @@ public class AutorizationService {
             UserDoc user = userService.getUser(sessionModel.getIdUser());
             if (user == null) throw new UserNotAutorizedException();
             if (sessionModel.getType().equals(SessionType.EMAIL) && getTokenEmail(user).equals(sessionModel.getToken()))
+                return user;
+        }
+        if ((sessionModel.getType().equals(SessionType.LOGIN))) {
+            UserDoc user = userService.getUser(sessionModel.getIdUser());
+            if (user == null) throw new UserNotAutorizedException();
+            if (sessionModel.getType().equals(SessionType.LOGIN) && getTokenLogin(user).equals(sessionModel.getToken()))
                 return user;
         }
         if ((sessionModel.getType().equals(SessionType.VK))) {
