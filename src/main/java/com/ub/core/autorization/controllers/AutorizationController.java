@@ -33,7 +33,9 @@ public class AutorizationController {
         try {
             autorizationService.autorizeEmail(email, password);
         } catch (UserNotAutorizedException e) {
-            return RouteUtils.redirectTo(UserLoginRoutes.LOGIN);
+            //return RouteUtils.redirectTo(UserLoginRoutes.LOGIN);
+            model.addAttribute("error","true");
+            return "com.ub.core.admin.login";
         }
         return RouteUtils.redirectTo("/admin");
     }

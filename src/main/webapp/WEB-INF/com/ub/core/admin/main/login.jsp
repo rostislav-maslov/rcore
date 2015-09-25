@@ -46,7 +46,7 @@
                 <img src="<c:url value="/static/a/images/logo.png"/>" width="95" alt=""/>
             </a>
 
-            <p class="description">Dear user, log in to access the admin area!</p>
+            <%--<p class="description">Dear user, log in to access the admin area!</p>--%>
 
             <!-- progress bar indicator -->
             <%--<div class="login-progressbar-indicator">--%>
@@ -67,9 +67,8 @@
 
         <form method="post" role="form" action="<%= UserLoginRoutes.LOGIN%>" id="form_login">
             <c:if test="${not empty error}">
-                <div class="errorblock">
-                    Your login attempt was not successful, try again.<br/> Caused :
-                        ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
+                <div class="alert alert-danger">
+                    Your login attempt was not successful, try again.<br/>
                 </div>
             </c:if>
             <div class="form-group">
