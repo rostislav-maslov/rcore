@@ -43,7 +43,7 @@
         <div class="login-content">
 
             <a href="/admin" class="logo">
-                <img src="<c:url value="/static/a/images/logo@2x.png"/>" width="95" alt=""/>
+                <img src="<c:url value="/static/a/images/logo.png"/>" width="95" alt=""/>
             </a>
 
             <p class="description">Dear user, log in to access the admin area!</p>
@@ -79,7 +79,7 @@
                         <i class="entypo-user"></i>
                     </div>
 
-                    <input type="text" class="form-control" name='email' id="username" placeholder="Username"
+                    <input type="text" class="form-control" name='email' id="username" placeholder="Email"
                            autocomplete="off"/>
                 </div>
 

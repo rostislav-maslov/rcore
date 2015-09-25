@@ -47,7 +47,7 @@
             <!-- logo -->
             <div class="logo">
                 <a href="/admin">
-                    <img src="<c:url value="/static/a/images/logo@2x.png"/>" width="95" alt=""/>
+                    <img src="<c:url value="/static/a/images/logo.png"/>" width="95" alt=""/>
                 </a>
             </div>
 
@@ -118,7 +118,7 @@
         <footer class="main">
 
 
-            &copy; 2014 <strong>UBCore</strong> Admin Engine by <a href="http://unitbean.com" target="_blank">LLC
+            &copy; 2013 - 2016 <strong>UBCore</strong> Admin Engine by <a href="http://www.unitbean.com" target="_blank">LLC
             UnitBean</a>
 
         </footer>
