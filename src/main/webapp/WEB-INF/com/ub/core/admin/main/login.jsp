@@ -1,22 +1,21 @@
-<%@ page import="com.ub.core.menu.models.fields.MenuFields" %>
-<%@ page import="com.ub.core.pages.routes.PagesAdminRoutes" %>
 <%@ page import="com.ub.core.file.FileRoutes" %>
 <%@ page import="com.ub.core.user.routes.UserLoginRoutes" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
-<s:htmlEscape defaultHtmlEscape="true" />
+<s:htmlEscape defaultHtmlEscape="true"/>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
+    <!--[if IE]>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Neon Admin Panel" />
-    <meta name="author" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="Neon Admin Panel"/>
+    <meta name="author" content=""/>
 
     <title>Neon | Login</title>
 
@@ -51,64 +50,65 @@
 
             <!-- progress bar indicator -->
             <%--<div class="login-progressbar-indicator">--%>
-                <%--<h3>43%</h3>--%>
-                <%--<span>logging in...</span>--%>
+            <%--<h3>43%</h3>--%>
+            <%--<span>logging in...</span>--%>
             <%--</div>--%>
         </div>
 
     </div>
 
     <%--<div class="login-progressbar">--%>
-        <%--<div></div>--%>
+    <%--<div></div>--%>
     <%--</div>--%>
 
     <%--<div class="login-form">--%>
 
-        <div class="login-content">
+    <div class="login-content">
 
-            <form method="post" role="form" action="<%= UserLoginRoutes.LOGIN%>"  id="form_login">
-                <c:if test="${not empty error}">
-                    <div class="errorblock">
-                        Your login attempt was not successful, try again.<br /> Caused :
-                            ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
-                    </div>
-                </c:if>
-                <div class="form-group">
+        <form method="post" role="form" action="<%= UserLoginRoutes.LOGIN%>" id="form_login">
+            <c:if test="${not empty error}">
+                <div class="errorblock">
+                    Your login attempt was not successful, try again.<br/> Caused :
+                        ${sessionScope["SPRING_SECURITY_LAST_EXCEPTION"].message}
+                </div>
+            </c:if>
+            <div class="form-group">
 
-                    <div class="input-group">
-                        <div class="input-group-addon">
-                            <i class="entypo-user"></i>
-                        </div>
-
-                        <input type="text" class="form-control" name='email' id="username" placeholder="Username" autocomplete="off" />
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="entypo-user"></i>
                     </div>
 
+                    <input type="text" class="form-control" name='email' id="username" placeholder="Username"
+                           autocomplete="off"/>
                 </div>
 
-                <div class="form-group">
+            </div>
 
-                    <div class="input-group">
-                        <div class="input-group-addon">
-                            <i class="entypo-key"></i>
-                        </div>
+            <div class="form-group">
 
-                        <input type="password" class="form-control" name='password' id="password" placeholder="Password" autocomplete="off" />
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="entypo-key"></i>
                     </div>
 
+                    <input type="password" class="form-control" name='password' id="password" placeholder="Password"
+                           autocomplete="off"/>
                 </div>
 
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary btn-block btn-login">
-                        Login In
-                        <i class="entypo-login"></i>
-                    </button>
-                </div>
+            </div>
 
-            </form>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary btn-block btn-login">
+                    Login In
+                    <i class="entypo-login"></i>
+                </button>
+            </div>
+
+        </form>
 
 
-
-        </div>
+    </div>
 
     <%--</div>--%>
 
