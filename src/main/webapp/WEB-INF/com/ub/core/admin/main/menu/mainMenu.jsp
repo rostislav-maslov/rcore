@@ -1,6 +1,3 @@
-<%@ page import="com.ub.core.menu.models.fields.MenuFields" %>
-<%@ page import="com.ub.core.pages.routes.PagesAdminRoutes" %>
-<%@ page import="com.ub.core.file.FileRoutes" %>
 <%@ page import="com.ub.core.base.menu.MenuBoost" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>

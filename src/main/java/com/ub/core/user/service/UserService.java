@@ -243,6 +243,13 @@ public class UserService {
         return userDoc;
     }
 
+    public UserDoc createUserByLogin(String login, String password, String email) throws UserExistException {
+        UserDoc userDoc = createUserByLogin(login, password);
+        userDoc.setEmailForLogin(email);
+        save(userDoc);
+        return userDoc;
+    }
+
     /**
      * @param email
      * @param password

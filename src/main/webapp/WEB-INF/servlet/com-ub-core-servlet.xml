@@ -69,11 +69,6 @@
             <bean class="com.ub.core.security.service.SecurityInterception"/>
         </mvc:interceptor>
       
-        <!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/com/ub/core/controllers/ExampleCoreController/**"/>-->
-            <!--&lt;!&ndash;<mvc:exclude-mapping path="/admin/**"/>&ndash;&gt;-->
-            <!--<bean class="com.ub.core.yandexmetrica.controllers.YandexMetricaInterceptor"/>-->
-        <!--</mvc:interceptor>-->
     </mvc:interceptors>
 
 </beans>
