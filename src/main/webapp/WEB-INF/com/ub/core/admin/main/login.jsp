@@ -114,56 +114,5 @@
 </div>
 
 
-<!-- Bottom Scripts -->
-<%--<script src="<c:url value="/static/a/js/gsap/main-gsap.js"/>"></script>--%>
-<%--<script src="<c:url value="/static/a/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"/>"></script>--%>
-<%--<script src="<c:url value="/static/a/js/bootstrap.min.js"/>"></script>--%>
-<%--<script src="<c:url value="/static/a/js/joinable.js"/>"></script>--%>
-<%--<script src="<c:url value="/static/a/js/resizeable.js"/>"></script>--%>
-<%--<script src="<c:url value="/static/a/js/neon-api.js"/>"></script>--%>
-
-<%--<script src="<c:url value="/static/a/js/jquery.validate.min.js"/>"></script>--%>
-<%--<script src="<c:url value="/static/a/js/neon-login.js"/>"></script>--%>
-<%--<script src="<c:url value="/static/a/js/neon-custom.js"/>"></script>--%>
-<%--<script src="<c:url value="/static/a/js/neon-demo.js"/>"></script>--%>
-<%--<form method="post" role="form" action="<c:url value="j_spring_security_check" />"  id="form_login">--%>
-
-
-<%--<form method="post" role="form" action="<c:url value="j_spring_security_check" />"  id="form_login">--%>
-
-<%--<div class="form-group">--%>
-
-<%--<div class="input-group">--%>
-<%--<div class="input-group-addon">--%>
-<%--<i class="entypo-user"></i>--%>
-<%--</div>--%>
-
-<%--<input type="text" class="form-control" name='j_username' id="username" placeholder="Username" autocomplete="off" />--%>
-<%--</div>--%>
-
-<%--</div>--%>
-
-<%--<div class="form-group">--%>
-
-<%--<div class="input-group">--%>
-<%--<div class="input-group-addon">--%>
-<%--<i class="entypo-key"></i>--%>
-<%--</div>--%>
-
-<%--<input type="password" class="form-control" name='j_password' id="password" placeholder="Password" autocomplete="off" />--%>
-<%--</div>--%>
-
-<%--</div>--%>
-
-<%--<div class="form-group">--%>
-<%--<button type="submit" class="btn btn-primary btn-block btn-login">--%>
-<%--Login In--%>
-<%--<i class="entypo-login"></i>--%>
-<%--</button>--%>
-<%--</div>--%>
-
-<%--</form>--%>
-
-
 </body>
 </html>
