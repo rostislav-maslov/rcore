@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ub</groupId>
     <artifactId>UBCore</artifactId>
-    <!--<packaging>war</packaging>-->
+    <packaging>war</packaging>
     <version>0.3.0</version>
     <name>UBCore</name>
 
@@ -222,6 +222,13 @@
             <scope>compile</scope>
         </dependency>
 
+
+        <!--Twitter -->
+        <dependency>
+            <groupId>org.twitter4j</groupId>
+            <artifactId>twitter4j-core</artifactId>
+            <version>[4.0,)</version>
+        </dependency>
     </dependencies>
 
     <build>
