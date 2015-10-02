@@ -32,6 +32,10 @@ public class UserDoc {
     private String fbAccessToken;
     private String fbEmail;
 
+    private String googleId;
+    private String googleAccessToken;
+    private String googleEmail;
+
     private String login;
     private String passwordForLogin;
     private String emailForLogin;
@@ -182,5 +186,29 @@ public class UserDoc {
 
     public void setEmailForLogin(String emailForLogin) {
         this.emailForLogin = emailForLogin;
+    }
+
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
+    }
+
+    public String getGoogleAccessToken() {
+        return googleAccessToken;
+    }
+
+    public void setGoogleAccessToken(String googleAccessToken) {
+        this.googleAccessToken = googleAccessToken;
+    }
+
+    public String getGoogleEmail() {
+        return googleEmail;
+    }
+
+    public void setGoogleEmail(String googleEmail) {
+        this.googleEmail = googleEmail;
     }
 }

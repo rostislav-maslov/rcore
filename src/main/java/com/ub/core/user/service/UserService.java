@@ -17,6 +17,7 @@ import com.ub.core.user.views.AddEditUserView;
 import com.ub.core.user.views.modalUserSearch.all.SearchUserAdminRequest;
 import com.ub.core.user.views.modalUserSearch.all.SearchUserAdminResponse;
 import com.ub.facebook.response.FBUserInfo;
+import com.ub.google.response.GoogleUserInfo;
 import com.ub.vk.response.AccessTokenResponse;
 import com.ub.vk.response.users.get.UserInfo;
 import com.ub.vk.response.users.get.UsersGetResponse;
@@ -329,6 +330,27 @@ public class UserService {
         return userDoc;
     }
 
+    public UserDoc createUserByGoogle(GoogleUserInfo userInfo) throws UserExistException{
+        UserDoc userDoc = new UserDoc();
+
+        UserDoc check = getUserByGoogleId(userInfo.getId());
+        if (check != null) {
+            throw new UserExistException();
+        }
+
+        userDoc.setGoogleAccessToken(userInfo.getAccessToken());
+        userDoc.setGoogleEmail(userInfo.getEmail());
+        userDoc.setGoogleId(userInfo.getId());
+
+        userDoc.setUserStatus(UserStatusEnum.ACTIVE);
+
+        userDoc.setFirstName(userInfo.getFirst_name());
+        userDoc.setLastName(userInfo.getLast_name());
+
+        save(userDoc);
+        return userDoc;
+    }
+
     public UserDoc updateVkAccessToken(UserDoc userDoc, String accessToken) {
         userDoc.setVkAccessToken(accessToken);
         try {
@@ -341,6 +363,16 @@ public class UserService {
 
     public UserDoc updateFbAccessToken(UserDoc userDoc, String accessToken) {
         userDoc.setFbAccessToken(accessToken);
+        try {
+            save(userDoc);
+        } catch (UserExistException e) {
+            e.printStackTrace();
+        }
+        return userDoc;
+    }
+
+    public UserDoc updateGoogleAccessToken(UserDoc userDoc, String accessToken) {
+        userDoc.setGoogleAccessToken(accessToken);
         try {
             save(userDoc);
         } catch (UserExistException e) {
@@ -414,6 +446,10 @@ public class UserService {
 
     public UserDoc getUserByFbId(String fbId) {
         return mongoTemplate.findOne(new Query(new Criteria("fbId").is(fbId)), UserDoc.class);
+    }
+
+    public UserDoc getUserByGoogleId(String googleId) {
+        return mongoTemplate.findOne(new Query(new Criteria("googleId").is(googleId)), UserDoc.class);
     }
 
     public String restorePassword(String email) throws UserNotExistException, UserExistException {

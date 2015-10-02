@@ -13,6 +13,7 @@ import com.ub.core.user.models.UserDoc;
 import com.ub.core.user.service.UserService;
 import com.ub.core.user.service.exceptions.UserExistException;
 import com.ub.facebook.response.FBUserInfo;
+import com.ub.google.response.GoogleUserInfo;
 import com.ub.vk.response.AccessTokenResponse;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,6 +123,11 @@ public class AutorizationService {
         return DigestUtils.md5Hex(t);
     }
 
+    public String getTokenGoogle(UserDoc userDoc) {
+        String t = userDoc.getGoogleId() + ";" + userDoc.getGoogleAccessToken() + "42";
+        return DigestUtils.md5Hex(t);
+    }
+
     public SessionModel getSessionModelEmailType(UserDoc userDoc) {
         SessionModel sessionModel = new SessionModel();
         sessionModel.setIdUser(userDoc.getId());
@@ -144,6 +150,14 @@ public class AutorizationService {
         sessionModel.setIdUser(userDoc.getId());
         sessionModel.setType(SessionType.VK);
         sessionModel.setToken(getTokenVk(userDoc));
+        return sessionModel;
+    }
+
+    public SessionModel getSessionModelGoogleType(UserDoc userDoc) {
+        SessionModel sessionModel = new SessionModel();
+        sessionModel.setIdUser(userDoc.getId());
+        sessionModel.setType(SessionType.GOOGLE);
+        sessionModel.setToken(getTokenGoogle(userDoc));
         return sessionModel;
     }
 
@@ -225,6 +239,24 @@ public class AutorizationService {
         httpSession.setMaxInactiveInterval(60 * 60 * 24 * 30);
     }
 
+    public void authorizeGoogle(GoogleUserInfo userInfo) {
+        UserDoc userDoc = userService.getUserByGoogleId(userInfo.getId());
+        if (userDoc == null) {
+            try {
+                userDoc = userService.createUserByGoogle(userInfo);
+            } catch (UserExistException e) {
+                e.printStackTrace();
+            }
+        } else {
+            userDoc = userService.updateGoogleAccessToken(userDoc, userInfo.getAccessToken());
+        }
+
+        SessionModel sessionModel = getSessionModelGoogleType(userDoc);
+        HttpSession httpSession = getSession();
+        httpSession = sessionModel.fillSession(httpSession);
+        httpSession.setMaxInactiveInterval(60 * 60 * 24 * 30);
+    }
+
     public UserDoc getUserFromSession() throws UserNotAutorizedException {
         HttpSession httpSession = getSession();
         SessionModel sessionModel = null;
@@ -257,12 +289,27 @@ public class AutorizationService {
                 return user;
             }
         }
+        if (sessionModel.getType().equals(SessionType.GOOGLE)) {
+            UserDoc user = userService.getUser(sessionModel.getIdUser());
+            if (user == null) throw new UserNotAutorizedException();
+            if (!checkAccessTokenGoogle(user, sessionModel.getToken())) {
+                throw new UserNotAutorizedException();
+            } else {
+                return user;
+            }
+        }
 
         throw new UserNotAutorizedException();
     }
 
     private Boolean checkAccessTokenVk(UserDoc userDoc, String ourToken) {
         if (ourToken.equals(getTokenVk(userDoc)))
+            return true;
+        return false;
+    }
+
+    private Boolean checkAccessTokenGoogle(UserDoc userDoc, String ourToken) {
+        if (ourToken.equals(getTokenGoogle(userDoc)))
             return true;
         return false;
     }

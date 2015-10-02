@@ -256,7 +256,7 @@ public class MenuIcons {
     public static final String ENTYPO_FACEBBOK ="entypo-facebook";//before ; // content";// '\e8f3'; } /* '' */
     //    public static final String ENTYPO_ ="entypo-facebook-circled";//before ; // content";// '\e8f4'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-facebook-squared";//before ; // content";// '\e8f5'; } /* '' */
-//    public static final String ENTYPO_ ="entypo-gplus";//before ; // content";// '\e8f6'; } /* '' */
+    public static final String ENTYPO_GOOGLE ="entypo-gplus";//before ; // content";// '\e8f6'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-gplus-circled";//before ; // content";// '\e8f7'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-pinterest";//before ; // content";// '\e8f8'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-pinterest-circled";//before ; // content";// '\e8f9'; } /* '' */
