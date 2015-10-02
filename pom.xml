@@ -270,6 +270,7 @@
                     <include>**/*.gif</include>
                     <include>**/*.bmp</include>
                     <include>**/*.pdf</include>
+                    <include>**/*.properties</include>
                 </includes>
                 <!--<targetPath>..</targetPath>-->
             </resource>
