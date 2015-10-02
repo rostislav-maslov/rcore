@@ -262,7 +262,7 @@ public class MenuIcons {
 //    public static final String ENTYPO_ ="entypo-pinterest-circled";//before ; // content";// '\e8f9'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-tumblr";//before ; // content";// '\e8fa'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-tumblr-circled";//before ; // content";// '\e8fb'; } /* '' */
-//    public static final String ENTYPO_ ="entypo-linkedin";//before ; // content";// '\e8fc'; } /* '' */
+    public static final String ENTYPO_LINKEDIN ="entypo-linkedin";//before ; // content";// '\e8fc'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-linkedin-circled";//before ; // content";// '\e8fd'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-dribbble";//before ; // content";// '\e8fe'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-dribbble-circled";//before ; // content";// '\e8ff'; } /* '' */
