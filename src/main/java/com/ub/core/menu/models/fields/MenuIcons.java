@@ -251,8 +251,8 @@ public class MenuIcons {
 //    public static final String ENTYPO_ ="entypo-flickr-circled";//before ; // content";// '\e8ee'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-vimeo";//before ; // content";// '\e8ef'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-vimeo-circled";//before ; // content";// '\e8f0'; } /* '' */
-//    public static final String ENTYPO_ ="entypo-twitter";//before ; // content";// '\e8f1'; } /* '' */
-//    public static final String ENTYPO_ ="entypo-twitter-circled";//before ; // content";// '\e8f2'; } /* '' */
+    public static final String ENTYPO_TWITTER ="entypo-twitter";//before ; // content";// '\e8f1'; } /* '' */
+    public static final String ENTYPO_TWITTER_CIRCLED ="entypo-twitter-circled";//before ; // content";// '\e8f2'; } /* '' */
     public static final String ENTYPO_FACEBBOK ="entypo-facebook";//before ; // content";// '\e8f3'; } /* '' */
     //    public static final String ENTYPO_ ="entypo-facebook-circled";//before ; // content";// '\e8f4'; } /* '' */
 //    public static final String ENTYPO_ ="entypo-facebook-squared";//before ; // content";// '\e8f5'; } /* '' */

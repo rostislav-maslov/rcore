@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
  * Created by Eduard on 01.10.2015.
  */
 @Controller
-public class GooglePlusController {
+public class GooglePlusAdminController {
 
     @Autowired private GooglePlusService service;
 

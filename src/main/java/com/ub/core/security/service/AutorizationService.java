@@ -10,27 +10,32 @@ import com.ub.core.security.service.exceptions.UserNotAutorizedException;
 import com.ub.core.security.session.SessionModel;
 import com.ub.core.security.session.SessionType;
 import com.ub.core.user.models.UserDoc;
+import com.ub.core.user.service.EmailSessionService;
+import com.ub.core.user.service.LoginSessionService;
 import com.ub.core.user.service.UserService;
-import com.ub.core.user.service.exceptions.UserExistException;
-import com.ub.facebook.response.FBUserInfo;
-import com.ub.google.response.GoogleUserInfo;
-import com.ub.vk.response.AccessTokenResponse;
-import org.apache.commons.codec.digest.DigestUtils;
+import com.ub.facebook.services.FBSessionService;
+import com.ub.google.services.GPSessionService;
+import com.ub.twitter.services.TwitterSessionService;
+import com.ub.vk.services.VkSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.method.HandlerMethod;
 
 import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class AutorizationService {
 
     @Autowired private UserService userService;
     @Autowired private RoleService roleService;
-
+    @Autowired private FBSessionService fbSessionService;
+    @Autowired private EmailSessionService emailSessionService;
+    @Autowired private LoginSessionService loginSessionService;
+    @Autowired private VkSessionService vkSessionService;
+    @Autowired private GPSessionService gpSessionService;
+    @Autowired private TwitterSessionService twitterSessionService;
 
     public CheckAvailable checkAccess(HandlerMethod handlerMethod) {
         CheckAvailable checkAvailable = new CheckAvailable();
@@ -57,7 +62,7 @@ public class AutorizationService {
                 roleNames = new HashSet<String>();
                 for (Role role : userDoc.getRoles()) {
                     roleNames.add(role.getId());
-                    if(role.getId().equals(new SuperUser().getId())){
+                    if (role.getId().equals(new SuperUser().getId())) {
                         isSuperUser = true;
                         return checkAvailable;
                     }
@@ -79,7 +84,7 @@ public class AutorizationService {
                     roleNames = new HashSet<String>();
                     for (Role role : userDoc.getRoles()) {
                         roleNames.add(role.getId());
-                        if(role.getId().equals(new SuperUser().getId())){
+                        if (role.getId().equals(new SuperUser().getId())) {
                             isSuperUser = true;
                             return checkAvailable;
                         }
@@ -103,163 +108,19 @@ public class AutorizationService {
         return checkAvailable;
     }
 
-    public HttpSession getSession() {
-        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        return attr.getRequest().getSession(true); // true == allow create
+    public static HttpSession getSession() {
+        return ASessionConfigService.getSession();
     }
 
-    public String getTokenEmail(UserDoc userDoc) {
-        String t = userDoc.getEmail() + ";" + userDoc.getPassword() + "42";
-        return DigestUtils.md5Hex(t);
-    }
-
-    public String getTokenLogin(UserDoc userDoc) {
-        String t = userDoc.getLogin() + ";" + userDoc.getPasswordForLogin() + "42";
-        return DigestUtils.md5Hex(t);
-    }
-
-    public String getTokenVk(UserDoc userDoc) {
-        String t = userDoc.getVkId() + ";" + userDoc.getVkAccessToken() + "42";
-        return DigestUtils.md5Hex(t);
-    }
-
-    public String getTokenGoogle(UserDoc userDoc) {
-        String t = userDoc.getGoogleId() + ";" + userDoc.getGoogleAccessToken() + "42";
-        return DigestUtils.md5Hex(t);
-    }
-
-    public SessionModel getSessionModelEmailType(UserDoc userDoc) {
-        SessionModel sessionModel = new SessionModel();
-        sessionModel.setIdUser(userDoc.getId());
-        sessionModel.setType(SessionType.EMAIL);
-        sessionModel.setToken(getTokenEmail(userDoc));
-        return sessionModel;
-    }
-
-    public SessionModel getSessionModelLoginType(UserDoc userDoc){
-        SessionModel sessionModel = new SessionModel();
-        sessionModel.setIdUser(userDoc.getId());
-        sessionModel.setType(SessionType.LOGIN);
-        sessionModel.setToken(getTokenLogin(userDoc));
-
-        return sessionModel;
-    }
-
-    public SessionModel getSessionModelVkType(UserDoc userDoc) {
-        SessionModel sessionModel = new SessionModel();
-        sessionModel.setIdUser(userDoc.getId());
-        sessionModel.setType(SessionType.VK);
-        sessionModel.setToken(getTokenVk(userDoc));
-        return sessionModel;
-    }
-
-    public SessionModel getSessionModelGoogleType(UserDoc userDoc) {
-        SessionModel sessionModel = new SessionModel();
-        sessionModel.setIdUser(userDoc.getId());
-        sessionModel.setType(SessionType.GOOGLE);
-        sessionModel.setToken(getTokenGoogle(userDoc));
-        return sessionModel;
-    }
 
     public void logout() {
-        HttpSession httpSession = getSession();
-        Enumeration enumerator = httpSession.getAttributeNames();
-        while (enumerator.hasMoreElements()) {
-            Object o = enumerator.nextElement();
-            httpSession.removeAttribute(o.toString());
-        }
-    }
-
-    public void autorizeEmailHashedPassword(String email, String hashedPassword) throws UserNotAutorizedException {
-        UserDoc userDoc = userService.getUserByEmail(email);
-        if (userDoc == null || userDoc.getPassword() == null) throw new UserNotAutorizedException();
-        if (!userDoc.getPassword().equals(hashedPassword))
-            throw new UserNotAutorizedException();
-        SessionModel sessionModel = getSessionModelEmailType(userDoc);
-        HttpSession httpSession = getSession();
-        httpSession = sessionModel.fillSession(httpSession);
-        httpSession.setMaxInactiveInterval(60 * 60 * 24 * 3);
-    }
-
-    public UserDoc autorizeEmail(String email, String password) throws UserNotAutorizedException {
-        UserDoc userDoc = userService.getUserByEmail(email);
-        if (userDoc == null || userDoc.getPassword() == null) throw new UserNotAutorizedException();
-        if (!userDoc.getPassword().equals(UserDoc.generateHexPassword(email, password)))
-            throw new UserNotAutorizedException();
-        return authorizeUserDoc(userDoc);
-    }
-
-    public UserDoc authorizeLogin(String login, String password) throws UserNotAutorizedException {
-        UserDoc userDoc = userService.findByLogin(login);
-        if (userDoc == null || userDoc.getPasswordForLogin() == null) throw new UserNotAutorizedException();
-        if (!userDoc.getPasswordForLogin().equals(UserDoc.generateHexPassword(login, password)))
-            throw new UserNotAutorizedException();
-        return authorizeUserDoc(userDoc);
-    }
-
-    public UserDoc authorizeUserDoc(UserDoc userDoc){
-        SessionModel sessionModel = getSessionModelEmailType(userDoc);
-        HttpSession httpSession = getSession();
-        httpSession = sessionModel.fillSession(httpSession);
-        httpSession.setMaxInactiveInterval(60 * 60 * 24 * 3);
-        return userDoc;
-    }
-
-    public void authorizeVk(AccessTokenResponse accessTokenResponse) {
-        UserDoc userDoc = userService.getUserByVkId(accessTokenResponse.getUser_id());
-        if (userDoc == null) {
-            try {
-                userDoc = userService.createUserByVk(accessTokenResponse);
-            } catch (UserExistException e) {
-                e.printStackTrace();
-            }
-        } else {
-            userDoc = userService.updateVkAccessToken(userDoc, accessTokenResponse.getAccess_token());
-        }
-        SessionModel sessionModel = getSessionModelVkType(userDoc);
-        HttpSession httpSession = getSession();
-        httpSession = sessionModel.fillSession(httpSession);
-        httpSession.setMaxInactiveInterval(60 * 60 * 24 * 30);
-    }
-
-    public void authorizeFb(FBUserInfo userInfo) {
-        UserDoc userDoc = userService.getUserByFbId(userInfo.getId());
-        if (userDoc == null) {
-            try {
-                userDoc = userService.createUserByFb(userInfo);
-            } catch (UserExistException e) {
-                e.printStackTrace();
-            }
-        } else {
-            userDoc = userService.updateFbAccessToken(userDoc, userInfo.getAccessToken());
-        }
-        SessionModel sessionModel = getSessionModelVkType(userDoc);
-        HttpSession httpSession = getSession();
-        httpSession = sessionModel.fillSession(httpSession);
-        httpSession.setMaxInactiveInterval(60 * 60 * 24 * 30);
-    }
-
-    public void authorizeGoogle(GoogleUserInfo userInfo) {
-        UserDoc userDoc = userService.getUserByGoogleId(userInfo.getId());
-        if (userDoc == null) {
-            try {
-                userDoc = userService.createUserByGoogle(userInfo);
-            } catch (UserExistException e) {
-                e.printStackTrace();
-            }
-        } else {
-            userDoc = userService.updateGoogleAccessToken(userDoc, userInfo.getAccessToken());
-        }
-
-        SessionModel sessionModel = getSessionModelGoogleType(userDoc);
-        HttpSession httpSession = getSession();
-        httpSession = sessionModel.fillSession(httpSession);
-        httpSession.setMaxInactiveInterval(60 * 60 * 24 * 30);
+        ASessionConfigService.logout();
     }
 
     public UserDoc getUserFromSession() throws UserNotAutorizedException {
         HttpSession httpSession = getSession();
         SessionModel sessionModel = null;
+
         try {
             sessionModel = new SessionModel(httpSession);
         } catch (NullPointerException e) {
@@ -268,50 +129,28 @@ public class AutorizationService {
         if (sessionModel.getType() == null) throw new UserNotAutorizedException();
         if (sessionModel.getToken() == null) throw new UserNotAutorizedException();
         if (sessionModel.getIdUser() == null) throw new UserNotAutorizedException();
+
         if ((sessionModel.getType().equals(SessionType.EMAIL))) {
-            UserDoc user = userService.getUser(sessionModel.getIdUser());
-            if (user == null) throw new UserNotAutorizedException();
-            if (sessionModel.getType().equals(SessionType.EMAIL) && getTokenEmail(user).equals(sessionModel.getToken()))
-                return user;
+            return emailSessionService.getUserFromSession(sessionModel);
         }
         if ((sessionModel.getType().equals(SessionType.LOGIN))) {
-            UserDoc user = userService.getUser(sessionModel.getIdUser());
-            if (user == null) throw new UserNotAutorizedException();
-            if (sessionModel.getType().equals(SessionType.LOGIN) && getTokenLogin(user).equals(sessionModel.getToken()))
-                return user;
+            return loginSessionService.getUserFromSession(sessionModel);
         }
         if ((sessionModel.getType().equals(SessionType.VK))) {
-            UserDoc user = userService.getUser(sessionModel.getIdUser());
-            if (user == null) throw new UserNotAutorizedException();
-            if (checkAccessTokenVk(user, sessionModel.getToken()) == false) {
-                throw new UserNotAutorizedException();
-            } else {
-                return user;
-            }
+            return vkSessionService.getUserFromSession(sessionModel);
         }
         if (sessionModel.getType().equals(SessionType.GOOGLE)) {
-            UserDoc user = userService.getUser(sessionModel.getIdUser());
-            if (user == null) throw new UserNotAutorizedException();
-            if (!checkAccessTokenGoogle(user, sessionModel.getToken())) {
-                throw new UserNotAutorizedException();
-            } else {
-                return user;
-            }
+            return gpSessionService.getUserFromSession(sessionModel);
+        }
+        if (sessionModel.getType().equals(SessionType.TWITTER)) {
+            return twitterSessionService.getUserFromSession(sessionModel);
+        }
+        if (sessionModel.getType().equals(SessionType.FB)) {
+            return fbSessionService.getUserFromSession(sessionModel);
         }
 
         throw new UserNotAutorizedException();
     }
 
-    private Boolean checkAccessTokenVk(UserDoc userDoc, String ourToken) {
-        if (ourToken.equals(getTokenVk(userDoc)))
-            return true;
-        return false;
-    }
-
-    private Boolean checkAccessTokenGoogle(UserDoc userDoc, String ourToken) {
-        if (ourToken.equals(getTokenGoogle(userDoc)))
-            return true;
-        return false;
-    }
 
 }

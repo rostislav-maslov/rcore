@@ -36,6 +36,12 @@ public class UserDoc {
     private String googleAccessToken;
     private String googleEmail;
 
+    private String twitterId;
+    private String twitterAccessToken;
+    private String twitterSecretToken;
+    private String twitterEmail;
+    private String twitterScreenName;
+
     private String login;
     private String passwordForLogin;
     private String emailForLogin;
@@ -210,5 +216,45 @@ public class UserDoc {
 
     public void setGoogleEmail(String googleEmail) {
         this.googleEmail = googleEmail;
+    }
+
+    public String getTwitterId() {
+        return twitterId;
+    }
+
+    public void setTwitterId(String twitterId) {
+        this.twitterId = twitterId;
+    }
+
+    public String getTwitterAccessToken() {
+        return twitterAccessToken;
+    }
+
+    public void setTwitterAccessToken(String twitterAccessToken) {
+        this.twitterAccessToken = twitterAccessToken;
+    }
+
+    public String getTwitterEmail() {
+        return twitterEmail;
+    }
+
+    public void setTwitterEmail(String twitterEmail) {
+        this.twitterEmail = twitterEmail;
+    }
+
+    public String getTwitterSecretToken() {
+        return twitterSecretToken;
+    }
+
+    public void setTwitterSecretToken(String twitterSecretToken) {
+        this.twitterSecretToken = twitterSecretToken;
+    }
+
+    public String getTwitterScreenName() {
+        return twitterScreenName;
+    }
+
+    public void setTwitterScreenName(String twitterScreenName) {
+        this.twitterScreenName = twitterScreenName;
     }
 }

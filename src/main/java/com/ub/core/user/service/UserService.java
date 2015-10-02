@@ -32,6 +32,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
+import twitter4j.User;
+import twitter4j.auth.AccessToken;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,6 +48,7 @@ public class UserService {
     @Autowired private UserEmailVerifiedService userEmailVerifiedService;
     @Autowired private UserEmailPasswordRecoveryService userEmailPasswordRecoveryService;
     @Autowired private AutorizationService autorizationService;
+    @Autowired private EmailSessionService emailSessionService;
 
     /**
      * Блокировка пользотеля
@@ -185,7 +188,7 @@ public class UserService {
 
 
         userDoc = save(userDoc);
-        autorizationService.authorizeUserDoc(userDoc);
+        emailSessionService.authorizeUserDoc(userDoc);
         return userDoc;
     }
 
@@ -351,6 +354,39 @@ public class UserService {
         return userDoc;
     }
 
+    public UserDoc createUserByTwitter(User user, String token, String tokenSecret) throws UserExistException{
+        UserDoc check = getUserByTwitterId(String.valueOf(user.getId()));
+        if(check != null){
+            throw new UserExistException();
+        }
+        UserDoc userDoc = new UserDoc();
+
+        userDoc.setTwitterId(String.valueOf(user.getId()));
+        userDoc.setTwitterAccessToken(token);
+        userDoc.setTwitterSecretToken(tokenSecret);
+        userDoc.setTwitterScreenName(user.getScreenName());
+
+        userDoc.setUserStatus(UserStatusEnum.ACTIVE);
+
+        String[] name = user.getName().split(" ");
+
+        String firstName = "", lastName = "";
+        if(name.length == 2){
+            firstName = name[1];
+            lastName = name[0];
+        }
+
+        userDoc.setFirstName(firstName);
+        userDoc.setLastName(lastName);
+
+        save(userDoc);
+        return userDoc;
+    }
+
+    public UserDoc getUserByTwitterId(String id){
+        return mongoTemplate.findOne(new Query(new Criteria("twitterId").is(id)), UserDoc.class);
+    }
+
     public UserDoc updateVkAccessToken(UserDoc userDoc, String accessToken) {
         userDoc.setVkAccessToken(accessToken);
         try {
@@ -376,6 +412,17 @@ public class UserService {
         try {
             save(userDoc);
         } catch (UserExistException e) {
+            e.printStackTrace();
+        }
+        return userDoc;
+    }
+
+    public UserDoc updateTwitterAccesToken(UserDoc userDoc, AccessToken accessToken){
+        userDoc.setTwitterAccessToken(accessToken.getToken());
+        userDoc.setTwitterSecretToken(accessToken.getTokenSecret());
+        try {
+            save(userDoc);
+        }catch (UserExistException e){
             e.printStackTrace();
         }
         return userDoc;
@@ -451,6 +498,8 @@ public class UserService {
     public UserDoc getUserByGoogleId(String googleId) {
         return mongoTemplate.findOne(new Query(new Criteria("googleId").is(googleId)), UserDoc.class);
     }
+
+
 
     public String restorePassword(String email) throws UserNotExistException, UserExistException {
         String pass = DigestUtils.md2Hex(new Date().toString());

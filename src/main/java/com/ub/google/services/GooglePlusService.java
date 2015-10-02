@@ -8,10 +8,10 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.services.plus.Plus;
 import com.google.api.services.plus.model.Person;
+import com.ub.core.base.httpResponse.ResourceNotFoundException;
 import com.ub.google.models.AppPropertiesGoogleDoc;
 import com.ub.google.response.GoogleUserInfo;
 import com.ub.google.routes.GooglePlusRoutes;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
@@ -32,7 +32,9 @@ public class GooglePlusService {
         AppPropertiesGoogleDoc properties = getGoogleProperties();
         if (properties.getClient_id().isEmpty() || properties.getClient_secret().isEmpty()
             || properties.getRedirect_uri().isEmpty()) {
-            return "/404"; //TODO: page not found exception
+
+            //return "/404"; //TODO: page not found exception
+            throw new ResourceNotFoundException();
         }
 
         StringBuilder builder = new StringBuilder(GooglePlusRoutes.AUTH_URL);
