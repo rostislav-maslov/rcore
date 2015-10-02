@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpSession;
 
 @Component
-public class FBSessionService extends ASessionConfigService{
+public class FBSessionService extends ASessionConfigService {
 
 
     @Override

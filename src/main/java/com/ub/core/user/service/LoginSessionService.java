@@ -35,17 +35,17 @@ public class LoginSessionService extends ASessionConfigService {
 
     @Override
     public String getToken(UserDoc userDoc) {
-            String t = userDoc.getLogin() + ";" + userDoc.getPasswordForLogin() + "42";
-            return DigestUtils.md5Hex(t);
+        String t = userDoc.getLogin() + ";" + userDoc.getPasswordForLogin() + "42";
+        return DigestUtils.md5Hex(t);
     }
 
     @Override
     public SessionModel getSessionModel(UserDoc userDoc) {
-            SessionModel sessionModel = new SessionModel();
-            sessionModel.setIdUser(userDoc.getId());
-            sessionModel.setType(SessionType.LOGIN);
-            sessionModel.setToken(getToken(userDoc));
+        SessionModel sessionModel = new SessionModel();
+        sessionModel.setIdUser(userDoc.getId());
+        sessionModel.setType(SessionType.LOGIN);
+        sessionModel.setToken(getToken(userDoc));
 
-            return sessionModel;
+        return sessionModel;
     }
 }

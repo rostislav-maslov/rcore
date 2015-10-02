@@ -31,7 +31,7 @@ public class EmailSessionService extends ASessionConfigService {
         httpSession.setMaxInactiveInterval(60 * 60 * 24 * 3);
     }
 
-    public UserDoc authorizeUserDoc(UserDoc userDoc){
+    public UserDoc authorizeUserDoc(UserDoc userDoc) {
         SessionModel sessionModel = getSessionModel(userDoc);
         HttpSession httpSession = getSession();
         httpSession = sessionModel.fillSession(httpSession);
@@ -52,16 +52,16 @@ public class EmailSessionService extends ASessionConfigService {
 
     @Override
     public String getToken(UserDoc userDoc) {
-            String t = userDoc.getEmail() + ";" + userDoc.getPassword() + "42";
-            return DigestUtils.md5Hex(t);
+        String t = userDoc.getEmail() + ";" + userDoc.getPassword() + "42";
+        return DigestUtils.md5Hex(t);
     }
 
     @Override
     public SessionModel getSessionModel(UserDoc userDoc) {
-            SessionModel sessionModel = new SessionModel();
-            sessionModel.setIdUser(userDoc.getId());
-            sessionModel.setType(SessionType.EMAIL);
-            sessionModel.setToken(getToken(userDoc));
-            return sessionModel;
+        SessionModel sessionModel = new SessionModel();
+        sessionModel.setIdUser(userDoc.getId());
+        sessionModel.setType(SessionType.EMAIL);
+        sessionModel.setToken(getToken(userDoc));
+        return sessionModel;
     }
 }

@@ -24,6 +24,7 @@ public class TwitterService {
         String authUrl = "";
         try {
             RequestToken requestToken = twitter.getOAuthRequestToken(url);
+
             authUrl = requestToken.getAuthenticationURL();
         } catch (TwitterException e) {
         }
