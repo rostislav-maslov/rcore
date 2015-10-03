@@ -1,8 +1,7 @@
-package com.ub.twitter;
+package com.ub.twitter.controllers;
 
 import com.ub.twitter.services.TwitterService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,7 +10,7 @@ import twitter4j.TwitterException;
 import twitter4j.User;
 import twitter4j.auth.AccessToken;
 
-@Controller
+//@Controller
 public class TwitterTestController {
 
     private String your_api_key = "9ZgtugNWmfWwFINLCsmx254Vt", your_api_secret = "V3yOIkSRbUgBgHHecAx6A9gQ9Wwbn7jN4yj5HvDuSAX6MNlLbj";
