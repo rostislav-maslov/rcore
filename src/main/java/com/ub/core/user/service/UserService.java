@@ -18,6 +18,7 @@ import com.ub.core.user.views.modalUserSearch.all.SearchUserAdminRequest;
 import com.ub.core.user.views.modalUserSearch.all.SearchUserAdminResponse;
 import com.ub.facebook.response.FBUserInfo;
 import com.ub.google.response.GoogleUserInfo;
+import com.ub.linkedin.response.LinkedinUserInfo;
 import com.ub.vk.response.AccessTokenResponse;
 import com.ub.vk.response.users.get.UserInfo;
 import com.ub.vk.response.users.get.UsersGetResponse;
@@ -354,6 +355,27 @@ public class UserService {
         return userDoc;
     }
 
+    public UserDoc createUserByLinkedin(LinkedinUserInfo userInfo) throws UserExistException {
+        UserDoc userDoc = new UserDoc();
+
+        UserDoc check = getUserByLinkedinId(userInfo.getId());
+        if (check != null) {
+            throw new UserExistException();
+        }
+
+        userDoc.setLinkedinId(userInfo.getId());
+        userDoc.setLinkedinAccessToken(userInfo.getAccessToken());
+        userDoc.setLinkedinEmail(userInfo.getEmailAddress());
+
+        userDoc.setUserStatus(UserStatusEnum.ACTIVE);
+
+        userDoc.setFirstName(userInfo.getFirstName());
+        userDoc.setLastName(userInfo.getLastName());
+
+        save(userDoc);
+        return userDoc;
+    }
+
     public UserDoc createUserByTwitter(User user, String token, String tokenSecret) throws UserExistException{
         UserDoc check = getUserByTwitterId(String.valueOf(user.getId()));
         if(check != null){
@@ -423,6 +445,16 @@ public class UserService {
         try {
             save(userDoc);
         }catch (UserExistException e){
+            e.printStackTrace();
+        }
+        return userDoc;
+    }
+
+    public UserDoc updateLinkedinAccessToken(UserDoc userDoc, String accessToken) {
+        userDoc.setLinkedinAccessToken(accessToken);
+        try {
+            save(userDoc);
+        } catch (UserExistException e) {
             e.printStackTrace();
         }
         return userDoc;
@@ -499,7 +531,9 @@ public class UserService {
         return mongoTemplate.findOne(new Query(new Criteria("googleId").is(googleId)), UserDoc.class);
     }
 
-
+    public UserDoc getUserByLinkedinId(String linkedinId) {
+        return mongoTemplate.findOne(new Query(new Criteria("linkedinId").is(linkedinId)), UserDoc.class);
+    }
 
     public String restorePassword(String email) throws UserNotExistException, UserExistException {
         String pass = DigestUtils.md2Hex(new Date().toString());

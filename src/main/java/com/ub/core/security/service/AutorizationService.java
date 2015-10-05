@@ -15,6 +15,7 @@ import com.ub.core.user.service.LoginSessionService;
 import com.ub.core.user.service.UserService;
 import com.ub.facebook.services.FBSessionService;
 import com.ub.google.services.GPSessionService;
+import com.ub.linkedin.services.LiSessionService;
 import com.ub.twitter.services.TwitterSessionService;
 import com.ub.vk.services.VkSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class AutorizationService {
     @Autowired private VkSessionService vkSessionService;
     @Autowired private GPSessionService gpSessionService;
     @Autowired private TwitterSessionService twitterSessionService;
+    @Autowired private LiSessionService liSessionService;
 
     public CheckAvailable checkAccess(HandlerMethod handlerMethod) {
         CheckAvailable checkAvailable = new CheckAvailable();
@@ -147,6 +149,9 @@ public class AutorizationService {
         }
         if (sessionModel.getType().equals(SessionType.FB)) {
             return fbSessionService.getUserFromSession(sessionModel);
+        }
+        if (sessionModel.getType().equals(SessionType.LINKEDIN)) {
+            return liSessionService.getUserFromSession(sessionModel);
         }
 
         throw new UserNotAutorizedException();

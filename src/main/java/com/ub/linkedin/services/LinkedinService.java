@@ -3,6 +3,7 @@ package com.ub.linkedin.services;
 import com.ub.core.utils.HttpsUtils;
 import com.ub.linkedin.models.AppPropertiesLinkedinDoc;
 import com.ub.linkedin.models.LinkedAccessTokenResponse;
+import com.ub.linkedin.response.LinkedinUserInfo;
 import com.ub.linkedin.routes.LinkedinRoutes;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -65,12 +66,12 @@ public class LinkedinService {
         return builder.toString();
     }
 
-    public void getUserInfo(String code, String state) throws Exception {
+    public LinkedinUserInfo getUserInfo(String code, String state) throws Exception {
         AppPropertiesLinkedinDoc properties = getLinkedProperties();
 
         // check xss
         if (!state.equals(properties.getState())) {
-            return;
+            return null;
         }
 
         HttpClient httpclient = new DefaultHttpClient();
@@ -107,10 +108,10 @@ public class LinkedinService {
         }
 
         LinkedAccessTokenResponse accessTokenResponse = new ObjectMapper().readValue(result.toString(), LinkedAccessTokenResponse.class);
-        getUserInfo(accessTokenResponse.getAccess_token());
+        return getUserInfo(accessTokenResponse.getAccess_token());
     }
 
-    private void getUserInfo(String token) throws Exception{
+    private LinkedinUserInfo getUserInfo(String token) throws Exception{
         String url = LinkedinRoutes.GET_USER_URL;
 
         URL obj = new URL(url);
@@ -131,5 +132,11 @@ public class LinkedinService {
             response.append(inputLine);
         }
         in.close();
+
+        LinkedinUserInfo userInfo = new ObjectMapper().readValue(response.toString(), LinkedinUserInfo.class);
+
+        userInfo.setAccessToken(token);
+
+        return userInfo;
     }
 }

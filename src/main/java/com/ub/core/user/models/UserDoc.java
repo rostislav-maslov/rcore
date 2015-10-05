@@ -36,6 +36,10 @@ public class UserDoc {
     private String googleAccessToken;
     private String googleEmail;
 
+    private String linkedinId;
+    private String linkedinAccessToken;
+    private String linkedinEmail;
+
     private String twitterId;
     private String twitterAccessToken;
     private String twitterSecretToken;
@@ -256,5 +260,29 @@ public class UserDoc {
 
     public void setTwitterScreenName(String twitterScreenName) {
         this.twitterScreenName = twitterScreenName;
+    }
+
+    public String getLinkedinId() {
+        return linkedinId;
+    }
+
+    public void setLinkedinId(String linkedinId) {
+        this.linkedinId = linkedinId;
+    }
+
+    public String getLinkedinAccessToken() {
+        return linkedinAccessToken;
+    }
+
+    public void setLinkedinAccessToken(String linkedinAccessToken) {
+        this.linkedinAccessToken = linkedinAccessToken;
+    }
+
+    public String getLinkedinEmail() {
+        return linkedinEmail;
+    }
+
+    public void setLinkedinEmail(String linkedinEmail) {
+        this.linkedinEmail = linkedinEmail;
     }
 }
