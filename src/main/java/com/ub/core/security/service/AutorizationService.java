@@ -97,13 +97,35 @@ public class AutorizationService {
                 for (Class<? extends Role> roleClass : availableForRoles.value()) {
                     if (roleNames.contains(roleClass.getName()) == false) {
                         checkAvailable.setNeedRole(true);
-                        checkAvailable.setRole(new Role(roleService.findById(roleClass.getName())));
+                        Role role = new Role(roleService.findById(roleClass.getName()));
+                        checkAvailable.setRole(role);
+                        checkAvailable.setGoAfterFailLogin(role.getGoAfterFail());
                         return checkAvailable;
                     }
                 }
             }
         } catch (UserNotAutorizedException e) {
             checkAvailable.setLogged(false);
+
+            if (handlerMethod.getBeanType().isAnnotationPresent(AvailableForRoles.class)) {
+                AvailableForRoles availableForRoles = handlerMethod.getBeanType().getAnnotation(AvailableForRoles.class);
+                if (availableForRoles != null) {
+                    for (Class<? extends Role> roleClass : availableForRoles.value()) {
+                        Role role = new Role(roleService.findById(roleClass.getName()));
+                        checkAvailable.setGoAfterFailLogin(role.getGoAfterFail());
+                    }
+                }
+            }
+            if (handlerMethod.getMethod().isAnnotationPresent(AvailableForRoles.class)) {
+                AvailableForRoles availableForRoles = handlerMethod.getMethod().getAnnotation(AvailableForRoles.class);
+                if (availableForRoles != null) {
+                    for (Class<? extends Role> roleClass : availableForRoles.value()) {
+                        Role role = new Role(roleService.findById(roleClass.getName()));
+                        checkAvailable.setGoAfterFailLogin(role.getGoAfterFail());
+                    }
+                }
+            }
+
             return checkAvailable;
         }
 
