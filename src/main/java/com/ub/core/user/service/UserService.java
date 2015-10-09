@@ -61,7 +61,7 @@ public class UserService {
         userDoc.setUserStatus(UserStatusEnum.BLOCK);
         try {
             save(userDoc);
-        }catch (UserExistException e){
+        } catch (UserExistException e) {
             e.printStackTrace();
         }
     }
@@ -81,7 +81,7 @@ public class UserService {
         }
     }
 
-    public UserDoc findByLogin(String login){
+    public UserDoc findByLogin(String login) {
         return mongoTemplate.findOne(new Query(Criteria.where("login").is(login)), UserDoc.class);
     }
 
@@ -107,9 +107,9 @@ public class UserService {
             }
         }
 
-        if(userDoc.getId() == null && userDoc.getLogin() != null){
+        if (userDoc.getId() == null && userDoc.getLogin() != null) {
             UserDoc old = findByLogin(userDoc.getLogin());
-            if(old != null){
+            if (old != null) {
                 throw new UserExistException();
             }
         }
@@ -138,7 +138,7 @@ public class UserService {
             userDoc.getRoles().removeAll(toDelete);
             try {
                 save(userDoc);
-            }catch (UserExistException e){
+            } catch (UserExistException e) {
                 e.printStackTrace();
             }
         }
@@ -150,7 +150,7 @@ public class UserService {
             userDoc.getRoles().add(role);
             try {
                 save(userDoc);
-            }catch (UserExistException e){
+            } catch (UserExistException e) {
                 e.printStackTrace();
             }
         }
@@ -262,7 +262,7 @@ public class UserService {
      * @throws UserExistException
      */
     public UserEmailVerifiedDoc createUserByEmailWithVerified(String email, String password) throws UserExistException {
-        return createUserByEmailWithVerified(email, password, "", "");
+        return createUserByEmailWithVerified(email, password, "", "", "");
     }
 
     /**
@@ -270,16 +270,18 @@ public class UserService {
      * @param password
      * @param lastName
      * @param firstName
+     * @param secondName
      * @return
      * @throws UserExistException
      */
     public UserEmailVerifiedDoc createUserByEmailWithVerified(String email, String password, String lastName,
-                                                              String firstName) throws UserExistException {
+                                                              String firstName, String secondName) throws UserExistException {
         UserEmailVerifiedDoc userEmailVerifiedDoc = new UserEmailVerifiedDoc();
         userEmailVerifiedDoc.setEmail(email);
         userEmailVerifiedDoc.setPasswordAsHex(password);
         userEmailVerifiedDoc.setLastName(lastName);
         userEmailVerifiedDoc.setFirstName(firstName);
+        userEmailVerifiedDoc.setSecondName(secondName);
         return userEmailVerifiedService.create(userEmailVerifiedDoc);
     }
 
@@ -334,7 +336,7 @@ public class UserService {
         return userDoc;
     }
 
-    public UserDoc createUserByGoogle(GoogleUserInfo userInfo) throws UserExistException{
+    public UserDoc createUserByGoogle(GoogleUserInfo userInfo) throws UserExistException {
         UserDoc userDoc = new UserDoc();
 
         UserDoc check = getUserByGoogleId(userInfo.getId());
@@ -376,9 +378,9 @@ public class UserService {
         return userDoc;
     }
 
-    public UserDoc createUserByTwitter(User user, String token, String tokenSecret) throws UserExistException{
+    public UserDoc createUserByTwitter(User user, String token, String tokenSecret) throws UserExistException {
         UserDoc check = getUserByTwitterId(String.valueOf(user.getId()));
-        if(check != null){
+        if (check != null) {
             throw new UserExistException();
         }
         UserDoc userDoc = new UserDoc();
@@ -393,7 +395,7 @@ public class UserService {
         String[] name = user.getName().split(" ");
 
         String firstName = "", lastName = "";
-        if(name.length == 2){
+        if (name.length == 2) {
             firstName = name[1];
             lastName = name[0];
         }
@@ -405,7 +407,7 @@ public class UserService {
         return userDoc;
     }
 
-    public UserDoc getUserByTwitterId(String id){
+    public UserDoc getUserByTwitterId(String id) {
         return mongoTemplate.findOne(new Query(new Criteria("twitterId").is(id)), UserDoc.class);
     }
 
@@ -413,7 +415,7 @@ public class UserService {
         userDoc.setVkAccessToken(accessToken);
         try {
             save(userDoc);
-        }catch (UserExistException e){
+        } catch (UserExistException e) {
             e.printStackTrace();
         }
         return userDoc;
@@ -439,12 +441,12 @@ public class UserService {
         return userDoc;
     }
 
-    public UserDoc updateTwitterAccesToken(UserDoc userDoc, AccessToken accessToken){
+    public UserDoc updateTwitterAccesToken(UserDoc userDoc, AccessToken accessToken) {
         userDoc.setTwitterAccessToken(accessToken.getToken());
         userDoc.setTwitterSecretToken(accessToken.getTokenSecret());
         try {
             save(userDoc);
-        }catch (UserExistException e){
+        } catch (UserExistException e) {
             e.printStackTrace();
         }
         return userDoc;
@@ -504,7 +506,7 @@ public class UserService {
 
         try {
             save(currUser);
-        }catch (UserExistException e){
+        } catch (UserExistException e) {
             e.printStackTrace();
         }
     }
@@ -550,7 +552,7 @@ public class UserService {
         userDoc.setPasswordAsHex(password);
         try {
             save(userDoc);
-        }catch (UserExistException e){
+        } catch (UserExistException e) {
             e.printStackTrace();
         }
     }
@@ -587,13 +589,13 @@ public class UserService {
         return searchUserAdminResponse;
     }
 
-    public UserEmailPasswordRecoverDoc createPasswordRecover(String email) throws UserNotExistException{
+    public UserEmailPasswordRecoverDoc createPasswordRecover(String email) throws UserNotExistException {
         return userEmailPasswordRecoveryService.createRecovery(email);
     }
 
-    public Boolean passwordRecovery(ObjectId recoveryId, String code, String password) throws UserExistException{
-        UserEmailPasswordRecoverDoc userEmailPasswordRecoverDoc = userEmailPasswordRecoveryService.findByCodeAndId(recoveryId,code);
-        if( userEmailPasswordRecoverDoc == null || userEmailPasswordRecoverDoc.getIsRecovered()) return false;
+    public Boolean passwordRecovery(ObjectId recoveryId, String code, String password) throws UserExistException {
+        UserEmailPasswordRecoverDoc userEmailPasswordRecoverDoc = userEmailPasswordRecoveryService.findByCodeAndId(recoveryId, code);
+        if (userEmailPasswordRecoverDoc == null || userEmailPasswordRecoverDoc.getIsRecovered()) return false;
 
         UserDoc userDoc = getUser(userEmailPasswordRecoverDoc.getUserId());
         userDoc.setPasswordAsHex(password);

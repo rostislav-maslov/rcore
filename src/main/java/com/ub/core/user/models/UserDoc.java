@@ -23,6 +23,12 @@ public class UserDoc {
 
     protected String firstName = "";
     protected String lastName = "";
+    /**
+     * отчество
+     */
+    protected String secondName = "";
+
+
 
     private String vkId;
     private String vkAccessToken;
@@ -58,13 +64,13 @@ public class UserDoc {
         this.password = generateHexPassword(email, notHexPassword);
     }
 
-    public void setPasswordForLoginAsHex(String notHexPassword){
+    public void setPasswordForLoginAsHex(String notHexPassword) {
         this.passwordForLogin = generateHexPassword(login, notHexPassword);
     }
 
-    public boolean containsRole(Role role){
-        for(Role r :roles){
-            if(r.getId().equals(role.getId()))
+    public boolean containsRole(Role role) {
+        for (Role r : roles) {
+            if (r.getId().equals(role.getId()))
                 return true;
         }
         return false;
@@ -284,5 +290,13 @@ public class UserDoc {
 
     public void setLinkedinEmail(String linkedinEmail) {
         this.linkedinEmail = linkedinEmail;
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
     }
 }
