@@ -186,6 +186,7 @@ public class UserService {
         userDoc.setUserStatus(userEmailVerifiedDoc.getUserStatus());
         userDoc.setLastName(userEmailVerifiedDoc.getLastName());
         userDoc.setFirstName(userEmailVerifiedDoc.getFirstName());
+        userDoc.setSecondName(userEmailVerifiedDoc.getSecondName());
 
 
         userDoc = save(userDoc);
