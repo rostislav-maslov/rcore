@@ -286,6 +286,12 @@ public class UserService {
         return userEmailVerifiedService.create(userEmailVerifiedDoc);
     }
 
+    public UserEmailVerifiedDoc createUserByEmailWithVerified(String email, String password, String lastName,
+                                                              String firstName) throws UserExistException {
+
+        return createUserByEmailWithVerified(email, password, lastName, firstName, "");
+    }
+
     /**
      * Создание нового пользователя по vk
      *
