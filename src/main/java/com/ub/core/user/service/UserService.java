@@ -88,6 +88,9 @@ public class UserService {
     public UserDoc findByEmail(String email) {
         return mongoTemplate.findOne(new Query(Criteria.where("email").is(email)), UserDoc.class);
     }
+    public UserDoc findByEmailForLogin(String email) {
+        return mongoTemplate.findOne(new Query(Criteria.where("emailForLogin").is(email)), UserDoc.class);
+    }
 
     public UserDoc save(UserDoc userDoc) throws UserExistException {
         if (userDoc.getId() == null && userDoc.getEmail() != null) {
@@ -250,6 +253,9 @@ public class UserService {
     }
 
     public UserDoc createUserByLogin(String login, String password, String email) throws UserExistException {
+        UserDoc check=findByEmailForLogin(email);
+        if(check!=null)
+            throw  new UserExistException();
         UserDoc userDoc = createUserByLogin(login, password);
         userDoc.setEmailForLogin(email);
         save(userDoc);
