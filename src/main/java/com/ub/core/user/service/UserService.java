@@ -17,6 +17,8 @@ import com.ub.core.user.views.AddEditUserView;
 import com.ub.core.user.views.modalUserSearch.all.SearchUserAdminRequest;
 import com.ub.core.user.views.modalUserSearch.all.SearchUserAdminResponse;
 import com.ub.facebook.response.FBUserInfo;
+import com.ub.google.response.GoogleUserInfo;
+import com.ub.linkedin.response.LinkedinUserInfo;
 import com.ub.vk.response.AccessTokenResponse;
 import com.ub.vk.response.users.get.UserInfo;
 import com.ub.vk.response.users.get.UsersGetResponse;
@@ -31,6 +33,8 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
+import twitter4j.User;
+import twitter4j.auth.AccessToken;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,6 +49,7 @@ public class UserService {
     @Autowired private UserEmailVerifiedService userEmailVerifiedService;
     @Autowired private UserEmailPasswordRecoveryService userEmailPasswordRecoveryService;
     @Autowired private AutorizationService autorizationService;
+    @Autowired private EmailSessionService emailSessionService;
 
     /**
      * Блокировка пользотеля
@@ -56,7 +61,7 @@ public class UserService {
         userDoc.setUserStatus(UserStatusEnum.BLOCK);
         try {
             save(userDoc);
-        }catch (UserExistException e){
+        } catch (UserExistException e) {
             e.printStackTrace();
         }
     }
@@ -76,12 +81,15 @@ public class UserService {
         }
     }
 
-    public UserDoc findByLogin(String login){
+    public UserDoc findByLogin(String login) {
         return mongoTemplate.findOne(new Query(Criteria.where("login").is(login)), UserDoc.class);
     }
 
     public UserDoc findByEmail(String email) {
         return mongoTemplate.findOne(new Query(Criteria.where("email").is(email)), UserDoc.class);
+    }
+    public UserDoc findByEmailForLogin(String email) {
+        return mongoTemplate.findOne(new Query(Criteria.where("emailForLogin").is(email)), UserDoc.class);
     }
 
     public UserDoc save(UserDoc userDoc) throws UserExistException {
@@ -102,9 +110,9 @@ public class UserService {
             }
         }
 
-        if(userDoc.getId() == null && userDoc.getLogin() != null){
+        if (userDoc.getId() == null && userDoc.getLogin() != null) {
             UserDoc old = findByLogin(userDoc.getLogin());
-            if(old != null){
+            if (old != null) {
                 throw new UserExistException();
             }
         }
@@ -133,7 +141,7 @@ public class UserService {
             userDoc.getRoles().removeAll(toDelete);
             try {
                 save(userDoc);
-            }catch (UserExistException e){
+            } catch (UserExistException e) {
                 e.printStackTrace();
             }
         }
@@ -145,7 +153,7 @@ public class UserService {
             userDoc.getRoles().add(role);
             try {
                 save(userDoc);
-            }catch (UserExistException e){
+            } catch (UserExistException e) {
                 e.printStackTrace();
             }
         }
@@ -181,10 +189,11 @@ public class UserService {
         userDoc.setUserStatus(userEmailVerifiedDoc.getUserStatus());
         userDoc.setLastName(userEmailVerifiedDoc.getLastName());
         userDoc.setFirstName(userEmailVerifiedDoc.getFirstName());
+        userDoc.setSecondName(userEmailVerifiedDoc.getSecondName());
 
 
         userDoc = save(userDoc);
-        autorizationService.authorizeUserDoc(userDoc);
+        emailSessionService.authorizeUserDoc(userDoc);
         return userDoc;
     }
 
@@ -243,6 +252,16 @@ public class UserService {
         return userDoc;
     }
 
+    public UserDoc createUserByLogin(String login, String password, String email) throws UserExistException {
+        UserDoc check=findByEmailForLogin(email);
+        if(check!=null)
+            throw  new UserExistException();
+        UserDoc userDoc = createUserByLogin(login, password);
+        userDoc.setEmailForLogin(email);
+        save(userDoc);
+        return userDoc;
+    }
+
     /**
      * @param email
      * @param password
@@ -250,7 +269,7 @@ public class UserService {
      * @throws UserExistException
      */
     public UserEmailVerifiedDoc createUserByEmailWithVerified(String email, String password) throws UserExistException {
-        return createUserByEmailWithVerified(email, password, "", "");
+        return createUserByEmailWithVerified(email, password, "", "", "");
     }
 
     /**
@@ -258,17 +277,25 @@ public class UserService {
      * @param password
      * @param lastName
      * @param firstName
+     * @param secondName
      * @return
      * @throws UserExistException
      */
     public UserEmailVerifiedDoc createUserByEmailWithVerified(String email, String password, String lastName,
-                                                              String firstName) throws UserExistException {
+                                                              String firstName, String secondName) throws UserExistException {
         UserEmailVerifiedDoc userEmailVerifiedDoc = new UserEmailVerifiedDoc();
         userEmailVerifiedDoc.setEmail(email);
         userEmailVerifiedDoc.setPasswordAsHex(password);
         userEmailVerifiedDoc.setLastName(lastName);
         userEmailVerifiedDoc.setFirstName(firstName);
+        userEmailVerifiedDoc.setSecondName(secondName);
         return userEmailVerifiedService.create(userEmailVerifiedDoc);
+    }
+
+    public UserEmailVerifiedDoc createUserByEmailWithVerified(String email, String password, String lastName,
+                                                              String firstName) throws UserExistException {
+
+        return createUserByEmailWithVerified(email, password, lastName, firstName, "");
     }
 
     /**
@@ -322,11 +349,86 @@ public class UserService {
         return userDoc;
     }
 
+    public UserDoc createUserByGoogle(GoogleUserInfo userInfo) throws UserExistException {
+        UserDoc userDoc = new UserDoc();
+
+        UserDoc check = getUserByGoogleId(userInfo.getId());
+        if (check != null) {
+            throw new UserExistException();
+        }
+
+        userDoc.setGoogleAccessToken(userInfo.getAccessToken());
+        userDoc.setGoogleEmail(userInfo.getEmail());
+        userDoc.setGoogleId(userInfo.getId());
+
+        userDoc.setUserStatus(UserStatusEnum.ACTIVE);
+
+        userDoc.setFirstName(userInfo.getFirst_name());
+        userDoc.setLastName(userInfo.getLast_name());
+
+        save(userDoc);
+        return userDoc;
+    }
+
+    public UserDoc createUserByLinkedin(LinkedinUserInfo userInfo) throws UserExistException {
+        UserDoc userDoc = new UserDoc();
+
+        UserDoc check = getUserByLinkedinId(userInfo.getId());
+        if (check != null) {
+            throw new UserExistException();
+        }
+
+        userDoc.setLinkedinId(userInfo.getId());
+        userDoc.setLinkedinAccessToken(userInfo.getAccessToken());
+        userDoc.setLinkedinEmail(userInfo.getEmailAddress());
+
+        userDoc.setUserStatus(UserStatusEnum.ACTIVE);
+
+        userDoc.setFirstName(userInfo.getFirstName());
+        userDoc.setLastName(userInfo.getLastName());
+
+        save(userDoc);
+        return userDoc;
+    }
+
+    public UserDoc createUserByTwitter(User user, String token, String tokenSecret) throws UserExistException {
+        UserDoc check = getUserByTwitterId(String.valueOf(user.getId()));
+        if (check != null) {
+            throw new UserExistException();
+        }
+        UserDoc userDoc = new UserDoc();
+
+        userDoc.setTwitterId(String.valueOf(user.getId()));
+        userDoc.setTwitterAccessToken(token);
+        userDoc.setTwitterSecretToken(tokenSecret);
+        userDoc.setTwitterScreenName(user.getScreenName());
+
+        userDoc.setUserStatus(UserStatusEnum.ACTIVE);
+
+        String[] name = user.getName().split(" ");
+
+        String firstName = "", lastName = "";
+        if (name.length == 2) {
+            firstName = name[1];
+            lastName = name[0];
+        }
+
+        userDoc.setFirstName(firstName);
+        userDoc.setLastName(lastName);
+
+        save(userDoc);
+        return userDoc;
+    }
+
+    public UserDoc getUserByTwitterId(String id) {
+        return mongoTemplate.findOne(new Query(new Criteria("twitterId").is(id)), UserDoc.class);
+    }
+
     public UserDoc updateVkAccessToken(UserDoc userDoc, String accessToken) {
         userDoc.setVkAccessToken(accessToken);
         try {
             save(userDoc);
-        }catch (UserExistException e){
+        } catch (UserExistException e) {
             e.printStackTrace();
         }
         return userDoc;
@@ -334,6 +436,37 @@ public class UserService {
 
     public UserDoc updateFbAccessToken(UserDoc userDoc, String accessToken) {
         userDoc.setFbAccessToken(accessToken);
+        try {
+            save(userDoc);
+        } catch (UserExistException e) {
+            e.printStackTrace();
+        }
+        return userDoc;
+    }
+
+    public UserDoc updateGoogleAccessToken(UserDoc userDoc, String accessToken) {
+        userDoc.setGoogleAccessToken(accessToken);
+        try {
+            save(userDoc);
+        } catch (UserExistException e) {
+            e.printStackTrace();
+        }
+        return userDoc;
+    }
+
+    public UserDoc updateTwitterAccesToken(UserDoc userDoc, AccessToken accessToken) {
+        userDoc.setTwitterAccessToken(accessToken.getToken());
+        userDoc.setTwitterSecretToken(accessToken.getTokenSecret());
+        try {
+            save(userDoc);
+        } catch (UserExistException e) {
+            e.printStackTrace();
+        }
+        return userDoc;
+    }
+
+    public UserDoc updateLinkedinAccessToken(UserDoc userDoc, String accessToken) {
+        userDoc.setLinkedinAccessToken(accessToken);
         try {
             save(userDoc);
         } catch (UserExistException e) {
@@ -386,7 +519,7 @@ public class UserService {
 
         try {
             save(currUser);
-        }catch (UserExistException e){
+        } catch (UserExistException e) {
             e.printStackTrace();
         }
     }
@@ -409,6 +542,14 @@ public class UserService {
         return mongoTemplate.findOne(new Query(new Criteria("fbId").is(fbId)), UserDoc.class);
     }
 
+    public UserDoc getUserByGoogleId(String googleId) {
+        return mongoTemplate.findOne(new Query(new Criteria("googleId").is(googleId)), UserDoc.class);
+    }
+
+    public UserDoc getUserByLinkedinId(String linkedinId) {
+        return mongoTemplate.findOne(new Query(new Criteria("linkedinId").is(linkedinId)), UserDoc.class);
+    }
+
     public String restorePassword(String email) throws UserNotExistException, UserExistException {
         String pass = DigestUtils.md2Hex(new Date().toString());
         UserDoc userDoc = getUserByEmail(email);
@@ -424,7 +565,7 @@ public class UserService {
         userDoc.setPasswordAsHex(password);
         try {
             save(userDoc);
-        }catch (UserExistException e){
+        } catch (UserExistException e) {
             e.printStackTrace();
         }
     }
@@ -461,13 +602,13 @@ public class UserService {
         return searchUserAdminResponse;
     }
 
-    public UserEmailPasswordRecoverDoc createPasswordRecover(String email) throws UserNotExistException{
+    public UserEmailPasswordRecoverDoc createPasswordRecover(String email) throws UserNotExistException {
         return userEmailPasswordRecoveryService.createRecovery(email);
     }
 
-    public Boolean passwordRecovery(ObjectId recoveryId, String code, String password) throws UserExistException{
-        UserEmailPasswordRecoverDoc userEmailPasswordRecoverDoc = userEmailPasswordRecoveryService.findByCodeAndId(recoveryId,code);
-        if( userEmailPasswordRecoverDoc == null || userEmailPasswordRecoverDoc.getIsRecovered()) return false;
+    public Boolean passwordRecovery(ObjectId recoveryId, String code, String password) throws UserExistException {
+        UserEmailPasswordRecoverDoc userEmailPasswordRecoverDoc = userEmailPasswordRecoveryService.findByCodeAndId(recoveryId, code);
+        if (userEmailPasswordRecoverDoc == null || userEmailPasswordRecoverDoc.getIsRecovered()) return false;
 
         UserDoc userDoc = getUser(userEmailPasswordRecoverDoc.getUserId());
         userDoc.setPasswordAsHex(password);

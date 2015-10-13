@@ -53,7 +53,6 @@
     <bean name="CheckEngineStarter" init-method="init" class="com.ub.core.engine.starter.CheckEngineStarter"/>
     <bean name="RoleBoost" init-method="init" class="com.ub.core.role.service.RoleBoost"/>
 
-
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/admin/**"/>
@@ -63,17 +62,12 @@
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/favicon.ico"/>
             <mvc:exclude-mapping path="/static/**"/>
             <mvc:exclude-mapping path="/admin/login**"/>
             <mvc:exclude-mapping path="/admin/logout**"/>
             <bean class="com.ub.core.security.service.SecurityInterception"/>
         </mvc:interceptor>
-      
-        <!--<mvc:interceptor>-->
-            <!--<mvc:mapping path="/com/ub/core/controllers/ExampleCoreController/**"/>-->
-            <!--&lt;!&ndash;<mvc:exclude-mapping path="/admin/**"/>&ndash;&gt;-->
-            <!--<bean class="com.ub.core.yandexmetrica.controllers.YandexMetricaInterceptor"/>-->
-        <!--</mvc:interceptor>-->
     </mvc:interceptors>
 
 </beans>

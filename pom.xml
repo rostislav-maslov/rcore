@@ -222,6 +222,20 @@
             <scope>compile</scope>
         </dependency>
 
+
+        <!--Twitter -->
+        <dependency>
+            <groupId>org.twitter4j</groupId>
+            <artifactId>twitter4j-core</artifactId>
+            <version>[4.0,)</version>
+        </dependency>
+
+        <!-- Google + -->
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-plus</artifactId>
+            <version>v1-rev273-1.20.0</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -263,6 +277,7 @@
                     <include>**/*.gif</include>
                     <include>**/*.bmp</include>
                     <include>**/*.pdf</include>
+                    <include>**/*.properties</include>
                 </includes>
                 <!--<targetPath>..</targetPath>-->
             </resource>

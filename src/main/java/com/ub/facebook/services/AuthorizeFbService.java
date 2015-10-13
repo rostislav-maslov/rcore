@@ -17,6 +17,7 @@ import java.net.URL;
 public class AuthorizeFbService {
     @Autowired private AppPropertiesFbService appPropertiesFbService;
     @Autowired private AutorizationService autorizationService;
+    @Autowired private FBSessionService fbSessionService;
 
     public FBAccessTokenResponse getAccessToken(String code) {
         AppPropertiesFbDoc appPropertiesFbDoc = appPropertiesFbService.getFbProp();
@@ -52,7 +53,7 @@ public class AuthorizeFbService {
             FBUserInfo userInfo = new ObjectMapper().readValue(response, FBUserInfo.class);
             userInfo.setAccessToken(accessToken);
 
-            autorizationService.authorizeFb(userInfo);
+            fbSessionService.authorize(userInfo);
         } catch (Exception e) {
             e.printStackTrace();
             // TODO: продумать эксепшн

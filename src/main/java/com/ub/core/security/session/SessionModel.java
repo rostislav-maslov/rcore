@@ -30,6 +30,8 @@ public class SessionModel {
             httpSession.setAttribute(TYPE, "G");
         if (type.equals(SessionType.OK))
             httpSession.setAttribute(TYPE, "O");
+        if (type.equals(SessionType.TWITTER))
+            httpSession.setAttribute(TYPE, "T");
 
         return httpSession;
     }
@@ -51,6 +53,8 @@ public class SessionModel {
                 type = SessionType.GOOGLE;
             if (t.equals("O"))
                 type = SessionType.OK;
+            if (t.equals("T"))
+                type = SessionType.TWITTER;
         }
     }
 
