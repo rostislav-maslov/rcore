@@ -28,8 +28,6 @@ public class UserDoc {
      */
     protected String secondName = "";
 
-
-
     private String vkId;
     private String vkAccessToken;
     private String vkEmail;
