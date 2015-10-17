@@ -1,6 +1,5 @@
 package com.ub.google.response;
 
-import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.auth.oauth2.GoogleTokenResponse;
 import com.google.api.services.plus.model.Person;
 
@@ -24,7 +23,7 @@ public class GoogleUserInfo {
 
     public GoogleUserInfo(Person person, GoogleTokenResponse token) {
         this.id = person.getId();
-        if (person.getEmails().size() > 0) {
+        if (person.getEmails() != null && person.getEmails().size() > 0) {
             this.email = person.getEmails().get(0).getValue();
         }
         this.first_name = person.getName().getGivenName();
