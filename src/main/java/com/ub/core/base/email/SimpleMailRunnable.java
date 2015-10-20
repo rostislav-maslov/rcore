@@ -76,7 +76,14 @@ public class SimpleMailRunnable implements Runnable {
         mailSender.send(mimeMessage);
     }
 
+    @Deprecated
     public void start() {
+        Thread thread = new Thread(this);
+        thread.start();
+    }
+
+    public void start(JavaMailSender javaMailSender) {
+        this.setMailSender(javaMailSender);
         Thread thread = new Thread(this);
         thread.start();
     }
