@@ -1,8 +1,11 @@
 package com.ub.vk.services;
 
 import com.ub.core.utils.HttpsUtils;
+import com.ub.facebook.response.FBUserInfo;
+import com.ub.facebook.statparam.AuthorizeFbStatic;
 import com.ub.vk.models.AppPropertiesVkDoc;
 import com.ub.vk.response.AccessTokenResponse;
+import com.ub.vk.response.users.get.UserInfo;
 import com.ub.vk.services.exception.VkNotAuthorizedException;
 import com.ub.vk.statparam.AuthorizeVkStatic;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -37,5 +40,7 @@ public class AuthorizeVkService {
             throw new VkNotAuthorizedException();
         }
     }
+
+
 
 }
