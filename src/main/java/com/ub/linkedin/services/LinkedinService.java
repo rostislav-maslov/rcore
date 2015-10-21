@@ -1,6 +1,5 @@
 package com.ub.linkedin.services;
 
-import com.ub.core.utils.HttpsUtils;
 import com.ub.linkedin.models.AppPropertiesLinkedinDoc;
 import com.ub.linkedin.models.LinkedAccessTokenResponse;
 import com.ub.linkedin.response.LinkedinUserInfo;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Component;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -66,7 +64,13 @@ public class LinkedinService {
         return builder.toString();
     }
 
-    public LinkedinUserInfo getUserInfo(String code, String state) throws Exception {
+  /**  public LinkedinUserInfo getUserInfo(String code, String state) throws Exception {
+
+
+        return getUserInfo(accessTokenResponse.getAccess_token());
+    }    */
+
+    public LinkedAccessTokenResponse getAccessToken(String code, String state) throws Exception {
         AppPropertiesLinkedinDoc properties = getLinkedProperties();
 
         // check xss
@@ -108,10 +112,56 @@ public class LinkedinService {
         }
 
         LinkedAccessTokenResponse accessTokenResponse = new ObjectMapper().readValue(result.toString(), LinkedAccessTokenResponse.class);
-        return getUserInfo(accessTokenResponse.getAccess_token());
+        return accessTokenResponse;
     }
 
-    private LinkedinUserInfo getUserInfo(String token) throws Exception{
+    public LinkedAccessTokenResponse getAccessToken(String code, String state,String redirectUri) throws Exception {
+        AppPropertiesLinkedinDoc properties = getLinkedProperties();
+
+        // check xss
+        if (!state.equals(properties.getState())) {
+            return null;
+        }
+
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPost httppost = new HttpPost(LinkedinRoutes.TOKEN_URL);
+
+        // Request parameters and other properties.
+        List<NameValuePair> params = new ArrayList<NameValuePair>(2);
+        params.add(new BasicNameValuePair("grant_type", "authorization_code"));
+        params.add(new BasicNameValuePair("code", code));
+        params.add(new BasicNameValuePair("redirect_uri", redirectUri));
+        params.add(new BasicNameValuePair("client_id", properties.getClient_id()));
+        params.add(new BasicNameValuePair("client_secret", properties.getClient_secret()));
+        httppost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+
+        //Execute and get the response.
+        HttpResponse response = httpclient.execute(httppost);
+        HttpEntity entity = response.getEntity();
+
+        StringBuffer result = new StringBuffer();
+        if (entity != null) {
+            InputStream instream = entity.getContent();
+            try {
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(instream));
+                String inputLine;
+
+                while ((inputLine = in.readLine()) != null) {
+                    result.append(inputLine);
+                }
+                in.close();
+            } finally {
+                instream.close();
+            }
+        }
+
+        LinkedAccessTokenResponse accessTokenResponse = new ObjectMapper().readValue(result.toString(), LinkedAccessTokenResponse.class);
+        return accessTokenResponse;
+    }
+
+
+    public LinkedinUserInfo getUserInfo(String token) throws Exception {
         String url = LinkedinRoutes.GET_USER_URL;
 
         URL obj = new URL(url);
