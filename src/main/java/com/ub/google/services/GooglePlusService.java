@@ -31,7 +31,7 @@ public class GooglePlusService {
     public String formAuthUri() {
         AppPropertiesGoogleDoc properties = getGoogleProperties();
         if (properties.getClient_id().isEmpty() || properties.getClient_secret().isEmpty()
-            || properties.getRedirect_uri().isEmpty()) {
+                || properties.getRedirect_uri().isEmpty()) {
 
             //return "/404"; //TODO: page not found exception
             throw new ResourceNotFoundException();
@@ -62,20 +62,42 @@ public class GooglePlusService {
         mongoTemplate.save(appPropertiesGoogleDoc);
     }
 
-    public GoogleUserInfo getGooglePersonInfo(String code) {
+    public GoogleTokenResponse getGoogleAccessToken(String code) throws IOException {
+        AppPropertiesGoogleDoc properties = getGoogleProperties();
+        return getGoogleAccessToken(code, properties.getRedirect_uri());
+    }
+
+    public GoogleTokenResponse getGoogleAccessToken(String code, String redirectUri) throws IOException {
+        AppPropertiesGoogleDoc properties = getGoogleProperties();
+
+        GoogleTokenResponse tokenResponse = new GoogleAuthorizationCodeTokenRequest(TRANSPORT, JSON_FACTORY,
+                properties.getClient_id(), properties.getClient_secret(), code, redirectUri).execute();
+
+        GoogleCredential credential = new GoogleCredential.Builder()
+                .setJsonFactory(JSON_FACTORY)
+                .setTransport(TRANSPORT)
+                .setClientSecrets(properties.getClient_id(), properties.getClient_secret()).build()
+                .setFromTokenResponse(tokenResponse);
+
+
+        GoogleTokenResponse googleTokenResponse = new GoogleTokenResponse();
+        googleTokenResponse.setAccessToken(credential.getAccessToken());
+        return googleTokenResponse;
+
+    }
+
+
+    public GoogleUserInfo getGooglePersonInfo(GoogleTokenResponse googleTokenResponse) {
         try {
             AppPropertiesGoogleDoc properties = getGoogleProperties();
 
-            GoogleTokenResponse tokenResponse = new GoogleAuthorizationCodeTokenRequest(TRANSPORT, JSON_FACTORY,
-                    properties.getClient_id(), properties.getClient_secret(), code, properties.getRedirect_uri()).execute();
 
             GoogleCredential credential = new GoogleCredential.Builder()
                     .setJsonFactory(JSON_FACTORY)
                     .setTransport(TRANSPORT)
                     .setClientSecrets(properties.getClient_id(), properties.getClient_secret()).build()
-                    .setFromTokenResponse(tokenResponse);
+                    .setAccessToken(googleTokenResponse.getAccessToken());
 
-            credential.getAccessToken();
 
             Plus service = new Plus.Builder(TRANSPORT, JSON_FACTORY, credential)
                     .setApplicationName(properties.getApplication_name())
@@ -83,7 +105,7 @@ public class GooglePlusService {
 
             Person person = service.people().get("me").execute();
 
-            return new GoogleUserInfo(person, tokenResponse);
+            return new GoogleUserInfo(person, googleTokenResponse);
         } catch (IOException e) {
             return null;
         }

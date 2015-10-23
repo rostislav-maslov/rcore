@@ -15,8 +15,8 @@ public class GoogleUserInfo {
     private String name;
     private String gender;
     private String accessToken;
-    private String updated_time;
-    private String verified;
+    private String updated_time="";
+    private String verified="";
 
     public GoogleUserInfo() {
     }
@@ -31,8 +31,10 @@ public class GoogleUserInfo {
         this.name = person.getDisplayName();
         this.gender = person.getGender();
         this.accessToken = token.getAccessToken();
-        this.updated_time = token.getExpiresInSeconds().toString();
-        this.verified = person.getVerified().toString();
+        if (token.getExpiresInSeconds() != null)
+            this.updated_time = token.getExpiresInSeconds().toString();
+        if (person.getVerified() != null)
+            this.verified = person.getVerified().toString();
     }
 
     public String getId() {

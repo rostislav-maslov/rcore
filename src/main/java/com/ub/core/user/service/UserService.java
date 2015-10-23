@@ -535,6 +535,8 @@ public class UserService {
     }
 
     public UserDoc getUserByVkId(String vkId) {
+
+        if(vkId==null|| vkId.equals("")) return null;
         return mongoTemplate.findOne(new Query(Criteria.where("vkId").is(vkId)), UserDoc.class);
     }
 

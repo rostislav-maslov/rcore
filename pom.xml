@@ -4,6 +4,7 @@
     <groupId>com.ub</groupId>
     <artifactId>UBCore</artifactId>
     <!--<packaging>war</packaging>-->
+    <packaging>jar</packaging>
     <version>0.3.0</version>
     <name>UBCore</name>
 

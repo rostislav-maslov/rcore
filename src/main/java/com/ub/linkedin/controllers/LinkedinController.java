@@ -2,6 +2,7 @@ package com.ub.linkedin.controllers;
 
 import com.ub.core.base.utils.RouteUtils;
 import com.ub.linkedin.models.AppPropertiesLinkedinDoc;
+import com.ub.linkedin.models.LinkedAccessTokenResponse;
 import com.ub.linkedin.routes.LinkedinRoutes;
 import com.ub.linkedin.services.LinkedinService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,8 @@ public class LinkedinController {
     @RequestMapping(value = "/linkedin/resp", method = RequestMethod.GET)
     public String auth(@RequestParam String code, @RequestParam String state) {
         try {
-            service.getUserInfo(code, state);
+            LinkedAccessTokenResponse linkedAccessTokenResponse=service.getAccessToken(code,state);
+            service.getUserInfo(linkedAccessTokenResponse.getAccess_token());
         } catch (Exception e) {
             e.printStackTrace();
         }
