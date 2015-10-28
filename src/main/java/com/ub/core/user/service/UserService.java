@@ -184,7 +184,7 @@ public class UserService {
         UserEmailVerifiedDoc userEmailVerifiedDoc = userEmailVerifiedService.verified(email, code);
         UserDoc userDoc = new UserDoc();
         userDoc.setRoles(userEmailVerifiedDoc.getRoles());
-        userDoc.setEmail(userEmailVerifiedDoc.getEmail());
+        userDoc.setEmail(userEmailVerifiedDoc.getEmail().replace(" ",""));
         userDoc.setPassword(userEmailVerifiedDoc.getPassword());
         userDoc.setUserStatus(userEmailVerifiedDoc.getUserStatus());
         userDoc.setLastName(userEmailVerifiedDoc.getLastName());
