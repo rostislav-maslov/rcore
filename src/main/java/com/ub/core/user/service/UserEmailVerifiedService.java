@@ -45,6 +45,8 @@ public class UserEmailVerifiedService {
         if(oldDoc.getIsVerified()){
             throw new UserExistException();
         }
+        oldDoc.setPassword(userEmailVerifiedDoc.getPassword());
+        save(oldDoc);
         return oldDoc;
     }
 
