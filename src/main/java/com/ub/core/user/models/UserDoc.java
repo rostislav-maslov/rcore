@@ -23,6 +23,10 @@ public class UserDoc {
 
     protected String firstName = "";
     protected String lastName = "";
+    /**
+     * отчество
+     */
+    protected String secondName = "";
 
     private String vkId;
     private String vkAccessToken;
@@ -31,6 +35,20 @@ public class UserDoc {
     private String fbId;
     private String fbAccessToken;
     private String fbEmail;
+
+    private String googleId;
+    private String googleAccessToken;
+    private String googleEmail;
+
+    private String linkedinId;
+    private String linkedinAccessToken;
+    private String linkedinEmail;
+
+    private String twitterId;
+    private String twitterAccessToken;
+    private String twitterSecretToken;
+    private String twitterEmail;
+    private String twitterScreenName;
 
     private String login;
     private String passwordForLogin;
@@ -44,13 +62,13 @@ public class UserDoc {
         this.password = generateHexPassword(email, notHexPassword);
     }
 
-    public void setPasswordForLoginAsHex(String notHexPassword){
+    public void setPasswordForLoginAsHex(String notHexPassword) {
         this.passwordForLogin = generateHexPassword(login, notHexPassword);
     }
 
-    public boolean containsRole(Role role){
-        for(Role r :roles){
-            if(r.getId().equals(role.getId()))
+    public boolean containsRole(Role role) {
+        for (Role r : roles) {
+            if (r.getId().equals(role.getId()))
                 return true;
         }
         return false;
@@ -182,5 +200,101 @@ public class UserDoc {
 
     public void setEmailForLogin(String emailForLogin) {
         this.emailForLogin = emailForLogin;
+    }
+
+    public String getGoogleId() {
+        return googleId;
+    }
+
+    public void setGoogleId(String googleId) {
+        this.googleId = googleId;
+    }
+
+    public String getGoogleAccessToken() {
+        return googleAccessToken;
+    }
+
+    public void setGoogleAccessToken(String googleAccessToken) {
+        this.googleAccessToken = googleAccessToken;
+    }
+
+    public String getGoogleEmail() {
+        return googleEmail;
+    }
+
+    public void setGoogleEmail(String googleEmail) {
+        this.googleEmail = googleEmail;
+    }
+
+    public String getTwitterId() {
+        return twitterId;
+    }
+
+    public void setTwitterId(String twitterId) {
+        this.twitterId = twitterId;
+    }
+
+    public String getTwitterAccessToken() {
+        return twitterAccessToken;
+    }
+
+    public void setTwitterAccessToken(String twitterAccessToken) {
+        this.twitterAccessToken = twitterAccessToken;
+    }
+
+    public String getTwitterEmail() {
+        return twitterEmail;
+    }
+
+    public void setTwitterEmail(String twitterEmail) {
+        this.twitterEmail = twitterEmail;
+    }
+
+    public String getTwitterSecretToken() {
+        return twitterSecretToken;
+    }
+
+    public void setTwitterSecretToken(String twitterSecretToken) {
+        this.twitterSecretToken = twitterSecretToken;
+    }
+
+    public String getTwitterScreenName() {
+        return twitterScreenName;
+    }
+
+    public void setTwitterScreenName(String twitterScreenName) {
+        this.twitterScreenName = twitterScreenName;
+    }
+
+    public String getLinkedinId() {
+        return linkedinId;
+    }
+
+    public void setLinkedinId(String linkedinId) {
+        this.linkedinId = linkedinId;
+    }
+
+    public String getLinkedinAccessToken() {
+        return linkedinAccessToken;
+    }
+
+    public void setLinkedinAccessToken(String linkedinAccessToken) {
+        this.linkedinAccessToken = linkedinAccessToken;
+    }
+
+    public String getLinkedinEmail() {
+        return linkedinEmail;
+    }
+
+    public void setLinkedinEmail(String linkedinEmail) {
+        this.linkedinEmail = linkedinEmail;
+    }
+
+    public String getSecondName() {
+        return secondName;
+    }
+
+    public void setSecondName(String secondName) {
+        this.secondName = secondName;
     }
 }

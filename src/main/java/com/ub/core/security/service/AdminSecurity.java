@@ -20,8 +20,9 @@ public class AdminSecurity extends HandlerInterceptorAdapter {
             UserDoc userDoc = autorizationService.getUserFromSession();
             for(Role role : userDoc.getRoles()){
                 BaseAdminRole baseAdminRole = new BaseAdminRole();
-                if(role.getId().equals(baseAdminRole.getId()))
+                if(role.getId().equals(baseAdminRole.getId())) {
                     return true;
+                }
             }
         } catch (UserNotAutorizedException e) {
         }

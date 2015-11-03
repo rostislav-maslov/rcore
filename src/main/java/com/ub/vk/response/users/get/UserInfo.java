@@ -1,5 +1,8 @@
 package com.ub.vk.response.users.get;
 
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class UserInfo {
     private String uid;
     private String first_name;

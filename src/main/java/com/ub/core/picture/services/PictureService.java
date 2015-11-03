@@ -45,6 +45,10 @@ public class PictureService {
         return mongoTemplate.findOne(new Query(Criteria.where("url").is(url)), PictureDoc.class);
     }
 
+    public long countAll(){
+        return mongoTemplate.count(new Query(), PictureDoc.class);
+    }
+
     public void delete(ObjectId objectId) {
         PictureDoc pictureDoc = findById(objectId);
 

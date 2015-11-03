@@ -25,6 +25,7 @@
             dbname="${mongo.db}"/>
 
     <import resource="servlet/com-ub-core-servlet.xml" />
+    <import resource="servlet/com-ub-core-language-servlet.xml" />
 
     <!-- MAIL -->
 
