@@ -36,12 +36,11 @@ import org.springframework.stereotype.Component;
 import twitter4j.User;
 import twitter4j.auth.AccessToken;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class UserService {
+    private static Map<String, IUserEvent> userEvents = new HashMap<String, IUserEvent>();
 
     @Autowired protected MongoTemplate mongoTemplate;
     @Autowired protected UserVkService userVkService;
@@ -50,6 +49,22 @@ public class UserService {
     @Autowired private UserEmailPasswordRecoveryService userEmailPasswordRecoveryService;
     @Autowired private AutorizationService autorizationService;
     @Autowired private EmailSessionService emailSessionService;
+
+    public static void addUserEvent(IUserEvent iUserEvent) {
+        userEvents.put(iUserEvent.getClass().getCanonicalName(), iUserEvent);
+    }
+
+    private void callAfterSave(UserDoc userDoc) {
+        for (IUserEvent iUserEvent: userEvents.values()) {
+            iUserEvent.afterSave(userDoc);
+        }
+    }
+
+    private void callAfterDelete(UserDoc userDoc) {
+        for (IUserEvent iUserEvent : userEvents.values()) {
+            iUserEvent.afterDelete(userDoc);
+        }
+    }
 
     /**
      * Блокировка пользотеля
@@ -128,6 +143,7 @@ public class UserService {
         }
 
         mongoTemplate.save(userDoc);
+        this.callAfterSave(userDoc);
         return userDoc;
     }
 
@@ -492,6 +508,7 @@ public class UserService {
     public void deleteUser(ObjectId id) {
         UserDoc userDoc = mongoTemplate.findById(id, UserDoc.class);
         mongoTemplate.remove(userDoc);
+        this.callAfterDelete(userDoc);
     }
 
     /**
