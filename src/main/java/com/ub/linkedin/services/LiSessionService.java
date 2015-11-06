@@ -57,7 +57,7 @@ public class LiSessionService extends ASessionConfigService {
 
     @Override
     public String getToken(UserDoc userDoc) {
-        String t = userDoc.getTwitterId() + ";" + userDoc.getLinkedinAccessToken() + "42";
+        String t = userDoc.getLinkedinId() + ";" + userDoc.getLinkedinAccessToken() + "42";
         return DigestUtils.md5Hex(t);
     }
 
