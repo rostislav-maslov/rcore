@@ -53,6 +53,7 @@ public class PictureAdminController {
                          Model model) {
         SearchAdminRequest searchAdminRequest = new SearchAdminRequest(currentPage);
         searchAdminRequest.setQuery(query);
+        searchAdminRequest.setPageSize(30);
         model.addAttribute("searchAdminResponse", pictureService.findAll(searchAdminRequest));
         return "com.ub.core.admin.pictures.all";
     }
