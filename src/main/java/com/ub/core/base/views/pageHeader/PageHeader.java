@@ -6,12 +6,16 @@ import com.ub.core.base.views.breadcrumbs.BreadcrumbsLink;
 
 
 public class PageHeader {
-    public static PageHeader defaultPageHeader(){
+    public static PageHeader defaultPageHeader() {
+        return defaultPageHeader("Главная", "Добавить");
+    }
+
+    public static PageHeader defaultPageHeader(String mainPage, String addTitle) {
         PageHeader pageHeader = new PageHeader();
         Breadcrumbs breadcrumbs1 = new Breadcrumbs();
-        breadcrumbs1.getLinks().add(new BreadcrumbsLink(BaseRoutes.ADMIN,"Главная"));
+        breadcrumbs1.getLinks().add(new BreadcrumbsLink(BaseRoutes.ADMIN, mainPage));
         pageHeader.setBreadcrumbs(breadcrumbs1);
-        pageHeader.setTitleAdd("Добавить");
+        pageHeader.setTitleAdd(addTitle);
         return pageHeader;
     }
 

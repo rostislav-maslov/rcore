@@ -24,7 +24,8 @@
             password="${mongo.password}"
             dbname="${mongo.db}"/>
 
-    <import resource="classpath*:WEB-INF/servlet/com-ub-core-servlet.xml" />
+    <import resource="servlet/com-ub-core-servlet.xml" />
+    <import resource="servlet/com-ub-core-language-servlet.xml" />
 
     <!-- MAIL -->
 
@@ -32,7 +33,6 @@
           class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
         <property name="definitions">
             <list>
-                <value>classpath:/WEB-INF/tiles/*tiles.xml</value>
                 <value>/WEB-INF/tiles/*tiles.xml</value>
             </list>
         </property>

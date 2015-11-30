@@ -32,6 +32,9 @@
 
                     <th>Имя файла</th>
                     <th>Id</th>
+                    <th>Картинка</th>
+                    <th>Дата добавления</th>
+                    <th>Дата по id</th>
 
                     <th>Действия</th>
                 </tr>
@@ -43,6 +46,9 @@
                     <tr>
                         <td>${doc.fileName}</td>
                         <td>${doc.id}</td>
+                        <td><a href="/pics/${doc.id}" target="_blank"><img src="/pics/${doc.id}" style="max-height: 200px"/></a></td>
+                        <td>${doc.createDate}</td>
+                        <td>${doc.id.getDate()}</td>
                         <td class="">
                             <c:url value="<%= PicturesAdminRoutes.DELETE%>" var="urlDelete">
                                 <c:param name="id" value="${doc.id}"></c:param>

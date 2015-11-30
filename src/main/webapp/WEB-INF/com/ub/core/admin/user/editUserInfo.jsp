@@ -13,7 +13,7 @@
             </div>
             <div class="widget-content">
 
-                <form:form action="${backUrl}" modelAttribute="userDoc">
+                <form:form action="${backUrl}" modelAttribute="userDocHack">
 
                     <form:errors path="*" cssClass="alert alert-warning" element="div"/>
                     <form:hidden path="id"/>
@@ -47,14 +47,14 @@
     <div class="col-md-12">
         <h2>Роли</h2>
         <c:url value="<%= RoleAdminRoutes.ADD%>" var="roleAdd">
-            <c:param name="id" value="${userDoc.id}"></c:param>
+            <c:param name="id" value="${userDocHack.id}"></c:param>
         </c:url>
         <a href="${roleAdd}"> Добавить роль </a>
         <br>
 
-        <c:forEach items="${userDoc.roles}" var="r">
+        <c:forEach items="${userDocHack.roles}" var="r">
             <form action="<%= RoleAdminRoutes.DELETE%>" method="post">
-                <input type="hidden" name="user" value="${userDoc.id}"/>
+                <input type="hidden" name="user" value="${userDocHack.id}"/>
                 <input type="hidden" name="role" value="${r.id}"/>
 
                 <p>${r.roleTitle} <button type="submit" class="btn btn-xs">X</button>
@@ -71,7 +71,7 @@
         <h2>Изменить пароль пользователя</h2>
 
         <form action="<%= UserAdminRoutes.EDIT_PASSWORD%>" method="post">
-            <input name="userId" value="${userDoc.id}" type="hidden"/>
+            <input name="userId" value="${userDocHack.id}" type="hidden"/>
 
             <input name="password" class="form-control" type="password"/>
             <br>

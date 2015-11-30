@@ -9,16 +9,25 @@ public class CheckEngineStarter extends ACoreStarter {
     @Override
     protected void onStart() {
         try {
-            String url = "http://www.unitbean.com/api/v1/engine/check";
-            HttpUtils httpUtils = new HttpUtils(url);
-            httpUtils.addParam("hostName", getHostName());
-            httpUtils.addParam("hostAddress", getHostAddres());
-            httpUtils.sendGet();
+            Thread thread = new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        String url = "http://www.unitbean.com/api/v1/engine/check";
+                        HttpUtils httpUtils = new HttpUtils(url);
+                        httpUtils.addParam("hostName", getHostName());
+                        httpUtils.addParam("hostAddress", getHostAddress());
+                        httpUtils.sendGet();
+                    }catch(Exception e){
+
+                    }
+                }
+            });
+            thread.start();
         } catch (Exception e) {
         }
     }
 
-    private String getHostAddres() {
+    private String getHostAddress() {
         try {
             InetAddress inetAddress;
             inetAddress = InetAddress.getLocalHost();

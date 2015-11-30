@@ -117,6 +117,7 @@ public class UserAdminController {
 
         if (userService.getUser(id) != null) {
             modelMap.addAttribute("userDoc", userService.getUser(id));
+            modelMap.addAttribute("userDocHack", userService.getUser(id));
             modelMap.addAttribute("roles", roleService.findAllRoles());
             modelMap.addAttribute("backUrl", "/admin/user/edit");
             return "com.ub.core.admin.user.editUserInfo";

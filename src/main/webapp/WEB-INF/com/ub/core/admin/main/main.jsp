@@ -1,10 +1,9 @@
-<%@ page import="com.ub.core.menu.models.fields.MenuFields" %>
-<%@ page import="com.ub.core.pages.routes.PagesAdminRoutes" %>
-<%@ page import="com.ub.core.file.FileRoutes" %>
+<%@ page import="com.ub.core.language.routes.LanguageAdminRoutes" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="S" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--<%@ taglib uri="/WEB-INF/widgets/contactForm" prefix="cf" %>--%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -49,8 +48,8 @@
 
             <!-- logo -->
             <div class="logo">
-                <a href="/">
-                    <img src="<c:url value="/static/a/images/logo@2x.png"/>" width="95" alt=""/>
+                <a href="/admin">
+                    <img src="<c:url value="/static/a/images/logo.png"/>" width="95" alt=""/>
                 </a>
             </div>
 
@@ -100,9 +99,37 @@
             <div class="col-md-6 col-sm-4 clearfix hidden-xs">
 
                 <ul class="list-inline links-list pull-right">
+                    <li class="dropdown language-selector ">
+
+
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-close-others="true">
+                            <s:message code="ubcore.admin.langchange.button"/> &nbsp;
+                        </a>
+
+                        <ul class="dropdown-menu pull-right">
+                            <li>
+                                <c:url value="<%= LanguageAdminRoutes.CHANGE%>" var="langChange">
+                                    <c:param name="lang" value="ru"/>
+                                </c:url>
+                                <a href="${langChange}">
+                                    <span>Русский</span>
+                                </a>
+                            </li>
+                            <li>
+                                <c:url value="<%= LanguageAdminRoutes.CHANGE%>" var="langChange">
+                                    <c:param name="lang" value="en"/>
+                                </c:url>
+                                <a href="${langChange}">
+                                    <span>English</span>
+                                </a>
+                            </li>
+                        </ul>
+
+                    </li>
+                    <li class="sep"></li>
                     <li>
                         <a href="<c:url value="/admin/logout" />">
-                            Выйти <i class="entypo-logout right"></i>
+                            <s:message code="ubcore.admin.exit"/> <i class="entypo-logout right"></i>
                         </a>
                     </li>
                 </ul>
@@ -121,7 +148,7 @@
         <footer class="main">
 
 
-            &copy; 2014 <strong>UBCore</strong> Admin Engine by <a href="http://unitbean.com" target="_blank">LLC
+            &copy; 2013 - 2016 <strong>UBCore</strong> Admin Engine by <a href="http://www.unitbean.com" target="_blank">LLC
             UnitBean</a>
 
         </footer>

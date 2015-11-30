@@ -4,6 +4,7 @@
     <groupId>com.ub</groupId>
     <artifactId>UBCore</artifactId>
     <!--<packaging>war</packaging>-->
+    <packaging>jar</packaging>
     <version>0.3.0</version>
     <name>UBCore</name>
 
@@ -57,12 +58,7 @@
             <version>${spring.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
-            <scope>test</scope>
-        </dependency>
+
 
         <dependency>
             <groupId>org.mongodb</groupId>
@@ -85,14 +81,6 @@
             <artifactId>spring-context-support</artifactId>
             <version>${spring.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8.2</version>
-            <scope>test</scope>
-        </dependency>
-
         <dependency>
             <groupId>org.apache.tiles</groupId>
             <artifactId>tiles-core</artifactId>
@@ -100,8 +88,6 @@
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
-
-
 
         <dependency>
             <groupId>org.apache.tiles</groupId>
@@ -177,7 +163,7 @@
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
-            <version>1.4</version>
+            <version>1.4.7</version>
         </dependency>
         <dependency>
             <groupId>javax.persistence</groupId>
@@ -198,24 +184,45 @@
 
         <!--Spring security-->
         <!-- Spring Security Dependencies -->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-            <version>${spring-security.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-web</artifactId>
-            <version>${spring-security.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-config</artifactId>
-            <version>${spring-security.version}</version>
-        </dependency>
+
         <!--/Spring security-->
 
+        <!-- Image scale -->
+        <dependency>
+            <groupId>org.imgscalr</groupId>
+            <artifactId>imgscalr-lib</artifactId>
+            <version>4.2</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
 
+
+        <!--Twitter -->
+        <dependency>
+            <groupId>org.twitter4j</groupId>
+            <artifactId>twitter4j-core</artifactId>
+            <version>[4.0,)</version>
+        </dependency>
+
+        <!-- Google + -->
+        <dependency>
+            <groupId>com.google.apis</groupId>
+            <artifactId>google-api-services-plus</artifactId>
+            <version>v1-rev273-1.20.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit-dep</artifactId>
+            <version>4.8.2</version>
+            <!--<scope>test</scope>-->
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <!--<scope>test</scope>-->
+        </dependency>
     </dependencies>
 
     <build>
@@ -257,6 +264,7 @@
                     <include>**/*.gif</include>
                     <include>**/*.bmp</include>
                     <include>**/*.pdf</include>
+                    <include>**/*.properties</include>
                 </includes>
                 <!--<targetPath>..</targetPath>-->
             </resource>

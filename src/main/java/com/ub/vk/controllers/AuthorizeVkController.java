@@ -6,6 +6,7 @@ import com.ub.vk.models.AppPropertiesVkDoc;
 import com.ub.vk.response.AccessTokenResponse;
 import com.ub.vk.services.AppPropertiesVkService;
 import com.ub.vk.services.AuthorizeVkService;
+import com.ub.vk.services.VkSessionService;
 import com.ub.vk.services.exception.VkNotAuthorizedException;
 import com.ub.vk.statparam.AuthorizeVkStatic;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ public class AuthorizeVkController {
     @Autowired private AppPropertiesVkService appPropertiesVkService;
     @Autowired private AuthorizeVkService authorizeVkService;
     @Autowired private AutorizationService autorizationService;
+    @Autowired private VkSessionService vkSessionService;
 
     //@RequestMapping(value = AuthorizeVkRoutes.AUTHORIZE, method = RequestMethod.GET)
     private String authorize(RedirectAttributes redirectAttributes) {
@@ -35,7 +37,7 @@ public class AuthorizeVkController {
         try {
             autorizationService.logout();
             AccessTokenResponse accessTokenResponse = authorizeVkService.getAccessToken(code);
-            autorizationService.authorizeVk(accessTokenResponse);
+            vkSessionService.authorize(accessTokenResponse);
         } catch (VkNotAuthorizedException e) {
             e.printStackTrace();
         }

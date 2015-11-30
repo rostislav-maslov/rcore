@@ -4,6 +4,7 @@ import com.ub.core.base.utils.RouteUtils;
 import com.ub.core.security.service.AutorizationService;
 import com.ub.core.security.service.exceptions.UserNotAutorizedException;
 import com.ub.core.user.routes.UserLoginRoutes;
+import com.ub.core.user.service.EmailSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AutorizationController {
 
     @Autowired private AutorizationService autorizationService;
-
+    @Autowired private EmailSessionService emailSessionService;
 
 
     @RequestMapping(value = UserLoginRoutes.LOGIN, method = RequestMethod.GET)
@@ -31,9 +32,11 @@ public class AutorizationController {
     @RequestMapping(value = UserLoginRoutes.LOGIN, method = RequestMethod.POST)
     public String loginToAdmin(@RequestParam String email, @RequestParam String password, Model model) {
         try {
-            autorizationService.autorizeEmail(email, password);
+            emailSessionService.autorize(email, password);
         } catch (UserNotAutorizedException e) {
-            return RouteUtils.redirectTo(UserLoginRoutes.LOGIN);
+            //return RouteUtils.redirectTo(UserLoginRoutes.LOGIN);
+            model.addAttribute("error","true");
+            return "com.ub.core.admin.login";
         }
         return RouteUtils.redirectTo("/admin");
     }

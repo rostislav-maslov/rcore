@@ -1,7 +1,6 @@
 package com.ub.core.picture.controllers;
 
 import com.ub.core.base.utils.RouteUtils;
-import com.ub.core.pages.routes.PagesAdminRoutes;
 import com.ub.core.picture.models.PictureDoc;
 import com.ub.core.picture.routes.PicturesAdminRoutes;
 import com.ub.core.picture.services.PictureService;
@@ -54,6 +53,7 @@ public class PictureAdminController {
                          Model model) {
         SearchAdminRequest searchAdminRequest = new SearchAdminRequest(currentPage);
         searchAdminRequest.setQuery(query);
+        searchAdminRequest.setPageSize(30);
         model.addAttribute("searchAdminResponse", pictureService.findAll(searchAdminRequest));
         return "com.ub.core.admin.pictures.all";
     }
@@ -67,6 +67,6 @@ public class PictureAdminController {
     @RequestMapping(value = PicturesAdminRoutes.DELETE, method = RequestMethod.POST)
     protected String delete(@RequestParam ObjectId id) {
         pictureService.delete(id);
-        return RouteUtils.redirectTo(PagesAdminRoutes.ALL);
+        return RouteUtils.redirectTo(PicturesAdminRoutes.ALL);
     }
 }

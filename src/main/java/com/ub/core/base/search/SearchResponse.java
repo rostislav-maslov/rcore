@@ -6,43 +6,43 @@ import java.util.List;
 public class SearchResponse {
     protected Integer currentPage = 0;
     protected Integer pageSize = 10;
-    protected Integer all = 0;
+    protected Long all = 0l;
     protected String query = "";
 
-    public Integer prevNum(Integer all) {
+    public Long prevNum(Long all) {
         this.all = all;
         return prevNum();
     }
 
-    public Integer prevNum() {
+    public Long prevNum() {
         if (currentPage - 1 >= 0)
-            return currentPage - 1;
+            return currentPage - 1l;
         else
-            return 0;
+            return 0l;
     }
 
-    public Integer nextNum(Integer all) {
+    public Long nextNum(Long all) {
         this.all = all;
         return nextNum();
     }
 
-    public Integer nextNum() {
-        Integer allPages = all/pageSize;
+    public Long nextNum() {
+        Long allPages = all/pageSize;
         if(allPages == 0){
-            return 0;
+            return 0l;
         }
 
         if(all%pageSize != 0)allPages++;
 
         if (currentPage + 1 <= allPages - 1)
-            return currentPage + 1;
+            return currentPage + 1l;
         else
             return allPages - 1;
     }
 
-    public List<Integer> paginator() {
+    public List<Long> paginator() {
         Integer start, end, step = 3;
-        Integer allPages = all/pageSize;
+        Long allPages = all/pageSize;
         if(all%pageSize != 0)allPages++;
 
         if (currentPage + step <= allPages - 1) {
@@ -57,14 +57,14 @@ public class SearchResponse {
             start = 0;
         }
 
-        List<Integer> paginator = new ArrayList<Integer>();
-        for (int i = start; i <= end; i++)
+        List<Long> paginator = new ArrayList<Long>();
+        for (long i = start; i <= end; i++)
             paginator.add(i);
 
         return paginator;
     }
 
-    public List<Integer> paginator(Integer all) {
+    public List<Long> paginator(Long all) {
         this.all = all;
         return paginator();
     }
@@ -85,11 +85,11 @@ public class SearchResponse {
         this.pageSize = pageSize;
     }
 
-    public Integer getAll() {
+    public Long getAll() {
         return all;
     }
 
-    public void setAll(Integer all) {
+    public void setAll(Long all) {
         this.all = all;
     }
 

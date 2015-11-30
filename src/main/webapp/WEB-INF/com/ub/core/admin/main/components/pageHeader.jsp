@@ -15,7 +15,9 @@
             </li>
         </ol>
     </div>
-    <div class="col-md-6 text-right">
-        <a href="<c:url value="${pageHeader.linkAdd}"/>" class="btn btn-default">${pageHeader.titleAdd}</a>
-    </div>
+    <c:if test="${not empty pageHeader.linkAdd}">
+        <div class="col-md-6 text-right">
+            <a href="<c:url value="${pageHeader.linkAdd}"/>" class="btn btn-default">${pageHeader.titleAdd}</a>
+        </div>
+    </c:if>
 </div>

@@ -1,8 +1,10 @@
 package com.ub.core.picture.models;
 
+import com.ub.core.picture.services.PictureService;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,13 +19,25 @@ public class PictureDoc {
     private Boolean isFileInDb = true;
     private ObjectId originFileId;
     private String originFilePath;
+    private Date createDate = new Date();
 
     private String color;
 
-    public void addSize(PictureSize pictureSize){
-        sizes.put(pictureSize.getStringSize(),pictureSize);
+    public PictureSize hasSizeWidth(Integer width){
+        for(PictureSize pictureSize : sizes.values()){
+            if(pictureSize.getWidth().equals(width)){
+                return pictureSize;
+            }
+        }
+        return null;
     }
 
+    public void addSize(PictureSize pictureSize){
+        if(sizes.size() >= PictureService.LIMIT_OF_IMAGE_SIZES){
+            return;
+        }
+        sizes.put(pictureSize.getStringSize(),pictureSize);
+    }
 
     public ObjectId getId() {
         return id;
@@ -95,5 +109,13 @@ public class PictureDoc {
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 }
