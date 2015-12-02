@@ -174,6 +174,7 @@ public class LinkedinService {
         con.setRequestProperty("Authorization", "Bearer " + token);
         con.setRequestProperty("Content-Type", "text/html; charset=utf-8");
 
+
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
         String inputLine;
         StringBuffer response = new StringBuffer();
