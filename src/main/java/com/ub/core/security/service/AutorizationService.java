@@ -70,9 +70,19 @@ public class AutorizationService {
                     }
                 }
 
+                //Если хоть одна роль есть, значит можно пустить по урлу
                 AvailableForRoles availableForRoles = handlerMethod.getMethod().getAnnotation(AvailableForRoles.class);
-                for (Class<? extends Role> roleClass : availableForRoles.value()) {
-                    if (roleNames.contains(roleClass.getName()) == false) {
+
+                if( availableForRoles.value().length > 0) {
+                    boolean needReturn = true;
+                    for (Class<? extends Role> roleClass : availableForRoles.value()) {
+                        if (roleNames.contains(roleClass.getName()) == true) {
+                            needReturn = false;
+                        }
+                    }
+
+                    if(needReturn) {
+                        Class<? extends Role> roleClass = availableForRoles.value()[0];
                         checkAvailable.setNeedRole(true);
                         checkAvailable.setRole(new Role(roleService.findById(roleClass.getName())));
                         return checkAvailable;
@@ -93,16 +103,26 @@ public class AutorizationService {
                     }
                 }
 
+                //Если хоть одна роль есть, значит можно пустить по урлу
                 AvailableForRoles availableForRoles = handlerMethod.getBeanType().getAnnotation(AvailableForRoles.class);
-                for (Class<? extends Role> roleClass : availableForRoles.value()) {
-                    if (roleNames.contains(roleClass.getName()) == false) {
+                if(availableForRoles.value().length > 0){
+                    boolean needReturn = true;
+                    for (Class<? extends Role> roleClass : availableForRoles.value()) {
+                        if (roleNames.contains(roleClass.getName()) == true) {
+                            needReturn = false;
+                        }
+                    }
+                    if(needReturn){
+                        Class<? extends Role> roleClass = availableForRoles.value()[0];
                         checkAvailable.setNeedRole(true);
                         Role role = new Role(roleService.findById(roleClass.getName()));
                         checkAvailable.setRole(role);
                         checkAvailable.setGoAfterFailLogin(role.getGoAfterFail());
                         return checkAvailable;
                     }
+
                 }
+
             }
         } catch (UserNotAutorizedException e) {
             checkAvailable.setLogged(false);
