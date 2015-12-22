@@ -5,6 +5,7 @@ import com.ub.core.security.service.exceptions.UserNotAutorizedException;
 import com.ub.core.security.session.SessionModel;
 import com.ub.core.security.session.SessionType;
 import com.ub.core.user.models.UserDoc;
+import com.ub.core.user.models.UserStatusEnum;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,8 @@ public class LoginSessionService extends ASessionConfigService {
 
     public UserDoc authorize(String login, String password) throws UserNotAutorizedException {
         UserDoc userDoc = userService.findByLogin(login);
-        if (userDoc == null || userDoc.getPasswordForLogin() == null) throw new UserNotAutorizedException();
+        if (userDoc == null || userDoc.getPasswordForLogin() == null || userDoc.getUserStatus().equals(UserStatusEnum.BLOCK))
+            throw new UserNotAutorizedException();
         if (!userDoc.getPasswordForLogin().equals(UserDoc.generateHexPassword(login, password)))
             throw new UserNotAutorizedException();
         return emailSessionService.authorizeUserDoc(userDoc);
