@@ -1,5 +1,7 @@
 package com.ub.core.seo.seoTags.models;
 
+import org.springframework.web.util.HtmlUtils;
+
 public class SeoTags {
     private String metaTitle;
     private String metaDescription;
@@ -12,26 +14,26 @@ public class SeoTags {
     }
 
     public SeoTags(String title) {
-        this.title = title;
+        this.title = HtmlUtils.htmlEscape(title);
     }
 
     public SeoTags(String metaTitle, String title) {
-        this.metaTitle = metaTitle;
-        this.title = title;
+        this.metaTitle = HtmlUtils.htmlEscape(metaTitle);
+        this.title = HtmlUtils.htmlEscape(title);
     }
 
     public SeoTags(String metaTitle, String title, String h1) {
-        this.metaTitle = metaTitle;
-        this.title = title;
-        this.h1 = h1;
+        this.metaTitle = HtmlUtils.htmlEscape(metaTitle);
+        this.title = HtmlUtils.htmlEscape(title);
+        this.h1 = HtmlUtils.htmlEscape(h1);
     }
 
     public SeoTags(String metaTitle, String metaDescription, String metaKeywords, String title, String h1) {
-        this.metaTitle = metaTitle;
-        this.metaDescription = metaDescription;
-        this.metaKeywords = metaKeywords;
-        this.title = title;
-        this.h1 = h1;
+        this.metaTitle = HtmlUtils.htmlEscape(metaTitle);
+        this.metaDescription = HtmlUtils.htmlEscape(metaDescription);
+        this.metaKeywords = HtmlUtils.htmlEscape(metaKeywords);
+        this.title = HtmlUtils.htmlEscape(title);
+        this.h1 = HtmlUtils.htmlEscape(h1);
     }
 
     public String getMetaTitle() {
@@ -39,7 +41,7 @@ public class SeoTags {
     }
 
     public void setMetaTitle(String metaTitle) {
-        this.metaTitle = metaTitle;
+        this.metaTitle = HtmlUtils.htmlEscape(metaTitle);
     }
 
     public String getMetaDescription() {
@@ -47,7 +49,7 @@ public class SeoTags {
     }
 
     public void setMetaDescription(String metaDescription) {
-        this.metaDescription = metaDescription;
+        this.metaDescription = HtmlUtils.htmlEscape(metaDescription);
     }
 
     public String getMetaKeywords() {
@@ -55,7 +57,7 @@ public class SeoTags {
     }
 
     public void setMetaKeywords(String metaKeywords) {
-        this.metaKeywords = metaKeywords;
+        this.metaKeywords = HtmlUtils.htmlEscape(metaKeywords);
     }
 
     public String getTitle() {
@@ -63,7 +65,7 @@ public class SeoTags {
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        this.title = HtmlUtils.htmlEscape(title);
     }
 
     public String getH1() {
@@ -71,7 +73,7 @@ public class SeoTags {
     }
 
     public void setH1(String h1) {
-        this.h1 = h1;
+        this.h1 = HtmlUtils.htmlEscape(h1);
     }
 
     public String getRelCanonical() {
@@ -79,6 +81,6 @@ public class SeoTags {
     }
 
     public void setRelCanonical(String relCanonical) {
-        this.relCanonical = relCanonical;
+        this.relCanonical = HtmlUtils.htmlEscape(relCanonical);
     }
 }
