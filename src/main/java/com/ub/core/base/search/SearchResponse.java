@@ -27,12 +27,12 @@ public class SearchResponse {
     }
 
     public Long nextNum() {
-        Long allPages = all/pageSize;
-        if(allPages == 0){
+        Long allPages = all / pageSize;
+        if (allPages == 0) {
             return 0l;
         }
 
-        if(all%pageSize != 0)allPages++;
+        if (all % pageSize != 0) allPages++;
 
         if (currentPage + 1 <= allPages - 1)
             return currentPage + 1l;
@@ -40,28 +40,76 @@ public class SearchResponse {
             return allPages - 1;
     }
 
+    public Integer lastPage() {
+        Long allPages = all / pageSize;
+        allPages -= 1;
+        if (all % pageSize != 0) allPages++;
+        if(allPages < 0l){
+            allPages = 0l;
+        }
+        return allPages.intValue();
+    }
+
+    public List<Long> paginator(Integer step) {
+        Integer begin, end, beginDif = null, endDif = null;
+        Integer allPages = lastPage();
+
+        begin = currentPage - step;
+        if (begin < 0) {
+            beginDif = begin;
+            begin = 0;
+        }
+
+        end = currentPage + step;
+        if (end > allPages) {
+            endDif = end - allPages;
+            end = allPages;
+        }
+
+        if (beginDif != null) {
+            end -= beginDif;
+            if (end > allPages) {
+                end = allPages;
+            }
+        }
+        if (endDif != null) {
+            begin -= endDif;
+            if (begin < 0) {
+                begin = 0;
+            }
+        }
+
+        List<Long> result = new ArrayList<Long>();
+        for (Integer i = begin; i <= end; i++) {
+            result.add(i.longValue());
+        }
+
+        return result;
+    }
+
     public List<Long> paginator() {
-        Integer start, end, step = 3;
-        Long allPages = all/pageSize;
-        if(all%pageSize != 0)allPages++;
-
-        if (currentPage + step <= allPages - 1) {
-            end = currentPage + step;
-        } else {
-            end = allPages.intValue() - 1;
-        }
-
-        if (currentPage - step >= 0) {
-            start = currentPage - step;
-        } else {
-            start = 0;
-        }
-
-        List<Long> paginator = new ArrayList<Long>();
-        for (long i = start; i <= end; i++)
-            paginator.add(i);
-
-        return paginator;
+        return this.paginator(3);
+//        Integer start, end, step = 3;
+//        Long allPages = all / pageSize;
+//        if (all % pageSize != 0) allPages++;
+//
+//        if (currentPage + step <= allPages - 1) {
+//            end = currentPage + step;
+//        } else {
+//            end = allPages.intValue() - 1;
+//        }
+//
+//        if (currentPage - step >= 0) {
+//            start = currentPage - step;
+//        } else {
+//            start = 0;
+//        }
+//
+//        List<Long> paginator = new ArrayList<Long>();
+//        for (long i = start; i <= end; i++)
+//            paginator.add(i);
+//
+//        return paginator;
     }
 
     public List<Long> paginator(Long all) {
