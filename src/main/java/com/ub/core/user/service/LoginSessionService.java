@@ -1,6 +1,7 @@
 package com.ub.core.user.service;
 
 import com.ub.core.security.service.ASessionConfigService;
+import com.ub.core.security.service.exceptions.UserBlockedException;
 import com.ub.core.security.service.exceptions.UserNotAutorizedException;
 import com.ub.core.security.session.SessionModel;
 import com.ub.core.security.session.SessionType;
@@ -21,6 +22,17 @@ public class LoginSessionService extends ASessionConfigService {
             throw new UserNotAutorizedException();
         if (!userDoc.getPasswordForLogin().equals(UserDoc.generateHexPassword(login, password)))
             throw new UserNotAutorizedException();
+        return emailSessionService.authorizeUserDoc(userDoc);
+    }
+
+    public UserDoc authorize(String login, String password, String lang) throws UserNotAutorizedException, UserBlockedException {
+        UserDoc userDoc = userService.findByLogin(login);
+        if (userDoc == null || userDoc.getPasswordForLogin() == null)
+            throw new UserNotAutorizedException();
+        if (!userDoc.getPasswordForLogin().equals(UserDoc.generateHexPassword(login, password)))
+            throw new UserNotAutorizedException();
+        if (userDoc.getUserStatus().equals(UserStatusEnum.BLOCK))
+            throw new UserBlockedException();
         return emailSessionService.authorizeUserDoc(userDoc);
     }
 
