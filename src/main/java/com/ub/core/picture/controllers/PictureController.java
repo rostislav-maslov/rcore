@@ -49,7 +49,7 @@ public class PictureController {
             //Кеширование
             GregorianCalendar gc = new GregorianCalendar();
             gc.setTime(new Date());
-            gc.add(GregorianCalendar.HOUR_OF_DAY, 72);
+            gc.add(GregorianCalendar.YEAR, 1);
             long ex = gc.getTime().getTime();
             response.setDateHeader("Expires", ex);
             //конец кеширования

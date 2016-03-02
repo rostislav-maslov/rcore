@@ -17,6 +17,7 @@ public class GoogleUserInfo {
     private String accessToken;
     private String updated_time="";
     private String verified="";
+    private String img_url;
 
     public GoogleUserInfo() {
     }
@@ -35,6 +36,9 @@ public class GoogleUserInfo {
             this.updated_time = token.getExpiresInSeconds().toString();
         if (person.getVerified() != null)
             this.verified = person.getVerified().toString();
+        if(person.getImage().getUrl()!=null){
+            this.img_url=person.getImage().getUrl();
+        }
     }
 
     public String getId() {
@@ -107,5 +111,13 @@ public class GoogleUserInfo {
 
     public void setVerified(String verified) {
         this.verified = verified;
+    }
+
+    public String getImg_url() {
+        return img_url;
+    }
+
+    public void setImg_url(String img_url) {
+        this.img_url = img_url;
     }
 }

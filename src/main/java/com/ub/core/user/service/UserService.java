@@ -55,7 +55,7 @@ public class UserService {
     }
 
     private void callAfterSave(UserDoc userDoc) {
-        for (IUserEvent iUserEvent: userEvents.values()) {
+        for (IUserEvent iUserEvent : userEvents.values()) {
             iUserEvent.afterSave(userDoc);
         }
     }
@@ -103,6 +103,7 @@ public class UserService {
     public UserDoc findByEmail(String email) {
         return mongoTemplate.findOne(new Query(Criteria.where("email").is(email)), UserDoc.class);
     }
+
     public UserDoc findByEmailForLogin(String email) {
         return mongoTemplate.findOne(new Query(Criteria.where("emailForLogin").is(email)), UserDoc.class);
     }
@@ -200,7 +201,7 @@ public class UserService {
         UserEmailVerifiedDoc userEmailVerifiedDoc = userEmailVerifiedService.verified(email, code);
         UserDoc userDoc = new UserDoc();
         userDoc.setRoles(userEmailVerifiedDoc.getRoles());
-        userDoc.setEmail(userEmailVerifiedDoc.getEmail().replace(" ",""));
+        userDoc.setEmail(userEmailVerifiedDoc.getEmail().replace(" ", ""));
         userDoc.setPassword(userEmailVerifiedDoc.getPassword());
         userDoc.setUserStatus(userEmailVerifiedDoc.getUserStatus());
         userDoc.setLastName(userEmailVerifiedDoc.getLastName());
@@ -269,9 +270,9 @@ public class UserService {
     }
 
     public UserDoc createUserByLogin(String login, String password, String email) throws UserExistException {
-        UserDoc check=findByEmailForLogin(email);
-        if(check!=null)
-            throw  new UserExistException();
+        UserDoc check = findByEmailForLogin(email);
+        if (check != null)
+            throw new UserExistException();
         UserDoc userDoc = createUserByLogin(login, password);
         userDoc.setEmailForLogin(email);
         save(userDoc);
@@ -553,7 +554,7 @@ public class UserService {
 
     public UserDoc getUserByVkId(String vkId) {
 
-        if(vkId==null|| vkId.equals("")) return null;
+        if (vkId == null || vkId.equals("")) return null;
         return mongoTemplate.findOne(new Query(Criteria.where("vkId").is(vkId)), UserDoc.class);
     }
 
@@ -564,6 +565,7 @@ public class UserService {
     public UserDoc getUserByGoogleId(String googleId) {
         return mongoTemplate.findOne(new Query(new Criteria("googleId").is(googleId)), UserDoc.class);
     }
+
 
     public UserDoc getUserByLinkedinId(String linkedinId) {
         return mongoTemplate.findOne(new Query(new Criteria("linkedinId").is(linkedinId)), UserDoc.class);

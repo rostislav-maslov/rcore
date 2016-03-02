@@ -54,6 +54,8 @@ public class UserDoc {
     private String passwordForLogin;
     private String emailForLogin;
 
+    private Integer fails=0;
+
     public static String generateHexPassword(String email, String password) {
         return DigestUtils.md5Hex(email + ";" + password + "42");
     }
@@ -296,5 +298,13 @@ public class UserDoc {
 
     public void setSecondName(String secondName) {
         this.secondName = secondName;
+    }
+
+    public Integer getFails() {
+        return fails;
+    }
+
+    public void setFails(Integer fails) {
+        this.fails = fails;
     }
 }

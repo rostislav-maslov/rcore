@@ -10,6 +10,7 @@ public class LinkedinUserInfo {
     private String firstName;
     private String lastName;
     private String accessToken;
+    private String pictureUrl;
 
     public String getId() {
         return id;
@@ -49,5 +50,13 @@ public class LinkedinUserInfo {
 
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public void setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
     }
 }

@@ -2,6 +2,7 @@ package com.ub.core.user.service;
 
 import com.ub.core.user.models.UserDoc;
 import com.ub.core.user.models.UserLoginPasswordRecoveryDoc;
+import com.ub.core.user.models.UserStatusEnum;
 import com.ub.core.user.service.exceptions.UserNotExistException;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,8 +41,8 @@ public class UserLoginPasswordRecoveryService {
 
     public UserLoginPasswordRecoveryDoc findByEmail(String emailForLogin) {
         UserDoc userDoc = userService.findByEmailForLogin(emailForLogin);
-        if(userDoc==null) {
-              return null;
+        if (userDoc == null) {
+            return null;
         }
         Criteria criteria = Criteria.where("userId").is(userDoc.getId()).and("isRecovered").is(false);
         Query query = new Query(criteria);
@@ -49,11 +50,17 @@ public class UserLoginPasswordRecoveryService {
         return userLoginPasswordRecoveryDoc;
     }
 
-    public void recoveryPassword(ObjectId id,String code,String password) throws Exception{
-        UserLoginPasswordRecoveryDoc userLoginPasswordRecoveryDoc=findByCodeAndId(id,code);
-        if(userLoginPasswordRecoveryDoc.getIsRecovered()) throw new Exception();
-        UserDoc userDoc=userService.getUser(userLoginPasswordRecoveryDoc.getUserId());
+    public void recoveryPassword(ObjectId id, String code, String password) throws Exception {
+        UserLoginPasswordRecoveryDoc userLoginPasswordRecoveryDoc = findByCodeAndId(id, code);
+        if (userLoginPasswordRecoveryDoc.getIsRecovered()) throw new Exception();
+        UserDoc userDoc = userService.getUser(userLoginPasswordRecoveryDoc.getUserId());
         userDoc.setPasswordForLoginAsHex(password);
+        if (userDoc.getFails() <= LoginSessionService.LIMIT_FAILS) {
+            userDoc.setFails(0);
+        } else {
+            userDoc.setUserStatus(UserStatusEnum.ACTIVE);
+            userDoc.setFails(0);
+        }
         userService.save(userDoc);
         userLoginPasswordRecoveryDoc.setIsRecovered(true);
         save(userLoginPasswordRecoveryDoc);
