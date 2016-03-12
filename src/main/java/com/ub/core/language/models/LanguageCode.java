@@ -19,6 +19,7 @@ public class LanguageCode {
     public static final LanguageCode Russian = new LanguageCode("Russian", "Русский", "ru", "rus");
 
     public static LanguageCode defaultLanguage = Russian;
+    public static boolean isShowLanguageButton = true; // Показывать ли в админке выбор языка
 
     public static LanguageCode getLangbyCode2(String code2){
         for(LanguageCode languageCode : all()){
