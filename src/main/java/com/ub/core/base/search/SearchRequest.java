@@ -3,7 +3,7 @@ package com.ub.core.base.search;
 public class SearchRequest {
     protected String query = "";
     protected Integer currentPage = 0;
-    protected Integer pageSize = 10;
+    protected Integer pageSize = 30;
 
     public Integer skip(){
         return currentPage * pageSize;

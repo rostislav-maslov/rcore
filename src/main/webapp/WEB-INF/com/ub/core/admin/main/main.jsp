@@ -157,7 +157,7 @@
 
 </div>
 
-
+<jsp:include page="components/goToTop.jsp"/>
 <tiles:insertAttribute name="contentModals" defaultValue=""/>
 
 <tiles:useAttribute id="contentModalsListItems" name="contentModalsList" classname="java.util.List" />
@@ -207,6 +207,7 @@
 <script src="<c:url value="/static/a/js/daterangepicker/daterangepicker.js"/>"></script>
 <script src="<c:url value="/static/a/js/selectboxit/jquery.selectBoxIt.min.js"/>"></script>
 <script src="<c:url value="/static/a/js/toastr.js"/>"></script>
+<script src="<c:url value="/static/a/js/custom.js"/>"></script>
 <tiles:insertAttribute name="footerJs"/>
 </body>
 </html>
