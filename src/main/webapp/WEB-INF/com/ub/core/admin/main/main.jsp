@@ -1,4 +1,5 @@
 <%@ page import="com.ub.core.language.routes.LanguageAdminRoutes" %>
+<%@ page import="com.ub.core.language.models.LanguageCode" %>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles" %>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -99,34 +100,36 @@
             <div class="col-md-6 col-sm-4 clearfix hidden-xs">
 
                 <ul class="list-inline links-list pull-right">
-                    <li class="dropdown language-selector ">
+                    <c:if test="<%=LanguageCode.isShowLanguageButton%>">
+                        <li class="dropdown language-selector ">
 
 
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-close-others="true">
-                            <s:message code="ubcore.admin.langchange.button"/> &nbsp;
-                        </a>
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-close-others="true">
+                                <s:message code="ubcore.admin.langchange.button"/> &nbsp;
+                            </a>
 
-                        <ul class="dropdown-menu pull-right">
-                            <li>
-                                <c:url value="<%= LanguageAdminRoutes.CHANGE%>" var="langChange">
-                                    <c:param name="lang" value="ru"/>
-                                </c:url>
-                                <a href="${langChange}">
-                                    <span>Русский</span>
-                                </a>
-                            </li>
-                            <li>
-                                <c:url value="<%= LanguageAdminRoutes.CHANGE%>" var="langChange">
-                                    <c:param name="lang" value="en"/>
-                                </c:url>
-                                <a href="${langChange}">
-                                    <span>English</span>
-                                </a>
-                            </li>
-                        </ul>
+                            <ul class="dropdown-menu pull-right">
+                                <li>
+                                    <c:url value="<%= LanguageAdminRoutes.CHANGE%>" var="langChange">
+                                        <c:param name="lang" value="ru"/>
+                                    </c:url>
+                                    <a href="${langChange}">
+                                        <span>Русский</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <c:url value="<%= LanguageAdminRoutes.CHANGE%>" var="langChange">
+                                        <c:param name="lang" value="en"/>
+                                    </c:url>
+                                    <a href="${langChange}">
+                                        <span>English</span>
+                                    </a>
+                                </li>
+                            </ul>
 
-                    </li>
-                    <li class="sep"></li>
+                        </li>
+                        <li class="sep"></li>
+                    </c:if>
                     <li>
                         <a href="<c:url value="/admin/logout" />">
                             <s:message code="ubcore.admin.exit"/> <i class="entypo-logout right"></i>
@@ -157,7 +160,7 @@
 
 </div>
 
-
+<jsp:include page="components/goToTop.jsp"/>
 <tiles:insertAttribute name="contentModals" defaultValue=""/>
 
 <tiles:useAttribute id="contentModalsListItems" name="contentModalsList" classname="java.util.List" />
@@ -207,6 +210,7 @@
 <script src="<c:url value="/static/a/js/daterangepicker/daterangepicker.js"/>"></script>
 <script src="<c:url value="/static/a/js/selectboxit/jquery.selectBoxIt.min.js"/>"></script>
 <script src="<c:url value="/static/a/js/toastr.js"/>"></script>
+<script src="<c:url value="/static/a/js/custom.js"/>"></script>
 <tiles:insertAttribute name="footerJs"/>
 </body>
 </html>
