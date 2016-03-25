@@ -77,7 +77,7 @@ public class AuthorizeFbService {
 
     public InputStream getImage(FBUserInfo userInfo) {
         try {
-            URL url = new URL(AuthorizeFbStatic.GRAPH_URL + userInfo.getId() + "/picture");
+            URL url = new URL(AuthorizeFbStatic.GRAPH_URL + userInfo.getId() + "/picture?width=350");
 
             return url.openConnection().getInputStream();
         } catch (Exception e) {

@@ -359,8 +359,17 @@ public class UserService {
         userDoc.setFbId(userInfo.getId());
         userDoc.setUserStatus(UserStatusEnum.ACTIVE);
 
-        userDoc.setFirstName(userInfo.getFirst_name());
-        userDoc.setLastName(userInfo.getLast_name());
+        String name[] = userInfo.getName().split(" ");
+
+        if (name.length > 0) {
+            if (name.length == 1) {
+                userDoc.setFirstName(name[0]);
+            } else if (name.length > 1) {
+                userDoc.setFirstName(name[1]);
+                userDoc.setLastName(name[0]);
+            }
+        }
+
 
         save(userDoc);
         return userDoc;

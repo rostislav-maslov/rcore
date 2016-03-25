@@ -14,6 +14,7 @@ public class FBUserInfo {
     private String timezone;
     private String updated_time;
     private String verified;
+    private String url;
 
     public String getId() {
         return id;
@@ -109,5 +110,13 @@ public class FBUserInfo {
 
     public void setUpdated_time(String updated_time) {
         this.updated_time = updated_time;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
