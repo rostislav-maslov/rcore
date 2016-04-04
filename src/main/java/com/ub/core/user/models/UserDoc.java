@@ -27,6 +27,7 @@ public class UserDoc {
      * отчество
      */
     protected String secondName = "";
+    protected String fullName="";
 
     private String vkId;
     private String vkAccessToken;
@@ -54,7 +55,7 @@ public class UserDoc {
     private String passwordForLogin;
     private String emailForLogin;
 
-    private Integer fails=0;
+    private Integer fails = 0;
 
     public static String generateHexPassword(String email, String password) {
         return DigestUtils.md5Hex(email + ";" + password + "42");
@@ -306,5 +307,13 @@ public class UserDoc {
 
     public void setFails(Integer fails) {
         this.fails = fails;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 }
