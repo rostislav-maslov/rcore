@@ -1,10 +1,13 @@
 package com.ub.core.user.service;
 
 import com.ub.core.security.service.ASessionConfigService;
+import com.ub.core.security.service.exceptions.UserBlockedException;
 import com.ub.core.security.service.exceptions.UserNotAutorizedException;
 import com.ub.core.security.session.SessionModel;
 import com.ub.core.security.session.SessionType;
 import com.ub.core.user.models.UserDoc;
+import com.ub.core.user.models.UserStatusEnum;
+import com.ub.core.user.service.exceptions.UserPasswordErrorException;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +20,16 @@ public class EmailSessionService extends ASessionConfigService {
         if (userDoc == null || userDoc.getPassword() == null) throw new UserNotAutorizedException();
         if (!userDoc.getPassword().equals(UserDoc.generateHexPassword(email, password)))
             throw new UserNotAutorizedException();
+        return authorizeUserDoc(userDoc);
+    }
+
+    public UserDoc autorize(String email, String password, String lang) throws UserNotAutorizedException, UserPasswordErrorException, UserBlockedException {
+        UserDoc userDoc = userService.getUserByEmail(email);
+        if (userDoc == null || userDoc.getPassword() == null) throw new UserNotAutorizedException();
+        if (!userDoc.getPassword().equals(UserDoc.generateHexPassword(email, password)))
+            throw new UserPasswordErrorException();
+        if (userDoc.getUserStatus().equals(UserStatusEnum.BLOCK))
+            throw new UserBlockedException();
         return authorizeUserDoc(userDoc);
     }
 
