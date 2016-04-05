@@ -318,6 +318,17 @@ public class UserService {
         return userEmailVerifiedService.create(userEmailVerifiedDoc);
     }
 
+    public UserEmailVerifiedDoc createUserByEmailWithVerified(String email, String password, String fullName, ObjectId firstId, ObjectId secondId) throws UserExistException {
+        UserEmailVerifiedDoc userEmailVerifiedDoc = new UserEmailVerifiedDoc();
+        userEmailVerifiedDoc.setEmail(email);
+        userEmailVerifiedDoc.setPasswordAsHex(password);
+        userEmailVerifiedDoc.setFullName(fullName);
+        userEmailVerifiedDoc.getCustomId().put("firstId", firstId);
+        userEmailVerifiedDoc.getCustomId().put("secondId", secondId);
+
+        return userEmailVerifiedService.create(userEmailVerifiedDoc);
+    }
+
     public UserEmailVerifiedDoc createUserByEmailWithVerified(String email, String password, String lastName,
                                                               String firstName) throws UserExistException {
 
