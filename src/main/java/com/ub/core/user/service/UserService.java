@@ -207,7 +207,7 @@ public class UserService {
         userDoc.setLastName(userEmailVerifiedDoc.getLastName());
         userDoc.setFirstName(userEmailVerifiedDoc.getFirstName());
         userDoc.setSecondName(userEmailVerifiedDoc.getSecondName());
-
+        userDoc.setFullName(userEmailVerifiedDoc.getFullName());
 
         userDoc = save(userDoc);
         emailSessionService.authorizeUserDoc(userDoc);
@@ -306,6 +306,26 @@ public class UserService {
         userEmailVerifiedDoc.setLastName(lastName);
         userEmailVerifiedDoc.setFirstName(firstName);
         userEmailVerifiedDoc.setSecondName(secondName);
+        return userEmailVerifiedService.create(userEmailVerifiedDoc);
+    }
+
+    public UserEmailVerifiedDoc createUserByEmailWithVerified(String email, String password, String fullName) throws UserExistException {
+        UserEmailVerifiedDoc userEmailVerifiedDoc = new UserEmailVerifiedDoc();
+        userEmailVerifiedDoc.setEmail(email);
+        userEmailVerifiedDoc.setPasswordAsHex(password);
+        userEmailVerifiedDoc.setFullName(fullName);
+
+        return userEmailVerifiedService.create(userEmailVerifiedDoc);
+    }
+
+    public UserEmailVerifiedDoc createUserByEmailWithVerified(String email, String password, String fullName, ObjectId firstId, ObjectId secondId) throws UserExistException {
+        UserEmailVerifiedDoc userEmailVerifiedDoc = new UserEmailVerifiedDoc();
+        userEmailVerifiedDoc.setEmail(email);
+        userEmailVerifiedDoc.setPasswordAsHex(password);
+        userEmailVerifiedDoc.setFullName(fullName);
+        userEmailVerifiedDoc.getCustomId().put("firstId", firstId);
+        userEmailVerifiedDoc.getCustomId().put("secondId", secondId);
+
         return userEmailVerifiedService.create(userEmailVerifiedDoc);
     }
 

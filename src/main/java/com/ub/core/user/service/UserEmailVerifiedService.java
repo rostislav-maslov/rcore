@@ -18,31 +18,35 @@ public class UserEmailVerifiedService {
     @Autowired private UserService userService;
     @Autowired private MongoTemplate mongoTemplate;
 
-    public UserEmailVerifiedDoc findByEmail(String email){
+    public UserEmailVerifiedDoc findByEmail(String email) {
         return mongoTemplate.findOne(new Query(Criteria.where("email").is(email)), UserEmailVerifiedDoc.class);
     }
 
-    public UserEmailVerifiedDoc save(UserEmailVerifiedDoc userEmailVerifiedDoc) throws UserExistException{
-        if(userEmailVerifiedDoc.getId() == null){
-            if(findByEmail(userEmailVerifiedDoc.getEmail())!=null){
+    public UserEmailVerifiedDoc findByEmailAndCode(String email, String code) {
+        return mongoTemplate.findOne(new Query(Criteria.where("email").is(email).and("code").is(code)), UserEmailVerifiedDoc.class);
+    }
+
+    public UserEmailVerifiedDoc save(UserEmailVerifiedDoc userEmailVerifiedDoc) throws UserExistException {
+        if (userEmailVerifiedDoc.getId() == null) {
+            if (findByEmail(userEmailVerifiedDoc.getEmail()) != null) {
                 throw new UserExistException();
             }
         }
-        if(userEmailVerifiedDoc.getCode() == null || userEmailVerifiedDoc.getCode().equals("")){
+        if (userEmailVerifiedDoc.getCode() == null || userEmailVerifiedDoc.getCode().equals("")) {
             userEmailVerifiedDoc.setCode(new ObjectId().toString());
         }
         mongoTemplate.save(userEmailVerifiedDoc);
         return userEmailVerifiedDoc;
     }
 
-    public UserEmailVerifiedDoc create(UserEmailVerifiedDoc userEmailVerifiedDoc) throws UserExistException{
+    public UserEmailVerifiedDoc create(UserEmailVerifiedDoc userEmailVerifiedDoc) throws UserExistException {
         UserDoc userDoc = userService.findByEmail(userEmailVerifiedDoc.getEmail());
-        if(userDoc != null) throw new UserExistException();
+        if (userDoc != null) throw new UserExistException();
         UserEmailVerifiedDoc oldDoc = findByEmail(userEmailVerifiedDoc.getEmail());
-        if(oldDoc == null ){
+        if (oldDoc == null) {
             return save(userEmailVerifiedDoc);
         }
-        if(oldDoc.getIsVerified()){
+        if (oldDoc.getIsVerified()) {
             throw new UserExistException();
         }
         oldDoc.setPassword(userEmailVerifiedDoc.getPassword());
@@ -50,18 +54,18 @@ public class UserEmailVerifiedService {
         return oldDoc;
     }
 
-    public UserEmailVerifiedDoc verified(String email, String code) throws UserExistException, UserVerifiedLimitException, UserVerifiedErrorCodeException{
+    public UserEmailVerifiedDoc verified(String email, String code) throws UserExistException, UserVerifiedLimitException, UserVerifiedErrorCodeException {
         UserEmailVerifiedDoc userEmailVerifiedDoc = findByEmail(email);
-        if(userEmailVerifiedDoc == null) throw new UserExistException();
+        if (userEmailVerifiedDoc == null) throw new UserExistException();
 
-        if(userEmailVerifiedDoc.getIsVerified()) throw new UserExistException();
+        if (userEmailVerifiedDoc.getIsVerified()) throw new UserExistException();
 
-        if(userEmailVerifiedDoc.getNumberOfRetries() > 10) throw new UserVerifiedLimitException();
+        if (userEmailVerifiedDoc.getNumberOfRetries() > 10) throw new UserVerifiedLimitException();
 
         userEmailVerifiedDoc.setNumberOfRetries(userEmailVerifiedDoc.getNumberOfRetries() + 1);
         userEmailVerifiedDoc = save(userEmailVerifiedDoc);
 
-        if(userEmailVerifiedDoc.getCode().equals(code) == false){
+        if (userEmailVerifiedDoc.getCode().equals(code) == false) {
             throw new UserVerifiedErrorCodeException();
         }
 
