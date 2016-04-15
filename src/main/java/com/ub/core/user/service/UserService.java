@@ -510,6 +510,10 @@ public class UserService {
         return Lists.newArrayList(mongoTemplate.findAll(UserDoc.class));
     }
 
+    public Long countAll() {
+        return mongoTemplate.count(new Query(), UserDoc.class);
+    }
+
     /**
      * Удалить пользователя
      *
