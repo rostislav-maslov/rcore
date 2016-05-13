@@ -108,6 +108,28 @@ public class UserService {
         return mongoTemplate.findOne(new Query(Criteria.where("emailForLogin").is(email)), UserDoc.class);
     }
 
+    public UserDoc findByAccessToken(String token) {
+        UserDoc userDoc = mongoTemplate.findOne(new Query(Criteria.where("accessTokens.token").is(token)), UserDoc.class);
+        if(userDoc == null) return null;
+
+        if( userDoc.checkAccessToken(token) ){
+            return userDoc;
+        }
+
+        return null;
+    }
+
+    public UserDoc findByRefreshToken(String token) {
+        UserDoc userDoc = mongoTemplate.findOne(new Query(Criteria.where("refreshTokens.token").is(token)), UserDoc.class);
+        if(userDoc == null) return null;
+
+        if( userDoc.checkRefreshToken(token) ){
+            return userDoc;
+        }
+
+        return null;
+    }
+
     public UserDoc save(UserDoc userDoc) throws UserExistException {
         if (userDoc.getId() == null && userDoc.getEmail() != null) {
             UserDoc old = findByEmail(userDoc.getEmail());
