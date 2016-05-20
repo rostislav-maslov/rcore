@@ -36,6 +36,22 @@ public class TokenSessionService {
         return getToken(userDoc);
     }
 
+    public UserToken generateNewAccessTokenByVk(String vkId) throws UserNotAutorizedException {
+        UserDoc userDoc = userService.getUserByVkId(vkId);
+        if (userDoc == null || userDoc.getUserStatus().equals(UserStatusEnum.BLOCK))
+            throw new UserNotAutorizedException();
+
+        return getToken(userDoc);
+    }
+
+    public UserToken generateNewAccessTokenByFb(String fbId) throws UserNotAutorizedException {
+        UserDoc userDoc = userService.getUserByFbId(fbId);
+        if (userDoc == null || userDoc.getUserStatus().equals(UserStatusEnum.BLOCK))
+            throw new UserNotAutorizedException();
+
+        return getToken(userDoc);
+    }
+
     public UserToken generateNewAccessTokenByRefreshToken(String refreshToken) throws UserNotAutorizedException {
         UserDoc userDoc = getUserFromRefreshToken(refreshToken);
         return getToken(userDoc);
