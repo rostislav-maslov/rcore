@@ -5,6 +5,7 @@ import com.ub.core.base.role.Role;
 import com.ub.core.role.models.RoleDoc;
 import com.ub.core.role.service.RoleService;
 import com.ub.core.security.service.AutorizationService;
+import com.ub.core.security.service.exceptions.UserNotAutorizedException;
 import com.ub.core.user.models.UserDoc;
 import com.ub.core.user.models.UserEmailPasswordRecoverDoc;
 import com.ub.core.user.models.UserEmailVerifiedDoc;
@@ -17,6 +18,7 @@ import com.ub.core.user.views.AddEditUserView;
 import com.ub.core.user.views.modalUserSearch.all.SearchUserAdminRequest;
 import com.ub.core.user.views.modalUserSearch.all.SearchUserAdminResponse;
 import com.ub.facebook.response.FBUserInfo;
+import com.ub.facebook.services.AuthorizeFbService;
 import com.ub.google.response.GoogleUserInfo;
 import com.ub.linkedin.response.LinkedinUserInfo;
 import com.ub.vk.response.AccessTokenResponse;
@@ -48,6 +50,7 @@ public class UserService {
     @Autowired private UserEmailVerifiedService userEmailVerifiedService;
     @Autowired private UserEmailPasswordRecoveryService userEmailPasswordRecoveryService;
     @Autowired private AutorizationService autorizationService;
+    @Autowired private AuthorizeFbService authorizeFbService;
     @Autowired private EmailSessionService emailSessionService;
 
     public static void addUserEvent(IUserEvent iUserEvent) {
@@ -110,9 +113,9 @@ public class UserService {
 
     public UserDoc findByAccessToken(String token) {
         UserDoc userDoc = mongoTemplate.findOne(new Query(Criteria.where("accessTokens.token").is(token)), UserDoc.class);
-        if(userDoc == null) return null;
+        if (userDoc == null) return null;
 
-        if( userDoc.checkAccessToken(token) ){
+        if (userDoc.checkAccessToken(token)) {
             return userDoc;
         }
 
@@ -121,9 +124,9 @@ public class UserService {
 
     public UserDoc findByRefreshToken(String token) {
         UserDoc userDoc = mongoTemplate.findOne(new Query(Criteria.where("refreshTokens.token").is(token)), UserDoc.class);
-        if(userDoc == null) return null;
+        if (userDoc == null) return null;
 
-        if( userDoc.checkRefreshToken(token) ){
+        if (userDoc.checkRefreshToken(token)) {
             return userDoc;
         }
 
@@ -387,6 +390,7 @@ public class UserService {
         save(userDoc);
         return userDoc;
     }
+
 
     public UserDoc createUserByFb(FBUserInfo userInfo) throws UserExistException {
         UserDoc userDoc = new UserDoc();
@@ -692,5 +696,68 @@ public class UserService {
         userEmailPasswordRecoverDoc.setIsRecovered(true);
         userEmailPasswordRecoveryService.save(userEmailPasswordRecoverDoc);
         return true;
+    }
+
+    public UserDoc linkFacebookAccount(UserDoc userDoc, String accessToken) throws UserExistException, UserNotAutorizedException {
+        FBUserInfo userInfo = authorizeFbService.get(accessToken);
+
+        if(userInfo == null){
+            throw new UserNotAutorizedException();
+        }
+
+        UserDoc check = getUserByFbId(userInfo.getId());
+        if (check != null) {
+            throw new UserExistException();
+        }
+        if (userDoc.getFbAccessToken() != null || userDoc.getFbId() != null) {
+            throw new UserExistException();
+        }
+
+        userDoc.setFbAccessToken(accessToken);
+        userDoc.setFbEmail(userInfo.getEmail());
+        userDoc.setFbId(userInfo.getId());
+        userDoc.setUserStatus(UserStatusEnum.ACTIVE);
+
+        String name[] = userInfo.getName().split(" ");
+
+        if (name.length > 0) {
+            if (name.length == 1) {
+                userDoc.setFirstName(name[0]);
+            } else if (name.length > 1) {
+                userDoc.setFirstName(name[1]);
+                userDoc.setLastName(name[0]);
+            }
+        }
+        save(userDoc);
+        return userDoc;
+    }
+
+    public UserDoc linkVkAccount(UserDoc userDoc, String accessToken, String email) throws UserExistException, UserNotAutorizedException {
+
+        UsersGetResponse usersGetResponse = userVkService.me(accessToken);
+        if (usersGetResponse == null || usersGetResponse.getResponse() == null || usersGetResponse.getResponse().size() != 1) {
+            throw new UserNotAutorizedException();
+        }
+
+        UserDoc check = getUserByVkId(usersGetResponse.getResponse().get(0).getUid());
+        if (check != null) {
+            throw new UserExistException();
+        }
+
+        if (userDoc.getVkId() != null) {
+            throw new UserExistException();
+        }
+
+        userDoc.setVkAccessToken(accessToken);
+        userDoc.setVkEmail(email);
+        userDoc.setVkId(usersGetResponse.getResponse().get(0).getUid());
+        userDoc.setUserStatus(UserStatusEnum.ACTIVE);
+
+        UserInfo userInfo = usersGetResponse.getResponse().get(0);
+        userDoc.setFirstName(userInfo.getFirst_name());
+        userDoc.setLastName(userInfo.getLast_name());
+
+        save(userDoc);
+        return userDoc;
     }
 }
