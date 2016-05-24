@@ -7,7 +7,9 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Document
@@ -57,8 +59,73 @@ public class UserDoc {
 
     private Integer fails = 0;
 
+    private List<UserToken> accessTokens = new ArrayList<UserToken>();
+    private List<UserToken> refreshTokens = new ArrayList<UserToken>();
+
     public static String generateHexPassword(String email, String password) {
         return DigestUtils.md5Hex(email + ";" + password + "42");
+    }
+
+    public static UserToken generateNewToken(UserDoc userDoc){
+        UserToken userToken = new UserToken();
+        userToken.setToken(new ObjectId().toString() + userDoc.getId() + new ObjectId().toString());
+        return userToken;
+    }
+
+    public Boolean checkAccessToken(String token){
+        for(UserToken userToken : this.accessTokens){
+            if(userToken.getToken().equals(token)){
+                return userToken.isActive();
+            }
+        }
+
+        return false;
+    }
+
+    public Boolean checkRefreshToken(String token){
+        for(UserToken userToken : this.refreshTokens){
+            if(userToken.getToken().equals(token)){
+                return userToken.isActive();
+            }
+        }
+
+        return false;
+    }
+
+    public UserToken getUserTokenByString(String token){
+        for(UserToken userToken : this.accessTokens){
+            if(userToken.getToken().equals(token) && userToken.isActive()){
+                return  userToken;
+            }
+        }
+
+        return null;
+    }
+
+    public UserToken getActiveAccessToken(){
+        for(UserToken userToken : this.accessTokens){
+            if(userToken.isActive()){
+                return userToken;
+            }
+        }
+        return null;
+    }
+
+    public UserToken getActiveRefreshToken(){
+        for(UserToken userToken : this.refreshTokens){
+            if(userToken.isActive()){
+                return userToken;
+            }
+        }
+        return null;
+    }
+
+    public void addAccessToken(UserToken userToken){
+        this.accessTokens.add(userToken);
+    }
+
+    public void addRefreshToken(UserToken userToken){
+        this.refreshTokens.add(userToken);
     }
 
     public void setPasswordAsHex(String notHexPassword) {
@@ -315,5 +382,21 @@ public class UserDoc {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public List<UserToken> getAccessTokens() {
+        return accessTokens;
+    }
+
+    public void setAccessTokens(List<UserToken> accessTokens) {
+        this.accessTokens = accessTokens;
+    }
+
+    public List<UserToken> getRefreshTokens() {
+        return refreshTokens;
+    }
+
+    public void setRefreshTokens(List<UserToken> refreshTokens) {
+        this.refreshTokens = refreshTokens;
     }
 }

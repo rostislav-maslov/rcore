@@ -30,13 +30,27 @@ public class UserVkService {
         }
         httpsUtils.addParam(UserVkStatic.P_USER_IDS, stringBuffer.toString());
         try {
-            String result = httpsUtils.sendGet();
             UsersGetResponse usersGetResponse = new ObjectMapper().readValue(httpsUtils.sendGet(), UsersGetResponse.class);
             return usersGetResponse;
         } catch (Exception e) {
             e.printStackTrace();
         }
         return new UsersGetResponse();
+    }
+
+    public UsersGetResponse me(String accessToken) {
+        HttpsUtils httpsUtils = new HttpsUtils(UserVkStatic.URL_USER_GET);
+
+        httpsUtils.addParam(UserVkStatic.P_FIELDS, UserVkStatic.V_FIELDS);
+        httpsUtils.addParam(UserVkStatic.P_NAME_CASE, accessToken);
+
+        try {
+            UsersGetResponse usersGetResponse = new ObjectMapper().readValue(httpsUtils.sendGet(), UsersGetResponse.class);
+            return usersGetResponse;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

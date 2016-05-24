@@ -156,7 +156,6 @@ public class AutorizationService {
         return ASessionConfigService.getSession();
     }
 
-
     public void logout() {
         ASessionConfigService.logout();
     }

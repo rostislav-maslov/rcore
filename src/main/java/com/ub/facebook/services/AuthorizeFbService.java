@@ -44,22 +44,6 @@ public class AuthorizeFbService {
         }
     }
 
-    public void getUserInfo(String accessToken) {
-        HttpsUtils httpsUtils = new HttpsUtils(AuthorizeFbStatic.ME_URL);
-
-        httpsUtils.addParam(AuthorizeFbStatic.P_ACCESS_TOKEN, accessToken);
-        try {
-            String response = httpsUtils.sendGet();
-            FBUserInfo userInfo = new ObjectMapper().readValue(response, FBUserInfo.class);
-            userInfo.setAccessToken(accessToken);
-
-            fbSessionService.authorize(userInfo);
-        } catch (Exception e) {
-            e.printStackTrace();
-            // TODO: продумать эксепшн
-        }
-    }
-
     public FBUserInfo get(String accessToken) {
         HttpsUtils httpsUtils = new HttpsUtils(AuthorizeFbStatic.ME_URL);
 
