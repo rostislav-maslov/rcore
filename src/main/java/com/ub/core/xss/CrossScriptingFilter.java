@@ -28,7 +28,7 @@ public class CrossScriptingFilter implements Filter {
             throws IOException, ServletException {
         String path = ((HttpServletRequest) request).getRequestURI();
 
-        if (path.startsWith(pathToBeIgnored)) {
+        if (pathToBeIgnored != null && path.startsWith(pathToBeIgnored)) {
             request.getRequestDispatcher(path).forward(request, response);
         } else {
             //logger.info("Inlter CrossScriptingFilter  ...............");
