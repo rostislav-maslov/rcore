@@ -13,9 +13,11 @@ import org.apache.log4j.Logger;
 public class CrossScriptingFilter implements Filter {
     //private static Logger logger = Logger.getLogger(CrossScriptingFilter.class);
     private FilterConfig filterConfig;
+    private String pathToBeIgnored;
 
     public void init(FilterConfig filterConfig) throws ServletException {
         this.filterConfig = filterConfig;
+        this.pathToBeIgnored = filterConfig.getInitParameter("pathToBeIgnored");
     }
 
     public void destroy() {
@@ -24,9 +26,15 @@ public class CrossScriptingFilter implements Filter {
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        //logger.info("Inlter CrossScriptingFilter  ...............");
-        chain.doFilter(new RequestWrapper((HttpServletRequest) request), response);
-        //logger.info("Outlter CrossScriptingFilter ...............");
+        String path = ((HttpServletRequest) request).getRequestURI();
+
+        if (path.startsWith(pathToBeIgnored)) {
+            request.getRequestDispatcher(path).forward(request, response);
+        } else {
+            //logger.info("Inlter CrossScriptingFilter  ...............");
+            chain.doFilter(new RequestWrapper((HttpServletRequest) request), response);
+            //logger.info("Outlter CrossScriptingFilter ...............");
+        }
     }
 
 }
