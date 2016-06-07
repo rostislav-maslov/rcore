@@ -5,6 +5,11 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 public class UrlUtils {
+
+    public static String urlFromString(String str){
+        return StringUtils.cyrillicToLatin(str).replaceAll(" ", "-").replaceAll(" ", "-").replaceAll(" ", "-").toLowerCase();
+    }
+
     public static String longToBase64(Long aLong) {
         return Base64.encodeBase64URLSafeString(aLong.toString().getBytes());
     }
