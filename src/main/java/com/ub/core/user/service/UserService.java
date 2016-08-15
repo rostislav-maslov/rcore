@@ -664,9 +664,45 @@ public class UserService {
         Criteria criteria = new Criteria();
         criteria = criteria.orOperator(
                 Criteria.where("lastName").regex(searchUserAdminRequest.getQuery(), "i"),
-                Criteria.where("firstName").regex(searchUserAdminRequest.getQuery(), "i")
+                Criteria.where("firstName").regex(searchUserAdminRequest.getQuery(), "i"),
+                Criteria.where("email").regex(searchUserAdminRequest.getQuery(), "i")
         );
 
+
+        Query query = new Query(criteria);
+        Long count = mongoTemplate.count(query, UserDoc.class);
+        query = query.with(pageable);
+
+        List<UserDoc> result = mongoTemplate.find(query, UserDoc.class);
+        SearchUserAdminResponse searchUserAdminResponse = new SearchUserAdminResponse(
+                searchUserAdminRequest.getCurrentPage(),
+                searchUserAdminRequest.getPageSize(),
+                result);
+        searchUserAdminResponse.setAll(count);
+        searchUserAdminResponse.setQuery(searchUserAdminRequest.getQuery());
+        return searchUserAdminResponse;
+    }
+
+    /**
+     * @param searchUserAdminRequest - поисковый реквест
+     * @param userStatusEnum - статус пользователя (активный\заблокированный)
+     * @return SearchUserAdminResponse
+     */
+    public SearchUserAdminResponse findAll(SearchUserAdminRequest searchUserAdminRequest,
+                                           UserStatusEnum userStatusEnum) {
+
+        Sort sort = new Sort(Sort.Direction.DESC, "id");
+        Pageable pageable = new PageRequest(
+                searchUserAdminRequest.getCurrentPage(),
+                searchUserAdminRequest.getPageSize(),
+                sort);
+
+        Criteria criteria = new Criteria();
+        criteria = criteria.orOperator(
+                Criteria.where("lastName").regex(searchUserAdminRequest.getQuery(), "i"),
+                Criteria.where("firstName").regex(searchUserAdminRequest.getQuery(), "i"),
+                Criteria.where("email").regex(searchUserAdminRequest.getQuery(), "i")
+        ).andOperator(Criteria.where("userStatus").is(userStatusEnum));
 
         Query query = new Query(criteria);
         Long count = mongoTemplate.count(query, UserDoc.class);
