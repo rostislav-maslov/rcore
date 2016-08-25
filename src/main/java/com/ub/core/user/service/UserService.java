@@ -761,7 +761,7 @@ public class UserService {
         if (userDoc.getUserStatus().equals(UserStatusEnum.BLOCK)) {
             throw new UserBlockedException();
         }
-        if(userDoc.getFails() >= LIMIT_FAILS && (userDoc.getLastFailDate().getTime() - new Date().getTime()) < BLOCK_TIMEOUT) {
+        if(userDoc.getFails() >= LIMIT_FAILS && (userDoc.getLastFailDate().getTime() - new Date().getTime())/1000 < BLOCK_TIMEOUT) {
             throw new UserBlockedException();
         }
         if(userDoc.getFails() >= LIMIT_FAILS) {
