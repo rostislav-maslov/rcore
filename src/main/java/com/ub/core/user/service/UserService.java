@@ -5,15 +5,13 @@ import com.ub.core.base.role.Role;
 import com.ub.core.role.models.RoleDoc;
 import com.ub.core.role.service.RoleService;
 import com.ub.core.security.service.AutorizationService;
+import com.ub.core.security.service.exceptions.UserBlockedException;
 import com.ub.core.security.service.exceptions.UserNotAutorizedException;
 import com.ub.core.user.models.UserDoc;
 import com.ub.core.user.models.UserEmailPasswordRecoverDoc;
 import com.ub.core.user.models.UserEmailVerifiedDoc;
 import com.ub.core.user.models.UserStatusEnum;
-import com.ub.core.user.service.exceptions.UserExistException;
-import com.ub.core.user.service.exceptions.UserNotExistException;
-import com.ub.core.user.service.exceptions.UserVerifiedErrorCodeException;
-import com.ub.core.user.service.exceptions.UserVerifiedLimitException;
+import com.ub.core.user.service.exceptions.*;
 import com.ub.core.user.views.AddEditUserView;
 import com.ub.core.user.views.modalUserSearch.all.SearchUserAdminRequest;
 import com.ub.core.user.views.modalUserSearch.all.SearchUserAdminResponse;
@@ -52,6 +50,9 @@ public class UserService {
     @Autowired private AutorizationService autorizationService;
     @Autowired private AuthorizeFbService authorizeFbService;
     @Autowired private EmailSessionService emailSessionService;
+
+    public static final Integer LIMIT_FAILS = 10;
+    public static final Long BLOCK_TIMEOUT = 60 * 10L; // В секундах
 
     public static void addUserEvent(IUserEvent iUserEvent) {
         userEvents.put(iUserEvent.getClass().getCanonicalName(), iUserEvent);
@@ -716,6 +717,59 @@ public class UserService {
         searchUserAdminResponse.setAll(count);
         searchUserAdminResponse.setQuery(searchUserAdminRequest.getQuery());
         return searchUserAdminResponse;
+    }
+
+    public UserDoc validateUserByEmail(String email, String hashedPassword) throws UserNotAutorizedException, UserPasswordErrorException, UserBlockedException {
+        UserDoc userDoc = findByEmail(email);
+
+        if (userDoc == null || userDoc.getPassword() == null) {
+            throw new UserNotAutorizedException();
+        }
+        if (!userDoc.getPassword().equals(hashedPassword)) {
+            userDoc.setLastFailDate(new Date());
+            userDoc.setFails(userDoc.getFails() + 1);
+            mongoTemplate.save(userDoc);
+            throw new UserPasswordErrorException();
+        }
+        if (userDoc.getUserStatus().equals(UserStatusEnum.BLOCK)) {
+            throw new UserBlockedException();
+        }
+        if(userDoc.getFails() >= LIMIT_FAILS && (new Date().getTime() - userDoc.getLastFailDate().getTime())/1000 < BLOCK_TIMEOUT) {
+            throw new UserBlockedException();
+        }
+        if(userDoc.getFails() >= LIMIT_FAILS) {
+            userDoc.setFails(0);
+            mongoTemplate.save(userDoc);
+        }
+
+        return userDoc;
+    }
+
+
+    public UserDoc validateUserByLogin(String login, String hashedPassword) throws UserNotAutorizedException, UserPasswordErrorException, UserBlockedException {
+        UserDoc userDoc = findByLogin(login);
+
+        if (userDoc == null || userDoc.getPassword() == null) {
+            throw new UserNotAutorizedException();
+        }
+        if (!userDoc.getPasswordForLogin().equals(hashedPassword)) {
+            userDoc.setLastFailDate(new Date());
+            userDoc.setFails(userDoc.getFails() + 1);
+            mongoTemplate.save(userDoc);
+            throw new UserPasswordErrorException();
+        }
+        if (userDoc.getUserStatus().equals(UserStatusEnum.BLOCK)) {
+            throw new UserBlockedException();
+        }
+        if(userDoc.getFails() >= LIMIT_FAILS && (userDoc.getLastFailDate().getTime() - new Date().getTime()) < BLOCK_TIMEOUT) {
+            throw new UserBlockedException();
+        }
+        if(userDoc.getFails() >= LIMIT_FAILS) {
+            userDoc.setFails(0);
+            mongoTemplate.save(userDoc);
+        }
+
+        return userDoc;
     }
 
     public UserEmailPasswordRecoverDoc createPasswordRecover(String email) throws UserNotExistException {

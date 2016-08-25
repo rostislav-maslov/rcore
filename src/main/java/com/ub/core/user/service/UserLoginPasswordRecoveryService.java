@@ -55,12 +55,9 @@ public class UserLoginPasswordRecoveryService {
         if (userLoginPasswordRecoveryDoc.getIsRecovered()) throw new Exception();
         UserDoc userDoc = userService.getUser(userLoginPasswordRecoveryDoc.getUserId());
         userDoc.setPasswordForLoginAsHex(password);
-        if (userDoc.getFails() <= LoginSessionService.LIMIT_FAILS) {
-            userDoc.setFails(0);
-        } else {
-            userDoc.setUserStatus(UserStatusEnum.ACTIVE);
-            userDoc.setFails(0);
-        }
+        userDoc.setUserStatus(UserStatusEnum.ACTIVE);
+        userDoc.setFails(0);
+
         userService.save(userDoc);
         userLoginPasswordRecoveryDoc.setIsRecovered(true);
         save(userLoginPasswordRecoveryDoc);

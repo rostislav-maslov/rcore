@@ -7,10 +7,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Document
 public class UserDoc {
@@ -58,6 +55,7 @@ public class UserDoc {
     private String emailForLogin;
 
     private Integer fails = 0;
+    private Date lastFailDate = new Date();
 
     private List<UserToken> accessTokens = new ArrayList<UserToken>();
     private List<UserToken> refreshTokens = new ArrayList<UserToken>();
@@ -398,5 +396,13 @@ public class UserDoc {
 
     public void setRefreshTokens(List<UserToken> refreshTokens) {
         this.refreshTokens = refreshTokens;
+    }
+
+    public Date getLastFailDate() {
+        return lastFailDate;
+    }
+
+    public void setLastFailDate(Date lastFailDate) {
+        this.lastFailDate = lastFailDate;
     }
 }
