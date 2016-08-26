@@ -727,7 +727,9 @@ public class UserService {
         }
         if (!userDoc.getPassword().equals(hashedPassword)) {
             userDoc.setLastFailDate(new Date());
-            userDoc.setFails(userDoc.getFails() + 1);
+            if(userDoc.getFails() < LIMIT_FAILS) {
+                userDoc.setFails(userDoc.getFails() + 1);
+            }
             mongoTemplate.save(userDoc);
             throw new UserPasswordErrorException();
         }
@@ -754,7 +756,9 @@ public class UserService {
         }
         if (!userDoc.getPasswordForLogin().equals(hashedPassword)) {
             userDoc.setLastFailDate(new Date());
-            userDoc.setFails(userDoc.getFails() + 1);
+            if(userDoc.getFails() < LIMIT_FAILS) {
+                userDoc.setFails(userDoc.getFails() + 1);
+            }
             mongoTemplate.save(userDoc);
             throw new UserPasswordErrorException();
         }
