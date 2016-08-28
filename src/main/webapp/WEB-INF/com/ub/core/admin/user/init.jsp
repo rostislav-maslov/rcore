@@ -7,9 +7,15 @@
 <div class="row">
     <div class="col-md-12">
         <form action="<%= UserAdminRoutes.INIT_USER%>" method="POST">
-            <input name="email" type="email" class="form-control"/><br/>
-            <input name="password" type="password" class="form-control"/><br/>
-            <button class="btn btn-success">создать пользователя</button>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input name="email" type="email" id="email" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input name="password" type="password" id="password" class="form-control"/>
+            </div>
+            <button class="btn btn-success">Создать пользователя</button>
         </form>
     </div>
 </div>

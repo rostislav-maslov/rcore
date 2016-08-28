@@ -8,7 +8,7 @@
     <div class="col-md-12">
         <div class="widget widget-green" id="widget_profit_chart">
             <div class="widget-title">
-                <h3><i class="icon-tasks"></i> Вы собираетесь удалить изображение! </h3>
+                <h3><i class="fa fa-exclamation" aria-hidden="true"></i> Вы собираетесь удалить изображение! </h3>
             </div>
             <div class="widget-content">
 

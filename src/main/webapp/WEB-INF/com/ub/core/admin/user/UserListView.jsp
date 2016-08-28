@@ -22,7 +22,7 @@
 
 <div class="widget widget-blue">
     <div class="widget-title">
-        <h3><i class="icon-table"></i> Пользователи</h3>
+        <h3><i class="fa fa-table" aria-hidden="true"></i> Пользователи</h3>
     </div>
     <div class="widget-content">
         <p>Всего - ${searchUserAdminResponse.all}</p>
@@ -75,18 +75,20 @@
                             <c:url value="/admin/user/edit" var="editUsr">
                                 <c:param name="id" value="${user.id}"/>
                             </c:url>
-                            <a href="${editUsr}" class="btn btn-default btn-xs">Редактировать</a>
+                            <a href="${editUsr}" class="btn btn-default btn-xs">
+                                <i class="fa fa-pencil" aria-hidden="true"></i> Редактировать
+                            </a>
                             <c:url value="/admin/user/delete" var="deleteUsr">
                                 <c:param name="id" value="${user.id}"/>
                             </c:url>
                             <a href="${deleteUsr}" class="btn btn-xs btn-danger">
-                                <i class="icon-remove">Удалить</i>
+                                <i class="fa fa-times-circle" aria-hidden="true"></i> Удалить
                             </a>
 
                             <form action="<%= UserAdminRoutes.BLOCK%>" method="POST">
                                 <input type="hidden" name="id" value="${user.id}"/>
                                 <button type="submit" class="btn btn-default btn-xs">
-                                    Заблокировать
+                                    <i class="fa fa-ban" aria-hidden="true"></i> Заблокировать
                                 </button>
                             </form>
 

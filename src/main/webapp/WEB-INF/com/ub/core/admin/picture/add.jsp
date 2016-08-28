@@ -8,7 +8,7 @@
     <div class="col-md-12">
         <div class="widget widget-green" id="widget_profit_chart">
             <div class="widget-title">
-                <h3><i class="icon-tasks"></i> Загрузка файла на сервер</h3>
+                <h3><i class="fa fa-tasks"></i> Загрузка файла на сервер</h3>
             </div>
             <div class="widget-content">
                 <form method="POST" enctype="multipart/form-data" action="<%= PicturesAdminRoutes.ADD%>">
