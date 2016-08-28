@@ -9,7 +9,7 @@
     <div class="col-md-6">
         <div class="widget widget-green" id="widget_profit_chart">
             <div class="widget-title">
-                <h3><i class="icon-tasks"></i></h3>
+                <h3><i class="fa fa-tasks" aria-hidden="true"></i> Редактировать </h3>
             </div>
             <div class="widget-content">
 
@@ -18,16 +18,20 @@
                     <form:errors path="*" cssClass="alert alert-warning" element="div"/>
                     <form:hidden path="id"/>
 
-                    <label for="email">Email </label>
-                    <form:input path="email" cssClass="form-control" id="email"/>
+                    <div class="form-group">
+                        <label for="email">Email </label>
+                        <form:input path="email" cssClass="form-control" id="email"/>
+                    </div>
 
-                    <label for="firstName">Имя </label>
-                    <form:input path="firstName" cssClass="form-control" id="firstName"/>
+                    <div class="form-group">
+                        <label for="firstName">Имя </label>
+                        <form:input path="firstName" cssClass="form-control" id="firstName"/>
+                    </div>
 
-
-                    <label for="lastName">Фамилия </label>
-                    <form:input path="lastName" cssClass="form-control" id="lastName"/>
-
+                    <div class="form-group">
+                        <label for="lastName">Фамилия </label>
+                        <form:input path="lastName" cssClass="form-control" id="lastName"/>
+                    </div>
 
                     <br>
 
@@ -57,7 +61,8 @@
                 <input type="hidden" name="user" value="${userDocHack.id}"/>
                 <input type="hidden" name="role" value="${r.id}"/>
 
-                <p>${r.roleTitle} <button type="submit" class="btn btn-xs">X</button>
+                <p>${r.roleTitle}
+                    <button type="submit" class="btn btn-xs">X</button>
                 </p>
             </form>
 

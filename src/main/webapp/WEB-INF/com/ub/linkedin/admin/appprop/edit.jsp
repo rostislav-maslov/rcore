@@ -9,7 +9,7 @@
   <div class="col-md-12">
     <div class="widget widget-green" id="widget_profit_chart">
       <div class="widget-title">
-        <h3><i class="icon-tasks"></i> Изменение настроек Linkedin </h3>
+        <h3><i class="fa fa-tasks" aria-hidden="true"></i> Изменение настроек Linkedin </h3>
       </div>
       <div class="widget-content">
         <form:form method="POST" action="<%= LinkedinRoutes.EDIT%>" modelAttribute="appPropertiesLinkedinDoc">
