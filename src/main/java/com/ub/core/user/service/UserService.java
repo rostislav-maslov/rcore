@@ -751,7 +751,7 @@ public class UserService {
     public UserDoc validateUserByLogin(String login, String hashedPassword) throws UserNotAutorizedException, UserPasswordErrorException, UserBlockedException {
         UserDoc userDoc = findByLogin(login);
 
-        if (userDoc == null) {
+        if (userDoc == null || userDoc.getPasswordForLogin() == null) {
             throw new UserNotAutorizedException();
         }
         if (!userDoc.getPasswordForLogin().equals(hashedPassword)) {
