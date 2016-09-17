@@ -7,6 +7,7 @@ import com.ub.core.user.models.UserDoc;
 import com.ub.core.user.models.UserStatusEnum;
 import com.ub.core.user.roles.AvailableChangePassword;
 import com.ub.core.user.routes.UserAdminRoutes;
+import com.ub.core.user.service.UserLogsService;
 import com.ub.core.user.service.UserService;
 import com.ub.core.user.service.exceptions.UserExistException;
 import com.ub.core.user.service.exceptions.UserNotExistException;
@@ -35,6 +36,7 @@ public class UserAdminController {
 
     @Autowired private UserService userService;
     @Autowired private RoleService roleService;
+    @Autowired private UserLogsService userLogsService;
 
     @AvailableForRoles(AvailableChangePassword.class)
     @RequestMapping(value = UserAdminRoutes.EDIT_PASSWORD, method = RequestMethod.POST)
@@ -117,13 +119,14 @@ public class UserAdminController {
     }
 
     @RequestMapping(value = UserAdminRoutes.EDIT, method = RequestMethod.GET)
-    public String editUserGet(@RequestParam("id") ObjectId id, ModelMap modelMap) {
+    public String editUserGet(@RequestParam("id") ObjectId id, Model model) {
 
         if (userService.getUser(id) != null) {
-            modelMap.addAttribute("userDoc", userService.getUser(id));
-            modelMap.addAttribute("userDocHack", userService.getUser(id));
-            modelMap.addAttribute("roles", roleService.findAllRoles());
-            modelMap.addAttribute("backUrl", "/admin/user/edit");
+            model.addAttribute("userLogs", userLogsService.findByUserId(id));
+            model.addAttribute("userDoc", userService.getUser(id));
+            model.addAttribute("userDocHack", userService.getUser(id));
+            model.addAttribute("roles", roleService.findAllRoles());
+            model.addAttribute("backUrl", "/admin/user/edit");
             return "com.ub.core.admin.user.editUserInfo";
         } else {
             return "redirect:/admin/user/list";

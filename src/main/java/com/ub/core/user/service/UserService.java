@@ -7,10 +7,7 @@ import com.ub.core.role.service.RoleService;
 import com.ub.core.security.service.AutorizationService;
 import com.ub.core.security.service.exceptions.UserBlockedException;
 import com.ub.core.security.service.exceptions.UserNotAutorizedException;
-import com.ub.core.user.models.UserDoc;
-import com.ub.core.user.models.UserEmailPasswordRecoverDoc;
-import com.ub.core.user.models.UserEmailVerifiedDoc;
-import com.ub.core.user.models.UserStatusEnum;
+import com.ub.core.user.models.*;
 import com.ub.core.user.service.exceptions.*;
 import com.ub.core.user.views.AddEditUserView;
 import com.ub.core.user.views.modalUserSearch.all.SearchUserAdminRequest;
@@ -50,6 +47,7 @@ public class UserService {
     @Autowired private AutorizationService autorizationService;
     @Autowired private AuthorizeFbService authorizeFbService;
     @Autowired private EmailSessionService emailSessionService;
+    @Autowired private UserLogsService userLogsService;
 
     public static final Integer LIMIT_FAILS = 10;
     public static final Long BLOCK_TIMEOUT = 60 * 10L; // В секундах
@@ -725,23 +723,29 @@ public class UserService {
         if (userDoc == null || userDoc.getPassword() == null) {
             throw new UserNotAutorizedException();
         }
+        UserLoginStatusEnum status = UserLoginStatusEnum.SUCCESS;
         if (!userDoc.getPassword().equals(hashedPassword)) {
             userDoc.setLastFailDate(new Date());
             if(userDoc.getFails() < LIMIT_FAILS) {
                 userDoc.setFails(userDoc.getFails() + 1);
             }
             mongoTemplate.save(userDoc);
-            throw new UserPasswordErrorException();
-        }
-        if (userDoc.getUserStatus().equals(UserStatusEnum.BLOCK)) {
-            throw new UserBlockedException();
-        }
-        if(userDoc.getFails() >= LIMIT_FAILS && (new Date().getTime() - userDoc.getLastFailDate().getTime())/1000 < BLOCK_TIMEOUT) {
-            throw new UserBlockedException();
-        }
-        if(userDoc.getFails() >= LIMIT_FAILS) {
+            status = UserLoginStatusEnum.PASSWORD_ERROR;
+        } else if (userDoc.getUserStatus().equals(UserStatusEnum.BLOCK)) {
+            status = UserLoginStatusEnum.BLOCKED;
+        } else if(userDoc.getFails() >= LIMIT_FAILS && (new Date().getTime() - userDoc.getLastFailDate().getTime())/1000 < BLOCK_TIMEOUT) {
+            status = UserLoginStatusEnum.BLOCKED;
+        } else if(userDoc.getFails() >= LIMIT_FAILS) {
             userDoc.setFails(0);
             mongoTemplate.save(userDoc);
+        }
+
+        userLogsService.logging(userDoc.getId(), status);
+
+        if(status.equals(UserLoginStatusEnum.PASSWORD_ERROR)) {
+            throw new UserBlockedException();
+        } else if(status.equals(UserLoginStatusEnum.BLOCKED)) {
+            throw new UserPasswordErrorException();
         }
 
         return userDoc;
@@ -754,23 +758,29 @@ public class UserService {
         if (userDoc == null || userDoc.getPasswordForLogin() == null) {
             throw new UserNotAutorizedException();
         }
+        UserLoginStatusEnum status = UserLoginStatusEnum.SUCCESS;
         if (!userDoc.getPasswordForLogin().equals(hashedPassword)) {
             userDoc.setLastFailDate(new Date());
             if(userDoc.getFails() < LIMIT_FAILS) {
                 userDoc.setFails(userDoc.getFails() + 1);
             }
             mongoTemplate.save(userDoc);
-            throw new UserPasswordErrorException();
-        }
-        if (userDoc.getUserStatus().equals(UserStatusEnum.BLOCK)) {
-            throw new UserBlockedException();
-        }
-        if(userDoc.getFails() >= LIMIT_FAILS && (userDoc.getLastFailDate().getTime() - new Date().getTime())/1000 < BLOCK_TIMEOUT) {
-            throw new UserBlockedException();
-        }
-        if(userDoc.getFails() >= LIMIT_FAILS) {
+            status = UserLoginStatusEnum.PASSWORD_ERROR;
+        }else if (userDoc.getUserStatus().equals(UserStatusEnum.BLOCK)) {
+            status = UserLoginStatusEnum.BLOCKED;
+        } else if(userDoc.getFails() >= LIMIT_FAILS && (userDoc.getLastFailDate().getTime() - new Date().getTime())/1000 < BLOCK_TIMEOUT) {
+            status = UserLoginStatusEnum.BLOCKED;
+        } else if(userDoc.getFails() >= LIMIT_FAILS) {
             userDoc.setFails(0);
             mongoTemplate.save(userDoc);
+        }
+
+        userLogsService.logging(userDoc.getId(), status);
+
+        if(status.equals(UserLoginStatusEnum.PASSWORD_ERROR)) {
+            throw new UserBlockedException();
+        } else if(status.equals(UserLoginStatusEnum.BLOCKED)) {
+            throw new UserPasswordErrorException();
         }
 
         return userDoc;
