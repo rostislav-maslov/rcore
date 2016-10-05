@@ -32,6 +32,10 @@ public class UserDoc {
     private String vkAccessToken;
     private String vkEmail;
 
+    private String okId;
+    private String okAccessToken;
+    private String okEmail;
+
     private String fbId;
     private String fbAccessToken;
     private String fbEmail;
@@ -404,5 +408,29 @@ public class UserDoc {
 
     public void setLastFailDate(Date lastFailDate) {
         this.lastFailDate = lastFailDate;
+    }
+
+    public String getOkId() {
+        return okId;
+    }
+
+    public void setOkId(String okId) {
+        this.okId = okId;
+    }
+
+    public String getOkAccessToken() {
+        return okAccessToken;
+    }
+
+    public void setOkAccessToken(String okAccessToken) {
+        this.okAccessToken = okAccessToken;
+    }
+
+    public String getOkEmail() {
+        return okEmail;
+    }
+
+    public void setOkEmail(String okEmail) {
+        this.okEmail = okEmail;
     }
 }

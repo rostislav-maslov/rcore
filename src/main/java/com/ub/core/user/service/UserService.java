@@ -16,6 +16,7 @@ import com.ub.facebook.response.FBUserInfo;
 import com.ub.facebook.services.AuthorizeFbService;
 import com.ub.google.response.GoogleUserInfo;
 import com.ub.linkedin.response.LinkedinUserInfo;
+import com.ub.odnoklassniki.response.OkUserInfo;
 import com.ub.vk.response.AccessTokenResponse;
 import com.ub.vk.response.users.get.UserInfo;
 import com.ub.vk.response.users.get.UsersGetResponse;
@@ -420,6 +421,23 @@ public class UserService {
         return userDoc;
     }
 
+    public UserDoc createUserByOk(OkUserInfo userInfo) throws UserExistException {
+        UserDoc userDoc = new UserDoc();
+
+        UserDoc check = getUserByOkId(userInfo.getUid());
+        if (check != null) {
+            throw new UserExistException();
+        }
+        userDoc.setOkId(userInfo.getUid());
+        userDoc.setOkAccessToken(userInfo.getAccessToken());
+        userDoc.setUserStatus(UserStatusEnum.ACTIVE);
+        userDoc.setFirstName(userInfo.getFirst_name());
+        userDoc.setLastName(userInfo.getLast_name());
+
+        save(userDoc);
+        return userDoc;
+    }
+
     public UserDoc createUserByGoogle(GoogleUserInfo userInfo) throws UserExistException {
         UserDoc userDoc = new UserDoc();
 
@@ -507,6 +525,16 @@ public class UserService {
 
     public UserDoc updateFbAccessToken(UserDoc userDoc, String accessToken) {
         userDoc.setFbAccessToken(accessToken);
+        try {
+            save(userDoc);
+        } catch (UserExistException e) {
+            e.printStackTrace();
+        }
+        return userDoc;
+    }
+
+    public UserDoc updateOkAccessToken(UserDoc userDoc, String accessToken) {
+        userDoc.setOkAccessToken(accessToken);
         try {
             save(userDoc);
         } catch (UserExistException e) {
@@ -618,6 +646,10 @@ public class UserService {
 
     public UserDoc getUserByFbId(String fbId) {
         return mongoTemplate.findOne(new Query(new Criteria("fbId").is(fbId)), UserDoc.class);
+    }
+
+    public UserDoc getUserByOkId(String fbId) {
+        return mongoTemplate.findOne(new Query(new Criteria("okId").is(fbId)), UserDoc.class);
     }
 
     public UserDoc getUserByGoogleId(String googleId) {
