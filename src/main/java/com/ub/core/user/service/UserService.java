@@ -810,9 +810,9 @@ public class UserService {
         userLogsService.logging(userDoc.getId(), status);
 
         if(status.equals(UserLoginStatusEnum.PASSWORD_ERROR)) {
-            throw new UserBlockedException();
-        } else if(status.equals(UserLoginStatusEnum.BLOCKED)) {
             throw new UserPasswordErrorException();
+        } else if(status.equals(UserLoginStatusEnum.BLOCKED)) {
+            throw new UserBlockedException();
         }
 
         return userDoc;
