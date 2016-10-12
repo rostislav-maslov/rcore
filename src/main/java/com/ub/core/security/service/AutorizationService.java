@@ -16,6 +16,7 @@ import com.ub.core.user.service.UserService;
 import com.ub.facebook.services.FBSessionService;
 import com.ub.google.services.GPSessionService;
 import com.ub.linkedin.services.LiSessionService;
+import com.ub.odnoklassniki.services.OkSessionService;
 import com.ub.twitter.services.TwitterSessionService;
 import com.ub.vk.services.VkSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,7 @@ public class AutorizationService {
     @Autowired private GPSessionService gpSessionService;
     @Autowired private TwitterSessionService twitterSessionService;
     @Autowired private LiSessionService liSessionService;
+    @Autowired private OkSessionService okSessionService;
 
     public CheckAvailable checkAccess(HandlerMethod handlerMethod) {
         CheckAvailable checkAvailable = new CheckAvailable();
@@ -73,7 +75,7 @@ public class AutorizationService {
                 //Если хоть одна роль есть, значит можно пустить по урлу
                 AvailableForRoles availableForRoles = handlerMethod.getMethod().getAnnotation(AvailableForRoles.class);
 
-                if( availableForRoles.value().length > 0) {
+                if (availableForRoles.value().length > 0) {
                     boolean needReturn = true;
                     for (Class<? extends Role> roleClass : availableForRoles.value()) {
                         if (roleNames.contains(roleClass.getName()) == true) {
@@ -81,7 +83,7 @@ public class AutorizationService {
                         }
                     }
 
-                    if(needReturn) {
+                    if (needReturn) {
                         Class<? extends Role> roleClass = availableForRoles.value()[0];
                         checkAvailable.setNeedRole(true);
                         checkAvailable.setRole(new Role(roleService.findById(roleClass.getName())));
@@ -105,14 +107,14 @@ public class AutorizationService {
 
                 //Если хоть одна роль есть, значит можно пустить по урлу
                 AvailableForRoles availableForRoles = handlerMethod.getBeanType().getAnnotation(AvailableForRoles.class);
-                if(availableForRoles.value().length > 0){
+                if (availableForRoles.value().length > 0) {
                     boolean needReturn = true;
                     for (Class<? extends Role> roleClass : availableForRoles.value()) {
                         if (roleNames.contains(roleClass.getName()) == true) {
                             needReturn = false;
                         }
                     }
-                    if(needReturn){
+                    if (needReturn) {
                         Class<? extends Role> roleClass = availableForRoles.value()[0];
                         checkAvailable.setNeedRole(true);
                         Role role = new Role(roleService.findById(roleClass.getName()));
@@ -193,6 +195,9 @@ public class AutorizationService {
         }
         if (sessionModel.getType().equals(SessionType.LINKEDIN)) {
             return liSessionService.getUserFromSession(sessionModel);
+        }
+        if (sessionModel.getType().equals(SessionType.OK)) {
+            return okSessionService.getUserFromSession(sessionModel);
         }
 
         throw new UserNotAutorizedException();
