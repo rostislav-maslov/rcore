@@ -4,6 +4,9 @@ import com.ub.core.base.routes.BaseRoutes;
 import com.ub.core.base.views.breadcrumbs.Breadcrumbs;
 import com.ub.core.base.views.breadcrumbs.BreadcrumbsLink;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class PageHeader {
     public static PageHeader defaultPageHeader() {
@@ -22,6 +25,9 @@ public class PageHeader {
     private Breadcrumbs breadcrumbs = new Breadcrumbs();
     private String titleAdd;
     private String linkAdd;
+    private AddLinkButtonType typeAdd = AddLinkButtonType.DEFAULT;
+
+    private List<AdditionalLink> addLinks = new ArrayList<>();
 
     public Breadcrumbs getBreadcrumbs() {
         return breadcrumbs;
@@ -45,5 +51,21 @@ public class PageHeader {
 
     public void setLinkAdd(String linkAdd) {
         this.linkAdd = linkAdd;
+    }
+
+    public List<AdditionalLink> getAddLinks() {
+        return addLinks;
+    }
+
+    public void setAddLinks(List<AdditionalLink> addLinks) {
+        this.addLinks = addLinks;
+    }
+
+    public AddLinkButtonType getTypeAdd() {
+        return typeAdd;
+    }
+
+    public void setTypeAdd(AddLinkButtonType typeAdd) {
+        this.typeAdd = typeAdd;
     }
 }

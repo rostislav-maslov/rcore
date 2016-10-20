@@ -28,10 +28,7 @@ public class MenuBoost {
                 for (CoreMenu coreMenu : coreMenus) {
                     result.put(coreMenu.getId(), coreMenu);
                 }
-            } catch (ClassNotFoundException e) {
-            } catch (InstantiationException e) {
-            } catch (IllegalAccessException e) {
-            }
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ignore) {}
         }
 
         return result;
@@ -57,10 +54,7 @@ public class MenuBoost {
                 if (mainMenu.getParent() == null)
                     result.add(mainMenu);
                 menuSet.add(mainMenu);
-            } catch (ClassNotFoundException e) {
-            } catch (InstantiationException e) {
-            } catch (IllegalAccessException e) {
-            }
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ignore) {}
         }
 
         for (CoreMenu coreMenu : result) {
@@ -70,7 +64,22 @@ public class MenuBoost {
             }
         }
 
-        Collections.sort(result, new Comparator<CoreMenu>() {
+        menu = sortMenu(result);
+    }
+
+    private static List<CoreMenu> getChildMenu(CoreMenu coreMenu, Set<CoreMenu> set) {
+        List<CoreMenu> subMenu = new ArrayList<CoreMenu>();
+        for (CoreMenu scm : set) {
+            if (scm.getParent() != null && scm.getParent().getId().equals(coreMenu.getId())) {
+                subMenu.add(scm);
+            }
+        }
+
+        return sortMenu(subMenu);
+    }
+
+    private static List<CoreMenu> sortMenu(List<CoreMenu> menuList) {
+        Collections.sort(menuList, new Comparator<CoreMenu>() {
             @Override
             public int compare(CoreMenu menu1, CoreMenu menu2) {
                 int position1 = menu1.position;
@@ -80,21 +89,12 @@ public class MenuBoost {
                 } else if (position1 < position2) {
                     return -1;
                 } else {
-                    return 0;
+                    return menu1.getName().compareTo(menu2.getName());
                 }
             }
         });
-        menu = result;
-    }
 
-    private static List<CoreMenu> getChildMenu(CoreMenu coreMenu, Set<CoreMenu> set) {
-        ArrayList<CoreMenu> subMenu = new ArrayList<CoreMenu>();
-        for (CoreMenu scm : set) {
-            if (scm.getParent() != null && scm.getParent().getId().equals(coreMenu.getId())) {
-                subMenu.add(scm);
-            }
-        }
-        return subMenu;
+        return menuList;
     }
 
     public static List<CoreMenu> allMenu() {

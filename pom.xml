@@ -293,6 +293,7 @@
                     <include>**/*.svg</include>
                     <include>**/*.ttf</include>
                     <include>**/*.woff</include>
+                    <include>**/*.woff2</include>
                     <include>**/*.otf</include>
                     <include>**/*.rtf</include>
                     <include>**/*.gif</include>

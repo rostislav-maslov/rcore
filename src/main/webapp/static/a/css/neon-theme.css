@@ -444,7 +444,7 @@ table {
 th {
   text-align: left;
   font-weight: 400;
-  color: #303641;
+  color: #303641 !important;
 }
 .table {
   width: 100%;
