@@ -14,21 +14,8 @@
         <c:if test="${fn:length(menu.child) > 0}">
             <ul>
                 <c:forEach items="${menu.child}" var="subMenu">
-                    <li>
-                        <a href="${subMenu.url}">
-                            <span>${subMenu.name}</span>
-                        </a> <c:if test="${not empty subMenu.child}">
-                        <ul>
-                            <c:forEach items="${subMenu.child}" var="menuLevel2">
-                                <li>
-                                    <a href="${menuLevel2.url}">
-                                        <span>${menuLevel2.name}</span>
-                                    </a>
-                                </li>
-                            </c:forEach>
-                        </ul>
-                    </c:if>
-                    </li>
+                    <c:set var="menu" value="${subMenu}" scope="request"/>
+                    <jsp:include page="subMenu.jsp"/>
                 </c:forEach>
             </ul>
         </c:if>

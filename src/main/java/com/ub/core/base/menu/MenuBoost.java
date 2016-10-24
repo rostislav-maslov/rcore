@@ -59,9 +59,6 @@ public class MenuBoost {
 
         for (CoreMenu coreMenu : result) {
             coreMenu.setChild(getChildMenu(coreMenu, menuSet));
-            for (CoreMenu scm : coreMenu.getChild()) {
-                scm.setChild(getChildMenu(scm, menuSet));
-            }
         }
 
         menu = sortMenu(result);
@@ -71,6 +68,7 @@ public class MenuBoost {
         List<CoreMenu> subMenu = new ArrayList<CoreMenu>();
         for (CoreMenu scm : set) {
             if (scm.getParent() != null && scm.getParent().getId().equals(coreMenu.getId())) {
+                scm.setChild(getChildMenu(scm, set));
                 subMenu.add(scm);
             }
         }
