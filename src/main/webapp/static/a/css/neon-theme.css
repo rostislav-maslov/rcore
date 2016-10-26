@@ -13,7 +13,7 @@ body {
   font-family: "Helvetica Neue", Helvetica, "Noto Sans", sans-serif, Arial, sans-serif;
   font-size: 12px;
   line-height: 1.42857143;
-  color: #949494;
+  /*color: #949494;*/
   background-color: #ffffff;
 }
 input,
@@ -444,7 +444,7 @@ table {
 th {
   text-align: left;
   font-weight: 400;
-  color: #303641;
+  color: #303641 !important;
 }
 .table {
   width: 100%;

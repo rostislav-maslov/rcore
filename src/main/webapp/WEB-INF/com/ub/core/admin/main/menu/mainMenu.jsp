@@ -3,31 +3,19 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <c:forEach items="<%= MenuBoost.allMenu()%>" var="menu">
     <li>
-        <a href="">
+        <a href="<c:if test="${fn:length(menu.child) eq 0}">${menu.url}</c:if>">
             <i class="${menu.icon}"></i>
             <span>${menu.name}</span>
         </a>
-        <c:if test="${not empty menu.child}">
+        <c:if test="${fn:length(menu.child) > 0}">
             <ul>
                 <c:forEach items="${menu.child}" var="subMenu">
-                    <li>
-                        <a href="${subMenu.url}">
-                            <span>${subMenu.name}</span>
-                        </a> <c:if test="${not empty subMenu.child}">
-                        <ul>
-                            <c:forEach items="${subMenu.child}" var="menuLevel2">
-                                <li>
-                                    <a href="${menuLevel2.url}">
-                                        <span>${menuLevel2.name}</span>
-                                    </a>
-                                </li>
-                            </c:forEach>
-                        </ul>
-                    </c:if>
-                    </li>
+                    <c:set var="menu" value="${subMenu}" scope="request"/>
+                    <jsp:include page="subMenu.jsp"/>
                 </c:forEach>
             </ul>
         </c:if>
