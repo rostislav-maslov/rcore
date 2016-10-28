@@ -61,7 +61,7 @@ public final class RequestWrapper extends HttpServletRequestWrapper {
 //        //value = value.replaceAll("<script>", "");
 //        //value = value.replaceAll("</script>", "");
 //        //logger.info("OutnXSS RequestWrapper ........ value ......." + value);
-        value = HtmlUtils.htmlEscape(value);
+        value = HtmlUtils.htmlEscape(value).replaceAll("&quot;", "\"");
         return value;
     }
 }

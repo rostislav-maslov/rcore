@@ -45,7 +45,7 @@ public class PictureService {
         return mongoTemplate.findOne(new Query(Criteria.where("url").is(url)), PictureDoc.class);
     }
 
-    public long countAll(){
+    public long countAll() {
         return mongoTemplate.count(new Query(), PictureDoc.class);
     }
 
@@ -64,7 +64,7 @@ public class PictureService {
     }
 
     public InputStream addNewSizeToPicture(InputStream is, PictureDoc pictureDoc, Integer width) throws IOException {
-        if(pictureDoc.getSizes().size() >= LIMIT_OF_IMAGE_SIZES){
+        if (pictureDoc.getSizes().size() >= LIMIT_OF_IMAGE_SIZES) {
             GridFSDBFile gridFSDBFile = fileService.getFile(pictureDoc.getOriginFileId());
             return gridFSDBFile.getInputStream();
         }
@@ -117,10 +117,11 @@ public class PictureService {
         PictureSize pictureSize = new PictureSize();
         try {
             BufferedImage bufferedImage = ImageIO.read(fileService.getFile(fileId).getInputStream());
-
-            pictureSize.setWidth(bufferedImage.getWidth());
-            pictureSize.setHieght(bufferedImage.getHeight());
-            pictureSize.setFileId(fileId);
+            if (bufferedImage != null) {
+                pictureSize.setWidth(bufferedImage.getWidth());
+                pictureSize.setHieght(bufferedImage.getHeight());
+                pictureSize.setFileId(fileId);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

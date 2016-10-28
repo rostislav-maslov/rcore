@@ -7,5 +7,6 @@ public class UserMenu extends CoreMenu {
     public UserMenu(){
         this.name = "Пользователи";
         this.icon = MenuIcons.ENTYPO_USERS;
+        this.position = 101;
     }
 }

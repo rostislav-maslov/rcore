@@ -7,10 +7,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Document
 public class UserDoc {
@@ -35,6 +32,10 @@ public class UserDoc {
     private String vkAccessToken;
     private String vkEmail;
 
+    private String okId;
+    private String okAccessToken;
+    private String okEmail;
+
     private String fbId;
     private String fbAccessToken;
     private String fbEmail;
@@ -58,6 +59,7 @@ public class UserDoc {
     private String emailForLogin;
 
     private Integer fails = 0;
+    private Date lastFailDate = new Date();
 
     private List<UserToken> accessTokens = new ArrayList<UserToken>();
     private List<UserToken> refreshTokens = new ArrayList<UserToken>();
@@ -398,5 +400,37 @@ public class UserDoc {
 
     public void setRefreshTokens(List<UserToken> refreshTokens) {
         this.refreshTokens = refreshTokens;
+    }
+
+    public Date getLastFailDate() {
+        return lastFailDate;
+    }
+
+    public void setLastFailDate(Date lastFailDate) {
+        this.lastFailDate = lastFailDate;
+    }
+
+    public String getOkId() {
+        return okId;
+    }
+
+    public void setOkId(String okId) {
+        this.okId = okId;
+    }
+
+    public String getOkAccessToken() {
+        return okAccessToken;
+    }
+
+    public void setOkAccessToken(String okAccessToken) {
+        this.okAccessToken = okAccessToken;
+    }
+
+    public String getOkEmail() {
+        return okEmail;
+    }
+
+    public void setOkEmail(String okEmail) {
+        this.okEmail = okEmail;
     }
 }

@@ -239,6 +239,7 @@
             <version>2.4.1.1</version>
         </dependency>
 
+
         <!-- https://mvnrepository.com/artifact/org.im4java/im4java -->
         <!--<dependency>-->
             <!--<groupId>org.im4java</groupId>-->
@@ -250,6 +251,23 @@
             <groupId>org.imgscalr</groupId>
             <artifactId>imgscalr-lib</artifactId>
             <version>4.2</version>
+        </dependency>
+        <!-- UserAgentUtils -->
+        <dependency>
+            <groupId>eu.bitwalker</groupId>
+            <artifactId>UserAgentUtils</artifactId>
+            <version>1.20</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.3.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.http-client</groupId>
+            <artifactId>google-http-client</artifactId>
+            <version>1.19.0</version>
         </dependency>
 
     </dependencies>
@@ -288,6 +306,7 @@
                     <include>**/*.svg</include>
                     <include>**/*.ttf</include>
                     <include>**/*.woff</include>
+                    <include>**/*.woff2</include>
                     <include>**/*.otf</include>
                     <include>**/*.rtf</include>
                     <include>**/*.gif</include>
@@ -312,6 +331,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.7</source>
+                    <target>1.7</target>
+                </configuration>
                 <version>2.3.2</version>
             </plugin>
         </plugins>

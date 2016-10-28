@@ -6,32 +6,26 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="s" uri="http://www.springframework.org/tags" %>
 ﻿
+<div class="row">
+    <form action="${url}" method="GET">
+        <div class="col-lg-5">
+            <div class="input-group">
+                <input type="text" class="form-control input-sm" id="query" name="query"
+                       value="${searchUserAdminResponse.query}" placeholder="Поиск"/>
+                <div class="input-group-btn">
+                    <button type="submit" class="btn btn-sm btn-default"><i class="entypo-search">Поиск </i></button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
 <div class="widget widget-blue">
     <div class="widget-title">
-        <div class="widget-controls">
-            <div class="dropdown" data-toggle="tooltip" data-placement="top" title="" data-original-title="Settings">
-                <a href="#" data-toggle="dropdown" class="widget-control widget-control-settings"><i
-                        class="icon-cog"></i></a>
-                <ul class="dropdown-menu dropdown-menu-small" role="menu" aria-labelledby="dropdownMenu1">
-                    <li class="dropdown-header">Set Widget Color</li>
-                    <li><a data-widget-color="blue" class="set-widget-color" href="#">Blue</a></li>
-                    <li><a data-widget-color="red" class="set-widget-color" href="#">Red</a></li>
-                    <li><a data-widget-color="green" class="set-widget-color" href="#">Green</a></li>
-                    <li><a data-widget-color="orange" class="set-widget-color" href="#">Orange</a></li>
-                    <li><a data-widget-color="purple" class="set-widget-color" href="#">Purple</a></li>
-                </ul>
-            </div>
-            <a href="#" class="widget-control widget-control-refresh" data-toggle="tooltip" data-placement="top"
-               title="" data-original-title="Refresh"><i class="icon-refresh"></i></a>
-            <a href="#" class="widget-control widget-control-minimize" data-toggle="tooltip" data-placement="top"
-               title="" data-original-title="Minimize"><i class="icon-minus-sign"></i></a>
-            <a href="#" class="widget-control widget-control-remove" data-toggle="tooltip" data-placement="top" title=""
-               data-original-title="Remove"><i class="icon-remove-sign"></i></a>
-        </div>
-        <h3><i class="icon-table"></i> Пользователи</h3>
+        <h3><i class="fa fa-table" aria-hidden="true"></i> Пользователи</h3>
     </div>
     <div class="widget-content">
-        <p>Всего - ${userList.size()}</p>
+        <p>Всего - ${searchUserAdminResponse.all}</p>
 
         <div class="table-responsive">
             <table class="table table-bordered datatable" id="table-1">
@@ -57,7 +51,7 @@
                 </thead>
                 <tbody>
 
-                <c:forEach items="${userList}" var="user">
+                <c:forEach items="${searchUserAdminResponse.result}" var="user">
                     <tr>
                         <td>${user.email}</td>
                         <td>${user.firstName} ${user.lastName}</td>
@@ -81,16 +75,20 @@
                             <c:url value="/admin/user/edit" var="editUsr">
                                 <c:param name="id" value="${user.id}"/>
                             </c:url>
-                            <a href="${editUsr}" class="btn btn-default btn-xs">Редактировать</a>
+                            <a href="${editUsr}" class="btn btn-default btn-xs">
+                                <i class="fa fa-pencil" aria-hidden="true"></i> Редактировать
+                            </a>
                             <c:url value="/admin/user/delete" var="deleteUsr">
                                 <c:param name="id" value="${user.id}"/>
                             </c:url>
-                            <a href="${deleteUsr}" class="btn"><i class="icon-remove"></i></a>
+                            <a href="${deleteUsr}" class="btn btn-xs btn-danger">
+                                <i class="fa fa-times-circle" aria-hidden="true"></i> Удалить
+                            </a>
 
                             <form action="<%= UserAdminRoutes.BLOCK%>" method="POST">
                                 <input type="hidden" name="id" value="${user.id}"/>
                                 <button type="submit" class="btn btn-default btn-xs">
-                                    Заблокировать
+                                    <i class="fa fa-ban" aria-hidden="true"></i> Заблокировать
                                 </button>
                             </form>
 
@@ -105,14 +103,40 @@
                     </tr>
                 </c:forEach>
 
-
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 
+<div class="row">
+    <div class="col-lg-12 text-center">
+        <ul class="pagination pagination-sm">
+            <c:url value="${url}" var="urlPrev">
+                <c:param name="query" value="${searchUserAdminResponse.query}"/>
+                <c:param name="currentPage" value="${searchUserAdminResponse.prevNum()}"/>
+            </c:url>
+            <li><a href="${urlPrev}"><i class="entypo-left-open-mini"></i></a></li>
 
+            <c:forEach items="${searchUserAdminResponse.paginator()}" var="page">
+                <c:url value="${url}" var="urlPage">
+                    <c:param name="query" value="${searchUserAdminResponse.query}"/>
+                    <c:param name="currentPage" value="${page}"/>
+                </c:url>
+                <li class="<c:if test="${searchUserAdminResponse.currentPage eq page}">active</c:if>">
+                    <a href="${urlPage}">${page + 1}</a>
+                </li>
+            </c:forEach>
+            <c:url value="${url}" var="urlNext">
+                <c:param name="query" value="${searchUserAdminResponse.query}"/>
+                <c:param name="currentPage" value="${searchUserAdminResponse.nextNum()}"/>
+            </c:url>
+            <li><a href="${urlNext}"><i class="entypo-right-open-mini"></i></a></li>
+        </ul>
+    </div>
+</div>
+
+<%--
 <script type="text/javascript">
     var responsiveHelper;
     var breakpointDefinition = {
@@ -153,4 +177,4 @@
             minimumResultsForSearch: -1
         });
     });
-</script>
+</script>--%>

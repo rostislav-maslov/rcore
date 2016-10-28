@@ -7,7 +7,7 @@
     <div class="col-md-6">
         <div class="widget widget-green" id="widget_profit_chart">
             <div class="widget-title">
-                <h3><i class="icon-tasks"></i></h3>
+                <h3><i class="fa fa-tasks"></i></h3>
             </div>
             <div class="widget-content">
 

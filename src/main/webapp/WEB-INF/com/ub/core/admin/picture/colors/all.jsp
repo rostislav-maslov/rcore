@@ -21,7 +21,7 @@
 
 <div class="widget widget-blue">
     <div class="widget-title">
-        <h3><i class="icon-table"></i> Результаты поиска: </h3>
+        <h3><i class="fa fa-table"></i> Результаты поиска: </h3>
     </div>
     <div class="widget-content">
         <div class="table-responsive">
@@ -43,18 +43,18 @@
                         <td>${doc.title}</td>
                         <td>${doc.hex}</td>
 
-                        <td class="">
+                        <td>
                             <c:url value="<%= PictureColorAdminRoutes.EDIT%>" var="editUrl">
                                 <c:param name="id" value="${doc.id}"/>
                             </c:url>
                             <a href="${editUrl}" class="btn btn-default btn-xs">
-                                <i class="icon-pencil">Редактировать</i>
+                                <i class="fa fa-pencil" aria-hidden="true"></i> Редактировать
                             </a>
                             <c:url value="<%= PictureColorAdminRoutes.DELETE%>" var="urlDelete">
-                                <c:param name="id" value="${doc.id}"></c:param>
+                                <c:param name="id" value="${doc.id}"/>
                             </c:url>
                             <a href="${urlDelete}" type="submit" class="btn btn-xs btn-danger  ">
-                                <i class="icon-remove">Удалить</i>
+                                <i class="fa fa-times-circle" aria-hidden="true"></i> Удалить
                             </a>
 
                         </td>

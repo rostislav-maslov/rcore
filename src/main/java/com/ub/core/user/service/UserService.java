@@ -5,15 +5,10 @@ import com.ub.core.base.role.Role;
 import com.ub.core.role.models.RoleDoc;
 import com.ub.core.role.service.RoleService;
 import com.ub.core.security.service.AutorizationService;
+import com.ub.core.security.service.exceptions.UserBlockedException;
 import com.ub.core.security.service.exceptions.UserNotAutorizedException;
-import com.ub.core.user.models.UserDoc;
-import com.ub.core.user.models.UserEmailPasswordRecoverDoc;
-import com.ub.core.user.models.UserEmailVerifiedDoc;
-import com.ub.core.user.models.UserStatusEnum;
-import com.ub.core.user.service.exceptions.UserExistException;
-import com.ub.core.user.service.exceptions.UserNotExistException;
-import com.ub.core.user.service.exceptions.UserVerifiedErrorCodeException;
-import com.ub.core.user.service.exceptions.UserVerifiedLimitException;
+import com.ub.core.user.models.*;
+import com.ub.core.user.service.exceptions.*;
 import com.ub.core.user.views.AddEditUserView;
 import com.ub.core.user.views.modalUserSearch.all.SearchUserAdminRequest;
 import com.ub.core.user.views.modalUserSearch.all.SearchUserAdminResponse;
@@ -21,6 +16,7 @@ import com.ub.facebook.response.FBUserInfo;
 import com.ub.facebook.services.AuthorizeFbService;
 import com.ub.google.response.GoogleUserInfo;
 import com.ub.linkedin.response.LinkedinUserInfo;
+import com.ub.odnoklassniki.response.OkUserInfo;
 import com.ub.vk.response.AccessTokenResponse;
 import com.ub.vk.response.users.get.UserInfo;
 import com.ub.vk.response.users.get.UsersGetResponse;
@@ -52,6 +48,10 @@ public class UserService {
     @Autowired private AutorizationService autorizationService;
     @Autowired private AuthorizeFbService authorizeFbService;
     @Autowired private EmailSessionService emailSessionService;
+    @Autowired private UserLogsService userLogsService;
+
+    public static final Integer LIMIT_FAILS = 10;
+    public static final Long BLOCK_TIMEOUT = 60 * 10L; // В секундах
 
     public static void addUserEvent(IUserEvent iUserEvent) {
         userEvents.put(iUserEvent.getClass().getCanonicalName(), iUserEvent);
@@ -421,6 +421,23 @@ public class UserService {
         return userDoc;
     }
 
+    public UserDoc createUserByOk(OkUserInfo userInfo) throws UserExistException {
+        UserDoc userDoc = new UserDoc();
+
+        UserDoc check = getUserByOkId(userInfo.getUid());
+        if (check != null) {
+            throw new UserExistException();
+        }
+        userDoc.setOkId(userInfo.getUid());
+        userDoc.setOkAccessToken(userInfo.getAccessToken());
+        userDoc.setUserStatus(UserStatusEnum.ACTIVE);
+        userDoc.setFirstName(userInfo.getFirst_name());
+        userDoc.setLastName(userInfo.getLast_name());
+
+        save(userDoc);
+        return userDoc;
+    }
+
     public UserDoc createUserByGoogle(GoogleUserInfo userInfo) throws UserExistException {
         UserDoc userDoc = new UserDoc();
 
@@ -508,6 +525,16 @@ public class UserService {
 
     public UserDoc updateFbAccessToken(UserDoc userDoc, String accessToken) {
         userDoc.setFbAccessToken(accessToken);
+        try {
+            save(userDoc);
+        } catch (UserExistException e) {
+            e.printStackTrace();
+        }
+        return userDoc;
+    }
+
+    public UserDoc updateOkAccessToken(UserDoc userDoc, String accessToken) {
+        userDoc.setOkAccessToken(accessToken);
         try {
             save(userDoc);
         } catch (UserExistException e) {
@@ -621,6 +648,10 @@ public class UserService {
         return mongoTemplate.findOne(new Query(new Criteria("fbId").is(fbId)), UserDoc.class);
     }
 
+    public UserDoc getUserByOkId(String fbId) {
+        return mongoTemplate.findOne(new Query(new Criteria("okId").is(fbId)), UserDoc.class);
+    }
+
     public UserDoc getUserByGoogleId(String googleId) {
         return mongoTemplate.findOne(new Query(new Criteria("googleId").is(googleId)), UserDoc.class);
     }
@@ -664,7 +695,8 @@ public class UserService {
         Criteria criteria = new Criteria();
         criteria = criteria.orOperator(
                 Criteria.where("lastName").regex(searchUserAdminRequest.getQuery(), "i"),
-                Criteria.where("firstName").regex(searchUserAdminRequest.getQuery(), "i")
+                Criteria.where("firstName").regex(searchUserAdminRequest.getQuery(), "i"),
+                Criteria.where("email").regex(searchUserAdminRequest.getQuery(), "i")
         );
 
 
@@ -680,6 +712,110 @@ public class UserService {
         searchUserAdminResponse.setAll(count);
         searchUserAdminResponse.setQuery(searchUserAdminRequest.getQuery());
         return searchUserAdminResponse;
+    }
+
+    /**
+     * @param searchUserAdminRequest - поисковый реквест
+     * @param userStatusEnum - статус пользователя (активный\заблокированный)
+     * @return SearchUserAdminResponse
+     */
+    public SearchUserAdminResponse findAll(SearchUserAdminRequest searchUserAdminRequest,
+                                           UserStatusEnum userStatusEnum) {
+
+        Sort sort = new Sort(Sort.Direction.DESC, "id");
+        Pageable pageable = new PageRequest(
+                searchUserAdminRequest.getCurrentPage(),
+                searchUserAdminRequest.getPageSize(),
+                sort);
+
+        Criteria criteria = new Criteria();
+        criteria = criteria.orOperator(
+                Criteria.where("lastName").regex(searchUserAdminRequest.getQuery(), "i"),
+                Criteria.where("firstName").regex(searchUserAdminRequest.getQuery(), "i"),
+                Criteria.where("email").regex(searchUserAdminRequest.getQuery(), "i")
+        ).andOperator(Criteria.where("userStatus").is(userStatusEnum));
+
+        Query query = new Query(criteria);
+        Long count = mongoTemplate.count(query, UserDoc.class);
+        query = query.with(pageable);
+
+        List<UserDoc> result = mongoTemplate.find(query, UserDoc.class);
+        SearchUserAdminResponse searchUserAdminResponse = new SearchUserAdminResponse(
+                searchUserAdminRequest.getCurrentPage(),
+                searchUserAdminRequest.getPageSize(),
+                result);
+        searchUserAdminResponse.setAll(count);
+        searchUserAdminResponse.setQuery(searchUserAdminRequest.getQuery());
+        return searchUserAdminResponse;
+    }
+
+    public UserDoc validateUserByEmail(String email, String hashedPassword) throws UserNotAutorizedException, UserPasswordErrorException, UserBlockedException {
+        UserDoc userDoc = findByEmail(email);
+
+        if (userDoc == null || userDoc.getPassword() == null) {
+            throw new UserNotAutorizedException();
+        }
+        UserLoginStatusEnum status = UserLoginStatusEnum.SUCCESS;
+        if (!userDoc.getPassword().equals(hashedPassword)) {
+            userDoc.setLastFailDate(new Date());
+            if(userDoc.getFails() < LIMIT_FAILS) {
+                userDoc.setFails(userDoc.getFails() + 1);
+            }
+            mongoTemplate.save(userDoc);
+            status = UserLoginStatusEnum.PASSWORD_ERROR;
+        } else if (userDoc.getUserStatus().equals(UserStatusEnum.BLOCK)) {
+            status = UserLoginStatusEnum.BLOCKED;
+        } else if(userDoc.getFails() >= LIMIT_FAILS && (new Date().getTime() - userDoc.getLastFailDate().getTime())/1000 < BLOCK_TIMEOUT) {
+            status = UserLoginStatusEnum.BLOCKED;
+        } else if(userDoc.getFails() >= LIMIT_FAILS) {
+            userDoc.setFails(0);
+            mongoTemplate.save(userDoc);
+        }
+
+        userLogsService.logging(userDoc.getId(), status);
+
+        if(status.equals(UserLoginStatusEnum.PASSWORD_ERROR)) {
+            throw new UserBlockedException();
+        } else if(status.equals(UserLoginStatusEnum.BLOCKED)) {
+            throw new UserPasswordErrorException();
+        }
+
+        return userDoc;
+    }
+
+
+    public UserDoc validateUserByLogin(String login, String hashedPassword) throws UserNotAutorizedException, UserPasswordErrorException, UserBlockedException {
+        UserDoc userDoc = findByLogin(login);
+
+        if (userDoc == null || userDoc.getPasswordForLogin() == null) {
+            throw new UserNotAutorizedException();
+        }
+        UserLoginStatusEnum status = UserLoginStatusEnum.SUCCESS;
+        if (!userDoc.getPasswordForLogin().equals(hashedPassword)) {
+            userDoc.setLastFailDate(new Date());
+            if(userDoc.getFails() < LIMIT_FAILS) {
+                userDoc.setFails(userDoc.getFails() + 1);
+            }
+            mongoTemplate.save(userDoc);
+            status = UserLoginStatusEnum.PASSWORD_ERROR;
+        }else if (userDoc.getUserStatus().equals(UserStatusEnum.BLOCK)) {
+            status = UserLoginStatusEnum.BLOCKED;
+        } else if(userDoc.getFails() >= LIMIT_FAILS && (userDoc.getLastFailDate().getTime() - new Date().getTime())/1000 < BLOCK_TIMEOUT) {
+            status = UserLoginStatusEnum.BLOCKED;
+        } else if(userDoc.getFails() >= LIMIT_FAILS) {
+            userDoc.setFails(0);
+            mongoTemplate.save(userDoc);
+        }
+
+        userLogsService.logging(userDoc.getId(), status);
+
+        if(status.equals(UserLoginStatusEnum.PASSWORD_ERROR)) {
+            throw new UserPasswordErrorException();
+        } else if(status.equals(UserLoginStatusEnum.BLOCKED)) {
+            throw new UserBlockedException();
+        }
+
+        return userDoc;
     }
 
     public UserEmailPasswordRecoverDoc createPasswordRecover(String email) throws UserNotExistException {

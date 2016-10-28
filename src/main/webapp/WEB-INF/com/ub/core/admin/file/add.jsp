@@ -7,25 +7,27 @@
     <div class="col-md-12">
         <div class="widget widget-green" id="widget_profit_chart">
             <div class="widget-title">
-                <h3><i class="icon-tasks"></i> Загрузка файла на сервер</h3>
+                <h3><i class="fa fa-tasks"></i> Загрузка файла на сервер</h3>
             </div>
             <div class="widget-content">
                 <form:form method="POST" commandName="fileUploadView"
                            enctype="multipart/form-data">
 
                     <form:errors path="*" cssClass="errorblock" element="div"/>
+                    <div class="form-group">
+                        <label for="file">Выберете файл для загрузки :</label>
+                        <input type="file" name="file" id="file"/>
+                    </div>
 
-                    <label for="file">Выберете файл для загрузки :</label>
-                    <input type="file" name="file" id="file"/>
-
+                    <br>
                     <div class="form-group">
                         <button type="submit" id="contact-form-settings-submit" class="btn btn-primary">Сохранить
                         </button>
                     </div>
 
-		<span>
-            <form:errors path="file" cssClass="error"/>
-		</span>
+                    <span>
+                        <form:errors path="file" cssClass="error"/>
+                    </span>
 
                 </form:form>
             </div>

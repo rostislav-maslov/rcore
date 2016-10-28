@@ -11,6 +11,7 @@ public class LinkedinUserInfo {
     private String lastName;
     private String accessToken;
     private String pictureUrl;
+    private SiteStandardProfileRequest siteStandardProfileRequest;
 
     public String getId() {
         return id;
@@ -58,5 +59,13 @@ public class LinkedinUserInfo {
 
     public void setPictureUrl(String pictureUrl) {
         this.pictureUrl = pictureUrl;
+    }
+
+    public SiteStandardProfileRequest getSiteStandardProfileRequest() {
+        return siteStandardProfileRequest;
+    }
+
+    public void setSiteStandardProfileRequest(SiteStandardProfileRequest siteStandardProfileRequest) {
+        this.siteStandardProfileRequest = siteStandardProfileRequest;
     }
 }
