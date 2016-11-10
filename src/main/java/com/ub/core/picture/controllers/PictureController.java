@@ -4,7 +4,6 @@ import com.mongodb.gridfs.GridFSDBFile;
 import com.ub.core.base.utils.StringUtils;
 import com.ub.core.file.services.FileService;
 import com.ub.core.picture.models.PictureDoc;
-import com.ub.core.picture.models.PictureSize;
 import com.ub.core.picture.routes.PicturesRoutes;
 import com.ub.core.picture.services.PictureService;
 import org.apache.commons.io.IOUtils;
@@ -16,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -58,31 +59,32 @@ public class PictureController {
             response.setHeader("Content-Disposition", "filename=\"" + StringUtils.cyrillicToLatin(gridFSDBFile.getFilename()) + "\"");
             response.setContentType(gridFSDBFile.getContentType());
             if (width != null && width > 0) {
-                try {
-                    PictureSize pictureSize = pictureDoc.hasSizeWidth(width);
-                    if (pictureSize != null ) {
-                        GridFSDBFile newSizeGrid = fileService.getFile(pictureSize.getFileId());
-                        InputStream isFile = newSizeGrid.getInputStream();
-                        IOUtils.copy(isFile, response.getOutputStream());
-                        isFile.close();
-                    } else {
-                        InputStream is = gridFSDBFile.getInputStream();
-                        //InputStream newIs = pictureService.resizeImage(is, width);
+                InputStream is = gridFSDBFile.getInputStream();
+//                String imageName = new ObjectId().toString();
+//                FileOutputStream fileOutputStream = new FileOutputStream(PATH_TO_IMAGE_FOLDER + "/" + imageName + ".jpg");
+//                IOUtils.copy(is,fileOutputStream);
+//                is.close();
+//                fileOutputStream.close();
 
-                        InputStream newIs = pictureService.addNewSizeToPicture(is, pictureDoc, width);
-                        IOUtils.copy(newIs, response.getOutputStream());
+//                ConvertCmd cmd = new ConvertCmd();
+//                cmd.setSearchPath(PATH_TO_IMAGE_MAGIC);
+//
+//                IMOperation op = new IMOperation();
+//                op.addImage(PATH_TO_IMAGE_FOLDER + "/" + imageName + ".jpg");
+//                op.resize(80, 60);
+//                op.addImage(PATH_TO_IMAGE_FOLDER + "/" + imageName + "_out.jpg");
+//
+//                // execute the operation
+//                cmd.run(op);
+                BufferedImage bufferedImage = ImageIO.read(is);
+                BufferedImage newImage = org.imgscalr.Scalr.resize(bufferedImage, width);
+                ImageIO.write(newImage,"png", response.getOutputStream());
+                is.close();
+                bufferedImage = null;
+                newImage = null;
 
-                        newIs.close();
-                        is.close();
-                        //response.setContentType("image/png");//gridFSDBFile.getContentType());
-                    }
-                } catch (IOException ioEx) {
-                    InputStream is = gridFSDBFile.getInputStream();
-                    IOUtils.copy(is, response.getOutputStream());
-                    is.close();
-                } finally {
-                    System.gc();
-                }
+
+                System.out.print("done");
             } else {
                 InputStream is = gridFSDBFile.getInputStream();
                 IOUtils.copy(is, response.getOutputStream());
@@ -100,4 +102,13 @@ public class PictureController {
     }
 
 
+    public static String PATH_TO_IMAGE_MAGIC = "/Users/maslov/workspace/kickcity/image-magic/ImageMagick-7.0.3" +
+            ":/Users/maslov/workspace/kickcity/image-magic/ImageMagick-7.0.3/bin" +
+            ":/Users/maslov/workspace/kickcity/image-magic/ImageMagick-7.0.3/etc" +
+            ":/Users/maslov/workspace/kickcity/image-magic/ImageMagick-7.0.3/include" +
+            ":/Users/maslov/workspace/kickcity/image-magic/ImageMagick-7.0.3/lib" +
+            ":/Users/maslov/workspace/kickcity/image-magic/ImageMagick-7.0.3/share" +
+            "";
+    public static String PATH_TO_IMAGE_FOLDER = "/Users/maslov/workspace/kickcity/image-magic";
+    public static String PATH_TO_IMAGE_FOLDER_ = "\\Users\\maslov\\workspace\\kickcity\\image-magic\\";
 }
