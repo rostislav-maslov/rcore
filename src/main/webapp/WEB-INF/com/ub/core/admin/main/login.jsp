@@ -21,7 +21,7 @@
 
     <link rel="stylesheet" href="<c:url value="/static/a/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css"/>">
     <link rel="stylesheet" href="<c:url value="/static/a/css/font-icons/entypo/css/entypo.css"/>">
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic">
+    <%--<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic">--%>
     <link rel="stylesheet" href="<c:url value="/static/a/css/neon.css"/>">
     <link rel="stylesheet" href="<c:url value="/static/a/css/custom.css"/>">
 

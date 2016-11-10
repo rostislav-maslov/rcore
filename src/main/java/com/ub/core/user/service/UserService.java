@@ -673,7 +673,11 @@ public class UserService {
 
     public void changePassword(ObjectId id, String password) {
         UserDoc userDoc = getUser(id);
-        userDoc.setPasswordAsHex(password);
+        if (userDoc.getEmail() != null && userDoc.getEmail().equals("") == false) {
+            userDoc.setPasswordAsHex(password);
+        } else if (userDoc.getLogin() != null && userDoc.getLogin().equals("") == false) {
+            userDoc.setPasswordForLoginAsHex(password);
+        }
         try {
             save(userDoc);
         } catch (UserExistException e) {
