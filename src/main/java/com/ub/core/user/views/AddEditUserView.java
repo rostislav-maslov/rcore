@@ -6,7 +6,6 @@ import javax.validation.constraints.Size;
 
 public class AddEditUserView {
 
-
     @Email(message = "неверно задан email")
     private String email;
     @Size(min = 6, message = "пароль должен быть более 6 символов")

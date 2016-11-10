@@ -33,7 +33,6 @@
     </bean>
     <mongo:repositories base-package="com.ub.*"/>
 
-
     <bean id="viewResolver"
           class="org.springframework.web.servlet.view.UrlBasedViewResolver">
         <property name="viewClass">

@@ -6,7 +6,6 @@ public class AccessTokenResponse {
     private String user_id;
     private String email;
 
-
     public String getEmail() {
         return email;
     }
