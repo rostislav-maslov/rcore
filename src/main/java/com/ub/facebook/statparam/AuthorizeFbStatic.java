@@ -14,6 +14,5 @@ public class AuthorizeFbStatic {
     public static final String P_SCOPE = "scope";//		Битовая маска настроек доступа приложения, которые необходимо проверить при авторизации пользователя и запросить, в случае отсутствия необходимых.
     public static final String P_RESPONSE_TYPE = "response_type";
     public static final String P_ACCESS_TOKEN = "access_token";
-    public static final String P_PERMISSIONS = "permissions";
     public static final String P_FIELDS = "fields";
 }

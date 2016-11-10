@@ -33,7 +33,7 @@ public class AuthorizeFbService {
         httpsUtils.addParam(AuthorizeFbStatic.P_CLIENT_SECRET, appPropertiesFbDoc.getAPP_SECRET());
         httpsUtils.addParam(AuthorizeFbStatic.P_CODE, code);
         httpsUtils.addParam(AuthorizeFbStatic.P_REDIRECT_URL, redirectUri);
-        httpsUtils.addParam(AuthorizeFbStatic.P_PERMISSIONS, appPropertiesFbDoc.getPERMISSIONS());
+        httpsUtils.addParam(AuthorizeFbStatic.P_SCOPE, appPropertiesFbDoc.getPERMISSIONS());
 
         try {
             String response = httpsUtils.sendGet();
@@ -47,9 +47,7 @@ public class AuthorizeFbService {
 
     public FBUserInfo get(String accessToken) {
         HttpsUtils httpsUtils = new HttpsUtils(AuthorizeFbStatic.ME_URL);
-
         httpsUtils.addParam(AuthorizeFbStatic.P_ACCESS_TOKEN, accessToken);
-        httpsUtils.addParam(AuthorizeFbStatic.P_FIELDS, "email,name");
         try {
             String response = httpsUtils.sendGet();
             FBUserInfo userInfo = new ObjectMapper().readValue(response, FBUserInfo.class);
@@ -57,6 +55,7 @@ public class AuthorizeFbService {
 
             return userInfo;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
