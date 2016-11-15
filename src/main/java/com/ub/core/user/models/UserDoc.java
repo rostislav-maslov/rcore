@@ -122,6 +122,27 @@ public class UserDoc {
         return null;
     }
 
+    public String getNoNullEmail(){
+        if( email != null){
+            return email;
+        }else if(emailForLogin != null){
+            return emailForLogin;
+        }else if(vkEmail != null){
+            return vkEmail ;
+        }else if(fbEmail != null){
+            return fbEmail;
+        }else if(twitterEmail != null){
+            return twitterEmail;
+        }else if(linkedinEmail != null){
+            return linkedinEmail;
+        }else if(googleEmail != null){
+            return googleEmail;
+        }else  if(okEmail != null){
+            return okEmail;
+        }
+        return null;
+    }
+
     public void addAccessToken(UserToken userToken){
         this.accessTokens.add(userToken);
     }
