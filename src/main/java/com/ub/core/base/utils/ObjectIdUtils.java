@@ -5,11 +5,19 @@ import org.bson.types.ObjectId;
 
 public class ObjectIdUtils {
 
-    public static String objectIdToBase64(ObjectId id){
+    public static String objectIdToBase64(ObjectId id) {
         return Base64.encodeBase64URLSafeString(id.toByteArray());
     }
 
-    public static ObjectId base64ToObjectId(String stringId){
-        return new ObjectId( Base64.decodeBase64(stringId));
+    public static ObjectId base64ToObjectId(String stringId) {
+        return new ObjectId(Base64.decodeBase64(stringId));
+    }
+
+    public static ObjectId tryParseString(String id) {
+        try {
+            return new ObjectId(id);
+        } catch (Exception e) {
+        }
+        return null;
     }
 }
