@@ -48,6 +48,7 @@ public class AuthorizeFbService {
     public FBUserInfo get(String accessToken) {
         HttpsUtils httpsUtils = new HttpsUtils(AuthorizeFbStatic.ME_URL);
         httpsUtils.addParam(AuthorizeFbStatic.P_ACCESS_TOKEN, accessToken);
+        httpsUtils.addParam(AuthorizeFbStatic.P_FIELDS, "id,name,first_name,last_name,gender,email,locale");
         try {
             String response = httpsUtils.sendGet();
             FBUserInfo userInfo = new ObjectMapper().readValue(response, FBUserInfo.class);

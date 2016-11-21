@@ -28,7 +28,6 @@
     <import resource="servlet/com-ub-core-language-servlet.xml" />
 
     <!-- MAIL -->
-
     <bean id="tilesConfigurer"
           class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
         <property name="definitions">

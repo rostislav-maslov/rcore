@@ -33,7 +33,6 @@
     </bean>
     <mongo:repositories base-package="com.ub.*"/>
 
-
     <bean id="viewResolver"
           class="org.springframework.web.servlet.view.UrlBasedViewResolver">
         <property name="viewClass">
@@ -63,6 +62,7 @@
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/api/**"/>
             <mvc:exclude-mapping path="/favicon.ico"/>
             <mvc:exclude-mapping path="/static/**"/>
             <mvc:exclude-mapping path="/admin/login**"/>

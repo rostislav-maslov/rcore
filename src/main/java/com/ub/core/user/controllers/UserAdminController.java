@@ -108,7 +108,7 @@ public class UserAdminController {
             return "com.ub.core.admin.user.addEdit";
         } else {
             try {
-                userService.createUserByEmail(addEditUserView);
+                userService.createUserByEmail(addEditUserView.getEmail(), addEditUserView.getPassword(), addEditUserView.getRole());
             } catch (UserExistException e) {
                 ObjectError error = new ObjectError("role", "Данный пользователь уже существует");
                 bindingResult.addError(error);
