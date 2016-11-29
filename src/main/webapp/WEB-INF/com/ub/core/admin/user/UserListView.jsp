@@ -66,7 +66,7 @@
                             <c:if test="${not empty user.login}">Login;</c:if>
                             <c:if test="${not empty user.vkId}">Vk;</c:if>
                             <c:if test="${not empty user.fbId}">Fb;</c:if>
-                            <c:if test="${not empty user.linkedinIdn}">LinkedIn;</c:if>
+                            <c:if test="${not empty user.linkedinId}">LinkedIn;</c:if>
                             <c:if test="${not empty user.okId}">Ok;</c:if>
                             <c:if test="${not empty user.twitterId}">Twitter;</c:if>
                             <c:if test="${not empty user.googleId}">Google;</c:if>
