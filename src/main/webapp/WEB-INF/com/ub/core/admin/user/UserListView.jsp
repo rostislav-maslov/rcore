@@ -31,21 +31,12 @@
             <table class="table table-bordered datatable" id="table-1">
                 <thead>
                 <tr>
-                    <th>
-                        Email
-                    </th>
-                    <th>
-                        Имя
-                    </th>
-                    <th>
-                        Статус
-                    </th>
-                    <th>
-                        Роли
-                    </th>
-                    <th>
-                        Действия
-                    </th>
+                    <th>Email</th>
+                    <th>Имя</th>
+                    <th>Статус</th>
+                    <th>Роли</th>
+                    <th>Тип авторизации</th>
+                    <th>Действия</th>
 
                 </tr>
                 </thead>
@@ -53,7 +44,7 @@
 
                 <c:forEach items="${searchUserAdminResponse.result}" var="user">
                     <tr>
-                        <td>${user.email}</td>
+                        <td>${user.noNullEmail}</td>
                         <td>${user.firstName} ${user.lastName}</td>
                         <c:if test="${user.userStatus == active}">
                             <td>
@@ -69,6 +60,16 @@
                             <c:forEach items="${user.roles}" var="role">
                                 ${role.roleTitle}<br/>
                             </c:forEach>
+                        </td>
+                        <td>
+                            <c:if test="${not empty user.email}">Email;</c:if>
+                            <c:if test="${not empty user.login}">Login;</c:if>
+                            <c:if test="${not empty user.vkId}">Vk;</c:if>
+                            <c:if test="${not empty user.fbId}">Fb;</c:if>
+                            <c:if test="${not empty user.linkedinIdn}">LinkedIn;</c:if>
+                            <c:if test="${not empty user.okId}">Ok;</c:if>
+                            <c:if test="${not empty user.twitterId}">Twitter;</c:if>
+                            <c:if test="${not empty user.googleId}">Google;</c:if>
                         </td>
 
                         <td class="text-right">
