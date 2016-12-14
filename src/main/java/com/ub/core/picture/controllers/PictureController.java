@@ -87,7 +87,10 @@ public class PictureController {
                 System.out.print("done");
             } else {
                 InputStream is = gridFSDBFile.getInputStream();
+                byte[] bt = IOUtils.toByteArray(is);
+                response.setContentLength(bt.length);
                 IOUtils.copy(is, response.getOutputStream());
+                response.getOutputStream().write(bt);
                 is.close();
             }
 
