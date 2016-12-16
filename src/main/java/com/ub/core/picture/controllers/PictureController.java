@@ -4,6 +4,7 @@ import com.mongodb.gridfs.GridFSDBFile;
 import com.ub.core.base.utils.StringUtils;
 import com.ub.core.file.services.FileService;
 import com.ub.core.picture.models.PictureDoc;
+import com.ub.core.picture.models.PictureSize;
 import com.ub.core.picture.routes.PicturesRoutes;
 import com.ub.core.picture.services.PictureService;
 import org.apache.commons.io.IOUtils;
@@ -31,7 +32,8 @@ public class PictureController {
 
 
     @RequestMapping(value = PicturesRoutes.PIC, method = RequestMethod.GET)
-    protected void pics(HttpServletResponse response, @PathVariable(value = "id") String id,
+    protected void pics(HttpServletResponse response,
+                        @PathVariable(value = "id") String id,
                         @RequestParam(required = false) Integer width) {
         try {
             PictureDoc pictureDoc = null;
@@ -59,37 +61,19 @@ public class PictureController {
             response.setHeader("Content-Disposition", "filename=\"" + StringUtils.cyrillicToLatin(gridFSDBFile.getFilename()) + "\"");
             response.setContentType(gridFSDBFile.getContentType());
             if (width != null && width > 0) {
-                InputStream is = gridFSDBFile.getInputStream();
-//                String imageName = new ObjectId().toString();
-//                FileOutputStream fileOutputStream = new FileOutputStream(PATH_TO_IMAGE_FOLDER + "/" + imageName + ".jpg");
-//                IOUtils.copy(is,fileOutputStream);
-//                is.close();
-//                fileOutputStream.close();
-
-//                ConvertCmd cmd = new ConvertCmd();
-//                cmd.setSearchPath(PATH_TO_IMAGE_MAGIC);
-//
-//                IMOperation op = new IMOperation();
-//                op.addImage(PATH_TO_IMAGE_FOLDER + "/" + imageName + ".jpg");
-//                op.resize(80, 60);
-//                op.addImage(PATH_TO_IMAGE_FOLDER + "/" + imageName + "_out.jpg");
-//
-//                // execute the operation
-//                cmd.run(op);
-                BufferedImage bufferedImage = ImageIO.read(is);
-                BufferedImage newImage = org.imgscalr.Scalr.resize(bufferedImage, width);
-                ImageIO.write(newImage,"png", response.getOutputStream());
+                PictureSize pictureSize = pictureService.getSizeFromPic(pictureDoc, width);
+                GridFSDBFile gridFSDBFileWidth = fileService.getFile(pictureSize.getFileId());
+                InputStream is = gridFSDBFileWidth.getInputStream();
+                byte[] bt = IOUtils.toByteArray(is);
+                response.setContentLength(bt.length);
+//                IOUtils.copy(is, response.getOutputStream());
+                response.getOutputStream().write(bt);
                 is.close();
-                bufferedImage = null;
-                newImage = null;
-
-
-                System.out.print("done");
             } else {
                 InputStream is = gridFSDBFile.getInputStream();
                 byte[] bt = IOUtils.toByteArray(is);
                 response.setContentLength(bt.length);
-                IOUtils.copy(is, response.getOutputStream());
+//                IOUtils.copy(is, response.getOutputStream());
                 response.getOutputStream().write(bt);
                 is.close();
             }

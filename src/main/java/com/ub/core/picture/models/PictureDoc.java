@@ -23,20 +23,27 @@ public class PictureDoc {
 
     private String color;
 
-    public PictureSize hasSizeWidth(Integer width){
-        for(PictureSize pictureSize : sizes.values()){
-            if(pictureSize.getWidth().equals(width)){
+    public PictureSize hasSizeWidth(Integer width) {
+        for (PictureSize pictureSize : sizes.values()) {
+            if (pictureSize.getWidth().equals(width)) {
                 return pictureSize;
             }
         }
         return null;
     }
 
-    public void addSize(PictureSize pictureSize){
-        if(sizes.size() >= PictureService.LIMIT_OF_IMAGE_SIZES){
+    public void addSize(PictureSize pictureSize) {
+        if (sizes.size() >= PictureService.LIMIT_OF_IMAGE_SIZES) {
             return;
         }
-        sizes.put(pictureSize.getStringSize(),pictureSize);
+        sizes.put(pictureSize.getStringSize(), pictureSize);
+    }
+
+    public void addSize(PictureSize pictureSize, Integer width) {
+        if (sizes.size() >= PictureService.LIMIT_OF_IMAGE_SIZES) {
+            return;
+        }
+        sizes.put(pictureSize.getStringSizeW(), pictureSize);
     }
 
     public ObjectId getId() {

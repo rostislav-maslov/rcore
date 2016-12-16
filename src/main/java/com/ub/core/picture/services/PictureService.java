@@ -27,6 +27,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
+import static org.imgscalr.Scalr.Mode.FIT_TO_WIDTH;
+
 @Component
 public class PictureService {
     public static final Integer LIMIT_OF_IMAGE_SIZES = 5;
@@ -63,56 +65,70 @@ public class PictureService {
         mongoTemplate.remove(pictureDoc);
     }
 
-    public InputStream addNewSizeToPicture(InputStream is, PictureDoc pictureDoc, Integer width) throws IOException {
-        if (pictureDoc.getSizes().size() >= LIMIT_OF_IMAGE_SIZES) {
-            GridFSDBFile gridFSDBFile = fileService.getFile(pictureDoc.getOriginFileId());
-            return gridFSDBFile.getInputStream();
+    public PictureSize getSizeFromPic(PictureDoc pictureDoc, Integer width) throws IOException {
+        for(PictureSize pictureSize : pictureDoc.getSizes().values()){
+            if(pictureSize.getWidth().equals(width)) {
+                return pictureSize;
+            }
         }
 
-        InputStream newSize = resizeImage(is, width);
+        PictureSize pictureSize = addNewSizeToPicture(pictureDoc, width);
 
+        return pictureSize;
+    }
+
+    public PictureSize addNewSizeToPicture(PictureDoc pictureDoc, Integer width) throws IOException {
+        if (pictureDoc.getSizes().size() >= LIMIT_OF_IMAGE_SIZES) {
+            PictureSize pictureSize = new PictureSize();
+            pictureSize.setFileId(pictureDoc.getOriginFileId());
+            return pictureSize;
+        }
+
+        InputStream newSize = resizeImage(pictureDoc, width);
         GridFSDBFile newSizeFile = fileService.save(newSize);
 
         BufferedImage originalImage = ImageIO.read(newSizeFile.getInputStream());
-
         // сохраняем еще один ресайз в картинке
         PictureSize pictureSize = new PictureSize();
         pictureSize.setFileId((ObjectId) newSizeFile.getId());
-        pictureSize.setWidth(width);
+        pictureSize.setWidth(originalImage.getWidth());
         pictureSize.setHieght(originalImage.getHeight());
 
+        // TODO: ПО хорошему размер тоже нужно тут прописывать
+        //pictureSize.setLength(originalImage.getB);
 
         pictureDoc.addSize(pictureSize);
         mongoTemplate.save(pictureDoc);
 
+        originalImage = null;
+        newSizeFile.getInputStream().close();
+
+        return pictureSize;
+    }
+
+    public InputStream resizeImage(PictureDoc pictureDoc, int width) throws IOException {
+        GridFSDBFile gridFSDBFile = fileService.getFile(pictureDoc.getOriginFileId());
+
+        InputStream is = gridFSDBFile.getInputStream();
+        BufferedImage bufferedImage = ImageIO.read(is);
+        BufferedImage newImage = org.imgscalr.Scalr.resize(bufferedImage, FIT_TO_WIDTH, width);
+
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        ImageIO.write(newImage, "png", os);
+
+        InputStream resultIS = new ByteArrayInputStream(os.toByteArray());
+
+
         is.close();
+        os.close();
+        bufferedImage = null;
+        newImage = null;
+        gridFSDBFile = null;
 
-        return newSizeFile.getInputStream();
+        return resultIS;
     }
 
-    public static synchronized InputStream resizeImage(InputStream is, int width) throws IOException {
-        try {
-            BufferedImage originalImage = ImageIO.read(is);
-            BufferedImage thumbnail = Scalr.resize(originalImage, Scalr.Method.AUTOMATIC, Scalr.Mode.FIT_TO_WIDTH, width);
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            ImageIO.write(thumbnail, "png", os);
-            thumbnail.flush();
-
-            is.close();
-            os.flush();
-            os.close();
-            originalImage.flush();
-            System.gc();
-
-            InputStream resultStream = new ByteArrayInputStream(os.toByteArray());
-            return resultStream;
-        } catch (IOException ex) {
-            //http://stackoverflow.com/questions/2408613/unable-to-read-jpeg-image-using-imageio-readfile-file
-            ex.printStackTrace();
-            throw ex;
-        }
-    }
-
+    @Deprecated
     public PictureSize getPictureSize(ObjectId fileId) {
         PictureSize pictureSize = new PictureSize();
         try {

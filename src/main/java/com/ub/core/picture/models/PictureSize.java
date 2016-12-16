@@ -8,9 +8,26 @@ public class PictureSize {
     private Integer width = 0;
     private Integer hieght = 0;
     private ObjectId fileId;
+    private Integer length = null;
 
-    public String getStringSize(){
+    public String getStringSize() {
         return width + SEP + hieght;
+    }
+
+    public String getStringSizeW() {
+        return width + "w";
+    }
+
+    public static String getStringSizeWidth(String width) {
+        return width + "w";
+    }
+
+    public static String getStringSizeHeight(String width) {
+        return width + "h";
+    }
+
+    public static String getFull(String width, String height) {
+        return width + SEP + height;
     }
 
     @Override
@@ -55,5 +72,13 @@ public class PictureSize {
 
     public void setFileId(ObjectId fileId) {
         this.fileId = fileId;
+    }
+
+    public Integer getLength() {
+        return length;
+    }
+
+    public void setLength(Integer length) {
+        this.length = length;
     }
 }
