@@ -64,17 +64,19 @@ public class PictureController {
                 PictureSize pictureSize = pictureService.getSizeFromPic(pictureDoc, width);
                 GridFSDBFile gridFSDBFileWidth = fileService.getFile(pictureSize.getFileId());
                 InputStream is = gridFSDBFileWidth.getInputStream();
-                byte[] bt = IOUtils.toByteArray(is);
-                response.setContentLength(bt.length);
-//                IOUtils.copy(is, response.getOutputStream());
-                response.getOutputStream().write(bt);
+//                byte[] bt = IOUtils.toByteArray(is);
+//                response.setContentLength(bt.length);
+                //response.getOutputStream().write(bt);
+                IOUtils.copy(is, response.getOutputStream());
+
                 is.close();
             } else {
                 InputStream is = gridFSDBFile.getInputStream();
-                byte[] bt = IOUtils.toByteArray(is);
-                response.setContentLength(bt.length);
-//                IOUtils.copy(is, response.getOutputStream());
-                response.getOutputStream().write(bt);
+//                byte[] bt = IOUtils.toByteArray(is);
+//                response.setContentLength(bt.length);
+//                response.getOutputStream().write(bt);
+                IOUtils.copy(is, response.getOutputStream());
+
                 is.close();
             }
 
