@@ -39,13 +39,6 @@ public class PictureDoc {
         sizes.put(pictureSize.getStringSize(), pictureSize);
     }
 
-    public void addSize(PictureSize pictureSize, Integer width) {
-        if (sizes.size() >= PictureService.LIMIT_OF_IMAGE_SIZES) {
-            return;
-        }
-        sizes.put(pictureSize.getStringSizeW(), pictureSize);
-    }
-
     public ObjectId getId() {
         return id;
     }

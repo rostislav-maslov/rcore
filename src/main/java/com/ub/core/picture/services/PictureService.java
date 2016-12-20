@@ -6,7 +6,11 @@ import com.ub.core.picture.models.PictureDoc;
 import com.ub.core.picture.models.PictureSize;
 import com.ub.core.picture.view.all.SearchAdminRequest;
 import com.ub.core.picture.view.all.SearchAdminResponse;
+import com.ub.core.pictureTask.services.PictureResizeService;
+import com.ub.core.pictureTask.services.PictureTaskService;
 import org.bson.types.ObjectId;
+import org.im4java.core.ConvertCmd;
+import org.im4java.core.IMOperation;
 import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -38,6 +42,7 @@ public class PictureService {
     @Autowired private FileService fileService;
     @Autowired private MongoTemplate mongoTemplate;
     @Autowired private PictureColorService pictureColorService;
+    @Autowired private PictureTaskService pictureTaskService;
 
     public PictureDoc findById(ObjectId id) {
         return mongoTemplate.findById(id, PictureDoc.class);
@@ -67,7 +72,7 @@ public class PictureService {
 
     public PictureSize getSizeFromPic(PictureDoc pictureDoc, Integer width) throws IOException {
         for(PictureSize pictureSize : pictureDoc.getSizes().values()){
-            if(pictureSize.getWidth().equals(width)) {
+            if(pictureSize.getWidth().equals(width) && pictureSize.getPictureSizeType() != null) {
                 return pictureSize;
             }
         }
@@ -84,48 +89,11 @@ public class PictureService {
             return pictureSize;
         }
 
-        InputStream newSize = resizeImage(pictureDoc, width);
-        GridFSDBFile newSizeFile = fileService.save(newSize);
+        pictureTaskService.addTask(pictureDoc, width);
 
-        BufferedImage originalImage = ImageIO.read(newSizeFile.getInputStream());
-        // сохраняем еще один ресайз в картинке
         PictureSize pictureSize = new PictureSize();
-        pictureSize.setFileId((ObjectId) newSizeFile.getId());
-        pictureSize.setWidth(originalImage.getWidth());
-        pictureSize.setHieght(originalImage.getHeight());
-
-        // TODO: ПО хорошему размер тоже нужно тут прописывать
-        //pictureSize.setLength(originalImage.getB);
-
-        pictureDoc.addSize(pictureSize);
-        mongoTemplate.save(pictureDoc);
-
-        originalImage = null;
-        newSizeFile.getInputStream().close();
-
+        pictureSize.setFileId(pictureDoc.getOriginFileId());
         return pictureSize;
-    }
-
-    public InputStream resizeImage(PictureDoc pictureDoc, int width) throws IOException {
-        GridFSDBFile gridFSDBFile = fileService.getFile(pictureDoc.getOriginFileId());
-
-        InputStream is = gridFSDBFile.getInputStream();
-        BufferedImage bufferedImage = ImageIO.read(is);
-        BufferedImage newImage = org.imgscalr.Scalr.resize(bufferedImage, FIT_TO_WIDTH, width);
-
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ImageIO.write(newImage, "png", os);
-
-        InputStream resultIS = new ByteArrayInputStream(os.toByteArray());
-
-
-        is.close();
-        os.close();
-        bufferedImage = null;
-        newImage = null;
-        gridFSDBFile = null;
-
-        return resultIS;
     }
 
     @Deprecated

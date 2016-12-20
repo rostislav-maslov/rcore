@@ -49,32 +49,35 @@ public class PictureController {
                 response.setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
                 response.setHeader("Location", "/404");
             }
-            //Кеширование
-            GregorianCalendar gc = new GregorianCalendar();
-            gc.setTime(new Date());
-            gc.add(GregorianCalendar.YEAR, 1);
-            long ex = gc.getTime().getTime();
-            response.setDateHeader("Expires", ex);
-            //конец кеширования
+
 
             GridFSDBFile gridFSDBFile = fileService.getFile(pictureDoc.getOriginFileId());
             response.setHeader("Content-Disposition", "filename=\"" + StringUtils.cyrillicToLatin(gridFSDBFile.getFilename()) + "\"");
             response.setContentType(gridFSDBFile.getContentType());
             if (width != null && width > 0) {
                 PictureSize pictureSize = pictureService.getSizeFromPic(pictureDoc, width);
+                if(pictureSize.getPictureSizeType() != null){
+                    //Кеширование
+                    GregorianCalendar gc = new GregorianCalendar();
+                    gc.setTime(new Date());
+                    gc.add(GregorianCalendar.YEAR, 1);
+                    long ex = gc.getTime().getTime();
+                    response.setDateHeader("Expires", ex);
+                    //конец кеширования
+                }
                 GridFSDBFile gridFSDBFileWidth = fileService.getFile(pictureSize.getFileId());
                 InputStream is = gridFSDBFileWidth.getInputStream();
-//                byte[] bt = IOUtils.toByteArray(is);
-//                response.setContentLength(bt.length);
-                //response.getOutputStream().write(bt);
                 IOUtils.copy(is, response.getOutputStream());
-
                 is.close();
             } else {
+                //Кеширование
+                GregorianCalendar gc = new GregorianCalendar();
+                gc.setTime(new Date());
+                gc.add(GregorianCalendar.YEAR, 1);
+                long ex = gc.getTime().getTime();
+                response.setDateHeader("Expires", ex);
+                //конец кеширования
                 InputStream is = gridFSDBFile.getInputStream();
-//                byte[] bt = IOUtils.toByteArray(is);
-//                response.setContentLength(bt.length);
-//                response.getOutputStream().write(bt);
                 IOUtils.copy(is, response.getOutputStream());
 
                 is.close();

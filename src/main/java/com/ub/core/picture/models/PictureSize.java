@@ -9,6 +9,7 @@ public class PictureSize {
     private Integer hieght = 0;
     private ObjectId fileId;
     private Integer length = null;
+    private PictureSizeType pictureSizeType;
 
     public String getStringSize() {
         return width + SEP + hieght;
@@ -80,5 +81,13 @@ public class PictureSize {
 
     public void setLength(Integer length) {
         this.length = length;
+    }
+
+    public PictureSizeType getPictureSizeType() {
+        return pictureSizeType;
+    }
+
+    public void setPictureSizeType(PictureSizeType pictureSizeType) {
+        this.pictureSizeType = pictureSizeType;
     }
 }
