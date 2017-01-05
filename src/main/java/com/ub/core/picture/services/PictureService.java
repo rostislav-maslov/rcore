@@ -62,17 +62,28 @@ public class PictureService {
         if (pictureDoc == null)
             return;
 
-        fileService.delete(pictureDoc.getOriginFileId());
-        for (PictureSize pictureSize : pictureDoc.getSizes().values()) {
-            fileService.delete(pictureSize.getFileId());
+        try {
+            fileService.delete(pictureDoc.getOriginFileId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if (pictureDoc.getSizes() != null) {
+            for (PictureSize pictureSize : pictureDoc.getSizes().values()) {
+                try {
+                    fileService.delete(pictureSize.getFileId());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
 
         mongoTemplate.remove(pictureDoc);
     }
 
     public PictureSize getSizeFromPic(PictureDoc pictureDoc, Integer width) throws IOException {
-        for(PictureSize pictureSize : pictureDoc.getSizes().values()){
-            if(pictureSize.getWidth().equals(width) && pictureSize.getPictureSizeType() != null) {
+        for (PictureSize pictureSize : pictureDoc.getSizes().values()) {
+            if (pictureSize.getWidth().equals(width) && pictureSize.getPictureSizeType() != null) {
                 return pictureSize;
             }
         }
