@@ -29,7 +29,7 @@ public class UrlUtils {
     }
 
     public static String getAbsUrl(String url) {
-        String pre = "http://" + serverName();
+        String pre = "https://" + serverName();
 
         return pre + url;
     }
