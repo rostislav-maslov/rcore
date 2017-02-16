@@ -6,6 +6,12 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 public class UrlUtils {
 
+    public enum ProtocolEnum{
+        http,https
+    }
+
+    public static ProtocolEnum PROTOCOL = ProtocolEnum.http;
+
     public static String urlFromString(String str) {
         return StringUtils.cyrillicToLatin(str).replaceAll(" ", "-").replaceAll(" ", "-").replaceAll(" ", "-").toLowerCase();
     }
@@ -29,18 +35,7 @@ public class UrlUtils {
     }
 
     public static String getAbsUrl(String url) {
-        String protocol = "http";
-        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        if (attr.getRequest().isSecure() == true) {
-            protocol = "https";
-        }
-        if (attr.getRequest().getHeader("X-SSL-Secure") != null &&
-                attr.getRequest().getHeader("X-SSL-Secure").equals("true")) {
-            protocol = "https";
-        }
-
-
-        String pre = protocol + "://" + serverName();
+        String pre = PROTOCOL.toString() + "://" + serverName();
 
         return pre + url;
     }
