@@ -29,7 +29,13 @@ public class UrlUtils {
     }
 
     public static String getAbsUrl(String url) {
-        String pre = "https://" + serverName();
+        String protocol = "http";
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        if(attr.getRequest().isSecure()){
+            protocol = "https";
+        }
+
+        String pre = protocol + "://" + serverName();
 
         return pre + url;
     }
