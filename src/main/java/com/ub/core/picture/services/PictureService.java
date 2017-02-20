@@ -201,7 +201,7 @@ public class PictureService {
                 searchAdminRequest.getPageSize(),
                 sort);
 
-        Criteria criteria = new Criteria();
+        Criteria criteria = Criteria.where("fileName").regex(searchAdminRequest.getQuery(), "i");
 
         Query query = new Query(criteria);
         Long count = mongoTemplate.count(query, PictureDoc.class);
