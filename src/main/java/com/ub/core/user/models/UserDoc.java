@@ -64,8 +64,6 @@ public class UserDoc {
     private List<UserToken> accessTokens = new ArrayList<UserToken>();
     private List<UserToken> refreshTokens = new ArrayList<UserToken>();
 
-    private String notificationId;
-
     public static String generateHexPassword(String email, String password) {
         return DigestUtils.md5Hex(email + ";" + password + "42");
     }
@@ -457,11 +455,4 @@ public class UserDoc {
         this.okEmail = okEmail;
     }
 
-    public String getNotificationId() {
-        return notificationId;
-    }
-
-    public void setNotificationId(String notificationId) {
-        this.notificationId = notificationId;
-    }
 }
