@@ -44,6 +44,7 @@ public class HttpUtils {
         URL urlObj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
         con.setRequestMethod("GET");
+        con.setConnectTimeout(300);
 
         int responseCode = con.getResponseCode();
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
