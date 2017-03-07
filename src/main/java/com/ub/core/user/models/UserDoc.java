@@ -454,4 +454,5 @@ public class UserDoc {
     public void setOkEmail(String okEmail) {
         this.okEmail = okEmail;
     }
+
 }

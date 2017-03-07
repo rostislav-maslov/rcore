@@ -40,7 +40,7 @@ public class FileController {
             gc.setTime(new Date());
             gc.add(GregorianCalendar.HOUR_OF_DAY, 72);
             long ex = gc.getTime().getTime();
-            response.setDateHeader("Expires",ex);
+            response.setDateHeader("Expires", ex);
             //конец кеширования
             response.setContentType(gridFSDBFile.getContentType());
             InputStream is = gridFSDBFile.getInputStream();
