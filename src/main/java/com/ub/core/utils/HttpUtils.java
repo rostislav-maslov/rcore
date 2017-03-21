@@ -14,6 +14,7 @@ import java.util.Map;
 public class HttpUtils {
 
     private Map<String, String> params = new HashMap<String, String>();
+    private Map<String, String> headers = new HashMap<String, String>();
     private String url = "";
 
     public HttpUtils(String utl) {
@@ -46,6 +47,10 @@ public class HttpUtils {
         con.setRequestMethod("GET");
         con.setConnectTimeout(300);
 
+        for(String key: this.headers.keySet()){
+            con.setRequestProperty(key, this.getHeaders().get(key));
+        }
+
         int responseCode = con.getResponseCode();
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         String inputLine;
@@ -55,5 +60,13 @@ public class HttpUtils {
         }
         in.close();
         return new String(response.toString().getBytes(),"UTF-8");
+    }
+
+    public Map<String, String> getHeaders() {
+        return headers;
+    }
+
+    public void setHeaders(Map<String, String> headers) {
+        this.headers = headers;
     }
 }
