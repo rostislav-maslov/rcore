@@ -3,9 +3,7 @@ package com.ub.core.utils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,9 +45,15 @@ public class HttpUtils {
         con.setRequestMethod("GET");
         con.setConnectTimeout(300);
 
+
+//        if(this.getHeaders().size() > 0){
+//            CookieManager cookieManager = new CookieManager();
+//            CookieHandler.setDefault(cookieManager);
+//        }
         for(String key: this.headers.keySet()){
             con.setRequestProperty(key, this.getHeaders().get(key));
         }
+
 
         int responseCode = con.getResponseCode();
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));

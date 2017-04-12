@@ -23,21 +23,7 @@ public class AdminLanguageSupportInterception extends HandlerInterceptorAdapter 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws ServletException {
-
-        LanguageCode lc = adminLanguageService.getLanguageCode();
-
-        Locale locale = StringUtils.parseLocaleString(lc.getCode2());
-        if (locale != null && !locale.equals(request.getLocale())) {
-            LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
-            if (localeResolver == null) {
-                throw new IllegalStateException("No LocaleResolver found.");
-            }
-            try {
-                localeResolver.setLocale(request, response, locale);
-            } catch (IllegalArgumentException e) {
-
-            }
-        }
+        adminLanguageService.updateLang(request, response);
         return true;
     }
 

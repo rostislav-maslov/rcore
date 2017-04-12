@@ -4,8 +4,14 @@ import com.ub.core.language.models.LanguageCode;
 import com.ub.core.security.service.AutorizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Locale;
 
 @Component
 public class AdminLanguageService {
@@ -31,5 +37,22 @@ public class AdminLanguageService {
     public void setLanguageCode(String code2){
         HttpSession httpSession = autorizationService.getSession();
         httpSession.setAttribute(HTTP_SESSION_KEY, code2);
+    }
+
+    public void updateLang(HttpServletRequest request, HttpServletResponse response){
+        LanguageCode lc = getLanguageCode();
+
+        Locale locale = StringUtils.parseLocaleString(lc.getCode2());
+        if (locale != null && !locale.equals(request.getLocale())) {
+            LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
+            if (localeResolver == null) {
+                throw new IllegalStateException("No LocaleResolver found.");
+            }
+            try {
+                localeResolver.setLocale(request, response, locale);
+            } catch (IllegalArgumentException e) {
+
+            }
+        }
     }
 }
