@@ -35,7 +35,11 @@ public class UrlUtils {
     }
 
     public static String getAbsUrl(String url) {
-        String pre = PROTOCOL.toString() + "://" + serverName();
+        return getAbsUrl(url, PROTOCOL.toString());
+    }
+
+    public static String getAbsUrl(String url, String protocol) {
+        String pre = protocol + "://" + serverName();
 
         return pre + url;
     }
