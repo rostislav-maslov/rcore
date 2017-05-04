@@ -39,4 +39,12 @@ public class UrlUtils {
 
         return pre + url;
     }
+
+//    public static String serverUrl() {
+//        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+//
+//        return request.getScheme() + "://"
+//                + request.getServerName()
+//                + (request.getServerPort() != 80 ? ':' + request.getServerPort() : "");
+//    }
 }
