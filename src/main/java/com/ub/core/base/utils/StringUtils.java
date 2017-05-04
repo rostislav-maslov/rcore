@@ -4,27 +4,26 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 public class StringUtils {
 
-    public static boolean isEmpty(String s){
-        if(s == null || s.equals(""))
-            return true;
-        return false;
+    public static boolean isEmpty(String s) {
+        return s == null || s.equals("");
     }
 
-    public static boolean isNotEmpty(String s){
+    public static boolean isNotEmpty(String s) {
         return !isEmpty(s);
     }
 
-    public static String catString(String str, Integer l){
-        if(str == null) return null;
-        if(str.length() <= l) return str;
+    public static String catString(String str, Integer l) {
+        if (str == null) return null;
+        if (str.length() <= l) return str;
 
-        return str.substring(0, l-1);
+        return str.substring(0, l - 1);
     }
-    public static String catStringWithDot(String str, Integer l){
-        if(str == null) return null;
-        if(str.length() <= l) return str;
 
-        return str.substring(0, l-4) + "...";
+    public static String catStringWithDot(String str, Integer l) {
+        if (str == null) return null;
+        if (str.length() <= l) return str;
+
+        return str.substring(0, l - 4) + "...";
     }
 
     public static String getMD5ofString(String str) {
@@ -33,7 +32,7 @@ public class StringUtils {
     }
 
     public static String cyrillicToLatin(String lat) {
-        if(lat == null) return lat;
+        if (lat == null) return lat;
         lat = lat.replaceAll("ё", "yo");
         lat = lat.replaceAll("а", "a");
         lat = lat.replaceAll("б", "b");
