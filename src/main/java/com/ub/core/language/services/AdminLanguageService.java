@@ -43,7 +43,7 @@ public class AdminLanguageService {
         LanguageCode lc = getLanguageCode();
 
         Locale locale = StringUtils.parseLocaleString(lc.getCode2());
-        if (locale != null && !locale.equals(request.getLocale())) {
+        if (locale != null ) {
             LocaleResolver localeResolver = RequestContextUtils.getLocaleResolver(request);
             if (localeResolver == null) {
                 throw new IllegalStateException("No LocaleResolver found.");
