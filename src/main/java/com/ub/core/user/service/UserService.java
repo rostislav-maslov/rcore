@@ -107,6 +107,14 @@ public class UserService {
         return mongoTemplate.findOne(new Query(Criteria.where("email").is(email)), UserDoc.class);
     }
 
+    public UserDoc findByVkEmail(String email) {
+        return mongoTemplate.findOne(new Query(Criteria.where("vkEmail").is(email)), UserDoc.class);
+    }
+
+    public UserDoc findByFbEmail(String email) {
+        return mongoTemplate.findOne(new Query(Criteria.where("fbEmail").is(email)), UserDoc.class);
+    }
+
     public UserDoc findByEmailForLogin(String email) {
         return mongoTemplate.findOne(new Query(Criteria.where("emailForLogin").is(email)), UserDoc.class);
     }
