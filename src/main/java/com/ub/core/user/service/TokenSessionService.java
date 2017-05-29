@@ -77,7 +77,7 @@ public class TokenSessionService {
         throw new UserNotAutorizedException();
     }
 
-    private UserToken getToken(UserDoc userDoc) {
+    public UserToken getToken(UserDoc userDoc) {
         UserToken userToken = userDoc.getActiveAccessToken();
         try {
             if (userToken == null) {

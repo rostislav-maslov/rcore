@@ -55,6 +55,7 @@ public class PictureController {
             response.setHeader("Content-Disposition", "filename=\"" + StringUtils.cyrillicToLatin(gridFSDBFile.getFilename()) + "\"");
             response.setContentType(gridFSDBFile.getContentType());
             if (width != null && width > 0) {
+                response.setHeader("Content-Type","image/png");
                 PictureSize pictureSize = pictureService.getSizeFromPic(pictureDoc, width);
                 if(pictureSize.getPictureSizeType() != null){
                     //Кеширование
@@ -69,6 +70,7 @@ public class PictureController {
                 InputStream is = gridFSDBFileWidth.getInputStream();
                 IOUtils.copy(is, response.getOutputStream());
                 is.close();
+                response.setHeader("Content-Type","image/png");
             } else {
                 //Кеширование
                 GregorianCalendar gc = new GregorianCalendar();
