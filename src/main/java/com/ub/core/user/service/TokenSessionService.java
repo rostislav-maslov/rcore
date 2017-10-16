@@ -30,8 +30,9 @@ public class TokenSessionService {
         UserDoc userDoc = userService.findByEmail(email);
         if (userDoc == null || userDoc.getPassword() == null || userDoc.getUserStatus().equals(UserStatusEnum.BLOCK))
             throw new UserNotAutorizedException();
-        if (!userDoc.getPassword().equals(password))
+        if(UserDoc.generateHexPassword(email, password).equals(userDoc.getPassword()) == false && password.equals(userDoc.getPassword()) == false){
             throw new UserNotAutorizedException();
+        }
 
         return getToken(userDoc);
     }
