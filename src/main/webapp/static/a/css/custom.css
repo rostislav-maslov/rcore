@@ -20,3 +20,7 @@
 .go-to-top .fa{
     font-size: 40px;
 }
+
+.modal-backdrop {
+    display: none;
+}
