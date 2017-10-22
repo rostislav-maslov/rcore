@@ -13,10 +13,17 @@
         <!--<spring-security.version>3.1.4.RELEASE</spring-security.version>-->
         <!--<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
 
-        
-        <spring.version>4.3.6.RELEASE</spring.version>
-        <spring-data.version>1.10.0.RELEASE</spring-data.version>
-        <spring-security.version>4.2.1.RELEASE</spring-security.version>
+        <!--<spring.version>4.3.6.RELEASE</spring.version>-->
+        <!--<spring-data.version>1.10.0.RELEASE</spring-data.version>-->
+        <!--<spring-security.version>4.2.1.RELEASE</spring-security.version>-->
+        <!--<java-mongo-driver.version>3.4.1</java-mongo-driver.version>-->
+
+        <spring.version>4.1.3.RELEASE</spring.version>
+        <spring-data.version>1.5.1.RELEASE</spring-data.version>
+        <spring-security.version>3.1.4.RELEASE</spring-security.version>
+        <java-mongo-driver.version>2.12.1</java-mongo-driver.version>
+
+
         <jackson.version>2.8.6</jackson.version>
         <log4j.version>2.8</log4j.version>
         <slf4j.version>1.7.24</slf4j.version>
