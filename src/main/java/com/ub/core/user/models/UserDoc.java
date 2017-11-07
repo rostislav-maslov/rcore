@@ -14,6 +14,7 @@ public class UserDoc {
     @Id
     protected ObjectId id;
 
+    private Long phoneNumber;
     protected Set<Role> roles = new HashSet<Role>();
 
     protected String email;
@@ -455,4 +456,11 @@ public class UserDoc {
         this.okEmail = okEmail;
     }
 
+    public Long getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(Long phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }
