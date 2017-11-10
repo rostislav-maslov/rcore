@@ -14,12 +14,15 @@ public class UserDoc {
     @Id
     protected ObjectId id;
 
-    private Long phoneNumber;
     protected Set<Role> roles = new HashSet<Role>();
+
+    protected UserStatusEnum userStatus = UserStatusEnum.ACTIVE;
+
+    private Long phoneNumber;
+    private String passwordPhone;
 
     protected String email;
     protected String password;
-    protected UserStatusEnum userStatus = UserStatusEnum.ACTIVE;
 
     protected String firstName = "";
     protected String lastName = "";
