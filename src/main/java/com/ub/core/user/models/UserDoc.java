@@ -18,14 +18,16 @@ public class UserDoc {
 
     protected UserStatusEnum userStatus = UserStatusEnum.ACTIVE;
 
+    protected String firstName = "";
+    protected String lastName = "";
+
+
     private Long phoneNumber;
     private String passwordPhone;
 
     protected String email;
     protected String password;
 
-    protected String firstName = "";
-    protected String lastName = "";
     /**
      * отчество
      */
@@ -163,12 +165,24 @@ public class UserDoc {
         this.passwordForLogin = generateHexPassword(login, notHexPassword);
     }
 
+    public void setPasswordPhoneAsHex(String notHexPassword){
+        this.passwordForLogin = generateHexPassword(phoneNumber.toString(), notHexPassword);
+    }
+
     public boolean containsRole(Role role) {
         for (Role r : roles) {
             if (r.getId().equals(role.getId()))
                 return true;
         }
         return false;
+    }
+
+    public String getPasswordPhone() {
+        return passwordPhone;
+    }
+
+    public void setPasswordPhone(String passwordPhone) {
+        this.passwordPhone = passwordPhone;
     }
 
     public ObjectId getId() {
