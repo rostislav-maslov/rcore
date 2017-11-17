@@ -17,10 +17,10 @@ public class PhoneSessionService extends ASessionConfigService {
 
     @Autowired private EmailSessionService emailSessionService;
 
-    public UserDoc authorize(Long phone, String password) throws UserNotAutorizedException, UserExistException, UserBlockedException, UserPasswordErrorException {
+    public UserDoc authorize(Long phone, String password) throws UserNotAutorizedException, UserBlockedException, UserPasswordErrorException {
 
         return emailSessionService.authorizeUserDoc(
-                userService.validateUserByPhone(phone, password));
+                userService.validateUserByPhone(phone, UserDoc.generateHexPassword(phone.toString(),password)));
     }
 
     public UserDoc authorize(String login, String password) throws UserNotAutorizedException, UserExistException, UserBlockedException, UserPasswordErrorException {
@@ -45,7 +45,7 @@ public class PhoneSessionService extends ASessionConfigService {
 
     @Override
     public String getToken(UserDoc userDoc) {
-        String t = userDoc.getLogin() + ";" + userDoc.getPasswordForLogin() + "42";
+        String t = userDoc.getLogin() + ";" + userDoc.getPasswordPhone() + "42";
         return DigestUtils.md5Hex(t);
     }
 

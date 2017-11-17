@@ -334,7 +334,7 @@ public class UserService {
         return userDoc;
     }
 
-    public UserDoc createUserByPhone(Long phone, String password) throws UserExistException{
+    public UserDoc createUserByPhone(Long phone, String password) throws UserExistException {
         UserDoc userDoc = new UserDoc();
         UserDoc check = findByPhone(phone);
         if (check != null) {
@@ -346,11 +346,11 @@ public class UserService {
         return userDoc;
     }
 
-    public UserDoc linkUserPhoneToEmail(Long phone, String password, UserDoc userDoc) throws UserExistException{
-        if(userDoc.getPhoneNumber() != null) throw new UserExistException();
+    public UserDoc linkUserPhoneToEmail(Long phone, String password, UserDoc userDoc) throws UserExistException {
+        if (userDoc.getPhoneNumber() != null) throw new UserExistException();
 
         UserDoc checkExist = findByPhone(phone);
-        if(checkExist != null) throw new UserExistException();
+        if (checkExist != null) throw new UserExistException();
 
         userDoc.setPhoneNumber(phone);
         userDoc.setPasswordPhoneAsHex(password);
@@ -740,6 +740,20 @@ public class UserService {
         }
     }
 
+    public void changePasswordByPhone(ObjectId id, String password) {
+
+        UserDoc userDoc = getUser(id);
+        if (userDoc.getPhoneNumber() != null) {
+            userDoc.setPasswordPhoneAsHex(password);
+        }
+
+        try {
+            save(userDoc);
+        } catch (UserExistException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * @param searchUserAdminRequest
      * @return
@@ -842,11 +856,11 @@ public class UserService {
         return userDoc;
     }
 
-    public UserDoc validateUserByPhone(Long phone, String hashedPassword) throws  UserNotAutorizedException,
-            UserPasswordErrorException, UserBlockedException{
+    public UserDoc validateUserByPhone(Long phone, String hashedPassword) throws UserNotAutorizedException,
+            UserPasswordErrorException, UserBlockedException {
         UserDoc userDoc = findByPhone(phone);
 
-        if (userDoc == null || userDoc.getPasswordForLogin() == null) {
+        if (userDoc == null || userDoc.getPasswordPhone() == null) {
             throw new UserNotAutorizedException();
         }
         UserLoginStatusEnum status = UserLoginStatusEnum.SUCCESS;
