@@ -107,6 +107,10 @@ public class UserService {
         return mongoTemplate.findOne(new Query(Criteria.where("email").is(email)), UserDoc.class);
     }
 
+    public UserDoc findByPhone(Long phone) {
+        return mongoTemplate.findOne(new Query(Criteria.where("phoneNumber").is(phone)), UserDoc.class);
+    }
+
     public UserDoc findByVkEmail(String email) {
         return mongoTemplate.findOne(new Query(Criteria.where("vkEmail").is(email)), UserDoc.class);
     }
@@ -170,6 +174,24 @@ public class UserService {
             UserDoc oldDoc = getUser(userDoc.getId());
             if (oldDoc == null) {
                 UserDoc old = findByLogin(userDoc.getLogin());
+                if (old != null) {
+                    throw new UserExistException();
+                }
+            }
+        }
+
+        // Check exist by phone
+        if (userDoc.getId() == null && userDoc.getPhoneNumber() != null) {
+            UserDoc old = findByPhone(userDoc.getPhoneNumber());
+            if (old != null) {
+                throw new UserExistException();
+            }
+        }
+
+        if (userDoc.getId() != null && userDoc.getPhoneNumber() != null) {
+            UserDoc oldDoc = getUser(userDoc.getId());
+            if (oldDoc == null) {
+                UserDoc old = findByPhone(userDoc.getPhoneNumber());
                 if (old != null) {
                     throw new UserExistException();
                 }
@@ -308,6 +330,30 @@ public class UserService {
             throw new UserExistException();
         UserDoc userDoc = createUserByLogin(login, password);
         userDoc.setEmailForLogin(email);
+        save(userDoc);
+        return userDoc;
+    }
+
+    public UserDoc createUserByPhone(Long phone, String password) throws UserExistException {
+        UserDoc userDoc = new UserDoc();
+        UserDoc check = findByPhone(phone);
+        if (check != null) {
+            throw new UserExistException();
+        }
+        userDoc.setPhoneNumber(phone);
+        userDoc.setPasswordPhoneAsHex(password);
+        save(userDoc);
+        return userDoc;
+    }
+
+    public UserDoc linkUserPhoneToEmail(Long phone, String password, UserDoc userDoc) throws UserExistException {
+        if (userDoc.getPhoneNumber() != null) throw new UserExistException();
+
+        UserDoc checkExist = findByPhone(phone);
+        if (checkExist != null) throw new UserExistException();
+
+        userDoc.setPhoneNumber(phone);
+        userDoc.setPasswordPhoneAsHex(password);
         save(userDoc);
         return userDoc;
     }
@@ -587,6 +633,7 @@ public class UserService {
      *
      * @return
      */
+    @Deprecated
     public ArrayList<UserDoc> getAllUsers() {
         return Lists.newArrayList(mongoTemplate.findAll(UserDoc.class));
     }
@@ -686,6 +733,20 @@ public class UserService {
         } else if (userDoc.getLogin() != null && userDoc.getLogin().equals("") == false) {
             userDoc.setPasswordForLoginAsHex(password);
         }
+        try {
+            save(userDoc);
+        } catch (UserExistException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void changePasswordByPhone(ObjectId id, String password) {
+
+        UserDoc userDoc = getUser(id);
+        if (userDoc.getPhoneNumber() != null) {
+            userDoc.setPasswordPhoneAsHex(password);
+        }
+
         try {
             save(userDoc);
         } catch (UserExistException e) {
@@ -795,6 +856,40 @@ public class UserService {
         return userDoc;
     }
 
+    public UserDoc validateUserByPhone(Long phone, String hashedPassword) throws UserNotAutorizedException,
+            UserPasswordErrorException, UserBlockedException {
+        UserDoc userDoc = findByPhone(phone);
+
+        if (userDoc == null || userDoc.getPasswordPhone() == null) {
+            throw new UserNotAutorizedException();
+        }
+        UserLoginStatusEnum status = UserLoginStatusEnum.SUCCESS;
+        if (!userDoc.getPasswordPhone().equals(hashedPassword)) {
+            userDoc.setLastFailDate(new Date());
+            if (userDoc.getFails() < LIMIT_FAILS) {
+                userDoc.setFails(userDoc.getFails() + 1);
+            }
+            mongoTemplate.save(userDoc);
+            status = UserLoginStatusEnum.PASSWORD_ERROR;
+        } else if (userDoc.getUserStatus().equals(UserStatusEnum.BLOCK)) {
+            status = UserLoginStatusEnum.BLOCKED;
+        } else if (userDoc.getFails() >= LIMIT_FAILS && (userDoc.getLastFailDate().getTime() - new Date().getTime()) / 1000 < BLOCK_TIMEOUT) {
+            status = UserLoginStatusEnum.BLOCKED;
+        } else if (userDoc.getFails() >= 0) {
+            userDoc.setFails(0);
+            mongoTemplate.save(userDoc);
+        }
+
+        userLogsService.logging(userDoc.getId(), status);
+
+        if (status.equals(UserLoginStatusEnum.PASSWORD_ERROR)) {
+            throw new UserPasswordErrorException();
+        } else if (status.equals(UserLoginStatusEnum.BLOCKED)) {
+            throw new UserBlockedException();
+        }
+
+        return userDoc;
+    }
 
     public UserDoc validateUserByLogin(String login, String hashedPassword) throws UserNotAutorizedException, UserPasswordErrorException, UserBlockedException {
         UserDoc userDoc = findByLogin(login);

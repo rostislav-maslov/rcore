@@ -7,21 +7,61 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
+import java.io.StringWriter;
+import java.text.ParseException;
 import java.util.*;
 
 @Document
 public class UserDoc {
+
+    public static String generateHexPassword(String email, String password) {
+        return DigestUtils.md5Hex(email + ";" + password + "42");
+    }
+
+    public static UserToken generateNewToken(UserDoc userDoc) {
+        UserToken userToken = new UserToken();
+        userToken.setToken(new ObjectId().toString() + userDoc.getId() + new ObjectId().toString());
+        return userToken;
+    }
+
+    public static Long parsePhone(String phone) throws ParseException {
+
+        StringWriter phoneNumber = new StringWriter();
+        for (int i = 0; i < phone.length(); i++) {
+            if (Character.isDigit(phone.charAt(i))) {
+                phoneNumber.append(phone.charAt(i));
+            }
+        }
+        phone = phoneNumber.toString();
+        if (phone.length() == 10) {
+            return Long.parseLong('7' + phone);
+        } else if (phone.length() == 11) {
+            if (phone.startsWith("8")) {
+                phone = '7' + phone.substring(1);
+            }
+            return Long.parseLong(phone);
+        }
+
+        throw new ParseException("errors.invalid.length", phone.length());
+    }
+
     @Id
     protected ObjectId id;
 
     protected Set<Role> roles = new HashSet<Role>();
 
-    protected String email;
-    protected String password;
     protected UserStatusEnum userStatus = UserStatusEnum.ACTIVE;
 
     protected String firstName = "";
     protected String lastName = "";
+
+
+    private Long phoneNumber;
+    private String passwordPhone;
+
+    protected String email;
+    protected String password;
+
     /**
      * отчество
      */
@@ -63,16 +103,6 @@ public class UserDoc {
 
     private List<UserToken> accessTokens = new ArrayList<UserToken>();
     private List<UserToken> refreshTokens = new ArrayList<UserToken>();
-
-    public static String generateHexPassword(String email, String password) {
-        return DigestUtils.md5Hex(email + ";" + password + "42");
-    }
-
-    public static UserToken generateNewToken(UserDoc userDoc){
-        UserToken userToken = new UserToken();
-        userToken.setToken(new ObjectId().toString() + userDoc.getId() + new ObjectId().toString());
-        return userToken;
-    }
 
     public Boolean checkAccessToken(String token){
         for(UserToken userToken : this.accessTokens){
@@ -159,12 +189,24 @@ public class UserDoc {
         this.passwordForLogin = generateHexPassword(login, notHexPassword);
     }
 
+    public void setPasswordPhoneAsHex(String notHexPassword){
+        this.passwordPhone = generateHexPassword(phoneNumber.toString(), notHexPassword);
+    }
+
     public boolean containsRole(Role role) {
         for (Role r : roles) {
             if (r.getId().equals(role.getId()))
                 return true;
         }
         return false;
+    }
+
+    public String getPasswordPhone() {
+        return passwordPhone;
+    }
+
+    public void setPasswordPhone(String passwordPhone) {
+        this.passwordPhone = passwordPhone;
     }
 
     public ObjectId getId() {
@@ -455,4 +497,11 @@ public class UserDoc {
         this.okEmail = okEmail;
     }
 
+    public Long getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(Long phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }
