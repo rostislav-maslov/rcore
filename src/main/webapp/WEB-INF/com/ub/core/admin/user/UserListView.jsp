@@ -70,6 +70,7 @@
                             <c:if test="${not empty user.okId}">Ok;</c:if>
                             <c:if test="${not empty user.twitterId}">Twitter;</c:if>
                             <c:if test="${not empty user.googleId}">Google;</c:if>
+                            <c:if test="${not empty user.passwordPhone}">Phone;</c:if>
                         </td>
 
                         <td class="text-right">

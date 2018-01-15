@@ -66,7 +66,7 @@ public class UserDoc {
      * отчество
      */
     protected String secondName = "";
-    protected String fullName="";
+    protected String fullName = "";
 
     private String vkId;
     private String vkAccessToken;
@@ -104,9 +104,9 @@ public class UserDoc {
     private List<UserToken> accessTokens = new ArrayList<UserToken>();
     private List<UserToken> refreshTokens = new ArrayList<UserToken>();
 
-    public Boolean checkAccessToken(String token){
-        for(UserToken userToken : this.accessTokens){
-            if(userToken.getToken().equals(token)){
+    public Boolean checkAccessToken(String token) {
+        for (UserToken userToken : this.accessTokens) {
+            if (userToken.getToken().equals(token)) {
                 return userToken.isActive();
             }
         }
@@ -114,9 +114,9 @@ public class UserDoc {
         return false;
     }
 
-    public Boolean checkRefreshToken(String token){
-        for(UserToken userToken : this.refreshTokens){
-            if(userToken.getToken().equals(token)){
+    public Boolean checkRefreshToken(String token) {
+        for (UserToken userToken : this.refreshTokens) {
+            if (userToken.getToken().equals(token)) {
                 return userToken.isActive();
             }
         }
@@ -124,60 +124,63 @@ public class UserDoc {
         return false;
     }
 
-    public UserToken getUserTokenByString(String token){
-        for(UserToken userToken : this.accessTokens){
-            if(userToken.getToken().equals(token) && userToken.isActive()){
-                return  userToken;
+    public UserToken getUserTokenByString(String token) {
+        for (UserToken userToken : this.accessTokens) {
+            if (userToken.getToken().equals(token) && userToken.isActive()) {
+                return userToken;
             }
         }
 
         return null;
     }
 
-    public UserToken getActiveAccessToken(){
-        for(UserToken userToken : this.accessTokens){
-            if(userToken.isActive()){
+    public UserToken getActiveAccessToken() {
+        for (UserToken userToken : this.accessTokens) {
+            if (userToken.isActive()) {
                 return userToken;
             }
         }
         return null;
     }
 
-    public UserToken getActiveRefreshToken(){
-        for(UserToken userToken : this.refreshTokens){
-            if(userToken.isActive()){
+    public UserToken getActiveRefreshToken() {
+        for (UserToken userToken : this.refreshTokens) {
+            if (userToken.isActive()) {
                 return userToken;
             }
         }
         return null;
     }
 
-    public String getNoNullEmail(){
-        if( email != null){
+    public String getNoNullEmail() {
+        if (passwordPhone != null && !passwordPhone.isEmpty()) {
+            return phoneNumber.toString();
+        } else if (email != null) {
             return email;
-        }else if(emailForLogin != null){
+        } else if (emailForLogin != null) {
             return emailForLogin;
-        }else if(vkEmail != null){
-            return vkEmail ;
-        }else if(fbEmail != null){
+        } else if (vkEmail != null) {
+            return vkEmail;
+        } else if (fbEmail != null) {
             return fbEmail;
-        }else if(twitterEmail != null){
+        } else if (twitterEmail != null) {
             return twitterEmail;
-        }else if(linkedinEmail != null){
+        } else if (linkedinEmail != null) {
             return linkedinEmail;
-        }else if(googleEmail != null){
+        } else if (googleEmail != null) {
             return googleEmail;
-        }else  if(okEmail != null){
+        } else if (okEmail != null) {
             return okEmail;
         }
+
         return null;
     }
 
-    public void addAccessToken(UserToken userToken){
+    public void addAccessToken(UserToken userToken) {
         this.accessTokens.add(userToken);
     }
 
-    public void addRefreshToken(UserToken userToken){
+    public void addRefreshToken(UserToken userToken) {
         this.refreshTokens.add(userToken);
     }
 
@@ -189,7 +192,7 @@ public class UserDoc {
         this.passwordForLogin = generateHexPassword(login, notHexPassword);
     }
 
-    public void setPasswordPhoneAsHex(String notHexPassword){
+    public void setPasswordPhoneAsHex(String notHexPassword) {
         this.passwordPhone = generateHexPassword(phoneNumber.toString(), notHexPassword);
     }
 
