@@ -153,9 +153,7 @@ public class UserDoc {
     }
 
     public String getNoNullEmail() {
-        if (passwordPhone != null && !passwordPhone.isEmpty()) {
-            return phoneNumber.toString();
-        } else if (email != null) {
+        if (email != null) {
             return email;
         } else if (emailForLogin != null) {
             return emailForLogin;
