@@ -3,6 +3,7 @@ package com.ub.core.utils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,22 +24,31 @@ public class HttpUtils {
         params.put(name, value);
     }
 
-    public String sendGet() throws IOException{
+    public String getUrl() {
         String url = this.url;
 
         StringBuffer stringBuffer = new StringBuffer();
         List<String> keys = new ArrayList<String>(params.keySet());
         for (int i = 0; i < keys.size(); i++) {
-            stringBuffer.append(keys.get(i));
-            stringBuffer.append("=");
-            stringBuffer.append(URLEncoder.encode(params.get(keys.get(i)), "UTF-8"));
-            if (i < keys.size() - 1)
-                stringBuffer.append("&");
+            try {
+                stringBuffer.append(keys.get(i));
+                stringBuffer.append("=");
+                stringBuffer.append(URLEncoder.encode(params.get(keys.get(i)), "UTF-8"));
+                if (i < keys.size() - 1)
+                    stringBuffer.append("&");
+            }catch (Exception e){
+
+            }
         }
         String urlParameters = stringBuffer.toString();
         if (urlParameters.length() > 0) {
             url += "?" + stringBuffer.toString();
         }
+        return url;
+    }
+
+    public String sendGet() throws IOException{
+        String url = getUrl();
 
         URL urlObj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
