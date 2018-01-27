@@ -13,7 +13,7 @@ public class UrlUtils {
     public static ProtocolEnum PROTOCOL = ProtocolEnum.http;
 
     public static String urlFromString(String str) {
-        return StringUtils.cyrillicToLatin(str).replaceAll(" ", "-").replaceAll(" ", "-").replaceAll(" ", "-").toLowerCase();
+        return StringUtils.cyrillicToLatin(str).replaceAll(" ", "-").replaceAll(" ", "-").replaceAll(" ", "-").replaceAll("'", "-").replaceAll("\\.", "-").toLowerCase();
     }
 
     public static String longToBase64(Long aLong) {

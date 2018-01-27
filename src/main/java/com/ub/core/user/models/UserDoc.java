@@ -7,26 +7,66 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.Id;
+import java.io.StringWriter;
+import java.text.ParseException;
 import java.util.*;
 
 @Document
 public class UserDoc {
+
+    public static String generateHexPassword(String email, String password) {
+        return DigestUtils.md5Hex(email + ";" + password + "42");
+    }
+
+    public static UserToken generateNewToken(UserDoc userDoc) {
+        UserToken userToken = new UserToken();
+        userToken.setToken(new ObjectId().toString() + userDoc.getId() + new ObjectId().toString());
+        return userToken;
+    }
+
+    public static Long parsePhone(String phone) throws ParseException {
+
+        StringWriter phoneNumber = new StringWriter();
+        for (int i = 0; i < phone.length(); i++) {
+            if (Character.isDigit(phone.charAt(i))) {
+                phoneNumber.append(phone.charAt(i));
+            }
+        }
+        phone = phoneNumber.toString();
+        if (phone.length() == 10) {
+            return Long.parseLong('7' + phone);
+        } else if (phone.length() == 11) {
+            if (phone.startsWith("8")) {
+                phone = '7' + phone.substring(1);
+            }
+            return Long.parseLong(phone);
+        }
+
+        throw new ParseException("errors.invalid.length", phone.length());
+    }
+
     @Id
     protected ObjectId id;
 
     protected Set<Role> roles = new HashSet<Role>();
 
-    protected String email;
-    protected String password;
     protected UserStatusEnum userStatus = UserStatusEnum.ACTIVE;
 
     protected String firstName = "";
     protected String lastName = "";
+
+
+    private Long phoneNumber;
+    private String passwordPhone;
+
+    protected String email;
+    protected String password;
+
     /**
      * отчество
      */
     protected String secondName = "";
-    protected String fullName="";
+    protected String fullName = "";
 
     private String vkId;
     private String vkAccessToken;
@@ -64,19 +104,9 @@ public class UserDoc {
     private List<UserToken> accessTokens = new ArrayList<UserToken>();
     private List<UserToken> refreshTokens = new ArrayList<UserToken>();
 
-    public static String generateHexPassword(String email, String password) {
-        return DigestUtils.md5Hex(email + ";" + password + "42");
-    }
-
-    public static UserToken generateNewToken(UserDoc userDoc){
-        UserToken userToken = new UserToken();
-        userToken.setToken(new ObjectId().toString() + userDoc.getId() + new ObjectId().toString());
-        return userToken;
-    }
-
-    public Boolean checkAccessToken(String token){
-        for(UserToken userToken : this.accessTokens){
-            if(userToken.getToken().equals(token)){
+    public Boolean checkAccessToken(String token) {
+        for (UserToken userToken : this.accessTokens) {
+            if (userToken.getToken().equals(token)) {
                 return userToken.isActive();
             }
         }
@@ -84,9 +114,9 @@ public class UserDoc {
         return false;
     }
 
-    public Boolean checkRefreshToken(String token){
-        for(UserToken userToken : this.refreshTokens){
-            if(userToken.getToken().equals(token)){
+    public Boolean checkRefreshToken(String token) {
+        for (UserToken userToken : this.refreshTokens) {
+            if (userToken.getToken().equals(token)) {
                 return userToken.isActive();
             }
         }
@@ -94,60 +124,61 @@ public class UserDoc {
         return false;
     }
 
-    public UserToken getUserTokenByString(String token){
-        for(UserToken userToken : this.accessTokens){
-            if(userToken.getToken().equals(token) && userToken.isActive()){
-                return  userToken;
+    public UserToken getUserTokenByString(String token) {
+        for (UserToken userToken : this.accessTokens) {
+            if (userToken.getToken().equals(token) && userToken.isActive()) {
+                return userToken;
             }
         }
 
         return null;
     }
 
-    public UserToken getActiveAccessToken(){
-        for(UserToken userToken : this.accessTokens){
-            if(userToken.isActive()){
+    public UserToken getActiveAccessToken() {
+        for (UserToken userToken : this.accessTokens) {
+            if (userToken.isActive()) {
                 return userToken;
             }
         }
         return null;
     }
 
-    public UserToken getActiveRefreshToken(){
-        for(UserToken userToken : this.refreshTokens){
-            if(userToken.isActive()){
+    public UserToken getActiveRefreshToken() {
+        for (UserToken userToken : this.refreshTokens) {
+            if (userToken.isActive()) {
                 return userToken;
             }
         }
         return null;
     }
 
-    public String getNoNullEmail(){
-        if( email != null){
+    public String getNoNullEmail() {
+        if (email != null) {
             return email;
-        }else if(emailForLogin != null){
+        } else if (emailForLogin != null) {
             return emailForLogin;
-        }else if(vkEmail != null){
-            return vkEmail ;
-        }else if(fbEmail != null){
+        } else if (vkEmail != null) {
+            return vkEmail;
+        } else if (fbEmail != null) {
             return fbEmail;
-        }else if(twitterEmail != null){
+        } else if (twitterEmail != null) {
             return twitterEmail;
-        }else if(linkedinEmail != null){
+        } else if (linkedinEmail != null) {
             return linkedinEmail;
-        }else if(googleEmail != null){
+        } else if (googleEmail != null) {
             return googleEmail;
-        }else  if(okEmail != null){
+        } else if (okEmail != null) {
             return okEmail;
         }
+
         return null;
     }
 
-    public void addAccessToken(UserToken userToken){
+    public void addAccessToken(UserToken userToken) {
         this.accessTokens.add(userToken);
     }
 
-    public void addRefreshToken(UserToken userToken){
+    public void addRefreshToken(UserToken userToken) {
         this.refreshTokens.add(userToken);
     }
 
@@ -159,12 +190,24 @@ public class UserDoc {
         this.passwordForLogin = generateHexPassword(login, notHexPassword);
     }
 
+    public void setPasswordPhoneAsHex(String notHexPassword) {
+        this.passwordPhone = generateHexPassword(phoneNumber.toString(), notHexPassword);
+    }
+
     public boolean containsRole(Role role) {
         for (Role r : roles) {
             if (r.getId().equals(role.getId()))
                 return true;
         }
         return false;
+    }
+
+    public String getPasswordPhone() {
+        return passwordPhone;
+    }
+
+    public void setPasswordPhone(String passwordPhone) {
+        this.passwordPhone = passwordPhone;
     }
 
     public ObjectId getId() {
@@ -455,4 +498,11 @@ public class UserDoc {
         this.okEmail = okEmail;
     }
 
+    public Long getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(Long phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }

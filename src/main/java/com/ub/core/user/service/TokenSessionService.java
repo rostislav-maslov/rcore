@@ -26,6 +26,19 @@ public class TokenSessionService {
         return refreshToken;
     }
 
+    public UserToken generateNewAccessTokenByPhonePassword(Long phone,String password) throws UserNotAutorizedException {
+
+        UserDoc userDoc = userService.findByPhone(phone);
+
+        if (userDoc == null || userDoc.getPasswordPhone() == null || userDoc.getUserStatus().equals(UserStatusEnum.BLOCK)) {
+            throw new UserNotAutorizedException();
+        }
+        if (!userDoc.getPasswordPhone().equals(password)) {
+            throw new UserNotAutorizedException();
+        }
+
+        return getToken(userDoc);
+    }
     public UserToken generateNewAccessTokenByEmailPassword(String email, String password) throws UserNotAutorizedException {
         UserDoc userDoc = userService.findByEmail(email);
         if (userDoc == null || userDoc.getPassword() == null || userDoc.getUserStatus().equals(UserStatusEnum.BLOCK))
