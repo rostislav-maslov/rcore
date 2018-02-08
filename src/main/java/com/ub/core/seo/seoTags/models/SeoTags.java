@@ -9,6 +9,7 @@ public class SeoTags {
     private String title;
     private String h1;
     private String relCanonical;
+    private String imgUrl;
 
     public SeoTags() {
     }
@@ -28,12 +29,13 @@ public class SeoTags {
         this.h1 = HtmlUtils.htmlEscape(h1);
     }
 
-    public SeoTags(String metaTitle, String metaDescription, String metaKeywords, String title, String h1) {
+    public SeoTags(String metaTitle, String metaDescription, String metaKeywords, String title, String h1, String imgUrl) {
         this.metaTitle = HtmlUtils.htmlEscape(metaTitle);
         this.metaDescription = HtmlUtils.htmlEscape(metaDescription);
         this.metaKeywords = HtmlUtils.htmlEscape(metaKeywords);
         this.title = HtmlUtils.htmlEscape(title);
         this.h1 = HtmlUtils.htmlEscape(h1);
+        this.imgUrl = HtmlUtils.htmlEscape(imgUrl);
     }
 
     public String getMetaTitle() {
@@ -82,5 +84,13 @@ public class SeoTags {
 
     public void setRelCanonical(String relCanonical) {
         this.relCanonical = HtmlUtils.htmlEscape(relCanonical);
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 }
