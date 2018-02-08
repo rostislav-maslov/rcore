@@ -29,6 +29,14 @@ public class SeoTags {
         this.h1 = HtmlUtils.htmlEscape(h1);
     }
 
+    public SeoTags(String metaTitle, String metaDescription, String metaKeywords, String title, String h1) {
+        this.metaTitle = HtmlUtils.htmlEscape(metaTitle);
+        this.metaDescription = HtmlUtils.htmlEscape(metaDescription);
+        this.metaKeywords = HtmlUtils.htmlEscape(metaKeywords);
+        this.title = HtmlUtils.htmlEscape(title);
+        this.h1 = HtmlUtils.htmlEscape(h1);
+    }
+
     public SeoTags(String metaTitle, String metaDescription, String metaKeywords, String title, String h1, String imgUrl) {
         this.metaTitle = HtmlUtils.htmlEscape(metaTitle);
         this.metaDescription = HtmlUtils.htmlEscape(metaDescription);
