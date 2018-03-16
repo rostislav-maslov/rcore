@@ -59,7 +59,7 @@ public class StringUtils {
         lat = lat.replaceAll("ц", "c");
         lat = lat.replaceAll("ч", "ch");
         lat = lat.replaceAll("ш", "sh");
-        lat = lat.replaceAll("х", "shch");
+        lat = lat.replaceAll("щ", "shch");
         lat = lat.replaceAll("ь", "");
         lat = lat.replaceAll("ы", "y");
         lat = lat.replaceAll("ъ", "");
@@ -93,7 +93,7 @@ public class StringUtils {
         lat = lat.replaceAll("Ц", "c");
         lat = lat.replaceAll("Ч", "ch");
         lat = lat.replaceAll("Ш", "sh");
-        lat = lat.replaceAll("Х", "shch");
+        lat = lat.replaceAll("Щ", "shch");
         lat = lat.replaceAll("Ь", "");
         lat = lat.replaceAll("Ы", "y");
         lat = lat.replaceAll("Ъ", "");
