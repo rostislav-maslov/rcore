@@ -9,6 +9,7 @@
     <div class="widget-title">
         <h3><i class="fa fa-table"></i> Список загруженных файлов</h3>
     </div>
+    <p>Всего - ${files.all}</p>
     <div class="widget-content">
         <div class="table-responsive">
             <table class="table table-bordered table-hover">
@@ -25,7 +26,7 @@
                 </thead>
                 <tbody>
 
-                <c:forEach items="${files}" var="f">
+                <c:forEach items="${files.result}" var="f">
                     <tr>
                         <td>${f.name}</td>
                         <td><a href="/files/${f.id}">/files/${f.id}</a></td>
@@ -46,5 +47,31 @@
                 </tbody>
             </table>
         </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12 text-center">
+        <ul class="pagination pagination-sm">
+            <c:url value="<%= FileRoutes.LIST%>" var="urlPrev">
+                <c:param name="query" value="${files.query}"/>
+                <c:param name="currentPage" value="${files.prevNum()}"/>
+            </c:url>
+            <li><a href="${urlPrev}"><i class="entypo-left-open-mini"></i></a></li>
+            <c:forEach items="${files.paginator()}" var="page">
+                <c:url value="<%= FileRoutes.LIST%>" var="urlPage">
+                    <c:param name="query" value="${files.query}"/>
+                    <c:param name="currentPage" value="${page}"/>
+                </c:url>
+                <li class="<c:if test="${files.currentPage eq page}">active</c:if>">
+                    <a href="${urlPage}">${page + 1}</a>
+                </li>
+            </c:forEach>
+            <c:url value="<%= FileRoutes.LIST%>" var="urlNext">
+                <c:param name="query" value="${files.query}"/>
+                <c:param name="currentPage" value="${files.nextNum()}"/>
+            </c:url>
+            <li><a href="${urlNext}"><i class="entypo-right-open-mini"></i></a></li>
+        </ul>
     </div>
 </div>
