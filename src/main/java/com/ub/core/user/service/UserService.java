@@ -433,7 +433,7 @@ public class UserService {
         userDoc.setVkId(accessTokenResponse.getUser_id());
         userDoc.setUserStatus(UserStatusEnum.ACTIVE);
 
-        UsersGetResponse usersGetResponse = userVkService.get(accessTokenResponse.getUser_id());
+        UsersGetResponse usersGetResponse = userVkService.get(accessTokenResponse.getUser_id(), accessTokenResponse.getAccess_token());
         if (usersGetResponse != null && usersGetResponse.getResponse() != null && usersGetResponse.getResponse().size() == 1) {
             UserInfo userInfo = usersGetResponse.getResponse().get(0);
 
