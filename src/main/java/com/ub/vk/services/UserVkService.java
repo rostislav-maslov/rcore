@@ -21,6 +21,7 @@ public class UserVkService {
     public UsersGetResponse get(List<String> ids) {
         HttpsUtils httpsUtils = new HttpsUtils(UserVkStatic.URL_USER_GET);
         httpsUtils.addParam(UserVkStatic.P_FIELDS, UserVkStatic.V_FIELDS);
+        httpsUtils.addParam(UserVkStatic.P_VERSION, UserVkStatic.V_VERSION);
         StringBuffer stringBuffer = new StringBuffer();
         for (int i = 0; i < ids.size(); i++) {
             stringBuffer.append(ids.get(i));
