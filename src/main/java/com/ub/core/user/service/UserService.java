@@ -346,6 +346,17 @@ public class UserService {
         return userDoc;
     }
 
+    public UserDoc createUserByPhone(Long phone) throws UserExistException {
+        UserDoc userDoc = new UserDoc();
+        UserDoc check = findByPhone(phone);
+        if (check != null) {
+            throw new UserExistException();
+        }
+        userDoc.setPhoneNumber(phone);
+        save(userDoc);
+        return userDoc;
+    }
+
     public UserDoc linkUserPhoneToEmail(Long phone, String password, UserDoc userDoc) throws UserExistException {
         if (userDoc.getPhoneNumber() != null) throw new UserExistException();
 
