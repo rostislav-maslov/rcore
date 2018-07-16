@@ -902,6 +902,35 @@ public class UserService {
         return userDoc;
     }
 
+    public UserDoc validateUserByPhone(Long phone) throws UserNotAutorizedException,
+            UserPasswordErrorException, UserBlockedException {
+        UserDoc userDoc = findByPhone(phone);
+
+        if (userDoc == null || userDoc.getPasswordPhone() == null) {
+            throw new UserNotAutorizedException();
+        }
+        UserLoginStatusEnum status = UserLoginStatusEnum.SUCCESS;
+
+        if (userDoc.getUserStatus().equals(UserStatusEnum.BLOCK)) {
+            status = UserLoginStatusEnum.BLOCKED;
+        } else if (userDoc.getFails() >= LIMIT_FAILS && (userDoc.getLastFailDate().getTime() - new Date().getTime()) / 1000 < BLOCK_TIMEOUT) {
+            status = UserLoginStatusEnum.BLOCKED;
+        } else if (userDoc.getFails() >= 0) {
+            userDoc.setFails(0);
+            mongoTemplate.save(userDoc);
+        }
+
+        userLogsService.logging(userDoc.getId(), status);
+
+        if (status.equals(UserLoginStatusEnum.PASSWORD_ERROR)) {
+            throw new UserPasswordErrorException();
+        } else if (status.equals(UserLoginStatusEnum.BLOCKED)) {
+            throw new UserBlockedException();
+        }
+
+        return userDoc;
+    }
+
     public UserDoc validateUserByLogin(String login, String hashedPassword) throws UserNotAutorizedException, UserPasswordErrorException, UserBlockedException {
         UserDoc userDoc = findByLogin(login);
 

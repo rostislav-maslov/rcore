@@ -12,24 +12,22 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpSession;
+
 @Component
 public class PhoneSessionService extends ASessionConfigService {
 
-    @Autowired private EmailSessionService emailSessionService;
+    public UserDoc authorize(Long phone) throws UserNotAutorizedException, UserBlockedException, UserPasswordErrorException {
 
-    public UserDoc authorize(Long phone, String password) throws UserNotAutorizedException, UserBlockedException, UserPasswordErrorException {
-
-        return emailSessionService.authorizeUserDoc(
-                userService.validateUserByPhone(phone, UserDoc.generateHexPassword(phone.toString(),password)));
+        return authorizeUserDoc(userService.validateUserByPhone(phone));
     }
 
-    public UserDoc authorize(String login, String password) throws UserNotAutorizedException, UserExistException, UserBlockedException, UserPasswordErrorException {
-
-        return emailSessionService.authorizeUserDoc(userService.validateUserByLogin(login, UserDoc.generateHexPassword(login, password)));
-    }
-
-    public UserDoc authorize(String login, String password, String lang) throws UserNotAutorizedException, UserBlockedException, UserPasswordErrorException, UserExistException {
-        return authorize(login, password);
+    private UserDoc authorizeUserDoc(UserDoc userDoc) {
+        SessionModel sessionModel = getSessionModel(userDoc);
+        HttpSession httpSession = getSession();
+        httpSession = sessionModel.fillSession(httpSession);
+        httpSession.setMaxInactiveInterval(60 * 60 * 24 * 3);
+        return userDoc;
     }
 
     @Override
@@ -45,7 +43,7 @@ public class PhoneSessionService extends ASessionConfigService {
 
     @Override
     public String getToken(UserDoc userDoc) {
-        String t = userDoc.getLogin() + ";" + userDoc.getPasswordPhone() + "42";
+        String t = userDoc.getPhoneNumber() + ";" + "42";
         return DigestUtils.md5Hex(t);
     }
 
