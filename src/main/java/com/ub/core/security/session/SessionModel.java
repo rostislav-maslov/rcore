@@ -36,6 +36,8 @@ public class SessionModel {
             httpSession.setAttribute(TYPE, "L");
         if (type.equals(SessionType.FB))
             httpSession.setAttribute(TYPE, "F");
+        if (type.equals(SessionType.PHONE))
+            httpSession.setAttribute(TYPE,"P");
 
         return httpSession;
     }
@@ -63,6 +65,8 @@ public class SessionModel {
                 type = SessionType.LINKEDIN;
             if (t.equals("F"))
                 type = SessionType.FB;
+            if (t.equals("P"))
+                type = SessionType.PHONE;
         }
     }
 

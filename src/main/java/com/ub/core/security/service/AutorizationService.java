@@ -12,6 +12,7 @@ import com.ub.core.security.session.SessionType;
 import com.ub.core.user.models.UserDoc;
 import com.ub.core.user.service.EmailSessionService;
 import com.ub.core.user.service.LoginSessionService;
+import com.ub.core.user.service.PhoneSessionService;
 import com.ub.core.user.service.UserService;
 import com.ub.facebook.services.FBSessionService;
 import com.ub.google.services.GPSessionService;
@@ -40,6 +41,8 @@ public class AutorizationService {
     @Autowired private TwitterSessionService twitterSessionService;
     @Autowired private LiSessionService liSessionService;
     @Autowired private OkSessionService okSessionService;
+    @Autowired private PhoneSessionService phoneSessionService;
+
 
     public CheckAvailable checkAccess(HandlerMethod handlerMethod) {
         CheckAvailable checkAvailable = new CheckAvailable();
@@ -198,6 +201,9 @@ public class AutorizationService {
         }
         if (sessionModel.getType().equals(SessionType.OK)) {
             return okSessionService.getUserFromSession(sessionModel);
+        }
+        if (sessionModel.getType().equals(SessionType.PHONE)) {
+            return phoneSessionService.getUserFromSession(sessionModel);
         }
 
         throw new UserNotAutorizedException();
