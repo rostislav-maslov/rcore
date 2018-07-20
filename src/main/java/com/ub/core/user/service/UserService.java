@@ -906,7 +906,7 @@ public class UserService {
             UserPasswordErrorException, UserBlockedException {
         UserDoc userDoc = findByPhone(phone);
 
-        if (userDoc == null || userDoc.getPasswordPhone() == null) {
+        if (userDoc == null || userDoc.getPhoneNumber() == null) {
             throw new UserNotAutorizedException();
         }
         UserLoginStatusEnum status = UserLoginStatusEnum.SUCCESS;
