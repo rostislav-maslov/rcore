@@ -357,6 +357,11 @@ public class UserService {
         return userDoc;
     }
 
+    public UserDoc getExistingUser(Long phone) {
+
+        return findByPhone(phone);
+    }
+
     public UserDoc linkUserPhoneToEmail(Long phone, String password, UserDoc userDoc) throws UserExistException {
         if (userDoc.getPhoneNumber() != null) throw new UserExistException();
 
