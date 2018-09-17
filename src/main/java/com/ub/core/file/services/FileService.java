@@ -4,9 +4,14 @@ import com.mongodb.gridfs.GridFSDBFile;
 import com.mongodb.gridfs.GridFSFile;
 import com.ub.core.file.store.FileInfo;
 import com.ub.core.file.view.FileView;
+import com.ub.core.file.view.SearchFileRequest;
+import com.ub.core.file.view.SearchFileResponse;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.gridfs.GridFsOperations;
@@ -24,8 +29,8 @@ import java.util.List;
 public class FileService {
     public static final String IMG_CONTENT_TYPE = "image/jpeg";
 
-    @Autowired
-    private GridFsOperations gridFsTemplate;
+    @Autowired private GridFsOperations gridFsTemplate;
+    @Autowired private MongoTemplate mongoTemplate;
 
     public GridFSDBFile getFile(ObjectId objectId) {
         List<GridFSDBFile> l = gridFsTemplate.find(new Query(Criteria.where("_id").is(objectId)).limit(1));
@@ -34,23 +39,23 @@ public class FileService {
         return null;
     }
 
-    public ObjectId saveWithDelete(MultipartFile file, ObjectId oldId){
-        if(file != null && file.getSize() != 0){
-            if(oldId != null) delete(oldId);
+    public ObjectId saveWithDelete(MultipartFile file, ObjectId oldId) {
+        if (file != null && file.getSize() != 0) {
+            if (oldId != null) delete(oldId);
 
             GridFSDBFile gridFSDBFile = save(file);
-            return (ObjectId)gridFSDBFile.getId();
+            return (ObjectId) gridFSDBFile.getId();
         }
 
         return oldId;
     }
 
-    public ObjectId saveWithDelete(File file, ObjectId oldId){
-        if(file != null && file.length() != 0){
-            if(oldId != null) delete(oldId);
+    public ObjectId saveWithDelete(File file, ObjectId oldId) {
+        if (file != null && file.length() != 0) {
+            if (oldId != null) delete(oldId);
 
             GridFSDBFile gridFSDBFile = save(file);
-            return (ObjectId)gridFSDBFile.getId();
+            return (ObjectId) gridFSDBFile.getId();
         }
 
         return null;
@@ -71,7 +76,7 @@ public class FileService {
         return null;
     }
 
-    public GridFSDBFile save(InputStream inputStream,String fileMeta, String fileName) {
+    public GridFSDBFile save(InputStream inputStream, String fileMeta, String fileName) {
         try {
             FileInfo fileInfo = new FileInfo();
             fileInfo.setFileMeta(fileMeta);
@@ -89,7 +94,7 @@ public class FileService {
 
     public GridFSDBFile save(MultipartFile multipartFile) {
         try {
-            if(multipartFile.getSize() == 0) return null;
+            if (multipartFile.getSize() == 0) return null;
             FileInfo fileInfo = new FileInfo();
             fileInfo.setFileMeta(multipartFile.getContentType());
             fileInfo.setFileName(multipartFile.getOriginalFilename());
@@ -106,7 +111,7 @@ public class FileService {
 
     public GridFSDBFile save(File file) {
         try {
-            if(file.length() == 0) return null;
+            if (file.length() == 0) return null;
             FileInfo fileInfo = new FileInfo();
             fileInfo.setFileMeta(IMG_CONTENT_TYPE);
             fileInfo.setFileName(file.getName());
@@ -145,19 +150,45 @@ public class FileService {
         return gridFsTemplate.find(new Query(new Criteria()).with(new Sort(Sort.Direction.DESC, "_id")));
     }
 
-    private FileView getView(GridFSDBFile gridFSDBFile){
+    private FileView getView(GridFSDBFile gridFSDBFile) {
         FileView fileView = new FileView();
         fileView.setId(gridFSDBFile.getId().toString());
         fileView.setName(gridFSDBFile.getFilename());
         return fileView;
     }
 
-    public List<FileView> getAllView(){
+    public List<FileView> getAllView() {
         List<FileView> fileViews = new ArrayList<FileView>();
-        for(GridFSDBFile gridFSDBFile : getAll()){
+        for (GridFSDBFile gridFSDBFile : getAll()) {
             fileViews.add(getView(gridFSDBFile));
         }
         return fileViews;
+    }
+
+    public SearchFileResponse findAll(SearchFileRequest request) {
+
+        Sort sort = new Sort(Sort.Direction.DESC, "id");
+        Pageable pageable = new PageRequest(
+                request.getCurrentPage(),
+                request.getPageSize(),
+                sort);
+
+        List<FileView> fileViews = new ArrayList<>();
+        int skip = pageable.getOffset();
+        int limit = pageable.getPageSize();
+        List<GridFSDBFile> result = gridFsTemplate.find(
+                new Query(new Criteria()).with(new Sort(Sort.Direction.DESC, "_id")));
+
+        for (GridFSDBFile gridFSDBFile : result.subList(skip, limit + skip)) {
+            fileViews.add(getView(gridFSDBFile));
+        }
+
+        SearchFileResponse response = new SearchFileResponse(request.getCurrentPage(),
+                request.getPageSize(),
+                fileViews);
+        response.setAll((long) result.size());
+
+        return response;
     }
 
     public void delete(ObjectId objectId) {
