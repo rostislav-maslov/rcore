@@ -153,7 +153,7 @@
         <footer class="main">
 
 
-            &copy; 2013 - 2016 <strong>UBCore</strong> Admin Engine by <a href="http://www.unitbean.com" target="_blank">LLC
+            &copy; 2013 - 2018 <strong>UBCore</strong> Admin Engine by <a href="http://www.unitbean.com" target="_blank">LLC
             UnitBean</a>
 
         </footer>
