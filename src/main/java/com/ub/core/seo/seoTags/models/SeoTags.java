@@ -2,7 +2,9 @@ package com.ub.core.seo.seoTags.models;
 
 import org.springframework.web.util.HtmlUtils;
 
-public class SeoTags {
+import java.io.Serializable;
+
+public class SeoTags implements Serializable {
     private String metaTitle;
     private String metaDescription;
     private String metaKeywords;

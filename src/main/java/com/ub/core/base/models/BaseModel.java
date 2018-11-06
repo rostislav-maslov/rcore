@@ -1,11 +1,12 @@
 package com.ub.core.base.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by maslov on 15.02.16.
  */
-public class BaseModel {
+public class BaseModel implements Serializable {
     protected Date createdAt = new Date();
     protected Date updateAt  = new Date();
     protected String timeZone = "GMT";
