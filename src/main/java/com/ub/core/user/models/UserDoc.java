@@ -5,6 +5,7 @@ import com.ub.core.base.role.Role;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.Id;
 import java.io.StringWriter;
@@ -22,27 +23,6 @@ public class UserDoc {
         UserToken userToken = new UserToken();
         userToken.setToken(new ObjectId().toString() + userDoc.getId() + new ObjectId().toString());
         return userToken;
-    }
-
-    public static Long parsePhone(String phone) throws ParseException {
-
-        StringWriter phoneNumber = new StringWriter();
-        for (int i = 0; i < phone.length(); i++) {
-            if (Character.isDigit(phone.charAt(i))) {
-                phoneNumber.append(phone.charAt(i));
-            }
-        }
-        phone = phoneNumber.toString();
-        if (phone.length() == 10) {
-            return Long.parseLong('7' + phone);
-        } else if (phone.length() == 11) {
-            if (phone.startsWith("8")) {
-                phone = '7' + phone.substring(1);
-            }
-            return Long.parseLong(phone);
-        }
-
-        throw new ParseException("errors.invalid.length", phone.length());
     }
 
     @Id
@@ -200,6 +180,13 @@ public class UserDoc {
                 return true;
         }
         return false;
+    }
+
+    public boolean needLink(UserDoc userDoc) {
+        return (!StringUtils.isEmpty(userDoc.getVkId())
+                || !StringUtils.isEmpty(userDoc.getFbId())
+                || !StringUtils.isEmpty(userDoc.getEmail())
+                && userDoc.getPhoneNumber() == null);
     }
 
     public String getPasswordPhone() {
