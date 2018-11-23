@@ -183,9 +183,9 @@ public class UserDoc {
     }
 
     public boolean needLink(UserDoc userDoc) {
-        return (!StringUtils.isEmpty(userDoc.getVkId())
+        return ((!StringUtils.isEmpty(userDoc.getVkId())
                 || !StringUtils.isEmpty(userDoc.getFbId())
-                || !StringUtils.isEmpty(userDoc.getEmail())
+                || !StringUtils.isEmpty(userDoc.getEmail()))
                 && userDoc.getPhoneNumber() == null);
     }
 
