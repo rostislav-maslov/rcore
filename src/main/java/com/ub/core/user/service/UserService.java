@@ -111,6 +111,20 @@ public class UserService {
         return mongoTemplate.findOne(new Query(Criteria.where("phoneNumber").is(phone)), UserDoc.class);
     }
 
+    public UserDoc findByVkAccessToken(String token) {
+        Criteria criteria = Criteria.where("vkAccessToken").is(token);
+        Query query = new Query(criteria);
+
+        return mongoTemplate.findOne(query, UserDoc.class);
+    }
+
+    public UserDoc findByFbAccessToken(String token) {
+        Criteria criteria = Criteria.where("fbAccessToken").is(token);
+        Query query = new Query(criteria);
+
+        return mongoTemplate.findOne(query, UserDoc.class);
+    }
+
     public UserDoc findByVkEmail(String email) {
         return mongoTemplate.findOne(new Query(Criteria.where("vkEmail").is(email)), UserDoc.class);
     }
@@ -641,6 +655,20 @@ public class UserService {
         } catch (UserExistException e) {
             e.printStackTrace();
         }
+        return userDoc;
+    }
+
+    public UserDoc replaceUserDoc(UserDoc userDoc) throws UserNotExistException {
+        UserDoc oldUserDoc = mongoTemplate.findById(userDoc.getId(), UserDoc.class);
+        if (oldUserDoc == null) {
+            throw new UserNotExistException();
+        }
+        mongoTemplate.remove(oldUserDoc);
+        callAfterDelete(oldUserDoc);
+
+        mongoTemplate.save(userDoc);
+        callAfterSave(userDoc);
+
         return userDoc;
     }
 

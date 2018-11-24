@@ -35,8 +35,6 @@ public class AuthorizeFbService {
         httpsUtils.addParam(AuthorizeFbStatic.P_REDIRECT_URL, redirectUri);
         httpsUtils.addParam(AuthorizeFbStatic.P_SCOPE, appPropertiesFbDoc.getPERMISSIONS());
 
-        System.out.println();
-
         try {
             String response = httpsUtils.sendGet();
             FBAccessTokenResponse accessTokenResponse = new ObjectMapper().readValue(response, FBAccessTokenResponse.class);
