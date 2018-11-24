@@ -15,7 +15,7 @@ public class PictureTaskExecutor {
 
     @Autowired private PictureResizeService pictureResizeService;
 
-    @Scheduled(fixedDelay = 900)
+    @Scheduled(fixedDelay = 60 * 1000, initialDelay = 2 * 60 * 1000)
     public void runNextTask() {
         try {
             pictureResizeService.runResizeForNextTask();
