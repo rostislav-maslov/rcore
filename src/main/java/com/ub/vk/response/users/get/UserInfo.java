@@ -4,6 +4,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserInfo {
+    private int id;
     private String uid;
     private String first_name;
     private String last_name;
@@ -49,6 +50,14 @@ public class UserInfo {
     private Object relatives;
     private Object can_see_audio;
     private Object hidden;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getUid() {
         return uid;
