@@ -1,9 +1,6 @@
 package com.ub.core.pictureTask.starter;
 
-import com.ub.core.picture.services.PictureService;
-import com.ub.core.pictureTask.models.PictureTaskDoc;
 import com.ub.core.pictureTask.services.PictureResizeService;
-import com.ub.core.pictureTask.services.PictureTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,7 +12,7 @@ public class PictureTaskExecutor {
 
     @Autowired private PictureResizeService pictureResizeService;
 
-    @Scheduled(fixedDelay = 60 * 1000, initialDelay = 2 * 60 * 1000)
+    @Scheduled(fixedDelay = 60 * 60 * 1000, initialDelay = 60 * 60 * 1000)
     public void runNextTask() {
         try {
             pictureResizeService.runResizeForNextTask();

@@ -138,7 +138,9 @@ public class UserService {
     }
 
     public UserDoc findByAccessToken(String token) {
-        UserDoc userDoc = mongoTemplate.findOne(new Query(Criteria.where("accessTokens.token").is(token)), UserDoc.class);
+        Query query = new Query(Criteria.where("accessTokens.token").is(token));
+        query = query.withHint("find_by_accesstoken");
+        UserDoc userDoc = mongoTemplate.findOne(query, UserDoc.class);
         if (userDoc == null) return null;
 
         if (userDoc.checkAccessToken(token)) {

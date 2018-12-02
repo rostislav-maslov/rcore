@@ -4,6 +4,8 @@ package com.ub.core.user.models;
 import com.ub.core.base.role.Role;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.util.StringUtils;
 
@@ -13,6 +15,14 @@ import java.text.ParseException;
 import java.util.*;
 
 @Document
+@CompoundIndexes({
+        @CompoundIndex(
+                name = "find_by_accesstoken",
+                def = "{'accessTokens.token': 1}",
+                unique = true,
+                sparse = true
+        )
+})
 public class UserDoc {
 
     public static String generateHexPassword(String email, String password) {
