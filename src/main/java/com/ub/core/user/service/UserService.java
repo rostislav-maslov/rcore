@@ -153,7 +153,12 @@ public class UserService {
     }
 
     public UserDoc findByRefreshToken(String token) {
-        UserDoc userDoc = mongoTemplate.findOne(new Query(Criteria.where("refreshTokens.token").is(token)), UserDoc.class);
+        if(token == null) return null;
+
+        Query query = new Query(Criteria.where("refreshTokens.token").is(token));
+        query.withHint("find_by_refreshtoken");
+
+        UserDoc userDoc = mongoTemplate.findOne(query, UserDoc.class);
         if (userDoc == null) return null;
 
         if (userDoc.checkRefreshToken(token)) {

@@ -21,6 +21,12 @@ import java.util.*;
                 def = "{'accessTokens.token': 1}",
                 unique = true,
                 sparse = true
+        ),
+        @CompoundIndex(
+                name = "find_by_refreshtoken",
+                def = "{'refreshTokens.token': 1}",
+                unique = true,
+                sparse = true
         )
 })
 public class UserDoc {
