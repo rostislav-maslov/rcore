@@ -18,15 +18,11 @@ import java.util.*;
 @CompoundIndexes({
         @CompoundIndex(
                 name = "find_by_accesstoken",
-                def = "{'accessTokens.token': 1}",
-                unique = true,
-                sparse = true
+                def = "{'accessTokens.token': 1}"
         ),
         @CompoundIndex(
                 name = "find_by_refreshtoken",
-                def = "{'refreshTokens.token': 1}",
-                unique = true,
-                sparse = true
+                def = "{'refreshTokens.token': 1}"
         )
 })
 public class UserDoc {
