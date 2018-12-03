@@ -4,7 +4,7 @@ import org.springframework.web.util.HtmlUtils;
 
 import java.io.Serializable;
 
-public class SeoTags implements Serializable {
+public class SeoTags {
     private String metaTitle;
     private String metaDescription;
     private String metaKeywords;

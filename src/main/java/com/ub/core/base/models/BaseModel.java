@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by maslov on 15.02.16.
  */
-public class BaseModel implements Serializable {
+public class BaseModel {
     protected Date createdAt = new Date();
     protected Date updateAt  = new Date();
     protected String timeZone = "GMT";
