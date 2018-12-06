@@ -141,7 +141,7 @@ public class UserService {
         if(token == null) return null;
 
         Query query = new Query(Criteria.where("accessTokens.token").is(token));
-        query = query.withHint("find_by_accesstoken");
+        query = query.withHint("find_by_accesstoken_new");
         UserDoc userDoc = mongoTemplate.findOne(query, UserDoc.class);
         if (userDoc == null) return null;
 
@@ -156,7 +156,7 @@ public class UserService {
         if(token == null) return null;
 
         Query query = new Query(Criteria.where("refreshTokens.token").is(token));
-        query.withHint("find_by_refreshtoken");
+        query.withHint("find_by_refreshtoken_new");
 
         UserDoc userDoc = mongoTemplate.findOne(query, UserDoc.class);
         if (userDoc == null) return null;

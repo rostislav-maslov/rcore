@@ -15,6 +15,16 @@ import java.text.ParseException;
 import java.util.*;
 
 @Document
+@CompoundIndexes({
+        @CompoundIndex(
+                name = "find_by_accesstoken_new",
+                def = "{'accessTokens.token': 1}"
+        ),
+        @CompoundIndex(
+                name = "find_by_refreshtoken_new",
+                def = "{'refreshTokens.token': 1}"
+        )
+})
 public class UserDoc {
 
     public static String generateHexPassword(String email, String password) {
