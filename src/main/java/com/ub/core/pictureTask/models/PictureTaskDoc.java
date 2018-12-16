@@ -2,6 +2,8 @@ package com.ub.core.pictureTask.models;
 
 import com.ub.core.picture.models.PictureSizeType;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 import com.ub.core.base.models.BaseModel;
 
@@ -9,6 +11,12 @@ import com.ub.core.base.models.BaseModel;
 import javax.persistence.Id;
 
 @Document
+@CompoundIndexes({
+        @CompoundIndex(
+                name = "find_by_pic_and_width",
+                def = "{'pictureId': 1,'width': 1}"
+        ),
+})
 public class PictureTaskDoc extends BaseModel {
     @Id
     private ObjectId id;

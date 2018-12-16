@@ -104,11 +104,15 @@ public class UserService {
     }
 
     public UserDoc findByEmail(String email) {
-        return mongoTemplate.findOne(new Query(Criteria.where("email").is(email)), UserDoc.class);
+        Query query = new Query(Criteria.where("email").is(email));
+        query = query.withHint("find_by_email");
+        return mongoTemplate.findOne(query, UserDoc.class);
     }
 
     public UserDoc findByPhone(Long phone) {
-        return mongoTemplate.findOne(new Query(Criteria.where("phoneNumber").is(phone)), UserDoc.class);
+        Query query = new Query(Criteria.where("phoneNumber").is(phone));
+        query = query.withHint("find_by_phone");
+        return mongoTemplate.findOne(query, UserDoc.class);
     }
 
     public UserDoc findByVkAccessToken(String token) {

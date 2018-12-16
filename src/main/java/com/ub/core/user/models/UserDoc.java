@@ -23,6 +23,14 @@ import java.util.*;
         @CompoundIndex(
                 name = "find_by_refreshtoken_new",
                 def = "{'refreshTokens.token': 1}"
+        ),
+        @CompoundIndex(
+                name = "find_by_phone",
+                def = "{'phoneNumber': 1}"
+        ),
+        @CompoundIndex(
+                name = "find_by_email",
+                def = "{'email': 1}"
         )
 })
 public class UserDoc {
