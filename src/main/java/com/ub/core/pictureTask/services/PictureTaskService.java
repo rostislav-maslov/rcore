@@ -68,12 +68,12 @@ public class PictureTaskService {
     }
 
     public PictureTaskDoc findByPicture(ObjectId pictureId, Integer width){
-        return mongoTemplate.findOne(
-                new Query(
-                        Criteria.where("pictureId").is(pictureId)
+        Query query = new Query(
+                Criteria.where("pictureId").is(pictureId)
                         .and("width").is(width)
-
-                ), PictureTaskDoc.class);
+        );
+        query = query.withHint("find_by_pic_and_width");
+        return mongoTemplate.findOne(query, PictureTaskDoc.class);
     }
 
     public SearchPictureTaskAdminResponse findAll(SearchPictureTaskAdminRequest searchPictureTaskAdminRequest) {

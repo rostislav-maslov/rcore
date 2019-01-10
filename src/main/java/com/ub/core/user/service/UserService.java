@@ -104,11 +104,15 @@ public class UserService {
     }
 
     public UserDoc findByEmail(String email) {
-        return mongoTemplate.findOne(new Query(Criteria.where("email").is(email)), UserDoc.class);
+        Query query = new Query(Criteria.where("email").is(email));
+        query = query.withHint("find_by_email");
+        return mongoTemplate.findOne(query, UserDoc.class);
     }
 
     public UserDoc findByPhone(Long phone) {
-        return mongoTemplate.findOne(new Query(Criteria.where("phoneNumber").is(phone)), UserDoc.class);
+        Query query = new Query(Criteria.where("phoneNumber").is(phone));
+        query = query.withHint("find_by_phone");
+        return mongoTemplate.findOne(query, UserDoc.class);
     }
 
     public UserDoc findByVkAccessToken(String token) {
@@ -141,7 +145,7 @@ public class UserService {
         if(token == null) return null;
 
         Query query = new Query(Criteria.where("accessTokens.token").is(token));
-        query = query.withHint("find_by_accesstoken");
+        query = query.withHint("find_by_accesstoken_new");
         UserDoc userDoc = mongoTemplate.findOne(query, UserDoc.class);
         if (userDoc == null) return null;
 
@@ -156,7 +160,7 @@ public class UserService {
         if(token == null) return null;
 
         Query query = new Query(Criteria.where("refreshTokens.token").is(token));
-        query.withHint("find_by_refreshtoken");
+        query.withHint("find_by_refreshtoken_new");
 
         UserDoc userDoc = mongoTemplate.findOne(query, UserDoc.class);
         if (userDoc == null) return null;
