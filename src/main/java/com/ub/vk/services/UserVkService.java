@@ -68,6 +68,7 @@ public class UserVkService {
 
         httpsUtils.addParam(UserVkStatic.P_FIELDS, UserVkStatic.V_FIELDS);
         httpsUtils.addParam(UserVkStatic.P_ACCESS_TOKEN, accessToken);
+        httpsUtils.addParam(UserVkStatic.P_VERSION, UserVkStatic.V_VERSION);
 
         try {
             UsersGetResponse usersGetResponse = new ObjectMapper().readValue(httpsUtils.sendGet(), UsersGetResponse.class);

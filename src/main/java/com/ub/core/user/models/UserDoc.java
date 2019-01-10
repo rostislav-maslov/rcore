@@ -184,11 +184,11 @@ public class UserDoc {
         return false;
     }
 
-    public boolean needLink(UserDoc userDoc) {
-        return ((!StringUtils.isEmpty(userDoc.getVkId())
-                || !StringUtils.isEmpty(userDoc.getFbId())
-                || !StringUtils.isEmpty(userDoc.getEmail()))
-                && userDoc.getPhoneNumber() == null);
+    public boolean needLink() {
+        return ((!StringUtils.isEmpty(getVkId())
+                || !StringUtils.isEmpty(getFbId())
+                || !StringUtils.isEmpty(getEmail()))
+                && getPhoneNumber() == null);
     }
 
     public String getPasswordPhone() {
