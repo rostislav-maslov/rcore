@@ -1,16 +1,19 @@
 package com.ub.core.picture.services;
 
+import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
+import com.drew.metadata.Metadata;
+import com.drew.metadata.MetadataException;
+import com.drew.metadata.exif.ExifIFD0Directory;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.ub.core.file.services.FileService;
 import com.ub.core.picture.models.PictureDoc;
 import com.ub.core.picture.models.PictureSize;
 import com.ub.core.picture.view.all.SearchAdminRequest;
 import com.ub.core.picture.view.all.SearchAdminResponse;
-import com.ub.core.pictureTask.services.PictureResizeService;
 import com.ub.core.pictureTask.services.PictureTaskService;
+import org.apache.commons.io.FilenameUtils;
 import org.bson.types.ObjectId;
-import org.im4java.core.ConvertCmd;
-import org.im4java.core.IMOperation;
 import org.imgscalr.Scalr;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -24,14 +27,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.List;
 
-import static org.imgscalr.Scalr.Mode.FIT_TO_WIDTH;
+import static org.imgscalr.Scalr.Rotation;
 
 @Component
 public class PictureService {
@@ -135,7 +135,26 @@ public class PictureService {
     }
 
     public PictureDoc save(MultipartFile multipartFile) {
-        GridFSDBFile gridFSDBFile = fileService.save(multipartFile);
+        GridFSDBFile gridFSDBFile;
+
+        Rotation rotation = getPictureOrientation(multipartFile);
+        if (rotation != null) {
+            try {
+                InputStream is = pictureIn(ImageIO.read(
+                        multipartFile.getInputStream()),
+                        FilenameUtils.getExtension(multipartFile.getOriginalFilename()),
+                        rotation
+                );
+                gridFSDBFile = fileService.save(is);
+            } catch (IOException e) {
+                e.printStackTrace();
+
+                return null;
+            }
+        } else {
+            gridFSDBFile = fileService.save(multipartFile);
+        }
+
         if (gridFSDBFile == null) return null;
 
         PictureDoc pictureDoc = new PictureDoc();
@@ -157,6 +176,43 @@ public class PictureService {
 
         mongoTemplate.save(pictureDoc);
         return pictureDoc;
+    }
+
+    private Rotation getPictureOrientation(MultipartFile multipartFile) {
+        try {
+            Metadata metadata = ImageMetadataReader.readMetadata(multipartFile.getInputStream());
+            ExifIFD0Directory exifIFD0Directory = metadata.getFirstDirectoryOfType(ExifIFD0Directory.class);
+            if (exifIFD0Directory == null) {
+                return null;
+            }
+            int orientation = exifIFD0Directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
+            switch (orientation) {
+                case 1: // [Exif IFD0] Orientation - Top, left side (Horizontal / normal)
+                    return null;
+                case 6: // [Exif IFD0] Orientation - Right side, top (Rotate 90 CW)
+                    return Rotation.CW_90;
+                case 3: // [Exif IFD0] Orientation - Bottom, right side (Rotate 180)
+                    return Rotation.CW_180;
+                case 8: // [Exif IFD0] Orientation - Left side, bottom (Rotate 270 CW)
+                    return Rotation.CW_270;
+            }
+        } catch (ImageProcessingException | IOException | MetadataException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private InputStream pictureIn(BufferedImage image, String fileType, Rotation rotation) {
+        try {
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(Scalr.rotate(image, rotation), fileType, os);
+
+            return new ByteArrayInputStream(os.toByteArray());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public PictureDoc saveByUrl(String url) {
