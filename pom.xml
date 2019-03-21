@@ -24,7 +24,7 @@
         <java-mongo-driver.version>2.12.1</java-mongo-driver.version>
 
 
-        <jackson.version>2.4.1</jackson.version>
+        <jackson.version>2.9.8</jackson.version>
         <log4j.version>2.8</log4j.version>
         <slf4j.version>1.7.24</slf4j.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
