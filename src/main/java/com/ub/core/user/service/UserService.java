@@ -150,7 +150,7 @@ public class UserService {
     }
 
     public UserDoc findByAccessToken(String token) {
-        if(token == null) return null;
+        if (token == null) return null;
 
         Query query = new Query(Criteria.where("accessTokens.token").is(token));
         query = query.withHint("find_by_accesstoken_new");
@@ -165,7 +165,7 @@ public class UserService {
     }
 
     public UserDoc findByRefreshToken(String token) {
-        if(token == null) return null;
+        if (token == null) return null;
 
         Query query = new Query(Criteria.where("refreshTokens.token").is(token));
         query.withHint("find_by_refreshtoken_new");
@@ -685,7 +685,6 @@ public class UserService {
             throw new UserNotExistException();
         }
         mongoTemplate.remove(oldUserDoc);
-        callAfterDelete(oldUserDoc);
 
         mongoTemplate.save(userDoc);
         callAfterSave(userDoc);
