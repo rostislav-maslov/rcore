@@ -679,13 +679,7 @@ public class UserService {
         return userDoc;
     }
 
-    public UserDoc replaceUserDoc(UserDoc userDoc) throws UserNotExistException {
-        UserDoc oldUserDoc = mongoTemplate.findById(userDoc.getId(), UserDoc.class);
-        if (oldUserDoc == null) {
-            throw new UserNotExistException();
-        }
-        mongoTemplate.remove(oldUserDoc);
-
+    public UserDoc replaceUserDoc(UserDoc userDoc) {
         mongoTemplate.save(userDoc);
         callAfterSave(userDoc);
 
