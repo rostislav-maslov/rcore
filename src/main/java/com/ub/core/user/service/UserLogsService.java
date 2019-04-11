@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -88,7 +89,9 @@ public class UserLogsService {
 
         UserAgent userAgent = UserAgent.parseUserAgentString(request.getHeader("User-Agent"));
         userLogsDoc.setBrowser(userAgent.getBrowser().getName());
-        userLogsDoc.setBrowserVersion(userAgent.getBrowserVersion().toString());
+        if (!StringUtils.isEmpty(userAgent.getBrowserVersion())) {
+            userLogsDoc.setBrowserVersion(userAgent.getBrowserVersion().toString());
+        }
         userLogsDoc.setOperatingSystem(userAgent.getOperatingSystem().getName());
         userLogsDoc.setDeviceType(userAgent.getOperatingSystem().getDeviceType().getName());
 
