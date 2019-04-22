@@ -67,20 +67,13 @@ public class PictureUtils {
         return null;
     }
 
-    public static InputStream fromBufferedImageToInputStream(BufferedImage image, String fileType) throws IOException {
-        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
-            ImageIO.write(image, fileType, os);
-
-            return new ByteArrayInputStream(os.toByteArray());
-        }
-    }
-
     private static InputStream pictureIn(BufferedImage image, String fileType, AffineTransformOp ops) {
         try {
             BufferedImage destImage = new BufferedImage(image.getHeight(), image.getWidth(), image.getType());
             destImage = ops.filter(image, destImage);
 
             ByteArrayOutputStream os = new ByteArrayOutputStream();
+
             ImageIO.write(destImage, fileType, os);
 
             return new ByteArrayInputStream(os.toByteArray());
@@ -96,5 +89,20 @@ public class PictureUtils {
         affineTransform.rotate(2 * Math.PI);
 
         return affineTransform;
+    }
+
+    public static InputStream fromBufferedImageToInputStream(BufferedImage image, String fileType) throws IOException {
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            ImageIO.write(dropAlphaChannel(image), fileType, os);
+
+            return new ByteArrayInputStream(os.toByteArray());
+        }
+    }
+
+    private static BufferedImage dropAlphaChannel(BufferedImage src) {
+        BufferedImage convertedImg = new BufferedImage(src.getWidth(), src.getHeight(), BufferedImage.TYPE_INT_RGB);
+        convertedImg.getGraphics().drawImage(src, 0, 0, null);
+
+        return convertedImg;
     }
 }
