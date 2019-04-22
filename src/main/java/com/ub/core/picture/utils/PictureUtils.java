@@ -12,6 +12,7 @@ import static org.imgscalr.Scalr.Rotation;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -68,6 +69,20 @@ public class PictureUtils {
         return null;
     }
 
+    public static InputStream fromBufferedImageToInputStream(BufferedImage image, String fileType) {
+        try {
+            BufferedImage destImage = new BufferedImage(image.getHeight(), image.getWidth(), image.getType());
+
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(destImage, fileType, os);
+
+            return new ByteArrayInputStream(os.toByteArray());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
     private static InputStream pictureIn(BufferedImage image, String fileType, AffineTransformOp ops) {
         try {
             BufferedImage destImage = new BufferedImage(image.getHeight(), image.getWidth(), image.getType());
