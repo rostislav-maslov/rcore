@@ -6,13 +6,9 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.MetadataException;
 import com.drew.metadata.exif.ExifIFD0Directory;
 import org.apache.commons.io.FilenameUtils;
-
-import static org.imgscalr.Scalr.Rotation;
-
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
@@ -20,6 +16,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import static org.imgscalr.Scalr.Rotation;
 
 public class PictureUtils {
 
@@ -69,20 +67,14 @@ public class PictureUtils {
         return null;
     }
 
-    public static InputStream fromBufferedImageToInputStream(BufferedImage image, String fileType) {
-        try {
-            BufferedImage destImage = new BufferedImage(image.getHeight(), image.getWidth(), image.getType());
-
-            ByteArrayOutputStream os = new ByteArrayOutputStream();
-            ImageIO.write(destImage, fileType, os);
+    public static InputStream fromBufferedImageToInputStream(BufferedImage image, String fileType) throws IOException {
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            ImageIO.write(image, fileType, os);
 
             return new ByteArrayInputStream(os.toByteArray());
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
-        return null;
     }
+
     private static InputStream pictureIn(BufferedImage image, String fileType, AffineTransformOp ops) {
         try {
             BufferedImage destImage = new BufferedImage(image.getHeight(), image.getWidth(), image.getType());
