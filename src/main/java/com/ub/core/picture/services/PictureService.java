@@ -29,6 +29,7 @@ import java.util.List;
 @Component
 public class PictureService {
     public static final Integer LIMIT_OF_IMAGE_SIZES = 5;
+    public static final Integer LIMIT_OF_SPLASH_IMAGE_SIZES = 75;
     public static final Boolean RETURN_ORIGIN_IF_LIMIT = true;
 
 

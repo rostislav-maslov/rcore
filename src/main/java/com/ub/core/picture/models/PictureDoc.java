@@ -32,8 +32,24 @@ public class PictureDoc {
         return null;
     }
 
+    public PictureSize getResizedPicture(Integer width, Integer height) {
+        for (PictureSize pictureSize : sizes.values()) {
+            if (pictureSize.getWidth().equals(width) && pictureSize.getHieght().equals(height)) {
+                return pictureSize;
+            }
+        }
+        return null;
+    }
+
     public void addSize(PictureSize pictureSize) {
         if (sizes.size() >= PictureService.LIMIT_OF_IMAGE_SIZES) {
+            return;
+        }
+        sizes.put(pictureSize.getStringSize(), pictureSize);
+    }
+
+    public void addSplashSize(PictureSize pictureSize) {
+        if (sizes.size() >= PictureService.LIMIT_OF_SPLASH_IMAGE_SIZES) {
             return;
         }
         sizes.put(pictureSize.getStringSize(), pictureSize);
