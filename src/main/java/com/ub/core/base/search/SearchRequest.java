@@ -4,6 +4,8 @@ public class SearchRequest {
     protected String query = "";
     protected Integer currentPage = 0;
     protected Integer pageSize = 30;
+    protected String sortDir;
+    protected String sortField;
 
     public Integer skip(){
         return currentPage * pageSize;
@@ -31,5 +33,21 @@ public class SearchRequest {
 
     public void setQuery(String query) {
         this.query = query;
+    }
+
+    public String getSortDir() {
+        return sortDir;
+    }
+
+    public void setSortDir(String sortDir) {
+        this.sortDir = sortDir;
+    }
+
+    public String getSortField() {
+        return sortField;
+    }
+
+    public void setSortField(String sortField) {
+        this.sortField = sortField;
     }
 }

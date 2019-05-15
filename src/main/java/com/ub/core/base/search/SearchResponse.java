@@ -8,6 +8,8 @@ public class SearchResponse {
     protected Integer pageSize = 10;
     protected Long all = 0l;
     protected String query = "";
+    protected String sortDir;
+    protected String sortField;
 
     public Long prevNum(Long all) {
         this.all = all;
@@ -147,5 +149,21 @@ public class SearchResponse {
 
     public void setQuery(String query) {
         this.query = query;
+    }
+
+    public String getSortDir() {
+        return sortDir;
+    }
+
+    public void setSortDir(String sortDir) {
+        this.sortDir = sortDir;
+    }
+
+    public String getSortField() {
+        return sortField;
+    }
+
+    public void setSortField(String sortField) {
+        this.sortField = sortField;
     }
 }
