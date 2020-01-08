@@ -31,6 +31,19 @@ public class MenuBoost {
             } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ignore) {}
         }
 
+        // TODO: удалить и отказаться от хардкода в сканах
+        for (BeanDefinition bd : scanner.findCandidateComponents("tech")) {
+            try {
+                Class aClass = Class.forName(bd.getBeanClassName());
+                ExcludeCoreMenu mainMenu = (ExcludeCoreMenu) aClass.newInstance();
+                List<CoreMenu> coreMenus = mainMenu.getMenu();
+                if (coreMenus == null) continue;
+                for (CoreMenu coreMenu : coreMenus) {
+                    result.put(coreMenu.getId(), coreMenu);
+                }
+            } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ignore) {}
+        }
+
         return result;
     }
 
@@ -46,6 +59,18 @@ public class MenuBoost {
 
         scanner.addIncludeFilter(new AssignableTypeFilter(CoreMenu.class));
         for (BeanDefinition bd : scanner.findCandidateComponents(BASE_PACKAGE)) {
+            try {
+                Class aClass = Class.forName(bd.getBeanClassName());
+                CoreMenu mainMenu = (CoreMenu) aClass.newInstance();
+                if (exMenu.get(mainMenu.getId()) != null)
+                    continue;
+                if (mainMenu.getParent() == null)
+                    result.add(mainMenu);
+                menuSet.add(mainMenu);
+            } catch (ClassNotFoundException | IllegalAccessException | InstantiationException ignore) {}
+        }
+
+        for (BeanDefinition bd : scanner.findCandidateComponents("tech")) {
             try {
                 Class aClass = Class.forName(bd.getBeanClassName());
                 CoreMenu mainMenu = (CoreMenu) aClass.newInstance();
