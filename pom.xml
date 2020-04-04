@@ -2,11 +2,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.ub</groupId>
-    <artifactId>UBCore</artifactId>
-    <!--<packaging>war</packaging>-->
+    <artifactId>RCore</artifactId>
+    <version>1.0.0</version>
+    <name>RCore</name>
+
+    <modules>
+        <module>domain</module>
+        <module>admin</module>
+        <module>mongo</module>
+
+    </modules>
+
+    <packaging>pom</packaging>
     <packaging>jar</packaging>
-    <version>0.3.0</version>
-    <name>UBCore</name>
 
     <properties>
         <!--<spring.version>4.1.3.RELEASE</spring.version>-->
