@@ -3,46 +3,68 @@ package com.rcore.domain.user.port.impl;
 import com.rcore.domain.user.port.PasswordGenerator;
 import lombok.SneakyThrows;
 
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.PBEKeySpec;
-import java.security.SecureRandom;
-import java.security.spec.KeySpec;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.UUID;
 
 public class PasswordGeneratorImpl implements PasswordGenerator {
 
-    private byte[] salt(){
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
-        return salt;
+    private String salt() {
+        String uuid = UUID.randomUUID().toString();
+        return encryptThisString(uuid);
+    }
+
+    public static String encryptThisString(String input) {
+        try {
+            // getInstance() method is called with algorithm SHA-512
+            MessageDigest md = MessageDigest.getInstance("SHA-512");
+
+            // digest() method is called
+            // to calculate message digest of the input string
+            // returned as array of byte
+            byte[] messageDigest = md.digest(input.getBytes());
+
+            // Convert byte array into signum representation
+            BigInteger no = new BigInteger(1, messageDigest);
+
+            // Convert message digest into hex value
+            String hashtext = no.toString(16);
+
+            // Add preceding 0s to make it 32 bit
+            while (hashtext.length() < 32) {
+                hashtext = "0" + hashtext;
+            }
+
+            // return the HashText
+            return hashtext;
+        }
+
+        // For specifying wrong message digest algorithms
+        catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @SneakyThrows
-    private String generate(String userId, String cleanPassword, String saltString){
-        byte[] salt = saltString.getBytes();
-
-        String passwordToProtect = userId + ":" + cleanPassword + "42";
-
-        KeySpec keySpec = new PBEKeySpec(passwordToProtect.toCharArray(), salt, 65536, 128);
-        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-
-        byte[] hash = factory.generateSecret(keySpec).getEncoded();
-        String hashString = new String(hash);
+    private String generate(String userId, String cleanPassword, String saltString) {
+        String passwordToProtect = userId + ":" + cleanPassword + ":" + "42" + ":" + saltString;
+        String hashString = encryptThisString(passwordToProtect);
 
         String protectedPassword = saltString + ":" + hashString;
         return protectedPassword;
     }
 
     @SneakyThrows
-    public String generate(String userId, String cleanPassword){
-        byte[] salt = salt();
-        return generate(userId, cleanPassword, new String(salt));
+    public String generate(String userId, String cleanPassword) {
+        String salt = salt();
+        return generate(userId, cleanPassword, salt);
     }
 
     @Override
     public Boolean check(String userId, String cleanPassword, String protectedPassword) {
         String[] passwordObject = protectedPassword.split(":");
-        if(passwordObject.length != 2) return false;
+        if (passwordObject.length != 2) return false;
 
         String salt = passwordObject[0];
         String password = generate(userId, cleanPassword, salt);

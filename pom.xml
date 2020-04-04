@@ -10,6 +10,8 @@
         <module>domain</module>
         <module>admin</module>
         <module>mongo</module>
+        <module>memory</module>
+        <module>common</module>
 
     </modules>
 

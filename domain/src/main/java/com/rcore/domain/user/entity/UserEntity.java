@@ -1,7 +1,7 @@
 package com.rcore.domain.user.entity;
 
 import com.rcore.domain.base.entity.BaseEntity;
-import com.rcore.domain.role.entity.RoleEntity;
+import com.rcore.domain.role.entity.Role;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,7 +12,7 @@ import java.util.*;
 public class UserEntity extends BaseEntity {
     protected String id;
 
-    protected Set<RoleEntity> roles = new HashSet<RoleEntity>();
+    protected Set<Role> roles = new HashSet<Role>();
 
     protected UserStatus userStatus = UserStatus.ACTIVE;
 
@@ -30,4 +30,42 @@ public class UserEntity extends BaseEntity {
 
     private Integer fails = 0;
     private Date lastFailDate = new Date();
+
+    public Boolean hasRole(Role role){
+        for(Role roleEntity : roles){
+            if(roleEntity.getId().equals(role.getId())) return true;
+        }
+
+        return false;
+    }
+
+    public String getNoNullEmail() {
+        if (email != null) {
+            return email;
+        }
+
+        for(SocialAccount socialAccount : socialAccounts){
+            if(socialAccount.getEmail() != null && socialAccount.getEmail().isEmpty() == false){
+                return socialAccount.getEmail();
+            }
+        }
+
+        return null;
+    }
+
+    public Set<String> getAllUserEmails() {
+        Set<String> emails = new HashSet<>();
+
+        if (email != null && emails.isEmpty() == false) {
+            emails.add(email);
+        }
+
+        for(SocialAccount socialAccount : socialAccounts){
+            if(socialAccount.getEmail() != null && socialAccount.getEmail().isEmpty() == false){
+                emails.add(socialAccount.getEmail());
+            }
+        }
+
+        return emails;
+    }
 }

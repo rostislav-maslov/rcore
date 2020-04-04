@@ -1,4 +1,4 @@
 package com.rcore.domain.role.entity;
 
-public class RoleEntity {
+public class GodModRole extends Role {
 }

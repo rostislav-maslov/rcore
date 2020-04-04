@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.rcore</groupId>
-    <artifactId>domain</artifactId>
+    <artifactId>memory</artifactId>
     <version>1.0.0</version>
     <name>RCore</name>
 
@@ -17,10 +17,10 @@
     <dependencies>
         <dependency>
             <groupId>com.rcore</groupId>
-            <artifactId>memory</artifactId>
+            <artifactId>domain</artifactId>
             <version>1.0.0</version>
-            <scope>test</scope>
         </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>

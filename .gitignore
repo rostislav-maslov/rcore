@@ -6,3 +6,9 @@
 /src/main/webapp/resources/database.properties
 domain.iml
 RAdmin.iml
+admin/target
+domain/target
+common.iml
+memory/target
+memory/memory.iml
+RCore.iml
