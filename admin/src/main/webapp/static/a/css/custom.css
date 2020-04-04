@@ -1,0 +1,26 @@
+/**
+ *
+ * Apply Here your Custom CSS
+ *
+*/
+
+.ckeditor{
+    min-height: 300px;
+}
+
+.go-to-top{
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 99999;
+    display: block;
+    cursor: pointer;
+}
+
+.go-to-top .fa{
+    font-size: 40px;
+}
+
+.modal-backdrop {
+    display: none;
+}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+    <!--CLIENT-->
+    <!-- <definition name="com.ub.core.client.pictureTask.all" extends="com.ub.core.client.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/ubcore/client/pictureTask/all.jsp"/>
+    </definition> -->
+
+    <!--ADMIN-->
+    <definition name="com.ub.core.admin.pictureTask.all" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/pictureTask/all.jsp"/>
+    </definition>
+    <definition name="com.ub.core.admin.pictureTask.add" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/pictureTask/add.jsp"/>
+    </definition>
+    <definition name="com.ub.core.admin.pictureTask.edit" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/pictureTask/edit.jsp"/>
+    </definition>
+    <definition name="com.ub.core.admin.pictureTask.delete" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/pictureTask/delete.jsp"/>
+    </definition>
+    <definition name="com.ub.core.admin.pictureTask.modal.parent"
+        template="/WEB-INF/com/ub/core/admin/pictureTask/modalResponse.jsp">
+    </definition>
+
+</tiles-definitions>

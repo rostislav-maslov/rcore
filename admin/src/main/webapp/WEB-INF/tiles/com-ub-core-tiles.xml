@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+    <!--CLIENT-->
+    <definition name="com.ub.core.client.main" template="/WEB-INF/com/ub/core/client/main/main.jsp">
+        <put-attribute name="main.header.css" value=""/>
+        <put-attribute name="main.header.js" value=""/>
+        <put-attribute name="main.content" value=""/>
+        <put-attribute name="main.body.js" value=""/>
+    </definition>
+    <!--ADMIN-->
+    <!--<definition name="com.ub.core.admin.main" template="/WEB-INF/com/ub/core/admin/main/main.jsp">-->
+    <!--<put-attribute name="main.header.component" value="/WEB-INF/com/ub/core/admin/main/component/header.jsp"/>-->
+    <!--</definition>-->
+    <definition name="com.ub.core.admin.layout" template="/WEB-INF/com/ub/core/admin/main/main.jsp">
+        <put-attribute name="content" value=""/>
+        <put-attribute name="contentModals" value=""/>
+        <put-attribute name="mainMenu" value="/WEB-INF/com/ub/core/admin/main/menu/mainMenu.jsp"/>
+        <put-attribute name="footerJs" value=""/>
+        <put-list-attribute name="contentModalsList"/>
+    </definition>
+
+    <definition name="com.ub.core.admin.login" template="/WEB-INF/com/ub/core/admin/main/login.jsp">
+        <put-attribute name="content" value=""/>
+        <put-attribute name="mainMenu" value="/WEB-INF/com/ub/core/admin/main/menu/mainMenu.jsp"/>
+    </definition>
+
+    <definition name="com.ub.core.admin.access_denied" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/accessDenied.jsp"/>
+    </definition>
+
+    <definition name="com.ub.core.admin.user.addEdit" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/AddEditUserView.jsp"/>
+    </definition>
+    <definition name="com.ub.core.admin.user.editUserInfo" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/editUserInfo.jsp"/>
+    </definition>
+    <definition name="com.ub.core.admin.user.list" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/UserListView.jsp"/>
+    </definition>
+    <definition name="com.ub.core.admin.main" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/UserListView.jsp"/>
+    </definition>
+    <definition name="com.ub.core.admin.user.modal.search.content"
+                template="/WEB-INF/com/ub/core/admin/user/modal/modalUserSearchContent.jsp">
+    </definition>
+    <!--roles-->
+    <definition name="com.ub.core.admin.role.addEdit" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/role/AddEditRoleView.jsp"/>
+    </definition>
+    <definition name="com.ub.core.admin.user.init" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/user/init.jsp"/>
+    </definition>
+    <!--/roles-->
+
+</tiles-definitions>

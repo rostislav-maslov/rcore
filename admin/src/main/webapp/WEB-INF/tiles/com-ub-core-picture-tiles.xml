@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+        "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+    <definition name="com.ub.core.admin.pictures.add" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/picture/add.jsp" />
+    </definition>
+
+    <definition name="com.ub.core.admin.pictures.delete" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/picture/delete.jsp" />
+    </definition>
+
+    <definition name="com.ub.core.admin.pictures.all" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/picture/all.jsp" />
+    </definition>
+
+    <definition name="com.ub.core.admin.pictures.color.add" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/picture/colors/add.jsp" />
+    </definition>
+
+    <definition name="com.ub.core.admin.pictures.color.edit" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/picture/colors/add.jsp" />
+    </definition>
+
+    <definition name="com.ub.core.admin.pictures.color.delete" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/picture/colors/delete.jsp" />
+    </definition>
+
+    <definition name="com.ub.core.admin.pictures.color.all" extends="com.ub.core.admin.layout">
+        <put-attribute name="content" value="/WEB-INF/com/ub/core/admin/picture/colors/all.jsp" />
+    </definition>
+</tiles-definitions>

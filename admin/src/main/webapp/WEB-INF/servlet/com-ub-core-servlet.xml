@@ -1,0 +1,74 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/data/mongo
+        http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        ">
+
+    <mvc:annotation-driven>
+        <mvc:argument-resolvers>
+            <bean class="org.springframework.data.web.PageableHandlerMethodArgumentResolver"/>
+        </mvc:argument-resolvers>
+    </mvc:annotation-driven>
+    <context:component-scan base-package="com.ub"/>
+    <!--<mvc:resources mapping="/static/**" location="/static/" />-->
+    <mvc:resources mapping="/static/**" location="/static/" />
+
+    <!--Data base settings-->
+    <mongo:mapping-converter id="converter" />
+    <bean name="gridFsTemplate"
+          class="org.springframework.data.mongodb.gridfs.GridFsTemplate">
+        <constructor-arg ref="mongoDbFactory" />
+        <constructor-arg ref="converter" />
+    </bean>
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+        <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+    </bean>
+    <mongo:repositories base-package="com.ub.*"/>
+
+    <bean id="viewResolver"
+          class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="viewClass">
+            <value>
+                org.springframework.web.servlet.view.tiles2.TilesView
+            </value>
+        </property>
+    </bean>
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="268435456"/>
+        <!-- 256 megs -->
+    </bean>
+
+    <!-- Starter -->
+    <!--<bean name="StarterName" init-method="init" class="com.ub.core.base.starter.CoreStarter"/>-->
+    <bean name="PictureColorsForItemStarter" init-method="init" class="com.ub.core.picture.starter.PictureColorsForItemStarter"/>
+    <bean name="CheckEngineStarter" init-method="init" class="com.ub.core.engine.starter.CheckEngineStarter"/>
+    <bean name="RoleBoost" init-method="init" class="com.ub.core.role.service.RoleBoost"/>
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/admin/**"/>
+            <mvc:exclude-mapping path="/admin/login**"/>
+            <mvc:exclude-mapping path="/admin/logout**"/>
+            <bean class="com.ub.core.security.service.AdminSecurity"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/api/**"/>
+            <mvc:exclude-mapping path="/favicon.ico"/>
+            <mvc:exclude-mapping path="/static/**"/>
+            <mvc:exclude-mapping path="/admin/login**"/>
+            <mvc:exclude-mapping path="/admin/logout**"/>
+            <bean class="com.ub.core.security.service.SecurityInterception"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+</beans>
