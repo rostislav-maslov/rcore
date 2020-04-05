@@ -1,4 +1,6 @@
 package com.rcore.domain.token.exception;
 
-public class AuthorizationException extends Exception {
+import com.rcore.domain.base.exception.CoreException;
+
+public class AuthorizationException extends CoreException {
 }
