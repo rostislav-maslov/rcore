@@ -6,6 +6,7 @@ public interface CRUDRepository<IdT,ObjectT> {
     public Boolean delete(ObjectT object);
     public Boolean deleteById(IdT id);
     public ObjectT findById(IdT id);
+    public SearchResult<ObjectT> find(Long size, Long skip);
     public Long count();
 
 }

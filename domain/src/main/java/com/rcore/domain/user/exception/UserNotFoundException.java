@@ -1,4 +1,6 @@
 package com.rcore.domain.user.exception;
 
-public class UserNotFoundException extends Exception {
+import com.rcore.domain.base.exception.CoreException;
+
+public class UserNotFoundException extends CoreException {
 }

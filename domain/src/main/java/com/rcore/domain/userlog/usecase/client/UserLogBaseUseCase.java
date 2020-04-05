@@ -1,0 +1,11 @@
+package com.rcore.domain.userLog.usecase.client;
+
+import com.rcore.domain.userLog.port.UserLogRepository;
+
+public class UserLogBaseUseCase {
+    protected UserLogRepository userLogRepository;
+
+    public UserLogBaseUseCase(UserLogRepository userLogRepository) {
+        this.userLogRepository = userLogRepository;
+    }
+}

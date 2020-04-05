@@ -5,11 +5,12 @@ import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.role.AdminUserBlockRole;
+import com.rcore.domain.user.role.AdminUserChangeRolesRole;
 
 public class ChangeRoleUseCase extends AdminBaseUseCase {
 
     public ChangeRoleUseCase(UserEntity actor, UserRepository userRepository)throws AuthorizationException {
-        super(actor, userRepository, new AdminUserBlockRole());
+        super(actor, userRepository, new AdminUserChangeRolesRole());
     }
 
     public UserEntity remove(UserEntity userEntity, Role role) {

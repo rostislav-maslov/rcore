@@ -22,14 +22,14 @@ public class UserEntity extends BaseEntity {
     protected String fullName = "";
 
     protected String email;
-    private Long phoneNumber;
-    private String login;
-    private String password;
+    protected Long phoneNumber;
+    protected String login;
+    protected String password;
 
-    private List<SocialAccount> socialAccounts = new ArrayList<>();
+    protected List<SocialAccount> socialAccounts = new ArrayList<>();
 
-    private Integer fails = 0;
-    private Date lastFailDate = new Date();
+    protected Integer fails = 0;
+    protected Date lastFailDate = new Date();
 
     public Boolean hasRole(Role role){
         for(Role roleEntity : roles){

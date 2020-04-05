@@ -6,14 +6,14 @@ import com.rcore.domain.user.exception.UserAlreadyExistException;
 import com.rcore.domain.user.port.IdGenerator;
 import com.rcore.domain.user.port.PasswordGenerator;
 import com.rcore.domain.user.port.UserRepository;
-import com.rcore.domain.user.role.AdminUserBlockRole;
+import com.rcore.domain.user.role.AdminUserCreateRole;
 
 public class CreateUseCase  extends AdminBaseUseCase {
     private final PasswordGenerator passwordGenerator;
     private final IdGenerator idGenerator;
 
     public CreateUseCase(UserEntity actor, UserRepository userRepository, PasswordGenerator passwordGenerator, IdGenerator idGenerator)throws AuthorizationException {
-        super(actor, userRepository, new AdminUserBlockRole());
+        super(actor, userRepository, new AdminUserCreateRole());
         this.passwordGenerator = passwordGenerator;
         this.idGenerator = idGenerator;
     }
