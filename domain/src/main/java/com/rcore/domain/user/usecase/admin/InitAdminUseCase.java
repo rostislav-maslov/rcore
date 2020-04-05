@@ -1,5 +1,6 @@
 package com.rcore.domain.user.usecase.admin;
 
+import com.rcore.domain.role.entity.GodModRole;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.port.IdGenerator;
 import com.rcore.domain.user.port.PasswordGenerator;
@@ -31,6 +32,7 @@ public class InitAdminUseCase {
         userEntity.setId(idGenerator.generate());
         userEntity.setEmail(email.toLowerCase());
         userEntity.setPassword(passwordGenerator.generate(userEntity.getId(), password));
+        userEntity.getRoles().add(new GodModRole());
         userEntity = userRepository.save(userEntity);
 
         return true;
