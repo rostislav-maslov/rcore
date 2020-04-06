@@ -15,15 +15,12 @@ public class ChangeRoleUseCase extends AdminBaseUseCase {
 
     public UserEntity remove(UserEntity userEntity, Role role) {
         userEntity.getRoles().remove(role);
-        userEntity = userRepository.save(userEntity);
 
-        return userEntity;
+        return userRepository.save(userEntity).get();
     }
 
     public UserEntity add(UserEntity userEntity, Role role) {
         userEntity.getRoles().add(role);
-        userEntity = userRepository.save(userEntity);
-
         return userEntity;
     }
 }

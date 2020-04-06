@@ -15,24 +15,29 @@ public class ExpireTokenUseCase {
         this.repository = repository;
     }
 
-    public void logout(UserEntity userEntity){
+    public void logout(UserEntity userEntity) {
         List<RefreshTokenEntity> refreshTokenEntities = repository.findAllActiveByUserId(userEntity.getId());
-        for(RefreshTokenEntity refreshTokenEntity : refreshTokenEntities){
+        for (RefreshTokenEntity refreshTokenEntity : refreshTokenEntities) {
             repository.expireRefreshToken(refreshTokenEntity);
         }
     }
 
-    public void logout(AccessTokenEntity accessTokenEntity){
-        RefreshTokenEntity refreshTokenEntity = repository.findById(accessTokenEntity.getCreateFromRefreshTokenId());
-        logout(refreshTokenEntity);
+    public void logout(AccessTokenEntity accessTokenEntity) {
+        repository.findById(accessTokenEntity.getCreateFromRefreshTokenId())
+                .map(refreshToken -> {
+                    logout(refreshToken);
+                    return refreshToken;
+                });
     }
 
-    public void logout(RefreshTokenEntity refreshTokenEntity){
+    public void logout(RefreshTokenEntity refreshTokenEntity) {
         repository.expireRefreshToken(refreshTokenEntity);
 
-        if(refreshTokenEntity.getCreateFromType().equals(RefreshTokenEntity.CreateFrom.REFRESH)){
-            RefreshTokenEntity parent = repository.findById(refreshTokenEntity.getCreateFromTokenId());
-            if(parent != null) logout(parent);
+        if (refreshTokenEntity.getCreateFromType().equals(RefreshTokenEntity.CreateFrom.REFRESH)) {
+            repository.findById(refreshTokenEntity.getCreateFromTokenId()).map(refreshToken -> {
+                logout(refreshToken);
+                return refreshToken;
+            });
         }
     }
 

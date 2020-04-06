@@ -33,7 +33,7 @@ public class InitAdminUseCase {
         userEntity.setEmail(email.toLowerCase());
         userEntity.setPassword(passwordGenerator.generate(userEntity.getId(), password));
         userEntity.getRoles().add(new GodModRole());
-        userEntity = userRepository.save(userEntity);
+        userRepository.save(userEntity);
 
         return true;
     }

@@ -7,17 +7,19 @@ import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.base.port.SearchResult;
 
+import java.util.Optional;
+
 public class UserEmailVerificationViewUseCase extends UserEmailVerificationAdminBaseUseCase {
 
     public UserEmailVerificationViewUseCase(UserEntity actor, UserEmailVerificationRepository userEmailVerificationRepository) throws AuthorizationException {
         super(actor, userEmailVerificationRepository, new AdminUserEmailVerificationViewRole());
     }
 
-    public UserEmailVerificationEntity findById(String id) {
+    public Optional<UserEmailVerificationEntity> findById(String id) {
         return userEmailVerificationRepository.findById(id);
     }
 
-    public UserEmailVerificationEntity search(String id) {
+    public Optional<UserEmailVerificationEntity> search(String id) {
         return userEmailVerificationRepository.findById(id);
     }
 

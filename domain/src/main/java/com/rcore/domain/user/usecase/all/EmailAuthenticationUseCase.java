@@ -4,6 +4,7 @@ import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.entity.TokenPair;
 import com.rcore.domain.token.exception.AuthenticationException;
+import com.rcore.domain.token.exception.RefreshTokenCreationException;
 import com.rcore.domain.token.port.AuthenticationPort;
 import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.domain.token.usecase.CreateAccessTokenUseCase;
@@ -39,9 +40,9 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
 
 
     @Override
-    public TokenPair authentication(String email, String password) throws UserNotFoundException, AuthenticationException, UserBlockedException {
-        UserEntity userEntity = userRepository.findByEmail(email);
-        if (userEntity == null) throw new UserNotFoundException();
+    public TokenPair authentication(String email, String password) throws UserNotFoundException, AuthenticationException, UserBlockedException, RefreshTokenCreationException {
+        UserEntity userEntity = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException());
 
         if (passwordGenerator.check(userEntity.getId(), password, userEntity.getPassword()) == false) {
 
@@ -64,7 +65,8 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
         userEntity.setFails( 0 );
         userRepository.save(userEntity);
 
-        RefreshTokenEntity refreshTokenEntity = createRefreshTokenUseCase.create(userEntity);
+        RefreshTokenEntity refreshTokenEntity = createRefreshTokenUseCase.create(userEntity)
+                .orElseThrow(() -> new RefreshTokenCreationException());
         AccessTokenEntity accessTokenEntity = createAccessTokenUseCase.create(userEntity, refreshTokenEntity);
 
         TokenPair tokenPair = new TokenPair();
@@ -76,16 +78,14 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
 
     @Override
     public TokenPair getNewTokenPairByRefreshToken(RefreshTokenEntity refreshTokenEntity) throws UserNotFoundException, AuthenticationException, UserBlockedException{
-        UserEntity userEntity = userRepository.findById(refreshTokenEntity.getUserId());
-
-        if (userEntity == null) throw new UserNotFoundException();
+        UserEntity userEntity = userRepository.findById(refreshTokenEntity.getUserId()).orElseThrow(() -> new UserNotFoundException());
 
         if (userEntity.getUserStatus().equals(UserStatus.ACTIVE) == false) {
             throw new UserBlockedException();
         }
 
-        RefreshTokenEntity fromRepo = refreshTokenRepository.findById(refreshTokenEntity.getId());
-        if(fromRepo == null) throw new AuthenticationException();
+        RefreshTokenEntity fromRepo = refreshTokenRepository.findById(refreshTokenEntity.getId())
+                .orElseThrow(() -> new AuthenticationException());
 
         if(fromRepo.isActive() == false) throw new AuthenticationException();
 

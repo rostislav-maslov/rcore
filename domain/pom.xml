@@ -4,7 +4,7 @@
     <groupId>com.rcore</groupId>
     <artifactId>domain</artifactId>
     <version>1.0.0</version>
-    <name>RCore</name>
+    <name>domain</name>
 
     <packaging>jar</packaging>
 
@@ -39,11 +39,8 @@
 
     </dependencies>
 
-
-
     <build>
         <finalName>RCore</finalName>
-
 
         <plugins>
             <plugin>

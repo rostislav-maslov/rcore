@@ -21,7 +21,7 @@ public class UserLogConfig {
         }
 
         public UserLogCreateUseCase createUseCase(UserEntity actor) throws AuthorizationException {
-            return new UserLogCreateUseCase(actor, this.userLogRepository, idGenerator);
+            return new UserLogCreateUseCase(actor, this.userLogRepository);
         }
 
         public UserLogDeleteUseCase deleteUseCase(UserEntity actor) throws AuthorizationException {

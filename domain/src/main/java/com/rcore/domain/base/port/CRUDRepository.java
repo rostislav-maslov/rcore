@@ -1,12 +1,14 @@
 package com.rcore.domain.base.port;
 
+import java.util.Optional;
+
 public interface CRUDRepository<IdT,ObjectT> {
 
-    public ObjectT save(ObjectT object);
-    public Boolean delete(ObjectT object);
-    public Boolean deleteById(IdT id);
-    public ObjectT findById(IdT id);
-    public SearchResult<ObjectT> find(Long size, Long skip);
-    public Long count();
+    Optional<ObjectT> save(ObjectT object);
+    Boolean delete(ObjectT object);
+    Boolean deleteById(IdT id);
+    Optional<ObjectT> findById(IdT id);
+    SearchResult<ObjectT> find(Long size, Long skip);
+    Long count();
 
 }

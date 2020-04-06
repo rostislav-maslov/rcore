@@ -7,6 +7,8 @@ import com.rcore.domain.user.port.PasswordGenerator;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.userEmailVerification.port.UserCreateFromConfirmUseCase;
 
+import java.util.Optional;
+
 public class UserCreateFromConfirmUseCaseImpl implements UserCreateFromConfirmUseCase {
 
     private final UserRepository userRepository;
@@ -20,9 +22,8 @@ public class UserCreateFromConfirmUseCaseImpl implements UserCreateFromConfirmUs
     }
 
 
-    public UserEntity create(String email, String password) throws UserAlreadyExistException {
-        UserEntity userEntity = userRepository.findByEmail(email);
-        if (userEntity != null) throw new UserAlreadyExistException();
+    public Optional<UserEntity> create(String email, String password) throws UserAlreadyExistException {
+        UserEntity userEntity = userRepository.findByEmail(email).orElseThrow(() -> new UserAlreadyExistException());
 
         userEntity = new UserEntity();
         userEntity.setEmail(email);

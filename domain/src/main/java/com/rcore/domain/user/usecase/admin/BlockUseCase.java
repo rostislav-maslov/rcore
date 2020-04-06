@@ -7,6 +7,8 @@ import com.rcore.domain.user.entity.UserStatus;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.role.AdminUserBlockRole;
 
+import java.util.Optional;
+
 public class BlockUseCase extends AdminBaseUseCase {
     private final ExpireTokenUseCase expireTokenUseCase;
 
@@ -19,7 +21,7 @@ public class BlockUseCase extends AdminBaseUseCase {
     public UserEntity block(UserEntity userEntity) {
         userEntity.setUserStatus(UserStatus.BLOCK);
         userEntity.setFails(0);
-        userEntity = userRepository.save(userEntity);
+        userEntity = userRepository.save(userEntity).get();
 
         expireTokenUseCase.logout(userEntity);
 

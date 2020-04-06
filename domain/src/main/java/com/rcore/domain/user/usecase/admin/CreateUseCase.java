@@ -8,28 +8,26 @@ import com.rcore.domain.user.port.PasswordGenerator;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.role.AdminUserCreateRole;
 
-public class CreateUseCase  extends AdminBaseUseCase {
+public class CreateUseCase extends AdminBaseUseCase {
     private final PasswordGenerator passwordGenerator;
     private final IdGenerator idGenerator;
 
-    public CreateUseCase(UserEntity actor, UserRepository userRepository, PasswordGenerator passwordGenerator, IdGenerator idGenerator)throws AuthorizationException {
+    public CreateUseCase(UserEntity actor, UserRepository userRepository, PasswordGenerator passwordGenerator, IdGenerator idGenerator) throws AuthorizationException {
         super(actor, userRepository, new AdminUserCreateRole());
         this.passwordGenerator = passwordGenerator;
         this.idGenerator = idGenerator;
     }
 
-    public UserEntity createByEmail(String email, String password) throws UserAlreadyExistException{
-        UserEntity userEntity = userRepository.findByEmail(email.toLowerCase());
-        if(userEntity != null) throw new UserAlreadyExistException();
+    public UserEntity createByEmail(String email, String password) throws UserAlreadyExistException {
+        userRepository.findByEmail(email.toLowerCase())
+                .orElseThrow(() -> new UserAlreadyExistException());
 
-        userEntity = new UserEntity();
+        UserEntity userEntity = new UserEntity();
         userEntity.setId(idGenerator.generate());
         userEntity.setEmail(email.toLowerCase());
         userEntity.setPassword(passwordGenerator.generate(userEntity.getId(), password));
 
-        userEntity = userRepository.save(userEntity);
-
-        return userEntity;
+        return userRepository.save(userEntity).get();
     }
 
 

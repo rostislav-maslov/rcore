@@ -7,6 +7,7 @@ import com.rcore.domain.token.port.TokenSaltGenerator;
 import com.rcore.domain.user.entity.UserEntity;
 
 import java.util.Date;
+import java.util.Optional;
 
 public class CreateRefreshTokenUseCase {
 
@@ -37,11 +38,11 @@ public class CreateRefreshTokenUseCase {
         return refreshTokenEntity;
     }
 
-    public RefreshTokenEntity create(UserEntity userEntity){
-        return  repository.save(create(userEntity.getId(), RefreshTokenEntity.CreateFrom.LOGIN, null));
+    public Optional<RefreshTokenEntity> create(UserEntity userEntity){
+        return repository.save(create(userEntity.getId(), RefreshTokenEntity.CreateFrom.LOGIN, null));
     }
 
-    public RefreshTokenEntity create(RefreshTokenEntity oldRefreshTokenEntity){
+    public Optional<RefreshTokenEntity> create(RefreshTokenEntity oldRefreshTokenEntity){
         return  repository.save(create(oldRefreshTokenEntity.getUserId(), RefreshTokenEntity.CreateFrom.LOGIN, oldRefreshTokenEntity.getId()));
     }
 

@@ -7,8 +7,10 @@ import com.rcore.domain.userEmailVerification.role.AdminUserEmailVerificationCre
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.entity.UserEntity;
 
+import java.util.Optional;
 
-public class UserEmailVerificationCreateUseCase  extends UserEmailVerificationAdminBaseUseCase {
+
+public class UserEmailVerificationCreateUseCase extends UserEmailVerificationAdminBaseUseCase {
     private final UserEmailVerificationIdGenerator idGenerator;
 
     public UserEmailVerificationCreateUseCase(UserEntity actor, UserEmailVerificationRepository userEmailVerificationRepository, UserEmailVerificationIdGenerator idGenerator) throws AuthorizationException {
@@ -16,12 +18,10 @@ public class UserEmailVerificationCreateUseCase  extends UserEmailVerificationAd
         this.idGenerator = idGenerator;
     }
 
-    public UserEmailVerificationEntity create(UserEmailVerificationEntity userEmailVerificationEntity) {
+    public Optional<UserEmailVerificationEntity> create(UserEmailVerificationEntity userEmailVerificationEntity) {
         userEmailVerificationEntity.setId(idGenerator.generate());
 
-        userEmailVerificationEntity = userEmailVerificationRepository.save(userEmailVerificationEntity);
-
-        return userEmailVerificationEntity;
+        return userEmailVerificationRepository.save(userEmailVerificationEntity);
     }
 
 

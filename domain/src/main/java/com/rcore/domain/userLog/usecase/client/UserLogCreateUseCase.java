@@ -5,6 +5,8 @@ import com.rcore.domain.userLog.entity.UserLogEntity;
 import com.rcore.domain.userLog.port.UserLogIdGenerator;
 import com.rcore.domain.userLog.port.UserLogRepository;
 
+import java.util.Optional;
+
 public class UserLogCreateUseCase extends UserLogBaseUseCase {
 
     private UserLogIdGenerator userLogIdGenerator;
@@ -14,7 +16,7 @@ public class UserLogCreateUseCase extends UserLogBaseUseCase {
         this.userLogIdGenerator = userLogIdGenerator;
     }
 
-    public UserLogEntity create(UserLogEntity userLogEntity) {
+    public Optional<UserLogEntity> create(UserLogEntity userLogEntity) {
         userLogEntity.setId(userLogIdGenerator.generate());
         return userLogRepository.save(userLogEntity);
     }

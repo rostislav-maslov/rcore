@@ -10,11 +10,11 @@ import com.rcore.domain.user.port.PasswordGenerator;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.config.UserConfig;
 import com.rcore.domain.user.port.impl.PasswordGeneratorImpl;
-import com.rcore.memory.token.port.AccessTokenIdGeneratorImpl;
-import com.rcore.memory.token.port.RefreshTokenIdGeneratorImpl;
-import com.rcore.memory.token.port.RefreshTokenRepositoryImpl;
-import com.rcore.memory.user.port.UserIdGeneratorImpl;
-import com.rcore.memory.user.port.UserRepositoryImpl;
+import com.rcore.database.memory.token.port.AccessTokenIdGeneratorImpl;
+import com.rcore.database.memory.token.port.RefreshTokenIdGeneratorImpl;
+import com.rcore.database.memory.token.port.RefreshTokenRepositoryImpl;
+import com.rcore.database.memory.user.port.UserIdGeneratorImpl;
+import com.rcore.database.memory.user.port.UserRepositoryImpl;
 import lombok.Getter;
 
 @Getter

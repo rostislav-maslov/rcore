@@ -7,17 +7,19 @@ import com.rcore.domain.userLog.role.AdminUserLogViewRole;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.entity.UserEntity;
 
+import java.util.Optional;
+
 public class UserLogViewUseCase extends UserLogAdminBaseUseCase {
 
     public UserLogViewUseCase(UserEntity actor, UserLogRepository userLogRepository) throws AuthorizationException {
         super(actor, userLogRepository, new AdminUserLogViewRole());
     }
 
-    public UserLogEntity findById(String id) {
+    public Optional<UserLogEntity> findById(String id) {
         return userLogRepository.findById(id);
     }
 
-    public UserLogEntity search(String id) {
+    public Optional<UserLogEntity> search(String id) {
         return userLogRepository.findById(id);
     }
 

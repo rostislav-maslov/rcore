@@ -14,9 +14,7 @@ public class DeleteUserUseCase  extends AdminBaseUseCase {
     }
 
     public Boolean delete(UserEntity userEntity) throws UserAlreadyExistException {
-        userRepository.delete(userEntity);
-
-        return true;
+        return userRepository.delete(userEntity);
     }
 
 

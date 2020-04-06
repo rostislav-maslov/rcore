@@ -6,13 +6,16 @@ import com.rcore.domain.userEmailVerification.role.AdminUserEmailVerificationUpd
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.entity.UserEntity;
 
+import java.util.Date;
+import java.util.Optional;
+
 public class UserEmailVerificationUpdateUseCase  extends UserEmailVerificationAdminBaseUseCase {
 
     public UserEmailVerificationUpdateUseCase(UserEntity actor, UserEmailVerificationRepository userEmailVerificationRepository)throws AuthorizationException {
         super(actor, userEmailVerificationRepository, new AdminUserEmailVerificationUpdateRole());
     }
 
-    public UserEmailVerificationEntity update(UserEmailVerificationEntity userEmailVerificationEntity){
+    public Optional<UserEmailVerificationEntity> update(UserEmailVerificationEntity userEmailVerificationEntity){
         userEmailVerificationEntity.setUpdatedAt(new Date());
         return userEmailVerificationRepository.save(userEmailVerificationEntity);
     }

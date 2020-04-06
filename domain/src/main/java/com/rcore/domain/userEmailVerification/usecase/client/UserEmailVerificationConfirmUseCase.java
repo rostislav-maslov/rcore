@@ -8,6 +8,7 @@ import com.rcore.domain.userEmailVerification.exception.UserEmailVerificationNot
 import com.rcore.domain.userEmailVerification.port.*;
 
 import java.util.List;
+import java.util.Optional;
 
 public class UserEmailVerificationConfirmUseCase extends UserEmailVerificationBaseUseCase {
 
@@ -19,9 +20,8 @@ public class UserEmailVerificationConfirmUseCase extends UserEmailVerificationBa
     }
 
 
-    public UserEntity confirm(String email, String code, String password) throws UserEmailVerificationNotFoundException, UserAlreadyExistException {
-        UserEntity userEntity = userRepository.findByEmail(email.toLowerCase());
-        if (userEntity != null) throw new UserAlreadyExistException();
+    public Optional<UserEntity> confirm(String email, String code, String password) throws UserEmailVerificationNotFoundException, UserAlreadyExistException {
+        UserEntity userEntity = userRepository.findByEmail(email.toLowerCase()).orElseThrow(() -> new UserAlreadyExistException());
 
         List<UserEmailVerificationEntity> userEmailVerificationEntity = userEmailVerificationRepository.findNotVerifiedAndActive(email, code);
         if( userEmailVerificationEntity == null || userEmailVerificationEntity.size() == 0) {

@@ -7,6 +7,7 @@ import com.rcore.domain.userEmailVerification.entity.UserEmailVerificationEntity
 import com.rcore.domain.userEmailVerification.port.*;
 
 import java.util.Date;
+import java.util.Optional;
 
 public class UserEmailVerificationCreateUseCase extends UserEmailVerificationBaseUseCase {
 
@@ -24,9 +25,9 @@ public class UserEmailVerificationCreateUseCase extends UserEmailVerificationBas
     }
 
 
-    public UserEmailVerificationEntity create(String email) throws UserAlreadyExistException {
-        UserEntity userEntity = userRepository.findByEmail(email.toLowerCase());
-        if (userEntity != null) throw new UserAlreadyExistException();
+    public Optional<UserEmailVerificationEntity> create(String email) throws UserAlreadyExistException {
+        userRepository.findByEmail(email.toLowerCase())
+                .orElseThrow(() -> new UserAlreadyExistException());
 
         UserEmailVerificationEntity userEmailVerificationEntity = new UserEmailVerificationEntity();
 
@@ -37,10 +38,11 @@ public class UserEmailVerificationCreateUseCase extends UserEmailVerificationBas
         ));
         userEmailVerificationEntity.setVerified(false);
 
-        userEmailVerificationEntity = userEmailVerificationRepository.save(userEmailVerificationEntity);
-        userEmailVerificationSender.sendEmail(userEmailVerificationEntity);
-
-        return userEmailVerificationEntity;
+       return userEmailVerificationRepository.save(userEmailVerificationEntity)
+                .map(userEmailVerification -> {
+                    userEmailVerificationSender.sendEmail(userEmailVerification);
+                    return userEmailVerification;
+                });
     }
 
 }

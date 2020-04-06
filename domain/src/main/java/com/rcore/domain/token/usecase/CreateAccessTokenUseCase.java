@@ -2,10 +2,12 @@ package com.rcore.domain.token.usecase;
 
 import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
+import com.rcore.domain.token.exception.RefreshTokenCreationException;
 import com.rcore.domain.token.port.AccessTokenIdGenerator;
 import com.rcore.domain.user.entity.UserEntity;
 
 import java.util.Date;
+import java.util.Optional;
 
 public class CreateAccessTokenUseCase {
     private final AccessTokenIdGenerator idGenerator;
@@ -16,11 +18,14 @@ public class CreateAccessTokenUseCase {
         this.createRefreshTokenUseCase = createRefreshTokenUseCase;
     }
 
-    public AccessTokenEntity create(UserEntity userEntity){
-        RefreshTokenEntity refreshTokenEntity = createRefreshTokenUseCase.create(userEntity);
+    public AccessTokenEntity create(UserEntity userEntity) throws RefreshTokenCreationException {
+        RefreshTokenEntity refreshTokenEntity = createRefreshTokenUseCase.create(userEntity)
+                .orElseThrow(() -> new RefreshTokenCreationException());
+
         return create(userEntity, refreshTokenEntity);
     }
-    public AccessTokenEntity create(UserEntity userEntity, RefreshTokenEntity refreshTokenEntity){
+
+    public AccessTokenEntity create(UserEntity userEntity, RefreshTokenEntity refreshTokenEntity) {
         AccessTokenEntity accessTokenEntity = new AccessTokenEntity();
 
         accessTokenEntity.setId(idGenerator.generate());
