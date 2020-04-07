@@ -4,7 +4,6 @@ import com.rcore.domain.role.entity.Role;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.port.UserRepository;
-import com.rcore.domain.user.role.AdminUserBlockRole;
 import com.rcore.domain.user.role.AdminUserChangeRolesRole;
 
 public class ChangeRoleUseCase extends AdminBaseUseCase {

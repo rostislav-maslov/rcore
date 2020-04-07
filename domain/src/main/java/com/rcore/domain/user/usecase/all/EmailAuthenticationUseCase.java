@@ -19,18 +19,18 @@ import com.rcore.domain.user.port.UserRepository;
 import java.util.Date;
 
 public class EmailAuthenticationUseCase implements AuthenticationPort {
-    private final UserRepository userRepository;
+    private final UserRepository<UserEntity> userRepository;
     private final PasswordGenerator passwordGenerator;
     private final CreateRefreshTokenUseCase createRefreshTokenUseCase;
     private final CreateAccessTokenUseCase createAccessTokenUseCase;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenRepository<RefreshTokenEntity> refreshTokenRepository;
 
     public EmailAuthenticationUseCase(
-            UserRepository userRepository,
+            UserRepository<UserEntity> userRepository,
             PasswordGenerator passwordGenerator,
             CreateRefreshTokenUseCase createRefreshTokenUseCase,
             CreateAccessTokenUseCase createAccessTokenUseCase,
-            RefreshTokenRepository refreshTokenRepository) {
+            RefreshTokenRepository<RefreshTokenEntity> refreshTokenRepository) {
         this.userRepository = userRepository;
         this.passwordGenerator = passwordGenerator;
         this.createRefreshTokenUseCase = createRefreshTokenUseCase;

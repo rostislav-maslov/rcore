@@ -1,6 +1,5 @@
 package com.rcore.domain.userEmailVerification.usecase.client;
 
-import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.exception.UserAlreadyExistException;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.userEmailVerification.entity.UserEmailVerificationEntity;

@@ -2,11 +2,11 @@ package com.rcore.database.mongo.user.testdata;
 
 
 import com.rcore.database.mongo.config.TestAppConfig;
+import com.rcore.database.mongo.user.port.model.UserDoc;
 import com.rcore.database.mongo.user.usecase.AuthenticationTestData;
 import com.rcore.domain.token.entity.TokenPair;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.RefreshTokenCreationException;
-import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.exception.UserBlockedException;
 import com.rcore.domain.user.exception.UserNotFoundException;
 import org.junit.After;
@@ -24,8 +24,8 @@ public class EmailAuthenticationTestCase extends Exception {
 
     @Before
     public void before() {
-        Optional<UserEntity> user1 = testAppConfig.getUserRepository().save(AuthenticationTestData.user1(testAppConfig.getPasswordGenerator()));
-        Optional<UserEntity> user2 = testAppConfig.getUserRepository().save(AuthenticationTestData.user2(testAppConfig.getPasswordGenerator()));
+        Optional<UserDoc> user1 = testAppConfig.getUserRepository().save(AuthenticationTestData.user1(testAppConfig.getPasswordGenerator()));
+        Optional<UserDoc> user2 = testAppConfig.getUserRepository().save(AuthenticationTestData.user2(testAppConfig.getPasswordGenerator()));
     }
 
     @After

@@ -7,7 +7,7 @@ import com.rcore.database.memory.base.port.CRUDRepositoryImpl;
 
 import java.util.Optional;
 
-public class UserRepositoryImpl extends CRUDRepositoryImpl<String, UserEntity> implements UserRepository {
+public class UserRepositoryImpl extends CRUDRepositoryImpl<String, UserEntity> implements UserRepository<UserEntity> {
 
     @Override
     public Optional<UserEntity> save(UserEntity object) {

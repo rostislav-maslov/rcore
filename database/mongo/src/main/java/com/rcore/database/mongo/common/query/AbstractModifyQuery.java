@@ -1,6 +1,7 @@
 package com.rcore.database.mongo.common.query;
 
 import com.rcore.domain.base.entity.BaseEntity;
+import lombok.Getter;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;

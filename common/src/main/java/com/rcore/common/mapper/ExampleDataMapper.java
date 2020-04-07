@@ -1,4 +1,4 @@
-package com.rcore.domain.base.mapper;
+package com.rcore.common.mapper;
 
 import java.util.List;
 import java.util.stream.Collectors;

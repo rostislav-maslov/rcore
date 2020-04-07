@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class UserCreateFromConfirmUseCaseImpl implements UserCreateFromConfirmUseCase {
 
-    private final UserRepository userRepository;
+    private final UserRepository<UserEntity> userRepository;
     private final PasswordGenerator passwordGenerator;
     private final IdGenerator idGenerator;
 
@@ -23,9 +23,10 @@ public class UserCreateFromConfirmUseCaseImpl implements UserCreateFromConfirmUs
 
 
     public Optional<UserEntity> create(String email, String password) throws UserAlreadyExistException {
-        UserEntity userEntity = userRepository.findByEmail(email).orElseThrow(() -> new UserAlreadyExistException());
+        userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserAlreadyExistException());
 
-        userEntity = new UserEntity();
+        UserEntity userEntity = new UserEntity();
         userEntity.setEmail(email);
         userEntity.setPassword(passwordGenerator.generate(userEntity.getId(), password));
 

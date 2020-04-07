@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class RefreshTokenRepositoryImpl extends CRUDRepositoryImpl<String, RefreshTokenEntity> implements RefreshTokenRepository {
+public class RefreshTokenRepositoryImpl extends CRUDRepositoryImpl<String, RefreshTokenEntity> implements RefreshTokenRepository<RefreshTokenEntity> {
     @Override
     public Optional<RefreshTokenEntity> save(RefreshTokenEntity object) {
         container.put(object.getId(), object);

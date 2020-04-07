@@ -9,8 +9,8 @@
     <modules>
         <module>domain</module>
         <module>admin</module>
-        <module>common</module>
         <module>database</module>
+        <module>common</module>
 
     </modules>
 

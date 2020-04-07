@@ -5,7 +5,8 @@ import com.rcore.database.mongo.token.port.AccessTokenIdGeneratorImpl;
 import com.rcore.database.mongo.token.port.RefreshTokenIdGeneratorImpl;
 import com.rcore.database.mongo.token.port.RefreshTokenRepositoryImpl;
 import com.rcore.database.mongo.user.port.UserRepositoryImpl;
-import com.rcore.domain.base.port.BaseIdGenerator;
+import com.rcore.database.mongo.user.port.model.UserDoc;
+import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.domain.token.port.impl.TokenSaltGeneratorImpl;
 import com.rcore.domain.token.usecase.CreateAccessTokenUseCase;
@@ -17,20 +18,19 @@ import com.rcore.domain.user.port.PasswordGenerator;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.port.impl.PasswordGeneratorImpl;
 import lombok.Getter;
-import org.springframework.data.mongodb.core.MongoTemplate;
 
 @Getter
 public class TestAppConfig {
 
     private final DatabaseConfig databaseConfig;
     private final UserConfig userConfig;
-    private final UserRepository userRepository;
+    private final UserRepository<UserDoc> userRepository;
     private final IdGenerator idGenerator;
     private final PasswordGenerator passwordGenerator;
     private final ExpireTokenUseCase expireTokenUseCase;
     private final CreateRefreshTokenUseCase createRefreshTokenUseCase;
     private final CreateAccessTokenUseCase createAccessTokenUseCase;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenRepository<RefreshTokenEntity> refreshTokenRepository;
 
     public TestAppConfig() throws Exception {
         this.databaseConfig = new DatabaseConfig();
