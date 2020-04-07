@@ -16,16 +16,26 @@
         <maven-compiler-plugin.target>8</maven-compiler-plugin.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-data.version>2.2.6.RELEASE</spring-data.version>
+        <spring-core.verison>5.2.5.RELEASE</spring-core.verison>
+        <fongo.version>2.1.2</fongo.version>
         <lombok.version>1.18.12</lombok.version>
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>com.rcore</groupId>
             <artifactId>domain</artifactId>
             <version>1.0.0</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-core -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring-core.verison}</version>
+        </dependency>
+
+
         <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-mongodb -->
         <dependency>
             <groupId>org.springframework.data</groupId>
@@ -33,11 +43,24 @@
             <version>${spring-data.version}</version>
         </dependency>
 
+        <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- FakeMongo -->
+        <dependency>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.mongo</artifactId>
+            <version>${fongo.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>de.flapdoodle.embed</groupId>
+            <artifactId>de.flapdoodle.embed.process</artifactId>
+            <version>${fongo.version}</version>
         </dependency>
     </dependencies>
 
