@@ -36,6 +36,9 @@ public class WebRequestUtils {
         return getHeader(X_DEVICE_WIDTH);
     }
 
+    public static String getLanguage() {
+        return getHeader(X_LANGUAGE);
+    }
     //TODO реализовать
     public static String getIp() {
         return "ip";
