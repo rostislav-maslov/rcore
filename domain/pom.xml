@@ -15,12 +15,6 @@
     </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>com.rcore</groupId>
-            <artifactId>memory</artifactId>
-            <version>1.0.0</version>
-            <scope>test</scope>
-        </dependency>
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>

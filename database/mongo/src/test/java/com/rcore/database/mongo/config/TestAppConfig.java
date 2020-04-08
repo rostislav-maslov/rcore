@@ -37,7 +37,7 @@ public class TestAppConfig {
         this.userRepository = new UserRepositoryImpl(databaseConfig.getMongoTemplate());
         this.idGenerator = new ObjectIdGenerator();
         this.passwordGenerator = new PasswordGeneratorImpl();
-        this.refreshTokenRepository = new RefreshTokenRepositoryImpl(databaseConfig.getMongoTemplate());
+        this.refreshTokenRepository = null; //new RefreshTokenRepositoryImpl(databaseConfig.getMongoTemplate());
         this.expireTokenUseCase = new ExpireTokenUseCase(refreshTokenRepository);
         this.createRefreshTokenUseCase = new CreateRefreshTokenUseCase(new RefreshTokenIdGeneratorImpl(), refreshTokenRepository, new TokenSaltGeneratorImpl());
         this.createAccessTokenUseCase = new CreateAccessTokenUseCase(new AccessTokenIdGeneratorImpl(), createRefreshTokenUseCase);
