@@ -5,12 +5,20 @@ import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.database.memory.base.port.CRUDRepositoryImpl;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
-public class UserRepositoryImpl extends CRUDRepositoryImpl<String, UserEntity> implements UserRepository<UserEntity> {
+public class UserRepositoryImpl extends UserRepository<UserEntity> {
+    private Map<String, UserEntity> container = new HashMap<>();
 
     @Override
-    public Optional<UserEntity> save(UserEntity object) {
+    public Long count() {
+        return null;
+    }
+
+    @Override
+    public Optional<UserEntity> saveToRepository(UserEntity object) {
         container.put(object.getId(), object);
         return Optional.ofNullable(object);
     }

@@ -14,11 +14,11 @@ public class UserPasswordRecoverViewUseCase extends UserPasswordRecoverAdminBase
     }
 
     public UserPasswordRecoverEntity findById(String id) {
-        return userPasswordRecoverRepository.findById(id);
+        return userPasswordRecoverRepository.findById(id).get();
     }
 
     public UserPasswordRecoverEntity search(String id) {
-        return userPasswordRecoverRepository.findById(id);
+        return userPasswordRecoverRepository.findById(id).get();
     }
 
     public SearchResult<UserPasswordRecoverEntity> find(Long size, Long skip) {

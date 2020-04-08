@@ -6,7 +6,7 @@ import com.rcore.domain.userPasswordRecover.entity.UserPasswordRecoverEntity;
 import java.util.Date;
 import java.util.Optional;
 
-public interface UserPasswordRecoverRepository extends CRUDRepository<String, UserPasswordRecoverEntity> {
+public abstract class UserPasswordRecoverRepository extends CRUDRepository<String, UserPasswordRecoverEntity> {
 
     /**
      * Ищем активный UserPassword:
@@ -17,6 +17,6 @@ public interface UserPasswordRecoverRepository extends CRUDRepository<String, Us
      * @param email
      * @return
      */
-    Optional<UserPasswordRecoverEntity> findActiveByEmail(String email);
+    public abstract Optional<UserPasswordRecoverEntity> findActiveByEmail(String email);
 
 }

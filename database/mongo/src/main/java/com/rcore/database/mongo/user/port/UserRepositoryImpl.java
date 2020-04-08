@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
-public class UserRepositoryImpl implements UserRepository<UserDoc> {
+public class UserRepositoryImpl extends UserRepository<UserDoc> {
 
     private final MongoTemplate mongoTemplate;
 
@@ -35,7 +35,7 @@ public class UserRepositoryImpl implements UserRepository<UserDoc> {
     }
 
     @Override
-    public Optional<UserDoc> save(UserDoc object) {
+    public Optional<UserDoc> saveToRepository(UserDoc object) {
         return Optional.ofNullable(mongoTemplate.save(object));
     }
 

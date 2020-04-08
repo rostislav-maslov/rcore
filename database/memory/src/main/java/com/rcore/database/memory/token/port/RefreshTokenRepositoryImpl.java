@@ -5,11 +5,10 @@ import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.database.memory.base.port.CRUDRepositoryImpl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
-public class RefreshTokenRepositoryImpl extends CRUDRepositoryImpl<String, RefreshTokenEntity> implements RefreshTokenRepository<RefreshTokenEntity> {
+public class RefreshTokenRepositoryImpl extends RefreshTokenRepository<RefreshTokenEntity> {
+    private Map<String, RefreshTokenEntity> container = new HashMap<>();
     @Override
     public Optional<RefreshTokenEntity> save(RefreshTokenEntity object) {
         container.put(object.getId(), object);
@@ -26,6 +25,16 @@ public class RefreshTokenRepositoryImpl extends CRUDRepositoryImpl<String, Refre
     public Boolean deleteById(String id) {
         container.remove(id);
         return true;
+    }
+
+    @Override
+    public Long count() {
+        return null;
+    }
+
+    @Override
+    protected Optional<RefreshTokenEntity> saveToRepository(RefreshTokenEntity object) {
+        return Optional.empty();
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Repository
-public class RefreshTokenRepositoryImpl implements RefreshTokenRepository<RefreshTokenDoc> {
+public class RefreshTokenRepositoryImpl extends RefreshTokenRepository<RefreshTokenDoc> {
 
     private final MongoTemplate mongoTemplate;
 
@@ -34,7 +34,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository<Refres
     }
 
     @Override
-    public Optional<RefreshTokenDoc> save(RefreshTokenDoc object) {
+    public Optional<RefreshTokenDoc> saveToRepository(RefreshTokenDoc object) {
         return Optional.ofNullable(mongoTemplate.save(object));
     }
 

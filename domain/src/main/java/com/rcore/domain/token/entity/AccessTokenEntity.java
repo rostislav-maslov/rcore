@@ -14,6 +14,14 @@ import java.util.Set;
 @Getter
 @Setter
 public class AccessTokenEntity extends BaseEntity {
+    private String id;
+    private String userId;
+    private Set<Role> roles;
+    private Date expireAt = new Date();
+
+    private String createFromRefreshTokenId;
+
+    private String sign;
 
     private static String hash(String st) {
         MessageDigest messageDigest = null;
@@ -47,14 +55,4 @@ public class AccessTokenEntity extends BaseEntity {
 
         return hash(signString);
     }
-
-
-    private String id;
-    private String userId;
-    private Set<Role> roles;
-    private Date expireAt = new Date();
-
-    private String createFromRefreshTokenId;
-
-    private String sign;
 }
