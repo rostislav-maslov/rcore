@@ -15,7 +15,7 @@ public class UserEmailVerificationUpdateUseCase  extends UserEmailVerificationAd
         super(actor, userEmailVerificationRepository, new AdminUserEmailVerificationUpdateRole());
     }
 
-    public Optional<UserEmailVerificationEntity> update(UserEmailVerificationEntity userEmailVerificationEntity){
+    public UserEmailVerificationEntity update(UserEmailVerificationEntity userEmailVerificationEntity){
         userEmailVerificationEntity.setUpdatedAt(new Date());
         return userEmailVerificationRepository.save(userEmailVerificationEntity);
     }

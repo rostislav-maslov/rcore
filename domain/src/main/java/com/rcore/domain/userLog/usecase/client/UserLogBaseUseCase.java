@@ -4,7 +4,7 @@ import com.rcore.domain.userLog.entity.UserLogEntity;
 import com.rcore.domain.userLog.port.UserLogRepository;
 
 public class UserLogBaseUseCase {
-    protected UserLogRepository<UserLogEntity> userLogRepository;
+    protected UserLogRepository userLogRepository;
 
     public UserLogBaseUseCase(UserLogRepository userLogRepository) {
         this.userLogRepository = userLogRepository;

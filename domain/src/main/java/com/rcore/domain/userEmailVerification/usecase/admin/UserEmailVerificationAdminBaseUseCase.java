@@ -9,7 +9,7 @@ import com.rcore.domain.userEmailVerification.port.UserEmailVerificationReposito
 
 class UserEmailVerificationAdminBaseUseCase extends AdminUseCase {
 
-    protected final UserEmailVerificationRepository<UserEmailVerificationEntity> userEmailVerificationRepository;
+    protected final UserEmailVerificationRepository userEmailVerificationRepository;
 
     public UserEmailVerificationAdminBaseUseCase(UserEntity actor, UserEmailVerificationRepository userEmailVerificationRepository, Role accessRole) throws AuthorizationException {
         super(actor, accessRole);

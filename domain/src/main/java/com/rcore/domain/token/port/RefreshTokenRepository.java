@@ -5,8 +5,8 @@ import com.rcore.domain.token.entity.RefreshTokenEntity;
 
 import java.util.List;
 
-public abstract class RefreshTokenRepository<Entity extends RefreshTokenEntity> extends CRUDRepository<String, Entity> {
+public interface RefreshTokenRepository extends CRUDRepository<String, RefreshTokenEntity> {
 
-    public abstract void expireRefreshToken(Entity refreshTokenEntity);
-    public abstract List<Entity> findAllActiveByUserId(String userId);
+    void expireRefreshToken(RefreshTokenEntity refreshTokenEntity);
+    List<RefreshTokenEntity> findAllActiveByUserId(String userId);
 }

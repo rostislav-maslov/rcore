@@ -1,11 +1,11 @@
-package com.rcore.database.memory.token.port;
+package com.rcore.domain.database.memory.token.port;
 
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.port.RefreshTokenRepository;
-import com.rcore.database.memory.base.port.CRUDRepositoryImpl;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     private Map<String, RefreshTokenEntity> container = new HashMap<>();
@@ -30,7 +30,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
     @Override
     public Long count() {
-        return null;
+        return (long) container.size();
     }
 
     @Override
@@ -40,7 +40,14 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
     @Override
     public SearchResult<RefreshTokenEntity> find(Long size, Long skip) {
-        return null;
+        return SearchResult.withItemsAndCount(
+                container.values()
+                        .stream()
+                        .skip(skip)
+                        .limit(size)
+                        .collect(Collectors.toList()),
+                count()
+        );
     }
 
     @Override

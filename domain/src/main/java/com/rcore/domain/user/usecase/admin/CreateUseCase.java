@@ -27,7 +27,7 @@ public class CreateUseCase extends AdminBaseUseCase {
         userEntity.setEmail(email.toLowerCase());
         userEntity.setPassword(passwordGenerator.generate(userEntity.getId(), password));
 
-        return userRepository.save(userEntity).get();
+        return userRepository.save(userEntity);
     }
 
 

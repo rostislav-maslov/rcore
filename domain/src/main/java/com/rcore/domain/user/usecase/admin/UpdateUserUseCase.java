@@ -26,7 +26,7 @@ public class UpdateUserUseCase  extends AdminBaseUseCase {
 
         old.setUpdatedAt(new Date());
 
-        return userRepository.save(old).get();
+        return userRepository.save(old);
     }
 
 

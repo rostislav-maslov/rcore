@@ -18,7 +18,7 @@ public class ActivateUseCase extends AdminBaseUseCase {
     public UserEntity activate(UserEntity userEntity) {
         userEntity.setUserStatus(UserStatus.ACTIVE);
         userEntity.setFails(0);
-        return userRepository.save(userEntity).get();
+        return userRepository.save(userEntity);
 
     }
 }

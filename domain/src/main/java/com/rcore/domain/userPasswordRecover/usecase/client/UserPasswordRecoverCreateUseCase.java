@@ -31,7 +31,7 @@ class UserPasswordRecoverCreateUseCase {
         return String.valueOf(random.nextInt((max - min)) + min);
     }
 
-    private Optional<UserPasswordRecoverEntity> create(UserEntity userEntity) {
+    private UserPasswordRecoverEntity create(UserEntity userEntity) {
         UserPasswordRecoverEntity userPasswordRecoverEntity = new UserPasswordRecoverEntity();
 
         userPasswordRecoverEntity.setId(userPasswordRecoverIdGenerator.generate());
@@ -53,12 +53,12 @@ class UserPasswordRecoverCreateUseCase {
         }else {
             Optional<UserEntity> userEntity = userRepository.findByEmail(email);
             if (userEntity.isPresent() == false) throw new UserNotFoundException();
-            userPasswordRecoverEntity = create(userEntity.get()).get();
+            userPasswordRecoverEntity = create(userEntity.get());
         }
 
         userPasswordRecoverEntity.tryIncrement();
         emailSender.send(email, userPasswordRecoverEntity.getCode());
-        userRepository.save(userPasswordRecoverEntity);
+        userPasswordRecoverRepository.save(userPasswordRecoverEntity);
 
         return userPasswordRecoverEntity;
     }

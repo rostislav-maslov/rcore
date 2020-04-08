@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ExpireTokenUseCase {
 
-    private final RefreshTokenRepository<RefreshTokenEntity> repository;
+    private final RefreshTokenRepository repository;
 
     public ExpireTokenUseCase(RefreshTokenRepository repository) {
         this.repository = repository;

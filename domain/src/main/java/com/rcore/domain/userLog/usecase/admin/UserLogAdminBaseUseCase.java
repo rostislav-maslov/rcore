@@ -9,7 +9,7 @@ import com.rcore.domain.userLog.port.UserLogRepository;
 
 class UserLogAdminBaseUseCase extends AdminUseCase {
 
-    protected final UserLogRepository<UserLogEntity> userLogRepository;
+    protected final UserLogRepository userLogRepository;
 
     public UserLogAdminBaseUseCase(UserEntity actor, UserLogRepository userLogRepository, Role accessRole) throws AuthorizationException {
         super(actor, accessRole);

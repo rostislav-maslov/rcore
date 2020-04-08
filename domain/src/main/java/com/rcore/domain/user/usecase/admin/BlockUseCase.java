@@ -21,7 +21,7 @@ public class BlockUseCase extends AdminBaseUseCase {
     public UserEntity block(UserEntity userEntity) {
         userEntity.setUserStatus(UserStatus.BLOCK);
         userEntity.setFails(0);
-        userEntity = userRepository.save(userEntity).get();
+        userEntity = userRepository.save(userEntity);
 
         expireTokenUseCase.logout(userEntity);
 

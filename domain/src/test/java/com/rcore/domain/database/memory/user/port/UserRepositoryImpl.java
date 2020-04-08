@@ -1,9 +1,8 @@
-package com.rcore.database.memory.user.port;
+package com.rcore.domain.database.memory.user.port;
 
 import com.rcore.domain.base.port.SearchResult;
-import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.entity.UserEntity;
-import com.rcore.database.memory.base.port.CRUDRepositoryImpl;
+import com.rcore.domain.user.port.UserRepository;
 
 import java.util.HashMap;
 import java.util.Map;

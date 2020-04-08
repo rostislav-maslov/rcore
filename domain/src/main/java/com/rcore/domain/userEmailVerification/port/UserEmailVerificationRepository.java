@@ -6,6 +6,6 @@ import com.rcore.domain.userEmailVerification.entity.UserEmailVerificationEntity
 import java.util.Date;
 import java.util.List;
 
-public abstract class UserEmailVerificationRepository<Entity extends UserEmailVerificationEntity> extends CRUDRepository<String, Entity> {
-    public abstract  List<Entity> findNotVerifiedAndActive(String email, String code);
+public interface UserEmailVerificationRepository extends CRUDRepository<String, UserEmailVerificationEntity> {
+    List<UserEmailVerificationEntity> findNotVerifiedAndActive(String email, String code);
 }

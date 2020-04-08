@@ -24,7 +24,7 @@ public class UserEmailVerificationCreateUseCase extends UserEmailVerificationBas
     }
 
 
-    public Optional<UserEmailVerificationEntity> create(String email) throws UserAlreadyExistException {
+    public UserEmailVerificationEntity create(String email) throws UserAlreadyExistException {
         userRepository.findByEmail(email.toLowerCase())
                 .orElseThrow(() -> new UserAlreadyExistException());
 
@@ -37,11 +37,9 @@ public class UserEmailVerificationCreateUseCase extends UserEmailVerificationBas
         ));
         userEmailVerificationEntity.setVerified(false);
 
-       return userEmailVerificationRepository.save(userEmailVerificationEntity)
-                .map(userEmailVerification -> {
-                    userEmailVerificationSender.sendEmail(userEmailVerification);
-                    return userEmailVerification;
-                });
+        userEmailVerificationRepository.save(userEmailVerificationEntity);
+        userEmailVerificationSender.sendEmail(userEmailVerificationEntity);
+        return userEmailVerificationEntity;
     }
 
 }

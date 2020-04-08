@@ -7,8 +7,8 @@ import com.rcore.domain.userEmailVerification.port.UserEmailVerificationReposito
 
 class UserEmailVerificationBaseUseCase{
 
-    protected final UserEmailVerificationRepository<UserEmailVerificationEntity> userEmailVerificationRepository;
-    protected final UserRepository<UserEntity> userRepository;
+    protected final UserEmailVerificationRepository userEmailVerificationRepository;
+    protected final UserRepository userRepository;
 
     public UserEmailVerificationBaseUseCase(UserEmailVerificationRepository userEmailVerificationRepository, UserRepository userRepository) {
         this.userEmailVerificationRepository = userEmailVerificationRepository;

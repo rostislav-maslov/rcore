@@ -18,7 +18,7 @@ public class UserEmailVerificationCreateUseCase extends UserEmailVerificationAdm
         this.idGenerator = idGenerator;
     }
 
-    public Optional<UserEmailVerificationEntity> create(UserEmailVerificationEntity userEmailVerificationEntity) {
+    public UserEmailVerificationEntity create(UserEmailVerificationEntity userEmailVerificationEntity) {
         userEmailVerificationEntity.setId(idGenerator.generate());
 
         return userEmailVerificationRepository.save(userEmailVerificationEntity);

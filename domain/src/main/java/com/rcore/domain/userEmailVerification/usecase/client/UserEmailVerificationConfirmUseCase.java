@@ -20,7 +20,7 @@ public class UserEmailVerificationConfirmUseCase extends UserEmailVerificationBa
     }
 
 
-    public Optional<UserEntity> confirm(String email, String code, String password) throws UserEmailVerificationNotFoundException, UserAlreadyExistException {
+    public UserEntity confirm(String email, String code, String password) throws UserEmailVerificationNotFoundException, UserAlreadyExistException {
         UserEntity userEntity = userRepository.findByEmail(email.toLowerCase()).orElseThrow(() -> new UserAlreadyExistException());
 
         List<UserEmailVerificationEntity> userEmailVerificationEntity = userEmailVerificationRepository.findNotVerifiedAndActive(email, code);

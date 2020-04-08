@@ -19,8 +19,7 @@ public class CreateAccessTokenUseCase {
     }
 
     public AccessTokenEntity create(UserEntity userEntity) throws RefreshTokenCreationException {
-        RefreshTokenEntity refreshTokenEntity = createRefreshTokenUseCase.create(userEntity)
-                .orElseThrow(() -> new RefreshTokenCreationException());
+        RefreshTokenEntity refreshTokenEntity = createRefreshTokenUseCase.create(userEntity);
 
         return create(userEntity, refreshTokenEntity);
     }

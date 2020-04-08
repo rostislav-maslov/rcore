@@ -17,20 +17,21 @@ import com.rcore.domain.user.port.PasswordGenerator;
 import com.rcore.domain.user.port.UserRepository;
 
 import java.util.Date;
+import java.util.List;
 
 public class EmailAuthenticationUseCase implements AuthenticationPort {
-    private final UserRepository<UserEntity> userRepository;
+    private final UserRepository userRepository;
     private final PasswordGenerator passwordGenerator;
     private final CreateRefreshTokenUseCase createRefreshTokenUseCase;
     private final CreateAccessTokenUseCase createAccessTokenUseCase;
-    private final RefreshTokenRepository<RefreshTokenEntity> refreshTokenRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public EmailAuthenticationUseCase(
-            UserRepository<UserEntity> userRepository,
+            UserRepository userRepository,
             PasswordGenerator passwordGenerator,
             CreateRefreshTokenUseCase createRefreshTokenUseCase,
             CreateAccessTokenUseCase createAccessTokenUseCase,
-            RefreshTokenRepository<RefreshTokenEntity> refreshTokenRepository) {
+            RefreshTokenRepository refreshTokenRepository) {
         this.userRepository = userRepository;
         this.passwordGenerator = passwordGenerator;
         this.createRefreshTokenUseCase = createRefreshTokenUseCase;
@@ -40,7 +41,7 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
 
 
     @Override
-    public TokenPair authentication(String email, String password) throws UserNotFoundException, AuthenticationException, UserBlockedException, RefreshTokenCreationException {
+    public TokenPair authentication(String email, String password) throws UserNotFoundException, AuthenticationException, UserBlockedException {
         UserEntity userEntity = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException());
 
@@ -63,10 +64,9 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
         }
 
         userEntity.setFails( 0 );
-        userRepository.save(userEntity);
+        userEntity = userRepository.save(userEntity);
 
-        RefreshTokenEntity refreshTokenEntity = createRefreshTokenUseCase.create(userEntity)
-                .orElseThrow(() -> new RefreshTokenCreationException());
+        RefreshTokenEntity refreshTokenEntity = createRefreshTokenUseCase.create(userEntity);
         AccessTokenEntity accessTokenEntity = createAccessTokenUseCase.create(userEntity, refreshTokenEntity);
 
         TokenPair tokenPair = new TokenPair();
@@ -77,14 +77,14 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
     }
 
     @Override
-    public TokenPair getNewTokenPairByRefreshToken(RefreshTokenEntity refreshTokenEntity) throws UserNotFoundException, AuthenticationException, UserBlockedException{
+    public TokenPair getNewTokenPairByRefreshToken(RefreshTokenEntity refreshTokenEntity) throws Throwable {
         UserEntity userEntity = userRepository.findById(refreshTokenEntity.getUserId()).orElseThrow(() -> new UserNotFoundException());
 
         if (userEntity.getUserStatus().equals(UserStatus.ACTIVE) == false) {
             throw new UserBlockedException();
         }
 
-        RefreshTokenEntity fromRepo = refreshTokenRepository.findById(refreshTokenEntity.getId())
+        RefreshTokenEntity fromRepo = (RefreshTokenEntity) refreshTokenRepository.findById(refreshTokenEntity.getId())
                 .orElseThrow(() -> new AuthenticationException());
 
         if(fromRepo.isActive() == false) throw new AuthenticationException();

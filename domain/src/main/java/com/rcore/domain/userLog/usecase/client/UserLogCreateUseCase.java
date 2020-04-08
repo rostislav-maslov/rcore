@@ -16,7 +16,7 @@ public class UserLogCreateUseCase extends UserLogBaseUseCase {
         this.userLogIdGenerator = userLogIdGenerator;
     }
 
-    public Optional<UserLogEntity> create(UserLogEntity userLogEntity) {
+    public UserLogEntity create(UserLogEntity userLogEntity) {
         userLogEntity.setId(userLogIdGenerator.generate());
         return userLogRepository.save(userLogEntity);
     }

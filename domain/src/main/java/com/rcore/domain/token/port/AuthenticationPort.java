@@ -13,6 +13,6 @@ import com.rcore.domain.user.exception.UserNotFoundException;
 public interface AuthenticationPort {
 
     TokenPair authentication(String key, String token) throws UserNotFoundException, AuthenticationException, UserBlockedException, RefreshTokenCreationException;
-    TokenPair getNewTokenPairByRefreshToken(RefreshTokenEntity refreshTokenEntity) throws UserNotFoundException, AuthenticationException, UserBlockedException;
+    TokenPair getNewTokenPairByRefreshToken(RefreshTokenEntity refreshTokenEntity) throws Throwable;
 
 }

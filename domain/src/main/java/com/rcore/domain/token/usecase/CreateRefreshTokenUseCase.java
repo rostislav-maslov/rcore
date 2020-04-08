@@ -33,17 +33,18 @@ public class CreateRefreshTokenUseCase {
         refreshTokenEntity.setCreateFromTokenId(refreshTokenId);
         refreshTokenEntity.setCreateFromType(createFrom);
 
-        refreshTokenEntity.setSalt(tokenSaltGenerator.generate());
 
+
+        refreshTokenEntity.setSalt(tokenSaltGenerator.generate());
         return refreshTokenEntity;
     }
 
-    public Optional<RefreshTokenEntity> create(UserEntity userEntity){
+    public RefreshTokenEntity create(UserEntity userEntity){
         return repository.save(create(userEntity.getId(), RefreshTokenEntity.CreateFrom.LOGIN, null));
     }
 
-    public Optional<RefreshTokenEntity> create(RefreshTokenEntity oldRefreshTokenEntity){
-        return  repository.save(create(oldRefreshTokenEntity.getUserId(), RefreshTokenEntity.CreateFrom.LOGIN, oldRefreshTokenEntity.getId()));
+    public RefreshTokenEntity create(RefreshTokenEntity oldRefreshTokenEntity){
+        return repository.save(create(oldRefreshTokenEntity.getUserId(), RefreshTokenEntity.CreateFrom.LOGIN, oldRefreshTokenEntity.getId()));
     }
 
 }

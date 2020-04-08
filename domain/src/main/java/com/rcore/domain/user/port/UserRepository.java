@@ -5,8 +5,8 @@ import com.rcore.domain.user.entity.UserEntity;
 
 import java.util.Optional;
 
-public abstract class UserRepository<Entity extends UserEntity> extends CRUDRepository<String, Entity> {
-    public abstract Optional<Entity> findByEmail(String email);
-    public abstract Optional<Entity> findByPhoneNumber(Long phoneNumber);
-    public abstract Optional<Entity> findByLogin(String login);
+public interface UserRepository extends CRUDRepository<String, UserEntity> {
+    Optional<UserEntity> findByEmail(String email);
+    Optional<UserEntity> findByPhoneNumber(Long phoneNumber);
+    Optional<UserEntity> findByLogin(String login);
 }

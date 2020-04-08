@@ -2,13 +2,15 @@ package com.rcore.domain.user.entity;
 
 import com.rcore.domain.base.entity.BaseEntity;
 import com.rcore.domain.role.entity.Role;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.*;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@SuperBuilder
 public class UserEntity extends BaseEntity {
     protected String id;
 

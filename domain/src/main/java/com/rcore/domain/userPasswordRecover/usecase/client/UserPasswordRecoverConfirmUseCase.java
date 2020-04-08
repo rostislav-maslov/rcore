@@ -39,9 +39,9 @@ class UserPasswordRecoverConfirmUseCase {
         userPasswordRecoverEntity.setIsRecovered(true);
         userPasswordRecoverRepository.save(userPasswordRecoverEntity);
 
-        UserEntity userEntity = (UserEntity) userRepository.findByEmail(email).get();
+        UserEntity userEntity = userRepository.findByEmail(email).get();
         userEntity.setPassword(passwordGenerator.generate(userEntity.getId(), newClearPassword));
-        userRepository.save(userPasswordRecoverEntity);
+        userPasswordRecoverRepository.save(userPasswordRecoverEntity);
 
         return userPasswordRecoverEntity;
     }
