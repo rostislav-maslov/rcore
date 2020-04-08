@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.ub</groupId>
+    <groupId>com.rcore</groupId>
     <artifactId>RCore</artifactId>
     <version>1.0.0</version>
     <name>RCore</name>
@@ -10,8 +10,9 @@
         <module>domain</module>
         <module>admin</module>
         <module>database</module>
-        <module>common</module>
-
+        <module>adapter</module>
+        <module>commons</module>
+        <module>rest-api</module>
     </modules>
 
     <packaging>pom</packaging>

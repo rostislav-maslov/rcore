@@ -4,14 +4,14 @@
 
     <parent>
         <artifactId>database</artifactId>
-        <groupId>com.ub</groupId>
+        <groupId>com.rcore</groupId>
         <version>1.0.0</version>
     </parent>
 
     <groupId>com.rcore</groupId>
     <artifactId>memory</artifactId>
     <version>1.0.0</version>
-    <name>RCore</name>
+    <name>memory</name>
 
     <packaging>jar</packaging>
 
