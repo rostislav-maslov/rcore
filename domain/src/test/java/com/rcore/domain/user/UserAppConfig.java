@@ -1,26 +1,24 @@
-package com.rcore.domain.base;
+package com.rcore.domain.user;
 
 import com.rcore.domain.database.memory.token.port.AccessTokenIdGeneratorImpl;
 import com.rcore.domain.database.memory.token.port.RefreshTokenIdGeneratorImpl;
 import com.rcore.domain.database.memory.token.port.RefreshTokenRepositoryImpl;
 import com.rcore.domain.database.memory.user.port.UserIdGeneratorImpl;
 import com.rcore.domain.database.memory.user.port.UserRepositoryImpl;
-import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.domain.token.port.impl.TokenSaltGeneratorImpl;
 import com.rcore.domain.token.usecase.CreateAccessTokenUseCase;
 import com.rcore.domain.token.usecase.CreateRefreshTokenUseCase;
 import com.rcore.domain.token.usecase.ExpireTokenUseCase;
-import com.rcore.domain.user.entity.UserEntity;
+import com.rcore.domain.user.config.UserConfig;
 import com.rcore.domain.user.port.IdGenerator;
 import com.rcore.domain.user.port.PasswordGenerator;
 import com.rcore.domain.user.port.UserRepository;
-import com.rcore.domain.user.config.UserConfig;
 import com.rcore.domain.user.port.impl.PasswordGeneratorImpl;
 import lombok.Getter;
 
 @Getter
-public class TestAppConfig {
+public class UserAppConfig {
     private final UserConfig userConfig;
     private final UserRepository userRepository;
     private final IdGenerator idGenerator;
@@ -30,7 +28,7 @@ public class TestAppConfig {
     private final CreateAccessTokenUseCase createAccessTokenUseCase;
     private final RefreshTokenRepository refreshTokenRepository;
 
-    public TestAppConfig() {
+    public UserAppConfig() {
         this.userRepository = new UserRepositoryImpl();
         this.idGenerator = new UserIdGeneratorImpl();
         this.passwordGenerator = new PasswordGeneratorImpl();
@@ -38,7 +36,6 @@ public class TestAppConfig {
         this.expireTokenUseCase = new ExpireTokenUseCase(refreshTokenRepository);
         this.createRefreshTokenUseCase = new CreateRefreshTokenUseCase(new RefreshTokenIdGeneratorImpl(), refreshTokenRepository, new TokenSaltGeneratorImpl());
         this.createAccessTokenUseCase = new CreateAccessTokenUseCase(new AccessTokenIdGeneratorImpl(), createRefreshTokenUseCase);
-
 
         this.userConfig = new UserConfig(userRepository, idGenerator, passwordGenerator, expireTokenUseCase, createRefreshTokenUseCase, createAccessTokenUseCase, refreshTokenRepository);
     }
