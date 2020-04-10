@@ -2,11 +2,14 @@ package com.rcore.domain.picture.entity;
 
 import com.rcore.domain.base.entity.BaseEntity;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.*;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@SuperBuilder
 public class PictureEntity extends BaseEntity {
     protected String id;
     protected String fileName;

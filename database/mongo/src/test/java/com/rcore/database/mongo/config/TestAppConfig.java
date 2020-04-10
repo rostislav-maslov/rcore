@@ -1,13 +1,10 @@
 package com.rcore.database.mongo.config;
 
 import com.rcore.database.mongo.base.ObjectIdGenerator;
-import com.rcore.database.mongo.token.port.AccessTokenIdGeneratorImpl;
-import com.rcore.database.mongo.token.port.RefreshTokenIdGeneratorImpl;
-import com.rcore.database.mongo.token.port.RefreshTokenRepositoryImpl;
-import com.rcore.database.mongo.token.port.model.RefreshTokenDoc;
-import com.rcore.database.mongo.user.port.UserRepositoryImpl;
-import com.rcore.database.mongo.user.port.model.UserDoc;
-import com.rcore.domain.token.entity.RefreshTokenEntity;
+import com.rcore.database.mongo.domain.token.port.AccessTokenIdGeneratorImpl;
+import com.rcore.database.mongo.domain.token.port.RefreshTokenIdGeneratorImpl;
+import com.rcore.database.mongo.domain.token.port.RefreshTokenRepositoryImpl;
+import com.rcore.database.mongo.domain.user.port.UserRepositoryImpl;
 import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.domain.token.port.impl.TokenSaltGeneratorImpl;
 import com.rcore.domain.token.usecase.CreateAccessTokenUseCase;
@@ -19,8 +16,6 @@ import com.rcore.domain.user.port.PasswordGenerator;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.port.impl.PasswordGeneratorImpl;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
 
 @Getter

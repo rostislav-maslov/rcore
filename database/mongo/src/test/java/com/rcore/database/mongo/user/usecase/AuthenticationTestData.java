@@ -1,7 +1,6 @@
 package com.rcore.database.mongo.user.usecase;
 
-import com.rcore.database.mongo.user.port.model.UserDoc;
-import com.rcore.domain.user.entity.UserEntity;
+import com.rcore.database.mongo.domain.user.port.model.UserDoc;
 import com.rcore.domain.user.port.PasswordGenerator;
 
 public class AuthenticationTestData {
