@@ -1,9 +1,7 @@
-package com.rcore.domain.database.memory.file.port;
+package com.rcore.domain.database.memory.picture.port;
 
 import com.rcore.domain.database.memory.base.port.BaseIdGeneratorImpl;
-import com.rcore.domain.file.port.FileIdGenerator;
-import com.rcore.domain.file.port.FileStorage;
-import com.rcore.domain.user.port.IdGenerator;
+import com.rcore.domain.picture.port.PictureStorage;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class FileStorageImpl implements FileStorage {
+public class PictureStorageImpl implements PictureStorage {
 
     private BaseIdGeneratorImpl idGenerator = new BaseIdGeneratorImpl();
     private Map<String, File> container = new HashMap<>();
