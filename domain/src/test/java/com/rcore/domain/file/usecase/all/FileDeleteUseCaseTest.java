@@ -8,6 +8,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -19,8 +21,9 @@ public class FileDeleteUseCaseTest {
     private FileEntity fileEntity;
 
     @Before
-    public void before() {
-       fileEntity = fileAppConfig.getFileConfig().all.createUseCase().create(new File(fileAppConfig.getFILE_PATH()));
+    public void before() throws FileNotFoundException {
+        File file = new File(fileAppConfig.getFILE_PATH());
+        fileEntity = fileAppConfig.getFileConfig().all.createUseCase().create(new FileInputStream(file), file.getName(), "jpg");
     }
 
     @Test

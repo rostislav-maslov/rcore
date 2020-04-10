@@ -1,8 +1,5 @@
 package com.rcore.domain.picture.port;
 
-import com.rcore.domain.picture.entity.PictureEntity;
-
-import java.io.File;
 import java.io.InputStream;
 import java.util.Optional;
 
@@ -11,11 +8,10 @@ public interface PictureStorage {
     /**
      * Сохранение файла
      *
-     * @param file - File
      * TODO возможно, стоит добавить contentType
      * @return Возвращает filePath
      */
-    String store(File file);
+    String store(InputStream content, String fileName, String contentType);
 
     /**
      * Удаление файла

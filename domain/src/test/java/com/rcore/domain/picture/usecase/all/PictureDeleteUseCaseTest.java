@@ -9,6 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Optional;
 
 import static org.junit.Assert.*;
@@ -19,8 +21,9 @@ public class PictureDeleteUseCaseTest {
     private PictureEntity pictureEntity;
 
     @Before
-    public void setUp() {
-        pictureEntity = pictureAppConfig.getPictureConfig().all.createUseCase().create(new File(pictureAppConfig.getFILE_PATH()));
+    public void setUp() throws FileNotFoundException {
+        File file = new File(pictureAppConfig.getFILE_PATH());
+        pictureEntity = pictureAppConfig.getPictureConfig().all.createUseCase().create(new FileInputStream(file), file.getName(), "jpg");
     }
 
     @Test

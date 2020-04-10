@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Optional;
 
@@ -21,7 +22,8 @@ public class FileViewUseCaseTest {
 
     @Before
     public void setUp() throws Exception {
-        fileEntity = fileAppConfig.getFileConfig().all.createUseCase().create(new File(fileAppConfig.getFILE_PATH()));
+        File file = new File(fileAppConfig.getFILE_PATH());
+        fileEntity = fileAppConfig.getFileConfig().all.createUseCase().create(new FileInputStream(file), file.getName(), "jpg");
     }
 
     @Test

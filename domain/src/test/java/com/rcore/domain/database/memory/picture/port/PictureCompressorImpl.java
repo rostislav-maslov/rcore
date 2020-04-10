@@ -5,6 +5,8 @@ import com.rcore.domain.picture.port.PictureCompressor;
 import com.rcore.domain.picture.port.PictureStorage;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class PictureCompressorImpl implements PictureCompressor {
 
@@ -20,7 +22,11 @@ public class PictureCompressorImpl implements PictureCompressor {
         File compressedFile = new File(pictureEntity.getFilePath());
         PictureEntity.Size size = new PictureEntity.Size();
         size.setWidth(newWidth);
-        size.setFilePath(pictureStorage.store(compressedFile));
+        try {
+            size.setFilePath(pictureStorage.store(new FileInputStream(compressedFile), compressedFile.getName(), ""));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         return size;
     }
 }

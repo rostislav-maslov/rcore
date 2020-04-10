@@ -11,6 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Optional;
 
@@ -22,9 +24,10 @@ public class PictureViewUseCaseTest {
     private PictureEntity pictureEntity;
 
     @Before
-    public void setUp() {
+    public void setUp() throws FileNotFoundException {
+        File file = new File(pictureAppConfig.getFILE_PATH());
         pictureEntity = pictureAppConfig.getPictureRepository().save(PictureViewTestData.create(pictureAppConfig.getFILE_PATH(), pictureAppConfig.getPictureIdGenerator()));
-        pictureAppConfig.getPictureStorage().store(new File(pictureAppConfig.getFILE_PATH()));
+        pictureAppConfig.getPictureStorage().store(new FileInputStream(file), file.getName(), "jpg");
     }
 
     @Test

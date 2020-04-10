@@ -12,6 +12,7 @@ import com.rcore.domain.user.entity.UserEntity;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 
 public class FileCreateUseCase  extends FileAdminBaseUseCase {
@@ -24,13 +25,12 @@ public class FileCreateUseCase  extends FileAdminBaseUseCase {
         this.fileStorage = fileStorage;
     }
 
-    public FileEntity create(File file, boolean isPrivate) {
+    public FileEntity create(InputStream content, String fileName, String contentType, boolean isPrivate) {
         FileEntity fileEntity = new FileEntity();
         fileEntity.setId(idGenerator.generate());
-        fileEntity.setFileName(file.getName());
+        fileEntity.setFileName(fileName);
         fileEntity.setIsPrivate(isPrivate);
-
-        fileEntity.setFilePath(fileStorage.store(file));
+        fileEntity.setFilePath(fileStorage.store(content, fileName, contentType));
 
         return fileRepository.save(fileEntity);
     }

@@ -6,6 +6,7 @@ import com.rcore.domain.picture.port.PictureRepository;
 import com.rcore.domain.picture.port.PictureStorage;
 
 import java.io.File;
+import java.io.InputStream;
 
 public class PictureCreateUseCase extends PictureBaseUseCase {
 
@@ -18,12 +19,12 @@ public class PictureCreateUseCase extends PictureBaseUseCase {
         this.pictureStorage = pictureStorage;
     }
 
-    public PictureEntity create(File file) {
+    public PictureEntity create(InputStream content, String fileName, String contentType) {
         PictureEntity pictureEntity = new PictureEntity();
         pictureEntity.setId(pictureIdGenerator.generate());
         pictureEntity.setIsPrivate(false);
-        pictureEntity.setFileName(file.getName());
-        pictureEntity.setFilePath(pictureStorage.store(file));
+        pictureEntity.setFileName(fileName);
+        pictureEntity.setFilePath(pictureStorage.store(content, fileName, contentType));
 
         return pictureRepository.save(pictureEntity);
     }

@@ -9,6 +9,7 @@ import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.entity.UserEntity;
 
 import java.io.File;
+import java.io.InputStream;
 
 
 public class PictureCreateUseCase extends PictureAdminBaseUseCase {
@@ -21,12 +22,12 @@ public class PictureCreateUseCase extends PictureAdminBaseUseCase {
         this.pictureStorage = pictureStorage;
     }
 
-    public PictureEntity create(File file, boolean isPrivate) {
+    public PictureEntity create(InputStream content, String fileName, String contentType, boolean isPrivate) {
         PictureEntity pictureEntity = new PictureEntity();
         pictureEntity.setId(idGenerator.generate());
         pictureEntity.setIsPrivate(isPrivate);
-        pictureEntity.setFileName(file.getName());
-        pictureEntity.setFilePath(pictureStorage.store(file));
+        pictureEntity.setFileName(fileName);
+        pictureEntity.setFilePath(pictureStorage.store(content, fileName, contentType));
 
         return pictureRepository.save(pictureEntity);
     }

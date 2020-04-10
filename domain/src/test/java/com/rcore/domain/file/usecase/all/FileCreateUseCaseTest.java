@@ -17,8 +17,9 @@ public class FileCreateUseCaseTest {
     private final FileAppConfig fileAppConfig = new FileAppConfig();
 
     @Test
-    public void create() {
-        FileEntity fileEntity = fileAppConfig.getFileConfig().all.createUseCase().create(new File(fileAppConfig.getFILE_PATH()));
+    public void create() throws FileNotFoundException {
+        File file = new File(fileAppConfig.getFILE_PATH());
+        FileEntity fileEntity = fileAppConfig.getFileConfig().all.createUseCase().create(new FileInputStream(file), file.getName(), "jpg");
         Assert.assertNotNull("Файл не создан", fileEntity);
     }
 }

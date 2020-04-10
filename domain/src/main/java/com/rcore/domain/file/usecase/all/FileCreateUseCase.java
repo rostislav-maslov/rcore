@@ -7,6 +7,7 @@ import com.rcore.domain.file.port.FileRepository;
 import com.rcore.domain.file.port.FileStorage;
 
 import java.io.File;
+import java.io.InputStream;
 
 public class FileCreateUseCase extends FileBaseUseCase {
     private final FileIdGenerator fileIdGenerator;
@@ -18,13 +19,13 @@ public class FileCreateUseCase extends FileBaseUseCase {
         this.fileStorage = fileStorage;
     }
 
-    public FileEntity create(File file) {
+    public FileEntity create(InputStream content, String fileName, String contentType) {
         FileEntity fileEntity = new FileEntity();
         fileEntity.setId(fileIdGenerator.generate());
-        fileEntity.setFileName(file.getName());
+        fileEntity.setFileName(fileName);
         fileEntity.setIsPrivate(false);
 
-        fileEntity.setFilePath(fileStorage.store(file));
+        fileEntity.setFilePath(fileStorage.store(content, fileName, contentType));
 
         return fileRepository.save(fileEntity);
     }
