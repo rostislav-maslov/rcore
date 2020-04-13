@@ -1,6 +1,6 @@
 package com.rcore.restapi.handler;
 
-import com.rcore.restapi.api.response.ErrorApiResponse;
+import com.rcore.restapi.web.api.response.ErrorApiResponse;
 import com.rcore.restapi.exceptions.BadRequestApiException;
 import com.rcore.restapi.exceptions.ExceptionDTO;
 import com.rcore.restapi.exceptions.NotFoundApiException;

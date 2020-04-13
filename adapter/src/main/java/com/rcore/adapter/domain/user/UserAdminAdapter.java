@@ -1,7 +1,7 @@
-package com.rcore.adapter.domen.user;
+package com.rcore.adapter.domain.user;
 
-import com.rcore.adapter.domen.user.mapper.UserMapper;
-import com.rcore.adapter.domen.user.model.UserDTO;
+import com.rcore.adapter.domain.user.mapper.UserMapper;
+import com.rcore.adapter.domain.user.dto.UserDTO;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.exception.UserAlreadyExistException;
@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class UserAdminController {
+public class UserAdminAdapter {
 
     private UserMapper mapper = new UserMapper();
 
@@ -55,7 +55,7 @@ public class UserAdminController {
         );
     }
 
-    public Optional<UserDTO> findById(String id){
+    public Optional<UserDTO> findById(String id) {
         return viewUserUseCase.findById(id).map(mapper::map);
     }
 

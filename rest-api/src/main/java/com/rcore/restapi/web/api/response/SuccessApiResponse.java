@@ -1,4 +1,4 @@
-package com.rcore.restapi.api.response;
+package com.rcore.restapi.web.api.response;
 
 import io.swagger.annotations.ApiModel;
 import lombok.AllArgsConstructor;

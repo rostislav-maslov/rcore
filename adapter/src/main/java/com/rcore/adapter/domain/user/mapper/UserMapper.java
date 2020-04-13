@@ -1,7 +1,7 @@
-package com.rcore.adapter.domen.user.mapper;
+package com.rcore.adapter.domain.user.mapper;
 
 
-import com.rcore.adapter.domen.user.model.UserDTO;
+import com.rcore.adapter.domain.user.dto.UserDTO;
 import com.rcore.commons.mapper.ExampleDataMapper;
 import com.rcore.domain.user.entity.UserEntity;
 

@@ -1,4 +1,4 @@
-package com.rcore.adapter.domen.user.model;
+package com.rcore.adapter.domain.user.dto;
 
 
 import com.rcore.domain.role.entity.Role;

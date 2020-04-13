@@ -1,4 +1,4 @@
-package com.rcore.restapi.api.request;
+package com.rcore.restapi.web.api.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;

@@ -9,7 +9,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.rcore</groupId>
     <artifactId>adapter</artifactId>
+    <version>1.0.0</version>
 
     <dependencies>
 
