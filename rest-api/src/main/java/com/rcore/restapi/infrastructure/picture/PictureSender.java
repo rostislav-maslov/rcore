@@ -1,15 +1,11 @@
 package com.rcore.restapi.infrastructure.picture;
 
-import com.rcore.adapter.domain.file.dto.FileDTO;
-import com.rcore.adapter.domain.picture.PictureAllAdapter;
+import com.rcore.adapter.domain.picture.PictureAdapter;
 import com.rcore.adapter.domain.picture.dto.PictureDTO;
-import com.rcore.domain.file.exception.FileAccessException;
-import com.rcore.domain.file.exception.FileNotFoundException;
 import com.rcore.domain.picture.exception.PictureAccessException;
 import com.rcore.domain.picture.exception.PictureNotFoundException;
 import com.rcore.restapi.utils.MediaTypeUtils;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
@@ -25,17 +21,17 @@ import java.io.InputStream;
 @Component
 public class PictureSender {
 
-    private final PictureAllAdapter pictureAllAdapter;
+    private final PictureAdapter pictureAdapter;
     private final ServletContext servletContext;
 
     public void send(String pictureId, Integer width, HttpServletResponse response) throws IOException, PictureAccessException, PictureNotFoundException {
-        InputStream inputStream = pictureAllAdapter.getInputStream(pictureId).orElseThrow(PictureNotFoundException::new);
-        InputStreamResource inputStreamResource = new InputStreamResource(pictureAllAdapter.getInputStream(pictureId).orElseThrow(PictureNotFoundException::new));
-        PictureDTO picture = pictureAllAdapter.findById(pictureId).orElseThrow(PictureNotFoundException::new);
+        InputStream inputStream = pictureAdapter.getAll().getInputStream(pictureId).orElseThrow(PictureNotFoundException::new);
+        InputStreamResource inputStreamResource = new InputStreamResource(pictureAdapter.getAll().getInputStream(pictureId).orElseThrow(PictureNotFoundException::new));
+        PictureDTO picture = pictureAdapter.getAll().findById(pictureId).orElseThrow(PictureNotFoundException::new);
 
         if (width != null && width > 0 && picture.getSize(width).isPresent()) {
-            inputStream = pictureAllAdapter.getInputStreamByWidth(pictureId, width).get();
-            inputStreamResource = new InputStreamResource(pictureAllAdapter.getInputStreamByWidth(pictureId, width).get());
+            inputStream = pictureAdapter.getAll().getInputStreamByWidth(pictureId, width).get();
+            inputStreamResource = new InputStreamResource(pictureAdapter.getAll().getInputStreamByWidth(pictureId, width).get());
         }
 
         if (inputStream == null){

@@ -1,6 +1,8 @@
 package com.rcore.restapi.config;
 
+import com.rcore.adapter.domain.file.FileAdapter;
 import com.rcore.adapter.domain.file.FileAllAdapter;
+import com.rcore.adapter.domain.picture.PictureAdapter;
 import com.rcore.adapter.domain.picture.PictureAllAdapter;
 import com.rcore.domain.file.config.FileConfig;
 import com.rcore.domain.file.port.FileIdGenerator;
@@ -32,14 +34,15 @@ public class RestApiConfig {
     private final FileIdGenerator fileIdGenerator;
     private final FileStorage fileStorage;
 
+
     @Bean
-    public FileAllAdapter fileAllAdapter() {
-        return new FileAllAdapter(new FileConfig(fileRepository, fileIdGenerator, fileStorage));
+    public PictureAdapter pictureAdapter() {
+        return new PictureAdapter(new PictureConfig(pictureRepository, pictureIdGenerator, pictureStorage, pictureCompressor));
     }
 
     @Bean
-    public PictureAllAdapter pictureAllAdapter() {
-        return new PictureAllAdapter(new PictureConfig(pictureRepository, pictureIdGenerator, pictureStorage, pictureCompressor));
+    public FileAdapter fileAdapter() {
+        return new FileAdapter(new FileConfig(fileRepository, fileIdGenerator, fileStorage));
     }
 
 }
