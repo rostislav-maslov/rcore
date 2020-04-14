@@ -8,6 +8,7 @@ import com.rcore.domain.file.role.AdminFileUpdateRole;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.entity.UserEntity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class FileUpdateUseCase extends FileAdminBaseUseCase {
@@ -22,7 +23,7 @@ public class FileUpdateUseCase extends FileAdminBaseUseCase {
 
         oldFile.setIsPrivate(fileEntity.getIsPrivate());
         oldFile.setFileName(fileEntity.getFileName());
-        oldFile.setUpdatedAt(new Date());
+        oldFile.setUpdatedAt(LocalDateTime.now());
 
         return fileRepository.save(fileEntity);
     }

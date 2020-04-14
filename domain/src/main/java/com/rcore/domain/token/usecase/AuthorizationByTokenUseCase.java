@@ -1,5 +1,6 @@
 package com.rcore.domain.token.usecase;
 
+import com.rcore.commons.utils.DateTimeUtils;
 import com.rcore.domain.role.entity.Role;
 import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
@@ -10,6 +11,9 @@ import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.port.UserRepository;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
@@ -29,14 +33,14 @@ public class AuthorizationByTokenUseCase implements AuthorizationPort {
 
     @Override
     public Boolean checkAccess(AccessTokenEntity accessToken, Set<Role> userRoles) {
-        if (new Date().getTime() > accessToken.getExpireAt().getTime()) return false;
+        if (LocalDateTime.now().isAfter(accessToken.getExpireAt())) return false;
 
         Optional<RefreshTokenEntity> refreshTokenEntity = refreshTokenRepository.findById(accessToken.getCreateFromRefreshTokenId());
         if (!refreshTokenEntity.isPresent()) return false;
 
         if (refreshTokenEntity.get().isActive() == false) return false;
 
-        if (AccessTokenEntity.sign(accessToken.getId(), accessToken.getExpireAt().getTime(), refreshTokenEntity.get()).equals(accessToken.getSign()) == false)
+        if (AccessTokenEntity.sign(accessToken.getId(), DateTimeUtils.getMillis(accessToken.getExpireAt()), refreshTokenEntity.get()).equals(accessToken.getSign()) == false)
             return false;
 
         return true;
@@ -59,7 +63,7 @@ public class AuthorizationByTokenUseCase implements AuthorizationPort {
         AccessTokenEntity accessTokenEntity = currentAccessToken();
 
         Optional<UserEntity> userEntity = userRepository.findById(accessTokenEntity.getUserId());
-        if(userEntity.isPresent() == false) throw new AuthenticationException();
+        if (userEntity.isPresent() == false) throw new AuthenticationException();
 
         return userEntity.get();
     }

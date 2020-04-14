@@ -5,6 +5,7 @@ import org.springframework.data.mongodb.core.mapping.event.AbstractMongoEventLis
 import org.springframework.data.mongodb.core.mapping.event.BeforeSaveEvent;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Component
@@ -18,7 +19,7 @@ public class BaseEntityEventListener extends AbstractMongoEventListener<BaseEnti
     public void onBeforeSave(BeforeSaveEvent<BaseEntity> event) {
         super.onBeforeSave(event);
         BaseEntity entity = event.getSource();
-        entity.setUpdatedAt(new Date());
+        entity.setUpdatedAt(LocalDateTime.now());
     }
 
 }

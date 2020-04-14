@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @AllArgsConstructor
@@ -31,8 +32,8 @@ public class UserDTO {
     private String login;
     private String password;
 
-    private List<SocialAccount> socialAccounts = new ArrayList<>();
+    private List<SocialAccount> socialAccounts;
 
     private Integer fails = 0;
-    private Date lastFailDate = new Date();
+    private LocalDateTime lastFailDate;
 }

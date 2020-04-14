@@ -5,18 +5,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
 @Getter
 public abstract class BaseEntity {
-    protected Date createdAt = new Date();
-    protected Date updatedAt  = new Date();
-    protected String timeZone = "GMT";
+    protected LocalDateTime createdAt = LocalDateTime.now();
+    protected LocalDateTime updatedAt  = LocalDateTime.now();
+    protected String timeZone = "Europe/Moscow";
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 

@@ -16,6 +16,7 @@ import com.rcore.domain.user.exception.UserNotFoundException;
 import com.rcore.domain.user.port.PasswordGenerator;
 import com.rcore.domain.user.port.UserRepository;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
 
         if (passwordGenerator.check(userEntity.getId(), password, userEntity.getPassword()) == false) {
 
-            userEntity.setLastFailDate(new Date());
+            userEntity.setLastFailDate(LocalDateTime.now());
             userEntity.setFails( userEntity.getFails() + 1);
             userRepository.save(userEntity);
 
@@ -56,7 +57,7 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
 
         if (userEntity.getUserStatus().equals(UserStatus.ACTIVE) == false) {
 
-            userEntity.setLastFailDate(new Date());
+            userEntity.setLastFailDate(LocalDateTime.now());
             userEntity.setFails( userEntity.getFails() + 1);
             userRepository.save(userEntity);
 

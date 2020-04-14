@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @AllArgsConstructor
@@ -16,7 +17,7 @@ public class FileDTO {
     protected String fileName;
     protected String filePath;
     protected Boolean isPrivate;
-    protected Date createdAt;
-    protected Date updatedAt;
+    protected LocalDateTime createdAt;
+    protected LocalDateTime updatedAt;
     protected String timeZone;
 }

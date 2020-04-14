@@ -8,6 +8,7 @@ import com.rcore.domain.picture.role.AdminPictureUpdateRole;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.entity.UserEntity;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class PictureUpdateUseCase  extends PictureAdminBaseUseCase {
@@ -25,7 +26,7 @@ public class PictureUpdateUseCase  extends PictureAdminBaseUseCase {
 
         oldPicture.setIsPrivate(pictureEntity.getIsPrivate());
         oldPicture.setFileName(pictureEntity.getFileName());
-        oldPicture.setUpdatedAt(new Date());
+        oldPicture.setUpdatedAt(LocalDateTime.now());
 
         return pictureRepository.save(pictureEntity);
     }

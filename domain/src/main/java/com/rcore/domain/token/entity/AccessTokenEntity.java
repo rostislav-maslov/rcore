@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
@@ -17,7 +17,7 @@ public class AccessTokenEntity extends BaseEntity {
     private String id;
     private String userId;
     private Set<Role> roles;
-    private Date expireAt = new Date();
+    private LocalDateTime expireAt = LocalDateTime.now();
 
     private String createFromRefreshTokenId;
 

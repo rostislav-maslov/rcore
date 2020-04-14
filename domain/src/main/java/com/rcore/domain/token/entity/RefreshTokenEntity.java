@@ -1,10 +1,12 @@
 package com.rcore.domain.token.entity;
 
 import com.rcore.domain.base.entity.BaseEntity;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -25,7 +27,7 @@ public class RefreshTokenEntity extends BaseEntity {
     private Long expireTimeRefreshToken = 60 * 24 * 60 * 60 * 1000l;
     private Long expireTimeAccessToken = 2 * 24 * 60 * 60 * 1000l;
 
-    private Date expireAt = new Date();
+    private LocalDateTime expireAt = LocalDateTime.now();
     private Status status = Status.ACTIVE;
 
     private String createFromTokenId;
@@ -35,7 +37,7 @@ public class RefreshTokenEntity extends BaseEntity {
 
     public Boolean isActive() {
         if (status.equals(Status.ACTIVE) == false) return false;
-        if (new Date().getTime() > expireAt.getTime()) return false;
+        if (LocalDateTime.now().isAfter(expireAt)) return false;
 
         return true;
     }

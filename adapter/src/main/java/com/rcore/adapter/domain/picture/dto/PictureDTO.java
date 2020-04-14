@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
@@ -20,8 +21,8 @@ public class PictureDTO {
     protected String filePath;
     protected Boolean isPrivate;
     protected Map<String, PictureEntity.Size> sizes;
-    protected Date createdAt;
-    protected Date updatedAt;
+    protected LocalDateTime createdAt;
+    protected LocalDateTime updatedAt;
     protected String timeZone;
 
     public Optional<PictureEntity.Size> getSize(Integer width) {
