@@ -37,7 +37,7 @@ public class UserEmailVerificationCreateUseCase extends UserEmailVerificationBas
         userEmailVerificationEntity.setExpiredDate(DateTimeUtils.fromMillis(DateTimeUtils.getNowMillis() + userEmailVerificationLifetime.emailLifetime()));
         userEmailVerificationEntity.setVerified(false);
 
-        userEmailVerificationRepository.save(userEmailVerificationEntity);
+        userEmailVerificationEntity = userEmailVerificationRepository.save(userEmailVerificationEntity);
         userEmailVerificationSender.sendEmail(userEmailVerificationEntity);
         return userEmailVerificationEntity;
     }

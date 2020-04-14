@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.core.mapping.event.BeforeSaveEvent;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Component
 public class BaseEntityEventListener extends AbstractMongoEventListener<BaseEntity> {

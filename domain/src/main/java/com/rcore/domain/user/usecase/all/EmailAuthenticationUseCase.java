@@ -49,7 +49,7 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
         if (passwordGenerator.check(userEntity.getId(), password, userEntity.getPassword()) == false) {
 
             userEntity.setLastFailDate(LocalDateTime.now());
-            userEntity.setFails( userEntity.getFails() + 1);
+            userEntity.setFails(userEntity.getFails() + 1);
             userRepository.save(userEntity);
 
             throw new AuthenticationException();
@@ -58,23 +58,22 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
         if (userEntity.getUserStatus().equals(UserStatus.ACTIVE) == false) {
 
             userEntity.setLastFailDate(LocalDateTime.now());
-            userEntity.setFails( userEntity.getFails() + 1);
+            userEntity.setFails(userEntity.getFails() + 1);
             userRepository.save(userEntity);
 
             throw new UserBlockedException();
         }
 
-        userEntity.setFails( 0 );
+        userEntity.setFails(0);
         userEntity = userRepository.save(userEntity);
 
         RefreshTokenEntity refreshTokenEntity = createRefreshTokenUseCase.create(userEntity);
         AccessTokenEntity accessTokenEntity = createAccessTokenUseCase.create(userEntity, refreshTokenEntity);
 
-        TokenPair tokenPair = new TokenPair();
-        tokenPair.setAccessToken(accessTokenEntity);
-        tokenPair.setRefreshToken(refreshTokenEntity);
-
-        return tokenPair;
+        return TokenPair.builder()
+                .accessToken(accessTokenEntity)
+                .refreshToken(refreshTokenEntity)
+                .build();
     }
 
     @Override
@@ -85,17 +84,16 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
             throw new UserBlockedException();
         }
 
-        RefreshTokenEntity fromRepo = (RefreshTokenEntity) refreshTokenRepository.findById(refreshTokenEntity.getId())
+        RefreshTokenEntity fromRepo = refreshTokenRepository.findById(refreshTokenEntity.getId())
                 .orElseThrow(() -> new AuthenticationException());
 
-        if(fromRepo.isActive() == false) throw new AuthenticationException();
+        if (fromRepo.isActive() == false) throw new AuthenticationException();
 
         AccessTokenEntity accessTokenEntity = createAccessTokenUseCase.create(userEntity, refreshTokenEntity);
 
-        TokenPair tokenPair = new TokenPair();
-        tokenPair.setAccessToken(accessTokenEntity);
-        tokenPair.setRefreshToken(refreshTokenEntity);
-
-        return tokenPair;
+        return TokenPair.builder()
+                .accessToken(accessTokenEntity)
+                .refreshToken(refreshTokenEntity)
+                .build();
     }
 }

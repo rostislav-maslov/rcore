@@ -38,8 +38,6 @@ public class CreateRefreshTokenUseCase {
         refreshTokenEntity.setCreateFromTokenId(refreshTokenId);
         refreshTokenEntity.setCreateFromType(createFrom);
 
-
-
         refreshTokenEntity.setSalt(tokenSaltGenerator.generate());
         return refreshTokenEntity;
     }
