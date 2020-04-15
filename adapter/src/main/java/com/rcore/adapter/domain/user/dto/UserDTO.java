@@ -36,4 +36,8 @@ public class UserDTO {
 
     private Integer fails = 0;
     private LocalDateTime lastFailDate;
+
+    protected LocalDateTime createdAt;
+    protected LocalDateTime updatedAt;
+    protected String timeZone;
 }

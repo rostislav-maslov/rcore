@@ -17,7 +17,7 @@ public class UserEntity extends BaseEntity {
 
     protected Set<Role> roles = new HashSet<Role>();
 
-    protected UserStatus userStatus = UserStatus.ACTIVE;
+    protected UserStatus status = UserStatus.ACTIVE;
 
     protected String firstName = "";
     protected String lastName = "";

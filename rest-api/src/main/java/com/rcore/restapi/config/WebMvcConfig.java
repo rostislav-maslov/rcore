@@ -1,5 +1,8 @@
 package com.rcore.restapi.config;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -11,16 +14,17 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Configuration
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
 
-
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+        builder.serializerByType(LocalDateTime.class, new ToStringSerializer());
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter(builder.build());
         converters.add(converter);
         StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter(StandardCharsets.UTF_8);
@@ -43,5 +47,13 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+
+    @Bean
+    public Jackson2ObjectMapperBuilder objectMapperBuilder() {
+        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+        builder.serializerByType(LocalDateTime.class, new ToStringSerializer());
+        builder.serializationInclusion(JsonInclude.Include.NON_NULL);
+        return builder;
     }
 }

@@ -4,7 +4,7 @@
     <groupId>com.rcore</groupId>
     <artifactId>RCore</artifactId>
     <version>1.0.0</version>
-    <name>RCore</name>
+    <name>rcore</name>
 
     <modules>
         <module>domain</module>
@@ -13,6 +13,7 @@
         <module>adapter</module>
         <module>commons</module>
         <module>rest-api</module>
+        <module>security</module>
     </modules>
 
     <packaging>pom</packaging>

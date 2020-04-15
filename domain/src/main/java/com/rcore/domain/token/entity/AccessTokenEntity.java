@@ -2,8 +2,11 @@ package com.rcore.domain.token.entity;
 
 import com.rcore.domain.base.entity.BaseEntity;
 import com.rcore.domain.role.entity.Role;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -13,6 +16,9 @@ import java.util.Set;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@SuperBuilder
 public class AccessTokenEntity extends BaseEntity {
     private String id;
     private String userId;
@@ -54,5 +60,11 @@ public class AccessTokenEntity extends BaseEntity {
                 accessTokenId;
 
         return hash(signString);
+    }
+
+    public Boolean isActive() {
+        if (LocalDateTime.now().isAfter(expireAt)) return false;
+
+        return true;
     }
 }

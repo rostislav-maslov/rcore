@@ -4,7 +4,6 @@ import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.entity.TokenPair;
 import com.rcore.domain.token.exception.AuthenticationException;
-import com.rcore.domain.token.exception.RefreshTokenCreationException;
 import com.rcore.domain.token.port.AuthenticationPort;
 import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.domain.token.usecase.CreateAccessTokenUseCase;
@@ -17,8 +16,6 @@ import com.rcore.domain.user.port.PasswordGenerator;
 import com.rcore.domain.user.port.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
 
 public class EmailAuthenticationUseCase implements AuthenticationPort {
     private final UserRepository userRepository;
@@ -55,7 +52,7 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
             throw new AuthenticationException();
         }
 
-        if (userEntity.getUserStatus().equals(UserStatus.ACTIVE) == false) {
+        if (userEntity.getStatus().equals(UserStatus.ACTIVE) == false) {
 
             userEntity.setLastFailDate(LocalDateTime.now());
             userEntity.setFails(userEntity.getFails() + 1);
@@ -80,7 +77,7 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
     public TokenPair getNewTokenPairByRefreshToken(RefreshTokenEntity refreshTokenEntity) throws Throwable {
         UserEntity userEntity = userRepository.findById(refreshTokenEntity.getUserId()).orElseThrow(() -> new UserNotFoundException());
 
-        if (userEntity.getUserStatus().equals(UserStatus.ACTIVE) == false) {
+        if (userEntity.getStatus().equals(UserStatus.ACTIVE) == false) {
             throw new UserBlockedException();
         }
 
