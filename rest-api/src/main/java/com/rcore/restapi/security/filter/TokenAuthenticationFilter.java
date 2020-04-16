@@ -8,6 +8,7 @@ import com.rcore.restapi.security.factory.AuthenticationTokenFactory;
 import com.rcore.security.infrastructure.AuthTokenGenerator;
 import com.rcore.security.infrastructure.jwt.exceptions.JWTParseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -27,8 +28,8 @@ import java.io.IOException;
 @Component
 public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    //TODO Сделать метод получения secretKey
-    private String secret = "OcgPpNVoa-yLNxmelnc6ErULJ-O_2m7ezTQqXlca1jU=";
+    @Value("${rcore.security.jwt.key}")
+    private String secret;
 
     @Autowired
     private AuthTokenGenerator<AccessTokenDTO> authTokenGenerator;
