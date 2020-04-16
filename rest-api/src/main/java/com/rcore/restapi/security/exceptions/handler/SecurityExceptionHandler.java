@@ -1,6 +1,10 @@
 package com.rcore.restapi.security.exceptions.handler;
 
 import com.rcore.domain.token.exception.AuthorizationException;
+import com.rcore.domain.user.exception.AdminUserIsExistException;
+import com.rcore.domain.user.exception.TokenExpiredException;
+import com.rcore.domain.user.exception.UserBlockedException;
+import com.rcore.domain.user.exception.UserNotExistException;
 import com.rcore.restapi.exceptions.ExceptionDTO;
 import com.rcore.restapi.security.exceptions.*;
 import com.rcore.restapi.web.api.response.ErrorApiResponse;
@@ -22,25 +26,46 @@ public class SecurityExceptionHandler {
             TokenExpiredApiException.class,
             InvalidTokenFormat.class
     })
+    public ErrorApiResponse<ExceptionDTO> handleApiForbidden(ApiAuthenticationException e) {
+        return ErrorApiResponse.of(e.getError());
+    }
+
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    @ExceptionHandler({
+            UserNotExistException.class,
+            TokenExpiredException.class
+    })
     public ErrorApiResponse<ExceptionDTO> handleForbidden(ApiAuthenticationException e) {
         return ErrorApiResponse.of(e.getError());
     }
 
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(UserBlockedApiException.class)
+    public ErrorApiResponse<ExceptionDTO> handleApiUnauthorized(AuthenticationException e) {
+        return ErrorApiResponse.of(ExceptionDTO.builder().build());
+    }
+
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(UserBlockedException.class)
     public ErrorApiResponse<ExceptionDTO> handleUnauthorized(AuthenticationException e) {
         return ErrorApiResponse.of(ExceptionDTO.builder().build());
     }
 
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler({AccessDeniedException.class, AuthorizationException.class})
+    @ExceptionHandler({AccessDeniedException.class, AuthorizationException.class, com.rcore.domain.token.exception.AuthenticationException.class})
     public ErrorApiResponse<ExceptionDTO> handleAccessDenied(Exception e) {
-         return ErrorApiResponse.of(ExceptionDTO.builder()
+        return ErrorApiResponse.of(ExceptionDTO.builder()
                 .presentationData(ExceptionDTO.PresentationData.builder()
                         .message("Ошибка прав доступа")
                         .build())
                 .domain("SERVER")
                 .details(e.getMessage())
                 .build());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({AdminUserIsExistException.class})
+    public ErrorApiResponse<ExceptionDTO> handleInitAdmin(Exception e) {
+        return ErrorApiResponse.of(AdminUserIsExistApiException.of().getError());
     }
 }

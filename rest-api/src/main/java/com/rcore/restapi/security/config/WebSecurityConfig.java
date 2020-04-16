@@ -39,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .authorizeRequests()
                     //Эндпоинты БЕЗ аутентификации пользователя
-                    .antMatchers(BaseAuthRoutes.AUTH + "/**", BaseRoutes.EXTERNAL_API + "/**").permitAll()
+                    .antMatchers(BaseAuthRoutes.AUTH + "/**", BaseRoutes.EXTERNAL_API + "/**", BaseAuthRoutes.INIT_ADMIN).permitAll()
                 .and()
                     .authorizeRequests()
                     //Эедпоинты C аутентификацией

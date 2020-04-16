@@ -74,7 +74,7 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
     }
 
     @Override
-    public TokenPair getNewTokenPairByRefreshToken(RefreshTokenEntity refreshTokenEntity) throws Throwable {
+    public TokenPair getNewTokenPairByRefreshToken(RefreshTokenEntity refreshTokenEntity) throws UserNotFoundException, UserBlockedException, AuthenticationException {
         UserEntity userEntity = userRepository.findById(refreshTokenEntity.getUserId()).orElseThrow(() -> new UserNotFoundException());
 
         if (userEntity.getStatus().equals(UserStatus.ACTIVE) == false) {

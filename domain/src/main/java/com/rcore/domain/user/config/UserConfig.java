@@ -48,7 +48,7 @@ public class UserConfig {
             return new DeleteUserUseCase(actor, this.userRepository);
         }
 
-        public InitAdminUseCase InitAdminUseCase() throws AuthorizationException {
+        public InitAdminUseCase InitAdminUseCase() {
             return new InitAdminUseCase(this.userRepository, passwordGenerator, userIdGenerator);
         }
 

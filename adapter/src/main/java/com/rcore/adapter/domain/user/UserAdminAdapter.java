@@ -6,6 +6,7 @@ import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.config.UserConfig;
 import com.rcore.domain.user.entity.UserEntity;
+import com.rcore.domain.user.exception.AdminUserIsExistException;
 import com.rcore.domain.user.exception.UserAlreadyExistException;
 import com.rcore.domain.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,7 @@ public class UserAdminAdapter {
                 .delete(userMapper.inverseMap(userDTO));
     }
 
-    public Boolean initAdminUser(String email, String password) throws AuthorizationException {
+    public Boolean initAdminUser(String email, String password) throws AdminUserIsExistException {
         return userConfig.admin.InitAdminUseCase()
                 .init(email, password);
     }
