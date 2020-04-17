@@ -8,30 +8,30 @@ import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.rcore.adapter.domain.token.dto.RefreshTokenDTO;
 import com.rcore.security.infrastructure.AuthTokenGenerator;
-import com.rcore.security.infrastructure.jwt.exceptions.JWTGenerateException;
-import com.rcore.security.infrastructure.jwt.exceptions.JWTParseException;
+import com.rcore.security.infrastructure.exceptions.TokenGenerateException;
+import com.rcore.security.infrastructure.exceptions.InvalidTokenFormatException;
 
 public class JWTByRefreshTokenGenerator implements AuthTokenGenerator<RefreshTokenDTO> {
 
     @Override
-    public String generate(RefreshTokenDTO refreshTokenDTO, String secret) throws JWTGenerateException {
+    public String generate(RefreshTokenDTO refreshTokenDTO, String secret) throws TokenGenerateException {
         try {
             JWSObject jwsObject = new JWSObject(new JWSHeader(JWSAlgorithm.HS256), new Payload(new ObjectMapper().writeValueAsString(refreshTokenDTO)));
             jwsObject.sign(new MACSigner(secret));
             return jwsObject.serialize();
         } catch (Exception e) {
-            throw new JWTGenerateException();
+            throw new TokenGenerateException();
         }
     }
 
     @Override
-    public RefreshTokenDTO parseToken(String token, String secret) throws JWTParseException {
+    public RefreshTokenDTO parseToken(String token, String secret) throws InvalidTokenFormatException {
         try {
             JWSObject jwsObject = JWSObject.parse(token);
             jwsObject.getPayload();
             return new ObjectMapper().readValue(token, RefreshTokenDTO.class);
         } catch (Exception e) {
-            throw new JWTParseException();
+            throw new InvalidTokenFormatException();
         }
     }
 }

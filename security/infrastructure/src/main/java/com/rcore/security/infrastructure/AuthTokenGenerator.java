@@ -1,9 +1,9 @@
 package com.rcore.security.infrastructure;
 
-import com.rcore.security.infrastructure.jwt.exceptions.JWTGenerateException;
-import com.rcore.security.infrastructure.jwt.exceptions.JWTParseException;
+import com.rcore.security.infrastructure.exceptions.TokenGenerateException;
+import com.rcore.security.infrastructure.exceptions.InvalidTokenFormatException;
 
 public interface AuthTokenGenerator<Model> {
-    String generate(Model model, String secret) throws JWTGenerateException;
-    Model parseToken(String token, String secret) throws JWTParseException;
+    String generate(Model model, String secret) throws TokenGenerateException;
+    Model parseToken(String token, String secret) throws InvalidTokenFormatException;
 }

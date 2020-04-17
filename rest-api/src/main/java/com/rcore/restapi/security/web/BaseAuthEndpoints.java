@@ -10,7 +10,6 @@ import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.user.exception.AdminUserIsExistException;
 import com.rcore.domain.user.exception.UserBlockedException;
 import com.rcore.domain.user.exception.UserNotFoundException;
-import com.rcore.restapi.exceptions.InternalServerException;
 import com.rcore.restapi.routes.BaseAuthRoutes;
 import com.rcore.restapi.security.web.api.AuthenticationDTO;
 import com.rcore.restapi.security.web.api.RefreshTokenRequest;
@@ -18,10 +17,9 @@ import com.rcore.restapi.security.web.api.UserCredentialsDTO;
 import com.rcore.restapi.web.api.response.OkApiResponse;
 import com.rcore.restapi.web.api.response.SuccessApiResponse;
 import com.rcore.security.infrastructure.AuthTokenGenerator;
-import com.rcore.security.infrastructure.jwt.exceptions.JWTGenerateException;
-import com.rcore.security.infrastructure.jwt.exceptions.JWTParseException;
+import com.rcore.security.infrastructure.exceptions.TokenGenerateException;
+import com.rcore.security.infrastructure.exceptions.InvalidTokenFormatException;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,7 +44,7 @@ public class BaseAuthEndpoints {
     }
 
     @PostMapping(value = BaseAuthRoutes.LOGIN)
-    public SuccessApiResponse<AuthenticationDTO> login(@RequestBody UserCredentialsDTO request) throws UserNotFoundException, UserBlockedException, AuthenticationException, JWTGenerateException {
+    public SuccessApiResponse<AuthenticationDTO> login(@RequestBody UserCredentialsDTO request) throws UserNotFoundException, UserBlockedException, AuthenticationException, TokenGenerateException {
         TokenPairDTO tokenPair = userAdapter.getAll()
                 .authentication(request.getEmail(), request.getPassword());
 
@@ -57,7 +55,7 @@ public class BaseAuthEndpoints {
     }
 
     @PostMapping(value = BaseAuthRoutes.REFRESH)
-    public SuccessApiResponse<AuthenticationDTO> refresh(@RequestBody RefreshTokenRequest request) throws JWTParseException, UserNotFoundException, UserBlockedException, AuthenticationException, JWTGenerateException {
+    public SuccessApiResponse<AuthenticationDTO> refresh(@RequestBody RefreshTokenRequest request) throws InvalidTokenFormatException, UserNotFoundException, UserBlockedException, AuthenticationException, TokenGenerateException {
         TokenPairDTO tokenPair = userAdapter.getAll()
                 .getNewTokenPairByRefreshToken(refreshTokenGenerator.parseToken(request.getRefreshToken(), secretKey));
 

@@ -3,10 +3,10 @@ package com.rcore.restapi.security.filter;
 import com.rcore.adapter.domain.token.dto.AccessTokenDTO;
 import com.rcore.restapi.headers.WebHeaders;
 import com.rcore.restapi.routes.BaseRoutes;
-import com.rcore.restapi.security.exceptions.InvalidTokenFormat;
+import com.rcore.restapi.security.exceptions.InvalidTokenFormatApiException;
 import com.rcore.restapi.security.factory.AuthenticationTokenFactory;
 import com.rcore.security.infrastructure.AuthTokenGenerator;
-import com.rcore.security.infrastructure.jwt.exceptions.JWTParseException;
+import com.rcore.security.infrastructure.exceptions.InvalidTokenFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -47,8 +47,8 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
         AccessTokenDTO accessToken = null;
         try {
             accessToken = authTokenGenerator.parseToken(token, secret);
-        } catch (JWTParseException e) {
-            throw new InvalidTokenFormat();
+        } catch (InvalidTokenFormatException e) {
+            throw new InvalidTokenFormatApiException();
         }
 
         return getAuthenticationManager().authenticate(AuthenticationTokenFactory.ofRawToken(accessToken));

@@ -30,7 +30,7 @@ public class TokenAuthenticationFailureHandler implements AuthenticationFailureH
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
 
-        if (exception instanceof UserNotExistApiException || exception instanceof TokenExpiredApiException || exception instanceof UserBlockedApiException || exception instanceof InvalidTokenFormat) {
+        if (exception instanceof UserNotExistApiException || exception instanceof TokenExpiredApiException || exception instanceof UserBlockedApiException || exception instanceof InvalidTokenFormatApiException) {
             ApiAuthenticationException e = (ApiAuthenticationException) exception;
             ErrorApiResponse error = ErrorApiResponse.of(e.getError());
             response.getWriter().write(objectMapper.writeValueAsString(error));

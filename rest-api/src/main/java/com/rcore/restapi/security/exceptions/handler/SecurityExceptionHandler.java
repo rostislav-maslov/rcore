@@ -8,6 +8,8 @@ import com.rcore.domain.user.exception.UserNotExistException;
 import com.rcore.restapi.exceptions.ExceptionDTO;
 import com.rcore.restapi.security.exceptions.*;
 import com.rcore.restapi.web.api.response.ErrorApiResponse;
+import com.rcore.security.infrastructure.exceptions.InvalidTokenFormatException;
+import com.rcore.security.infrastructure.exceptions.TokenGenerateException;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -24,7 +26,7 @@ public class SecurityExceptionHandler {
     @ExceptionHandler({
             UserNotExistApiException.class,
             TokenExpiredApiException.class,
-            InvalidTokenFormat.class
+            InvalidTokenFormatApiException.class
     })
     public ErrorApiResponse<ExceptionDTO> handleApiForbidden(ApiAuthenticationException e) {
         return ErrorApiResponse.of(e.getError());
@@ -67,5 +69,17 @@ public class SecurityExceptionHandler {
     @ExceptionHandler({AdminUserIsExistException.class})
     public ErrorApiResponse<ExceptionDTO> handleInitAdmin(Exception e) {
         return ErrorApiResponse.of(AdminUserIsExistApiException.of().getError());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({InvalidTokenFormatException.class})
+    public ErrorApiResponse<ExceptionDTO> handleInvalidToken(Exception e) {
+        return ErrorApiResponse.of(new InvalidTokenFormatApiException().getError());
+    }
+
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler({TokenGenerateException.class})
+    public ErrorApiResponse<ExceptionDTO> handleTokenGenerate(Exception e) {
+        return ErrorApiResponse.of(new TokenGenerateApiException().getError());
     }
 }

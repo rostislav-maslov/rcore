@@ -68,16 +68,6 @@ public class RestApiConfig {
     private final TokenSaltGeneratorImpl tokenSaltGenerator = new TokenSaltGeneratorImpl();
 
     @Bean
-    public AuthTokenGenerator<AccessTokenDTO> accessTokenGenerator() {
-        return new JWTByAccessTokenGenerator();
-    }
-
-    @Bean
-    public AuthTokenGenerator<RefreshTokenDTO> refreshTokenGenerator() {
-        return new JWTByRefreshTokenGenerator();
-    }
-
-    @Bean
     public PasswordGenerator passwordGenerator() {
         this.passwordGenerator = new PasswordGeneratorImpl();
         return this.passwordGenerator;
