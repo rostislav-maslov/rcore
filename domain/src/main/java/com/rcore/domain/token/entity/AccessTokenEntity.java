@@ -50,6 +50,7 @@ public class AccessTokenEntity extends BaseEntity {
         String signString = refreshTokenEntity.getId() +
                 refreshTokenEntity.getUserId() +
                 refreshTokenEntity.getExpireAt().toString() +
+                refreshTokenEntity.getSalt() +
                 expireAt.toString() +
                 accessTokenId;
 
