@@ -1,6 +1,6 @@
 package com.rcore.restapi.web.endpoints;
 
-import com.rcore.adapter.domain.file.FileAllAdapter;
+import com.rcore.adapter.domain.file.FileAdapter;
 import com.rcore.domain.file.exception.FileAccessException;
 import com.rcore.domain.file.exception.FileNotFoundException;
 import com.rcore.restapi.infrastructure.file.FileSender;
@@ -19,7 +19,7 @@ import java.io.IOException;
 public class FileEndpoints {
 
     private final FileSender fileSender;
-    private final FileAllAdapter fileAllAdapter;
+    private final FileAdapter fileAdapter;
 
     @GetMapping(FileRoutes.BY_ID)
     public void getFile(@PathVariable String id,
@@ -30,7 +30,7 @@ public class FileEndpoints {
     @PostMapping(FileRoutes.UPLOAD)
     public SuccessApiResponse<String> upload(@RequestParam MultipartFile file) throws IOException {
         return SuccessApiResponse.of(
-                fileAllAdapter.create(file.getInputStream(), file.getOriginalFilename(), file.getContentType()).getId()
+                fileAdapter.getAll().create(file.getInputStream(), file.getOriginalFilename(), file.getContentType()).getId()
         );
     }
 

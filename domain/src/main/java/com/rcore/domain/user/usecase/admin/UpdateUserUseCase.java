@@ -7,6 +7,7 @@ import com.rcore.domain.user.exception.UserNotFoundException;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.role.AdminUserUpdateRole;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public class UpdateUserUseCase  extends AdminBaseUseCase {
@@ -24,7 +25,7 @@ public class UpdateUserUseCase  extends AdminBaseUseCase {
         old.setSecondName(userEntity.getSecondName());
         old.setFullName(userEntity.getFullName());
 
-        old.setUpdatedAt(new Date());
+        old.setUpdatedAt(LocalDateTime.now());
 
         return userRepository.save(old);
     }

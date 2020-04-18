@@ -1,6 +1,7 @@
 package com.rcore.restapi.infrastructure.file;
 
 
+import com.rcore.adapter.domain.file.FileAdapter;
 import com.rcore.adapter.domain.file.FileAllAdapter;
 import com.rcore.adapter.domain.file.dto.FileDTO;
 import com.rcore.domain.file.exception.FileAccessException;
@@ -22,13 +23,13 @@ import java.io.InputStream;
 @Component
 public class FileSender {
 
-    private final FileAllAdapter fileAllAdapter;
+    private final FileAdapter fileAdapter;
     private final ServletContext servletContext;
 
     public void send(String fileId, HttpServletResponse response) throws IOException, FileNotFoundException, FileAccessException {
-        InputStream inputStream = fileAllAdapter.getInputStream(fileId).orElseThrow(FileNotFoundException::new);
-        InputStreamResource inputStreamResource = new InputStreamResource(fileAllAdapter.getInputStream(fileId).orElseThrow(FileNotFoundException::new));
-        FileDTO file = fileAllAdapter.findById(fileId).orElseThrow(FileNotFoundException::new);
+        InputStream inputStream = fileAdapter.getAll().getInputStream(fileId).orElseThrow(FileNotFoundException::new);
+        InputStreamResource inputStreamResource = new InputStreamResource(fileAdapter.getAll().getInputStream(fileId).orElseThrow(FileNotFoundException::new));
+        FileDTO file = fileAdapter.getAll().findById(fileId).orElseThrow(FileNotFoundException::new);
 
         if (inputStream == null){
             response.sendError(HttpServletResponse.SC_NOT_FOUND);

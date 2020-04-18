@@ -22,7 +22,10 @@ public class UserMapper implements ExampleDataMapper<UserEntity, UserDTO> {
                 .roles(userEntity.getRoles())
                 .secondName(userEntity.getSecondName())
                 .socialAccounts(userEntity.getSocialAccounts())
-                .userStatus(userEntity.getUserStatus())
+                .userStatus(userEntity.getStatus())
+                .createdAt(userEntity.getCreatedAt())
+                .updatedAt(userEntity.getUpdatedAt())
+                .timeZone(userEntity.getTimeZone())
                 .build();
     }
 
@@ -31,7 +34,7 @@ public class UserMapper implements ExampleDataMapper<UserEntity, UserDTO> {
         return UserEntity.builder()
                 .id(userDTO.getId())
                 .socialAccounts(userDTO.getSocialAccounts())
-                .userStatus(userDTO.getUserStatus())
+                .status(userDTO.getUserStatus())
                 .secondName(userDTO.getSecondName())
                 .roles(userDTO.getRoles())
                 .phoneNumber(userDTO.getPhoneNumber())
@@ -43,6 +46,9 @@ public class UserMapper implements ExampleDataMapper<UserEntity, UserDTO> {
                 .firstName(userDTO.getFirstName())
                 .fails(userDTO.getFails())
                 .email(userDTO.getEmail())
+                .createdAt(userDTO.getCreatedAt())
+                .updatedAt(userDTO.getUpdatedAt())
+                .timeZone(userDTO.getTimeZone())
                 .build();
     }
 }

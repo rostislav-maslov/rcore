@@ -2,10 +2,10 @@ package com.rcore.database.mongo.base;
 
 import com.rcore.domain.base.exception.InvalidIdException;
 import com.rcore.domain.base.port.BaseIdGenerator;
-import com.rcore.domain.user.port.IdGenerator;
+import com.rcore.domain.user.port.UserIdGenerator;
 import org.bson.types.ObjectId;
 
-public class ObjectIdGenerator implements BaseIdGenerator<ObjectId>, IdGenerator<ObjectId> {
+public class ObjectIdGenerator implements BaseIdGenerator<ObjectId> {
 
     @Override
     public String generate() {

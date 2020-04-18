@@ -2,22 +2,23 @@ package com.rcore.domain.user.usecase.admin;
 
 import com.rcore.domain.role.entity.GodModRole;
 import com.rcore.domain.user.entity.UserEntity;
-import com.rcore.domain.user.port.IdGenerator;
+import com.rcore.domain.user.exception.AdminUserIsExistException;
+import com.rcore.domain.user.port.UserIdGenerator;
 import com.rcore.domain.user.port.PasswordGenerator;
 import com.rcore.domain.user.port.UserRepository;
 
 public class InitAdminUseCase {
     private final UserRepository userRepository;
     private final PasswordGenerator passwordGenerator;
-    private final IdGenerator idGenerator;
+    private final UserIdGenerator userIdGenerator;
 
     public InitAdminUseCase(
             UserRepository userRepository,
             PasswordGenerator passwordGenerator,
-            IdGenerator idGenerator) {
+            UserIdGenerator userIdGenerator) {
         this.userRepository = userRepository;
         this.passwordGenerator = passwordGenerator;
-        this.idGenerator = idGenerator;
+        this.userIdGenerator = userIdGenerator;
     }
 
     public Boolean canInit() {
@@ -25,11 +26,11 @@ public class InitAdminUseCase {
         return true;
     }
 
-    public Boolean init(String email, String password) {
-        if (canInit() == false) return false;
+    public Boolean init(String email, String password) throws AdminUserIsExistException {
+        if (canInit() == false) throw new AdminUserIsExistException();
 
         UserEntity userEntity = new UserEntity();
-        userEntity.setId(idGenerator.generate());
+        userEntity.setId(userIdGenerator.generate());
         userEntity.setEmail(email.toLowerCase());
         userEntity.setPassword(passwordGenerator.generate(userEntity.getId(), password));
         userEntity.getRoles().add(new GodModRole());

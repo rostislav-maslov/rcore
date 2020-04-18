@@ -7,15 +7,14 @@ import lombok.NoArgsConstructor;
 @Getter
 public class BaseApiException extends Exception {
 
-    private ExceptionDTO errors;
+    private ExceptionDTO error;
 
-
-    public BaseApiException(ExceptionDTO errors) {
-        this.errors = errors;
+    public BaseApiException(ExceptionDTO error) {
+        this.error = error;
     }
 
     public BaseApiException(String title, String message, String domain, String details) {
-        this.errors = ExceptionDTO.builder()
+        this.error = ExceptionDTO.builder()
                 .presentationData(ExceptionDTO.PresentationData.builder()
                         .title(title)
                         .message(message)
@@ -26,7 +25,7 @@ public class BaseApiException extends Exception {
     }
 
     public BaseApiException(String message, String domain, String details) {
-        this.errors = ExceptionDTO.builder()
+        this.error = ExceptionDTO.builder()
                 .presentationData(ExceptionDTO.PresentationData.builder()
                         .message(message)
                         .build())

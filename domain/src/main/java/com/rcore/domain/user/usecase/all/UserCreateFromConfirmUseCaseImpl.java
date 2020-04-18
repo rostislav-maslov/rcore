@@ -2,23 +2,21 @@ package com.rcore.domain.user.usecase.all;
 
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.exception.UserAlreadyExistException;
-import com.rcore.domain.user.port.IdGenerator;
+import com.rcore.domain.user.port.UserIdGenerator;
 import com.rcore.domain.user.port.PasswordGenerator;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.userEmailVerification.port.UserCreateFromConfirmUseCase;
-
-import java.util.Optional;
 
 public class UserCreateFromConfirmUseCaseImpl implements UserCreateFromConfirmUseCase {
 
     private final UserRepository userRepository;
     private final PasswordGenerator passwordGenerator;
-    private final IdGenerator idGenerator;
+    private final UserIdGenerator userIdGenerator;
 
-    public UserCreateFromConfirmUseCaseImpl(UserRepository userRepository, PasswordGenerator passwordGenerator, IdGenerator idGenerator) {
+    public UserCreateFromConfirmUseCaseImpl(UserRepository userRepository, PasswordGenerator passwordGenerator, UserIdGenerator userIdGenerator) {
         this.userRepository = userRepository;
         this.passwordGenerator = passwordGenerator;
-        this.idGenerator = idGenerator;
+        this.userIdGenerator = userIdGenerator;
     }
 
 
@@ -27,6 +25,7 @@ public class UserCreateFromConfirmUseCaseImpl implements UserCreateFromConfirmUs
                 .orElseThrow(() -> new UserAlreadyExistException());
 
         UserEntity userEntity = new UserEntity();
+        userEntity.setId(userIdGenerator.generate());
         userEntity.setEmail(email);
         userEntity.setPassword(passwordGenerator.generate(userEntity.getId(), password));
 

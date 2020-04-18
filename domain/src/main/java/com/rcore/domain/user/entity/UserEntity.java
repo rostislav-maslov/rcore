@@ -5,6 +5,7 @@ import com.rcore.domain.role.entity.Role;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Data
@@ -16,7 +17,7 @@ public class UserEntity extends BaseEntity {
 
     protected Set<Role> roles = new HashSet<Role>();
 
-    protected UserStatus userStatus = UserStatus.ACTIVE;
+    protected UserStatus status = UserStatus.ACTIVE;
 
     protected String firstName = "";
     protected String lastName = "";
@@ -31,7 +32,7 @@ public class UserEntity extends BaseEntity {
     protected List<SocialAccount> socialAccounts = new ArrayList<>();
 
     protected Integer fails = 0;
-    protected Date lastFailDate = new Date();
+    protected LocalDateTime lastFailDate = LocalDateTime.now();
 
     public Boolean hasRole(Role role){
         for(Role roleEntity : roles){

@@ -1,6 +1,6 @@
 package com.rcore.domain.database.memory.file.port;
 
-import com.rcore.domain.database.memory.base.port.BaseIdGeneratorImpl;
+import com.rcore.domain.database.memory.base.port.BaseUserIdGeneratorImpl;
 import com.rcore.domain.file.port.FileStorage;
 
 import java.io.InputStream;
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class FileStorageImpl implements FileStorage {
 
-    private BaseIdGeneratorImpl idGenerator = new BaseIdGeneratorImpl();
+    private BaseUserIdGeneratorImpl idGenerator = new BaseUserIdGeneratorImpl();
     private Map<String, InputStream> container = new HashMap<>();
 
 

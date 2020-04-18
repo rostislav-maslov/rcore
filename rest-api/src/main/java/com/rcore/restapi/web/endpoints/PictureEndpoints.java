@@ -1,6 +1,6 @@
 package com.rcore.restapi.web.endpoints;
 
-import com.rcore.adapter.domain.picture.PictureAllAdapter;
+import com.rcore.adapter.domain.picture.PictureAdapter;
 import com.rcore.adapter.domain.picture.dto.PictureDTO;
 import com.rcore.domain.picture.exception.PictureAccessException;
 import com.rcore.domain.picture.exception.PictureNotFoundException;
@@ -19,7 +19,7 @@ import java.io.IOException;
 public class PictureEndpoints {
 
     private final PictureSender pictureSender;
-    private final PictureAllAdapter pictureAllAdapter;
+    private final PictureAdapter pictureAdapter;
 
     @GetMapping(PictureRoutes.BY_ID)
     public void getPicture(
@@ -33,7 +33,7 @@ public class PictureEndpoints {
     @PostMapping(PictureRoutes.UPLOAD)
     public SuccessApiResponse<String> upload(@RequestParam MultipartFile file) throws IOException {
 
-        PictureDTO picture = pictureAllAdapter.create(file.getInputStream(), file.getOriginalFilename(), file.getContentType());
+        PictureDTO picture = pictureAdapter.getAll().create(file.getInputStream(), file.getOriginalFilename(), file.getContentType());
         return SuccessApiResponse.of(picture.getId());
     }
 }

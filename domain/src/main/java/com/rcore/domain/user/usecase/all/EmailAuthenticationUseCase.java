@@ -4,7 +4,6 @@ import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.entity.TokenPair;
 import com.rcore.domain.token.exception.AuthenticationException;
-import com.rcore.domain.token.exception.RefreshTokenCreationException;
 import com.rcore.domain.token.port.AuthenticationPort;
 import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.domain.token.usecase.CreateAccessTokenUseCase;
@@ -16,8 +15,7 @@ import com.rcore.domain.user.exception.UserNotFoundException;
 import com.rcore.domain.user.port.PasswordGenerator;
 import com.rcore.domain.user.port.UserRepository;
 
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDateTime;
 
 public class EmailAuthenticationUseCase implements AuthenticationPort {
     private final UserRepository userRepository;
@@ -47,54 +45,52 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
 
         if (passwordGenerator.check(userEntity.getId(), password, userEntity.getPassword()) == false) {
 
-            userEntity.setLastFailDate(new Date());
-            userEntity.setFails( userEntity.getFails() + 1);
+            userEntity.setLastFailDate(LocalDateTime.now());
+            userEntity.setFails(userEntity.getFails() + 1);
             userRepository.save(userEntity);
 
             throw new AuthenticationException();
         }
 
-        if (userEntity.getUserStatus().equals(UserStatus.ACTIVE) == false) {
+        if (userEntity.getStatus().equals(UserStatus.ACTIVE) == false) {
 
-            userEntity.setLastFailDate(new Date());
-            userEntity.setFails( userEntity.getFails() + 1);
+            userEntity.setLastFailDate(LocalDateTime.now());
+            userEntity.setFails(userEntity.getFails() + 1);
             userRepository.save(userEntity);
 
             throw new UserBlockedException();
         }
 
-        userEntity.setFails( 0 );
+        userEntity.setFails(0);
         userEntity = userRepository.save(userEntity);
 
         RefreshTokenEntity refreshTokenEntity = createRefreshTokenUseCase.create(userEntity);
         AccessTokenEntity accessTokenEntity = createAccessTokenUseCase.create(userEntity, refreshTokenEntity);
 
-        TokenPair tokenPair = new TokenPair();
-        tokenPair.setAccessToken(accessTokenEntity);
-        tokenPair.setRefreshToken(refreshTokenEntity);
-
-        return tokenPair;
+        return TokenPair.builder()
+                .accessToken(accessTokenEntity)
+                .refreshToken(refreshTokenEntity)
+                .build();
     }
 
     @Override
-    public TokenPair getNewTokenPairByRefreshToken(RefreshTokenEntity refreshTokenEntity) throws Throwable {
+    public TokenPair getNewTokenPairByRefreshToken(RefreshTokenEntity refreshTokenEntity) throws UserNotFoundException, UserBlockedException, AuthenticationException {
         UserEntity userEntity = userRepository.findById(refreshTokenEntity.getUserId()).orElseThrow(() -> new UserNotFoundException());
 
-        if (userEntity.getUserStatus().equals(UserStatus.ACTIVE) == false) {
+        if (userEntity.getStatus().equals(UserStatus.ACTIVE) == false) {
             throw new UserBlockedException();
         }
 
-        RefreshTokenEntity fromRepo = (RefreshTokenEntity) refreshTokenRepository.findById(refreshTokenEntity.getId())
+        RefreshTokenEntity fromRepo = refreshTokenRepository.findById(refreshTokenEntity.getId())
                 .orElseThrow(() -> new AuthenticationException());
 
-        if(fromRepo.isActive() == false) throw new AuthenticationException();
+        if (fromRepo.isActive() == false) throw new AuthenticationException();
 
         AccessTokenEntity accessTokenEntity = createAccessTokenUseCase.create(userEntity, refreshTokenEntity);
 
-        TokenPair tokenPair = new TokenPair();
-        tokenPair.setAccessToken(accessTokenEntity);
-        tokenPair.setRefreshToken(refreshTokenEntity);
-
-        return tokenPair;
+        return TokenPair.builder()
+                .accessToken(accessTokenEntity)
+                .refreshToken(refreshTokenEntity)
+                .build();
     }
 }

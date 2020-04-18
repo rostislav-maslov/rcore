@@ -4,7 +4,7 @@
     <groupId>com.ub.rcore</groupId>
     <artifactId>RAdmin</artifactId>
     <version>1.0.0</version>
-    <name>RCore</name>
+    <name>RAdmin</name>
 
     <packaging>jar</packaging>
 

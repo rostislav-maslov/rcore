@@ -6,8 +6,6 @@ import com.rcore.domain.user.entity.UserStatus;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.role.AdminUserBlockRole;
 
-import java.util.Optional;
-
 
 public class ActivateUseCase extends AdminBaseUseCase {
 
@@ -16,7 +14,7 @@ public class ActivateUseCase extends AdminBaseUseCase {
     }
 
     public UserEntity activate(UserEntity userEntity) {
-        userEntity.setUserStatus(UserStatus.ACTIVE);
+        userEntity.setStatus(UserStatus.ACTIVE);
         userEntity.setFails(0);
         return userRepository.save(userEntity);
     }

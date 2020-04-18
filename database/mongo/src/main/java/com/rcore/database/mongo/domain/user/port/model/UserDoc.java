@@ -39,7 +39,7 @@ public class UserDoc extends UserEntity {
                 .phoneNumber(userEntity.getPhoneNumber())
                 .roles(userEntity.getRoles())
                 .secondName(userEntity.getSecondName())
-                .userStatus(userEntity.getUserStatus())
+                .status(userEntity.getStatus())
                 .socialAccounts(userEntity.getSocialAccounts())
                 .createdAt(userEntity.getCreatedAt())
                 .updatedAt(userEntity.getUpdatedAt())
