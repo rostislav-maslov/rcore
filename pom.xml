@@ -8,7 +8,6 @@
 
     <modules>
         <module>domain</module>
-        <module>admin</module>
         <module>database</module>
         <module>adapter</module>
         <module>commons</module>
