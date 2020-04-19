@@ -41,7 +41,7 @@
     </dependencies>
 
     <build>
-        <finalName>RCore</finalName>
+        <finalName>domain</finalName>
 
         <plugins>
             <plugin>
