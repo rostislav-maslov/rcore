@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.rostislav-maslov.rcore</groupId>
     <artifactId>RCore</artifactId>
-    <version>1.0.0</version>
+    <version>${rcore.version}</version>
     <name>rcore</name>
 
     <modules>
@@ -18,28 +18,11 @@
 
     <packaging>pom</packaging>
 
-    
+    <properties>
+        <rcore.version>0.9.1</rcore.version>
+    </properties>
 
     <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <includes>
-                        <include>**/*Tests.java</include>
-                    </includes>
-                </configuration>
-                <version>2.10</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-                <version>2.3.2</version>
-            </plugin>
-        </plugins>
+
     </build>
 </project>

@@ -4,23 +4,27 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>RCore</artifactId>
-        <groupId>com.rcore</groupId>
-        <version>1.0.0</version>
+        <groupId>com.github.rostislav-maslov.rcore</groupId>
+        <version>${rcore.version}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.rcore</groupId>
+    <groupId>com.github.rostislav-maslov.rcore</groupId>
     <artifactId>security</artifactId>
     <packaging>pom</packaging>
     <modules>
         <module>infrastructure</module>
     </modules>
 
+    <properties>
+        <rcore.version>0.9.1</rcore.version>
+    </properties>
+
     <dependencies>
         <dependency>
-            <groupId>com.rcore</groupId>
+            <groupId>com.github.rostislav-maslov.rcore</groupId>
             <artifactId>adapter</artifactId>
-            <version>1.0.0</version>
+            <version>${rcore.version}</version>
         </dependency>
     </dependencies>
 

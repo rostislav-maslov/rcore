@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.rostislav-maslov.rcore</groupId>
     <artifactId>domain</artifactId>
-    <version>0.0.10</version>
+    <version>${rcore.version}</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -31,21 +31,28 @@
         <url>http://github.com/rostislav-maslov/rcore</url>
     </scm>
 
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <rcore.version>0.9.1</rcore.version>
     </properties>
-
-
-
-    <repositories>
-    </repositories>
 
     <dependencies>
 
         <dependency>
-            <groupId>com.rcore</groupId>
+            <groupId>com.github.rostislav-maslov.rcore</groupId>
             <artifactId>commons</artifactId>
-            <version>1.0.0</version>
+            <version>${rcore.version}</version>
         </dependency>
         
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
@@ -66,16 +73,7 @@
 
     </dependencies>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
+
 
     <build>
         <finalName>domain</finalName>
@@ -99,7 +97,6 @@
                 </configuration>
                 <version>3.8.1</version>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>

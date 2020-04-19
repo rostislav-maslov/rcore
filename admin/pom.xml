@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.rostislav-maslov.rcore</groupId>
     <artifactId>RAdmin</artifactId>
-    <version>1.0.0</version>
+    <version>${rcore.version}</version>
     <name>RAdmin</name>
 
     <packaging>jar</packaging>
@@ -29,6 +29,7 @@
         <log4j.version>2.8</log4j.version>
         <slf4j.version>1.7.24</slf4j.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+            <rcore.version>0.9.1</rcore.version>
     </properties>
 
     <repositories>
