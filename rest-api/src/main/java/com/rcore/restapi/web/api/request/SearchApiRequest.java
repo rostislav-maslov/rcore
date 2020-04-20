@@ -16,10 +16,10 @@ public class SearchApiRequest {
     private String query = "";
 
     @ApiModelProperty("Кол-во элементов для отображения")
-    private Integer limit = 20;
+    private Long limit = 20l;
 
     @ApiModelProperty("Кол-во пропускаемых элементов")
-    private Integer offset = 0;
+    private Long offset = 0l;
 
     @ApiModelProperty("Имя поле, по которому нужно отсортировать")
     private String sortName = "id";
@@ -31,7 +31,7 @@ public class SearchApiRequest {
         this.query = query;
     }
 
-    public SearchApiRequest(String query, Integer limit) {
+    public SearchApiRequest(String query, Long limit) {
         this.query = query;
         this.limit = limit;
     }

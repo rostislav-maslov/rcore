@@ -39,9 +39,6 @@ public class JWTByAccessTokenGenerator implements AuthTokenGenerator<AccessToken
 
     @Override
     public AccessTokenDTO parseToken(String token, String secret) throws InvalidTokenFormatException {
-        if (!StringUtils.hasText(token))
-            return null;
-
         try {
             JWSObject jwsObject = JWSObject.parse(token);
             return objectMapper.readValue(jwsObject.getPayload().toString(), AccessTokenDTO.class);

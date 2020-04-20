@@ -6,6 +6,7 @@ public class NotFoundApiException extends BaseApiException {
         super(errors);
     }
 
+
     public NotFoundApiException(String title, String message, String domain, String details) {
         super(title, message, domain, details);
     }
