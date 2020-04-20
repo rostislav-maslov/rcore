@@ -4,8 +4,10 @@ import com.rcore.adapter.domain.picture.dto.PictureDTO;
 import com.rcore.adapter.domain.picture.mapper.PictureMapper;
 import com.rcore.adapter.domain.user.dto.UserDTO;
 import com.rcore.adapter.domain.user.mapper.UserMapper;
+import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.file.exception.FileNotFoundException;
 import com.rcore.domain.picture.config.PictureConfig;
+import com.rcore.domain.picture.entity.PictureEntity;
 import com.rcore.domain.token.exception.AuthorizationException;
 import lombok.RequiredArgsConstructor;
 
@@ -37,6 +39,16 @@ public class PictureAdminAdapter {
         return pictureConfig.admin.viewUseCase(userMapper.inverseMap(actor))
                 .findById(id)
                 .map(pictureMapper::map);
+    }
+
+    public SearchResult<PictureDTO> find(UserDTO actor, Long size, Long skip) throws AuthorizationException {
+        SearchResult<PictureEntity> result = pictureConfig.admin
+                .viewUseCase(userMapper.inverseMap(actor)).find(size, skip);
+
+        return SearchResult.withItemsAndCount(
+                pictureMapper.mapAll(result.getItems()),
+                result.getCount()
+        );
     }
 
 }

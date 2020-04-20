@@ -38,6 +38,12 @@
             <organization>com.github.rostislav-maslov</organization>
             <organizationUrl>https://github.com/rostislav-maslov</organizationUrl>
         </developer>
+        <developer>
+            <name>Kozlov Vladimir</name>
+            <email>kozlovvladimir6@gmail.com</email>
+            <organization>com.github.kozlovva</organization>
+            <organizationUrl>https://github.com/kozlovva</organizationUrl>
+        </developer>
     </developers>
 
     <scm>

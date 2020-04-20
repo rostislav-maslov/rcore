@@ -4,7 +4,9 @@ import com.rcore.adapter.domain.file.dto.FileDTO;
 import com.rcore.adapter.domain.file.mapper.FileMapper;
 import com.rcore.adapter.domain.user.dto.UserDTO;
 import com.rcore.adapter.domain.user.mapper.UserMapper;
+import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.file.config.FileConfig;
+import com.rcore.domain.file.entity.FileEntity;
 import com.rcore.domain.file.exception.FileNotFoundException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +39,15 @@ public class FileAdminAdapter {
         return fileConfig.admin.viewUseCase(userMapper.inverseMap(actor))
                 .findById(id)
                 .map(fileMapper::map);
+    }
+    public SearchResult<FileDTO> find(UserDTO actor, Long size, Long skip) throws AuthorizationException {
+        SearchResult<FileEntity> result = fileConfig.admin
+                .viewUseCase(userMapper.inverseMap(actor)).find(size, skip);
+
+        return SearchResult.withItemsAndCount(
+                fileMapper.mapAll(result.getItems()),
+                result.getCount()
+        );
     }
 
     public Optional<InputStream> getInputStream(UserDTO actor, String id) throws AuthorizationException, FileNotFoundException {
