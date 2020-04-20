@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+cd commons
+mvn clean deploy -P release -U
+cd ..
+
+cd domain
+mvn clean deploy -P release -U
+cd ..
+
+cd adapter
+mvn clean deploy -P release -U
+cd ..
+
+cd security/infrastructure
+mvn clean deploy -P release -U
+cd ../..
+
+cd database/memory
+mvn clean deploy -P release -U
+cd ../..
+
+cd database/mongo
+mvn clean deploy -P release -U
+cd ../..
+
+cd rest-api
+mvn clean deploy -P release -U
+cd ..

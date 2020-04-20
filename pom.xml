@@ -1,14 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.rcore</groupId>
+    <groupId>com.github.rostislav-maslov.rcore</groupId>
     <artifactId>RCore</artifactId>
-    <version>1.0.0</version>
+    <version>${rcore.version}</version>
     <name>rcore</name>
 
     <modules>
         <module>domain</module>
-        <module>admin</module>
         <module>database</module>
         <module>adapter</module>
         <module>commons</module>
@@ -19,26 +18,11 @@
 
     <packaging>pom</packaging>
 
+    <properties>
+        <rcore.version>0.9.1</rcore.version>
+    </properties>
+
     <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <includes>
-                        <include>**/*Tests.java</include>
-                    </includes>
-                </configuration>
-                <version>2.10</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-                <version>2.3.2</version>
-            </plugin>
-        </plugins>
+
     </build>
 </project>

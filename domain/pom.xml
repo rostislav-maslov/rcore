@@ -1,25 +1,58 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.rcore</groupId>
+    <groupId>com.github.rostislav-maslov.rcore</groupId>
     <artifactId>domain</artifactId>
-    <version>1.0.0</version>
-    <name>domain</name>
-
+    <version>${rcore.version}</version>
     <packaging>jar</packaging>
 
-    <properties>
-    </properties>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>Domain component for Clean Arch apps</description>
+    <url>https://github.com/rostislav-maslov/rcore</url>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
 
-    <repositories>
-    </repositories>
+    <developers>
+        <developer>
+            <name>Rostislav Maslov</name>
+            <email>maslov.rostislav@gmail.com</email>
+            <organization>com.github.rostislav-maslov</organization>
+            <organizationUrl>https://github.com/rostislav-maslov</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/rostislav-maslov/rcore.git</connection>
+        <developerConnection>scm:git:ssh://github.com:rostislav-maslov/rcore.git</developerConnection>
+        <url>http://github.com/rostislav-maslov/rcore</url>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <rcore.version>0.9.1</rcore.version>
+    </properties>
 
     <dependencies>
 
         <dependency>
-            <groupId>com.rcore</groupId>
+            <groupId>com.github.rostislav-maslov.rcore</groupId>
             <artifactId>commons</artifactId>
-            <version>1.0.0</version>
+            <version>${rcore.version}</version>
         </dependency>
         
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
@@ -40,8 +73,10 @@
 
     </dependencies>
 
+
+
     <build>
-        <finalName>RCore</finalName>
+        <finalName>domain</finalName>
 
         <plugins>
             <plugin>
@@ -60,7 +95,61 @@
                     <source>8</source>
                     <target>8</target>
                 </configuration>
-                <version>2.3.2</version>
+                <version>3.8.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <doclint>none</doclint>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.8</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
             </plugin>
         </plugins>
     </build>
