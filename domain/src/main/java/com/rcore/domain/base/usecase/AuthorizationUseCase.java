@@ -1,7 +1,8 @@
 package com.rcore.domain.base.usecase;
 
-import com.rcore.domain.role.entity.GodModRole;
-import com.rcore.domain.role.entity.Role;
+import com.rcore.domain.access.entity.GodModAccess;
+import com.rcore.domain.access.entity.Access;
+import com.rcore.domain.role.entity.RoleEntity;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.entity.UserEntity;
 
@@ -10,28 +11,28 @@ import java.util.Set;
 public abstract class AuthorizationUseCase {
 
     protected final UserEntity actor;
-    protected final Set<Role> availableRoles;
+    protected final Set<Access> availableAccesses;
     protected final Boolean onlyAuthorized;
 
-    protected AuthorizationUseCase(Set<Role> availableRoles, Boolean onlyAuthorized, UserEntity actor) throws AuthorizationException {
-        this.availableRoles = availableRoles;
+    protected AuthorizationUseCase(Set<Access> availableAccesses, Boolean onlyAuthorized, UserEntity actor) throws AuthorizationException {
+        this.availableAccesses = availableAccesses;
         this.onlyAuthorized = onlyAuthorized;
         this.actor = actor;
 
-        if( canExecute() == false ) {
+        if (canExecute() == false) {
             throw new AuthorizationException();
         }
     }
 
     public Boolean canExecute() {
-        if(onlyAuthorized == false) return true;
+        if (onlyAuthorized == false) return true;
 
-        if(actor == null) return false;
+        if (actor == null) return false;
 
-        if(actor.hasRole(new GodModRole())) return true;
+        if (actor.hasAccess(new GodModAccess())) return true;
 
-        for(Role role: availableRoles){
-            if(Role.hasAccess(actor.getRoles(), role) == false) return false;
+        for (Access access : availableAccesses) {
+            if (Access.hasAccess(actor.getAccesses(), access) == false) return false;
         }
 
         return true;

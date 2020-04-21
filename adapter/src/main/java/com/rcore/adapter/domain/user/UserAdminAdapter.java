@@ -1,5 +1,6 @@
 package com.rcore.adapter.domain.user;
 
+import com.rcore.adapter.domain.role.mapper.RoleMapper;
 import com.rcore.adapter.domain.user.mapper.UserMapper;
 import com.rcore.adapter.domain.user.dto.UserDTO;
 import com.rcore.domain.base.port.SearchResult;
@@ -16,7 +17,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserAdminAdapter {
 
-    private UserMapper userMapper = new UserMapper();
+    private UserMapper userMapper = new UserMapper(new RoleMapper());
     private final UserConfig userConfig;
 
     public UserDTO activateUser(UserDTO actor, UserDTO userDTO) throws AuthorizationException {

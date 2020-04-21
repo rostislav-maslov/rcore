@@ -1,17 +1,16 @@
 package com.rcore.adapter.domain.token;
 
+import com.rcore.adapter.domain.role.mapper.RoleMapper;
 import com.rcore.adapter.domain.token.dto.AccessTokenDTO;
 import com.rcore.adapter.domain.token.dto.RefreshTokenDTO;
 import com.rcore.adapter.domain.token.mapper.AccessTokenMapper;
 import com.rcore.adapter.domain.token.mapper.RefreshTokenMapper;
 import com.rcore.adapter.domain.user.dto.UserDTO;
 import com.rcore.adapter.domain.user.mapper.UserMapper;
-import com.rcore.domain.role.entity.Role;
+import com.rcore.domain.access.entity.Access;
 import com.rcore.domain.token.config.TokenConfig;
-import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.RefreshTokenCreationException;
-import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.domain.user.exception.UserBlockedException;
 import com.rcore.domain.user.exception.UserNotExistException;
@@ -23,11 +22,11 @@ import java.util.Set;
 public class TokenAdapter {
     private AccessTokenMapper accessTokenMapper = new AccessTokenMapper();
     private RefreshTokenMapper refreshTokenMapper = new RefreshTokenMapper();
-    private UserMapper userMapper = new UserMapper();
+    private UserMapper userMapper = new UserMapper(new RoleMapper());
     private final TokenConfig tokenConfig;
 
-    public Boolean checkAccess(AccessTokenDTO accessToken, Set<Role> roles) {
-        return tokenConfig.getAll().authorizationByTokenUseCase().checkAccess(accessTokenMapper.inverseMap(accessToken), roles);
+    public Boolean checkAccess(AccessTokenDTO accessToken, Set<Access> accesses) {
+        return tokenConfig.getAll().authorizationByTokenUseCase().checkAccess(accessTokenMapper.inverseMap(accessToken), accesses);
     }
 
     public void putInStorage(AccessTokenDTO accessToken) {

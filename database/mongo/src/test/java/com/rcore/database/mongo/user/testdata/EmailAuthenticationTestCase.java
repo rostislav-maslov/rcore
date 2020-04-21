@@ -2,8 +2,9 @@ package com.rcore.database.mongo.user.testdata;
 
 
 import com.rcore.database.mongo.config.TestAppConfig;
-import com.rcore.database.mongo.domain.user.port.model.UserDoc;
+import com.rcore.database.mongo.domain.user.model.UserDoc;
 import com.rcore.database.mongo.user.usecase.AuthenticationTestData;
+import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.token.entity.TokenPair;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.RefreshTokenCreationException;
@@ -14,7 +15,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public class EmailAuthenticationTestCase extends Exception {
+public class EmailAuthenticationTestCase {
     private final TestAppConfig testAppConfig = new TestAppConfig();
 
     public EmailAuthenticationTestCase() throws Exception {

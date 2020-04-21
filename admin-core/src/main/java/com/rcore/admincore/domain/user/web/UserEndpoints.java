@@ -7,6 +7,7 @@ import com.rcore.admincore.domain.user.application.UserWebMapper;
 import com.rcore.admincore.domain.user.web.api.CreateUserDTO;
 import com.rcore.admincore.domain.user.web.api.UserWeb;
 import com.rcore.domain.base.port.SearchResult;
+import com.rcore.domain.base.roles.BaseRoles;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.exception.UserAlreadyExistException;
@@ -20,8 +21,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+@Secured(BaseRoles.SUPER_USER)
 @Api(tags = "Users API", description = "API пользователей")
 @RequiredArgsConstructor
 @RestController

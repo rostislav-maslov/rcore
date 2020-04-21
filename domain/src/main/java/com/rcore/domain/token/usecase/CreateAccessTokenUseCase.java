@@ -7,9 +7,6 @@ import com.rcore.domain.token.exception.RefreshTokenCreationException;
 import com.rcore.domain.token.port.AccessTokenIdGenerator;
 import com.rcore.domain.user.entity.UserEntity;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-
 public class CreateAccessTokenUseCase {
     private final AccessTokenIdGenerator idGenerator;
     private final CreateRefreshTokenUseCase createRefreshTokenUseCase;
@@ -29,7 +26,7 @@ public class CreateAccessTokenUseCase {
         AccessTokenEntity accessTokenEntity = new AccessTokenEntity();
         accessTokenEntity.setId(idGenerator.generate());
         accessTokenEntity.setUserId(refreshTokenEntity.getUserId());
-        accessTokenEntity.setRoles(userEntity.getRoles());
+        accessTokenEntity.setAccesses(userEntity.getAccesses());
         accessTokenEntity.setExpireAt(DateTimeUtils.fromMillis(DateTimeUtils.getNowMillis() + refreshTokenEntity.getExpireTimeAccessToken()));
         accessTokenEntity.setCreateFromRefreshTokenId(refreshTokenEntity.getId());
 

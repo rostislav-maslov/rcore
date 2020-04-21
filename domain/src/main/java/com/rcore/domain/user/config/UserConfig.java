@@ -1,5 +1,6 @@
 package com.rcore.domain.user.config;
 
+import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.domain.token.usecase.CreateAccessTokenUseCase;
@@ -12,21 +13,17 @@ import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.usecase.admin.*;
 import com.rcore.domain.user.usecase.all.EmailAuthenticationUseCase;
 import com.rcore.domain.user.usecase.all.ViewUserUserCase;
+import lombok.RequiredArgsConstructor;
 
 public class UserConfig {
 
+    @RequiredArgsConstructor
     public static class Admin {
         protected final UserRepository userRepository;
         protected final UserIdGenerator userIdGenerator;
         protected final PasswordGenerator passwordGenerator;
         protected final ExpireTokenUseCase expireTokenUseCase;
-
-        public Admin(UserRepository userRepository, UserIdGenerator userIdGenerator, PasswordGenerator passwordGenerator, ExpireTokenUseCase expireTokenUseCase) {
-            this.userRepository = userRepository;
-            this.userIdGenerator = userIdGenerator;
-            this.passwordGenerator = passwordGenerator;
-            this.expireTokenUseCase = expireTokenUseCase;
-        }
+        protected final RoleRepository roleRepository;
 
         public ActivateUseCase activateUseCase(UserEntity actor) throws AuthorizationException {
             return new ActivateUseCase(actor, this.userRepository);
@@ -49,7 +46,7 @@ public class UserConfig {
         }
 
         public InitAdminUseCase InitAdminUseCase() {
-            return new InitAdminUseCase(this.userRepository, passwordGenerator, userIdGenerator);
+            return new InitAdminUseCase(userRepository, passwordGenerator, userIdGenerator, roleRepository);
         }
 
         public UpdateUserUseCase UpdateUserUseCase(UserEntity actor) throws AuthorizationException {
@@ -61,20 +58,13 @@ public class UserConfig {
         }
     }
 
+    @RequiredArgsConstructor
     public static class All {
         private final UserRepository userRepository;
         private final PasswordGenerator passwordGenerator;
         private final CreateRefreshTokenUseCase createRefreshTokenUseCase;
         private final CreateAccessTokenUseCase createAccessTokenUseCase;
         private final RefreshTokenRepository refreshTokenRepository;
-
-        public All(UserRepository userRepository, PasswordGenerator passwordGenerator, CreateRefreshTokenUseCase createRefreshTokenUseCase, CreateAccessTokenUseCase createAccessTokenUseCase, RefreshTokenRepository refreshTokenRepository) {
-            this.userRepository = userRepository;
-            this.passwordGenerator = passwordGenerator;
-            this.createRefreshTokenUseCase = createRefreshTokenUseCase;
-            this.createAccessTokenUseCase = createAccessTokenUseCase;
-            this.refreshTokenRepository = refreshTokenRepository;
-        }
 
         public EmailAuthenticationUseCase emailAuthenticationUseCase() {
             return new EmailAuthenticationUseCase(userRepository, passwordGenerator, createRefreshTokenUseCase, createAccessTokenUseCase, refreshTokenRepository);
@@ -93,6 +83,7 @@ public class UserConfig {
     private final CreateRefreshTokenUseCase createRefreshTokenUseCase;
     private final CreateAccessTokenUseCase createAccessTokenUseCase;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final RoleRepository roleRepository;
 
     public final Admin admin;
     public final All all;
@@ -104,7 +95,7 @@ public class UserConfig {
             ExpireTokenUseCase expireTokenUseCase,
             CreateRefreshTokenUseCase createRefreshTokenUseCase,
             CreateAccessTokenUseCase createAccessTokenUseCase,
-            RefreshTokenRepository refreshTokenRepository) {
+            RefreshTokenRepository refreshTokenRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.userIdGenerator = userIdGenerator;
         this.passwordGenerator = passwordGenerator;
@@ -112,8 +103,9 @@ public class UserConfig {
         this.createRefreshTokenUseCase = createRefreshTokenUseCase;
         this.createAccessTokenUseCase = createAccessTokenUseCase;
         this.refreshTokenRepository = refreshTokenRepository;
+        this.roleRepository = roleRepository;
 
-        this.admin = new Admin(this.userRepository, this.userIdGenerator, this.passwordGenerator, this.expireTokenUseCase);
+        this.admin = new Admin(this.userRepository, this.userIdGenerator, this.passwordGenerator, this.expireTokenUseCase, this.roleRepository);
         this.all = new All(this.userRepository, this.passwordGenerator, this.createRefreshTokenUseCase, this.createAccessTokenUseCase, this.refreshTokenRepository);
     }
 

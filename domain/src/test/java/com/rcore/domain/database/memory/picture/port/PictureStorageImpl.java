@@ -1,6 +1,6 @@
 package com.rcore.domain.database.memory.picture.port;
 
-import com.rcore.domain.database.memory.base.port.BaseUserIdGeneratorImpl;
+import com.rcore.domain.database.memory.base.port.BaseIdGeneratorImpl;
 import com.rcore.domain.picture.port.PictureStorage;
 
 import java.io.InputStream;
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class PictureStorageImpl implements PictureStorage {
 
-    private BaseUserIdGeneratorImpl idGenerator = new BaseUserIdGeneratorImpl();
+    private BaseIdGeneratorImpl idGenerator = new BaseIdGeneratorImpl();
     private Map<String, InputStream> container = new HashMap<>();
 
     @Override

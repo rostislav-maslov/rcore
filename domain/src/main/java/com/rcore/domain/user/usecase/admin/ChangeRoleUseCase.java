@@ -1,25 +1,25 @@
 package com.rcore.domain.user.usecase.admin;
 
-import com.rcore.domain.role.entity.Role;
+import com.rcore.domain.access.entity.Access;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.port.UserRepository;
-import com.rcore.domain.user.role.AdminUserChangeRolesRole;
+import com.rcore.domain.user.access.AdminUserChangeRolesAccess;
 
 public class ChangeRoleUseCase extends AdminBaseUseCase {
 
     public ChangeRoleUseCase(UserEntity actor, UserRepository userRepository)throws AuthorizationException {
-        super(actor, userRepository, new AdminUserChangeRolesRole());
+        super(actor, userRepository, new AdminUserChangeRolesAccess());
     }
 
-    public UserEntity remove(UserEntity userEntity, Role role) {
-        userEntity.getRoles().remove(role);
+    public UserEntity remove(UserEntity userEntity, Access access) {
+        userEntity.getAccesses().remove(access);
 
         return userRepository.save(userEntity);
     }
 
-    public UserEntity add(UserEntity userEntity, Role role) {
-        userEntity.getRoles().add(role);
+    public UserEntity add(UserEntity userEntity, Access access) {
+        userEntity.getAccesses().add(access);
         return userEntity;
     }
 }

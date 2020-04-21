@@ -2,7 +2,7 @@ package com.rcore.domain.userPasswordRecover.usecase.admin;
 
 import com.rcore.domain.userPasswordRecover.entity.UserPasswordRecoverEntity;
 import com.rcore.domain.userPasswordRecover.port.UserPasswordRecoverRepository;
-import com.rcore.domain.userPasswordRecover.role.AdminUserPasswordRecoverViewRole;
+import com.rcore.domain.userPasswordRecover.access.AdminUserPasswordRecoverViewAccess;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.base.port.SearchResult;
@@ -10,7 +10,7 @@ import com.rcore.domain.base.port.SearchResult;
 public class UserPasswordRecoverViewUseCase extends UserPasswordRecoverAdminBaseUseCase {
 
     public UserPasswordRecoverViewUseCase(UserEntity actor, UserPasswordRecoverRepository userPasswordRecoverRepository) throws AuthorizationException {
-        super(actor, userPasswordRecoverRepository, new AdminUserPasswordRecoverViewRole());
+        super(actor, userPasswordRecoverRepository, new AdminUserPasswordRecoverViewAccess());
     }
 
     public UserPasswordRecoverEntity findById(String id) {

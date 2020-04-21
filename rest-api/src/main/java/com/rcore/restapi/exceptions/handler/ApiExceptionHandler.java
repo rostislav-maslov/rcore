@@ -1,6 +1,7 @@
 package com.rcore.restapi.exceptions.handler;
 
 import com.rcore.restapi.exceptions.BadRequestApiException;
+import com.rcore.restapi.exceptions.BaseApiException;
 import com.rcore.restapi.exceptions.ExceptionDTO;
 import com.rcore.restapi.exceptions.NotFoundApiException;
 import com.rcore.restapi.web.api.response.ErrorApiResponse;
@@ -13,8 +14,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ApiExceptionHandler {
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(value = BadRequestApiException.class)
-    public ErrorApiResponse<ExceptionDTO> handleBadRequestApiException(BadRequestApiException e) {
+    @ExceptionHandler({BadRequestApiException.class, BaseApiException.class})
+    public ErrorApiResponse<ExceptionDTO> handleBadRequestApiException(BaseApiException e) {
         return ErrorApiResponse.of(e.getError());
     }
 

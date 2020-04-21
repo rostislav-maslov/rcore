@@ -1,6 +1,6 @@
 package com.rcore.domain.token.port;
 
-import com.rcore.domain.role.entity.Role;
+import com.rcore.domain.access.entity.Access;
 import com.rcore.domain.token.entity.AccessTokenEntity;
 
 import java.util.Set;
@@ -10,6 +10,6 @@ import java.util.Set;
  */
 public interface AuthorizationPort {
 
-    public Boolean checkAccess(AccessTokenEntity accessToken, Set<Role> userRoles);
+    public Boolean checkAccess(AccessTokenEntity accessToken, Set<Access> userAccesses);
 
 }

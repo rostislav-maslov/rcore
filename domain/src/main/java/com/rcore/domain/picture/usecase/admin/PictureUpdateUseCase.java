@@ -4,19 +4,18 @@ import com.rcore.domain.file.exception.FileNotFoundException;
 import com.rcore.domain.picture.entity.PictureEntity;
 import com.rcore.domain.picture.port.PictureCompressor;
 import com.rcore.domain.picture.port.PictureRepository;
-import com.rcore.domain.picture.role.AdminPictureUpdateRole;
+import com.rcore.domain.picture.access.AdminPictureUpdateAccess;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.entity.UserEntity;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class PictureUpdateUseCase  extends PictureAdminBaseUseCase {
 
     private final PictureCompressor pictureCompressor;
 
     public PictureUpdateUseCase(UserEntity actor, PictureRepository pictureRepository, PictureCompressor pictureCompressor)throws AuthorizationException {
-        super(actor, pictureRepository, new AdminPictureUpdateRole());
+        super(actor, pictureRepository, new AdminPictureUpdateAccess());
         this.pictureCompressor = pictureCompressor;
     }
 

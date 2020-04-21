@@ -4,7 +4,7 @@ import com.rcore.domain.file.exception.FileNotFoundException;
 import com.rcore.domain.picture.entity.PictureEntity;
 import com.rcore.domain.picture.port.PictureRepository;
 import com.rcore.domain.picture.port.PictureStorage;
-import com.rcore.domain.picture.role.AdminPictureViewRole;
+import com.rcore.domain.picture.access.AdminPictureViewAccess;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.base.port.SearchResult;
@@ -17,7 +17,7 @@ public class PictureViewUseCase extends PictureAdminBaseUseCase {
     private final PictureStorage pictureStorage;
 
     public PictureViewUseCase(UserEntity actor, PictureRepository pictureRepository, PictureStorage pictureStorage) throws AuthorizationException {
-        super(actor, pictureRepository, new AdminPictureViewRole());
+        super(actor, pictureRepository, new AdminPictureViewAccess());
         this.pictureStorage = pictureStorage;
     }
 

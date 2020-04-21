@@ -1,7 +1,7 @@
 package com.rcore.domain.token.usecase;
 
 import com.rcore.commons.utils.DateTimeUtils;
-import com.rcore.domain.role.entity.Role;
+import com.rcore.domain.access.entity.Access;
 import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.exception.AuthenticationException;
@@ -33,7 +33,7 @@ public class AuthorizationByTokenUseCase implements AuthorizationPort {
     }
 
     @Override
-    public Boolean checkAccess(AccessTokenEntity accessToken, Set<Role> userRoles) {
+    public Boolean checkAccess(AccessTokenEntity accessToken, Set<Access> userAccesses) {
         if (LocalDateTime.now().isAfter(accessToken.getExpireAt())) return false;
 
         Optional<RefreshTokenEntity> refreshTokenEntity = refreshTokenRepository.findById(accessToken.getCreateFromRefreshTokenId());

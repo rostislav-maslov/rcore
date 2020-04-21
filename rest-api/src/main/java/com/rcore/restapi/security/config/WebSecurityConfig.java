@@ -1,14 +1,9 @@
 package com.rcore.restapi.security.config;
 
-import com.rcore.adapter.domain.token.dto.AccessTokenDTO;
-import com.rcore.adapter.domain.token.dto.RefreshTokenDTO;
 import com.rcore.restapi.routes.BaseAuthRoutes;
 import com.rcore.restapi.routes.BaseRoutes;
 import com.rcore.restapi.security.authentication.RestAuthenticationEntryPoint;
 import com.rcore.restapi.security.filter.TokenAuthenticationFilter;
-import com.rcore.security.infrastructure.AuthTokenGenerator;
-import com.rcore.security.infrastructure.jwt.converter.impl.JWTByAccessTokenGenerator;
-import com.rcore.security.infrastructure.jwt.converter.impl.JWTByRefreshTokenGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +13,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -37,24 +33,24 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                    .authorizeRequests()
-                    //Эндпоинты БЕЗ аутентификации пользователя
-                    .antMatchers(BaseAuthRoutes.AUTH + "/**", BaseRoutes.EXTERNAL_API + "/**", BaseAuthRoutes.INIT_ADMIN).permitAll()
+                .authorizeRequests()
+                //Эндпоинты БЕЗ аутентификации пользователя
+                .antMatchers(BaseAuthRoutes.AUTH + "/**", BaseRoutes.EXTERNAL_API + "/**", BaseAuthRoutes.INIT_ADMIN).permitAll()
                 .and()
-                    .authorizeRequests()
-                    //Эедпоинты C аутентификацией
-                    .antMatchers(BaseRoutes.API + "/**").authenticated()
+                .authorizeRequests()
+                //Эедпоинты C аутентификацией
+                .antMatchers(BaseRoutes.API + "/**").authenticated()
                 .and()
-                    .addFilterBefore(abstractAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
-                    .exceptionHandling()
-                    .authenticationEntryPoint(authenticationEntryPoint)
+                .addFilterBefore(abstractAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint)
                 .and()
-                    .cors()
+                .cors()
                 .and()
-                    .csrf().disable()
-                    .formLogin().disable()
-                    .httpBasic().disable()
-                    .logout().disable();
+                .csrf().disable()
+                .formLogin().disable()
+                .httpBasic().disable()
+                .logout().disable();
     }
 
     @Override
@@ -71,5 +67,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AbstractAuthenticationProcessingFilter abstractAuthenticationProcessingFilter() {
         return new TokenAuthenticationFilter(authenticationManager, authenticationFailureHandler);
+    }
+
+    @Bean
+    GrantedAuthorityDefaults grantedAuthorityDefaults() {
+        return new GrantedAuthorityDefaults(""); // Remove the ROLE_ prefix
     }
 }

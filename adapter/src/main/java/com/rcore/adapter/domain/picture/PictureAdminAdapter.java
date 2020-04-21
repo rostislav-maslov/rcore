@@ -2,6 +2,7 @@ package com.rcore.adapter.domain.picture;
 
 import com.rcore.adapter.domain.picture.dto.PictureDTO;
 import com.rcore.adapter.domain.picture.mapper.PictureMapper;
+import com.rcore.adapter.domain.role.mapper.RoleMapper;
 import com.rcore.adapter.domain.user.dto.UserDTO;
 import com.rcore.adapter.domain.user.mapper.UserMapper;
 import com.rcore.domain.base.port.SearchResult;
@@ -17,7 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PictureAdminAdapter {
     private PictureMapper pictureMapper = new PictureMapper();
-    private UserMapper userMapper = new UserMapper();
+    private UserMapper userMapper = new UserMapper(new RoleMapper());
     private final PictureConfig pictureConfig;
 
     public PictureDTO create(UserDTO actor, InputStream content, String fileName, String contentType, boolean isPrivate) throws AuthorizationException {

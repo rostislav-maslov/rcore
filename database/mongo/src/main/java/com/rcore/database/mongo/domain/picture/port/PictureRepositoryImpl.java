@@ -1,5 +1,7 @@
 package com.rcore.database.mongo.domain.picture.port;
 
+import com.rcore.database.mongo.common.utils.CollectionNameUtils;
+import com.rcore.database.mongo.domain.picture.model.PictureDoc;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.picture.entity.PictureEntity;
 import com.rcore.domain.picture.port.PictureRepository;
@@ -10,6 +12,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Repository
@@ -19,36 +22,38 @@ public class PictureRepositoryImpl implements PictureRepository {
 
     @Override
     public PictureEntity save(PictureEntity object) {
-        return mongoTemplate.save(object);
+        return mongoTemplate.save(object, CollectionNameUtils.getCollectionName(PictureDoc.class));
     }
 
     @Override
     public Boolean delete(PictureEntity object) {
-        long deletedCount = mongoTemplate.remove(object).getDeletedCount();
+        long deletedCount = mongoTemplate.remove(object, CollectionNameUtils.getCollectionName(PictureDoc.class)).getDeletedCount();
         return deletedCount > 0;
     }
 
     @Override
     public Boolean deleteById(String id) {
-        long deletedCount = mongoTemplate.remove(Query.query(Criteria.where("id").is(id))).getDeletedCount();
+        long deletedCount = mongoTemplate.remove(Query.query(Criteria.where("id").is(id)), CollectionNameUtils.getCollectionName(PictureDoc.class)).getDeletedCount();
         return deletedCount > 0;
     }
 
     @Override
     public Optional<PictureEntity> findById(String id) {
-        return Optional.ofNullable(mongoTemplate.findById(id, PictureEntity.class));
+        return Optional.ofNullable(mongoTemplate.findById(id, PictureDoc.class, CollectionNameUtils.getCollectionName(PictureDoc.class)));
     }
 
     @Override
     public SearchResult<PictureEntity> find(Long size, Long skip) {
         return SearchResult.withItemsAndCount(
-                mongoTemplate.find(new Query().limit(size.intValue()).skip(skip), PictureEntity.class),
+                mongoTemplate.find(new Query().limit(size.intValue()).skip(skip), PictureDoc.class)
+                        .stream()
+                        .collect(Collectors.toList()),
                 count()
         );
     }
 
     @Override
     public Long count() {
-        return mongoTemplate.count(new Query(), PictureEntity.class);
+        return mongoTemplate.count(new Query(), PictureDoc.class);
     }
 }

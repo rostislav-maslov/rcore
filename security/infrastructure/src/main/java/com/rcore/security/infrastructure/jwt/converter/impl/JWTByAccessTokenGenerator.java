@@ -7,6 +7,9 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.rcore.adapter.domain.token.dto.AccessTokenDTO;
+import com.rcore.adapter.domain.token.mapper.AccessTokenMapper;
+import com.rcore.domain.access.entity.Access;
+import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.security.infrastructure.AuthTokenGenerator;
 import com.rcore.security.infrastructure.exceptions.TokenGenerateException;
 import com.rcore.security.infrastructure.exceptions.InvalidTokenFormatException;
@@ -18,6 +21,7 @@ import java.time.LocalDateTime;
 public class JWTByAccessTokenGenerator implements AuthTokenGenerator<AccessTokenDTO> {
 
     private final ObjectMapper objectMapper;
+    private final AccessTokenMapper accessTokenMapper = new AccessTokenMapper();
 
     public JWTByAccessTokenGenerator() {
         Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();

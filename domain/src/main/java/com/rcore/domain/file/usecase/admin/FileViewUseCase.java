@@ -4,7 +4,7 @@ import com.rcore.domain.file.entity.FileEntity;
 import com.rcore.domain.file.exception.FileNotFoundException;
 import com.rcore.domain.file.port.FileRepository;
 import com.rcore.domain.file.port.FileStorage;
-import com.rcore.domain.file.role.AdminFileViewRole;
+import com.rcore.domain.file.access.AdminFileViewAccess;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.base.port.SearchResult;
@@ -17,7 +17,7 @@ public class FileViewUseCase extends FileAdminBaseUseCase {
     private final FileStorage fileStorage;
 
     public FileViewUseCase(UserEntity actor, FileRepository fileRepository, FileStorage fileStorage) throws AuthorizationException {
-        super(actor, fileRepository, new AdminFileViewRole());
+        super(actor, fileRepository, new AdminFileViewAccess());
         this.fileStorage = fileStorage;
     }
 

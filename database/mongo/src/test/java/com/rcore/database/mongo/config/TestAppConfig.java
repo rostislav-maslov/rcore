@@ -1,11 +1,12 @@
 package com.rcore.database.mongo.config;
 
-import com.rcore.database.mongo.base.ObjectIdGenerator;
+import com.rcore.database.mongo.domain.role.port.RoleRepositoryImpl;
 import com.rcore.database.mongo.domain.token.port.AccessTokenIdGeneratorImpl;
 import com.rcore.database.mongo.domain.token.port.RefreshTokenIdGeneratorImpl;
 import com.rcore.database.mongo.domain.token.port.RefreshTokenRepositoryImpl;
 import com.rcore.database.mongo.domain.user.port.UserIdGeneratorImpl;
 import com.rcore.database.mongo.domain.user.port.UserRepositoryImpl;
+import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.domain.token.port.impl.TokenSaltGeneratorImpl;
 import com.rcore.domain.token.usecase.CreateAccessTokenUseCase;
@@ -32,6 +33,7 @@ public class TestAppConfig {
     private final CreateRefreshTokenUseCase createRefreshTokenUseCase;
     private final CreateAccessTokenUseCase createAccessTokenUseCase;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final RoleRepository roleRepository;
 
     public TestAppConfig() throws Exception {
         this.databaseConfig = new DatabaseConfig();
@@ -42,9 +44,10 @@ public class TestAppConfig {
         this.expireTokenUseCase = new ExpireTokenUseCase(refreshTokenRepository);
         this.createRefreshTokenUseCase = new CreateRefreshTokenUseCase(new RefreshTokenIdGeneratorImpl(), refreshTokenRepository, new TokenSaltGeneratorImpl());
         this.createAccessTokenUseCase = new CreateAccessTokenUseCase(new AccessTokenIdGeneratorImpl(), createRefreshTokenUseCase);
+        this.roleRepository = new RoleRepositoryImpl(databaseConfig.getMongoTemplate());
 
 
-        this.userConfig = new UserConfig(userRepository, userIdGenerator, passwordGenerator, expireTokenUseCase, createRefreshTokenUseCase, createAccessTokenUseCase, refreshTokenRepository);
+        this.userConfig = new UserConfig(userRepository, userIdGenerator, passwordGenerator, expireTokenUseCase, createRefreshTokenUseCase, createAccessTokenUseCase, refreshTokenRepository, this.roleRepository);
     }
 
 }

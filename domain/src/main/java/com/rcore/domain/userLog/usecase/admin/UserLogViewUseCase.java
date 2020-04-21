@@ -3,7 +3,7 @@ package com.rcore.domain.userLog.usecase.admin;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.userLog.entity.UserLogEntity;
 import com.rcore.domain.userLog.port.UserLogRepository;
-import com.rcore.domain.userLog.role.AdminUserLogViewRole;
+import com.rcore.domain.userLog.access.AdminUserLogViewAccess;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.entity.UserEntity;
 
@@ -12,7 +12,7 @@ import java.util.Optional;
 public class UserLogViewUseCase extends UserLogAdminBaseUseCase {
 
     public UserLogViewUseCase(UserEntity actor, UserLogRepository userLogRepository) throws AuthorizationException {
-        super(actor, userLogRepository, new AdminUserLogViewRole());
+        super(actor, userLogRepository, new AdminUserLogViewAccess());
     }
 
     public Optional<UserLogEntity> findById(String id) {

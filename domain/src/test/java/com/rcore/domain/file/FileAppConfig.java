@@ -1,6 +1,6 @@
 package com.rcore.domain.file;
 
-import com.rcore.domain.database.memory.file.port.FileUserIdGeneratorImpl;
+import com.rcore.domain.database.memory.file.port.FileIdGeneratorImpl;
 import com.rcore.domain.database.memory.file.port.FileRepositoryImpl;
 import com.rcore.domain.database.memory.file.port.FileStorageImpl;
 import com.rcore.domain.file.config.FileConfig;
@@ -20,7 +20,7 @@ public class FileAppConfig {
     private final FileStorage fileStorage;
 
     public FileAppConfig() {
-        this.idGenerator = new FileUserIdGeneratorImpl();
+        this.idGenerator = new FileIdGeneratorImpl();
         this.fileRepository = new FileRepositoryImpl();
         this.fileStorage = new FileStorageImpl();
 

@@ -1,7 +1,7 @@
 package com.rcore.domain.picture;
 
 import com.rcore.domain.database.memory.picture.port.PictureCompressorImpl;
-import com.rcore.domain.database.memory.picture.port.PictureUserIdGeneratorImpl;
+import com.rcore.domain.database.memory.picture.port.PictureIdGeneratorImpl;
 import com.rcore.domain.database.memory.picture.port.PictureRepositoryImpl;
 import com.rcore.domain.database.memory.picture.port.PictureStorageImpl;
 import com.rcore.domain.picture.config.PictureConfig;
@@ -24,7 +24,7 @@ public class PictureAppConfig {
 
     public PictureAppConfig() {
         this.pictureRepository = new PictureRepositoryImpl();
-        this.pictureIdGenerator = new PictureUserIdGeneratorImpl();
+        this.pictureIdGenerator = new PictureIdGeneratorImpl();
         this.pictureStorage = new PictureStorageImpl();
         this.pictureCompressor = new PictureCompressorImpl(pictureStorage);
 

@@ -6,10 +6,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.rostislav-maslov.rcore</groupId>
-    <name>admin-core</name>
     <version>${rcore.version}</version>
     <artifactId>admin-core</artifactId>
 
+    <name>${project.groupId}:${project.artifactId}</name>
     <description>REST API component for Clean Arch apps</description>
     <url>https://github.com/rostislav-maslov/rcore</url>
     <licenses>

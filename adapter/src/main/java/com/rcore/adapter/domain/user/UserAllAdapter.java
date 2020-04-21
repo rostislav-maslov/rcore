@@ -1,5 +1,6 @@
 package com.rcore.adapter.domain.user;
 
+import com.rcore.adapter.domain.role.mapper.RoleMapper;
 import com.rcore.adapter.domain.token.dto.RefreshTokenDTO;
 import com.rcore.adapter.domain.token.mapper.AccessTokenMapper;
 import com.rcore.adapter.domain.token.mapper.RefreshTokenMapper;
@@ -19,7 +20,7 @@ import java.util.Optional;
 public class UserAllAdapter {
     private final UserConfig userConfig;
 
-    private UserMapper userMapper = new UserMapper();
+    private UserMapper userMapper = new UserMapper(new RoleMapper());
     private AccessTokenMapper accessTokenMapper = new AccessTokenMapper();
     private RefreshTokenMapper refreshTokenMapper = new RefreshTokenMapper();
     private TokenPairMapper tokenPairMapper = new TokenPairMapper(accessTokenMapper,refreshTokenMapper);

@@ -2,6 +2,7 @@ package com.rcore.adapter.domain.file;
 
 import com.rcore.adapter.domain.file.dto.FileDTO;
 import com.rcore.adapter.domain.file.mapper.FileMapper;
+import com.rcore.adapter.domain.role.mapper.RoleMapper;
 import com.rcore.adapter.domain.user.dto.UserDTO;
 import com.rcore.adapter.domain.user.mapper.UserMapper;
 import com.rcore.domain.base.port.SearchResult;
@@ -17,7 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class FileAdminAdapter {
     private FileMapper fileMapper = new FileMapper();
-    private UserMapper userMapper = new UserMapper();
+    private UserMapper userMapper = new UserMapper(new RoleMapper());
     private final FileConfig fileConfig;
 
     public FileDTO create(UserDTO actor, InputStream content, String fileName, String contentType, boolean isPrivate) throws AuthorizationException {

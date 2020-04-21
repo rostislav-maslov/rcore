@@ -1,7 +1,8 @@
 package com.rcore.domain.user.entity;
 
 import com.rcore.domain.base.entity.BaseEntity;
-import com.rcore.domain.role.entity.Role;
+import com.rcore.domain.access.entity.Access;
+import com.rcore.domain.role.entity.RoleEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -15,7 +16,9 @@ import java.util.*;
 public class UserEntity extends BaseEntity {
     protected String id;
 
-    protected Set<Role> roles = new HashSet<Role>();
+    protected Set<RoleEntity> roles = new HashSet<>();
+
+//    protected Set<Access> accesses = new HashSet<Access>();
 
     protected UserStatus status = UserStatus.ACTIVE;
 
@@ -34,12 +37,20 @@ public class UserEntity extends BaseEntity {
     protected Integer fails = 0;
     protected LocalDateTime lastFailDate = LocalDateTime.now();
 
-    public Boolean hasRole(Role role){
-        for(Role roleEntity : roles){
-            if(roleEntity.getId().equals(role.getId())) return true;
+    public Boolean hasAccess(Access access) {
+
+        for (RoleEntity role : roles) {
+            for (Access roleAccess : role.getAccesses())
+                if (roleAccess.getId().equals(access.getId())) return true;
         }
 
         return false;
+    }
+
+    public Set<Access> getAccesses() {
+        Set<Access> accesses = new HashSet<>();
+        roles.stream().forEach(role -> accesses.addAll(role.getAccesses()));
+        return accesses;
     }
 
     public String getNoNullEmail() {
@@ -47,8 +58,8 @@ public class UserEntity extends BaseEntity {
             return email;
         }
 
-        for(SocialAccount socialAccount : socialAccounts){
-            if(socialAccount.getEmail() != null && socialAccount.getEmail().isEmpty() == false){
+        for (SocialAccount socialAccount : socialAccounts) {
+            if (socialAccount.getEmail() != null && socialAccount.getEmail().isEmpty() == false) {
                 return socialAccount.getEmail();
             }
         }
@@ -63,8 +74,8 @@ public class UserEntity extends BaseEntity {
             emails.add(email);
         }
 
-        for(SocialAccount socialAccount : socialAccounts){
-            if(socialAccount.getEmail() != null && socialAccount.getEmail().isEmpty() == false){
+        for (SocialAccount socialAccount : socialAccounts) {
+            if (socialAccount.getEmail() != null && socialAccount.getEmail().isEmpty() == false) {
                 emails.add(socialAccount.getEmail());
             }
         }
