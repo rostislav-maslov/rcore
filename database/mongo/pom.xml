@@ -59,7 +59,7 @@
         <spring-core.verison>5.2.5.RELEASE</spring-core.verison>
         <fongo.version>2.1.2</fongo.version>
         <lombok.version>1.18.12</lombok.version>
-        <rcore.version>0.9.1</rcore.version>
+        <rcore.version>0.9.2</rcore.version>
     </properties>
 
     <dependencies>
