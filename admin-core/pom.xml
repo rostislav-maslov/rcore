@@ -12,6 +12,32 @@
     <name>${project.groupId}:${project.artifactId}</name>
     <description>REST API component for Clean Arch apps</description>
     <url>https://github.com/rostislav-maslov/rcore</url>
+
+    <properties>
+        <rcore.version>0.9.2</rcore.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.rostislav-maslov.rcore</groupId>
+            <artifactId>rest-api</artifactId>
+            <version>0.9.2</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <licenses>
         <license>
             <name>MIT License</name>
@@ -50,31 +76,6 @@
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
     </distributionManagement>
-
-    <properties>
-        <rcore.version>0.9.1</rcore.version>
-    </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.github.rostislav-maslov.rcore</groupId>
-            <artifactId>rest-api</artifactId>
-            <version>0.9.1</version>
-        </dependency>
-    </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 
 </project>
