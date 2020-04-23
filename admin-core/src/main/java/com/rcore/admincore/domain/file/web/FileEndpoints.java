@@ -37,7 +37,7 @@ public class FileEndpoints {
     @GetMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
     public SuccessApiResponse<SearchApiResponse<FileWeb>> all(@ModelAttribute SearchApiRequest request) throws AuthenticationException, AuthorizationException {
         SearchResult<FileDTO> result = fileAdapter.getAdmin()
-                .find(tokenAdapter.currentUser(), request.getLimit(), request.getOffset());
+                .find(request.getLimit(), request.getOffset());
 
         return SuccessApiResponse.of(
                 SearchApiResponse.withItemsAndCount(
@@ -50,7 +50,7 @@ public class FileEndpoints {
     @GetMapping(value = Routes.BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
     public SuccessApiResponse<FileWeb> get(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException {
         return SuccessApiResponse.of(fileAdapter.getAdmin()
-                .findById(tokenAdapter.currentUser(), id)
+                .findById(id)
                 .map(fileWebMapper::map)
                 .orElseThrow(() -> new NotFoundApiException("Неверный идентификатор файла", DomainUtils.getDomain(FileWeb.class), "NOT_FOUND"))
         );
@@ -61,10 +61,10 @@ public class FileEndpoints {
     public OkApiResponse delete(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException {
         UserDTO actor = tokenAdapter.currentUser();
         FileDTO file = fileAdapter.getAdmin()
-                .findById(actor, id)
+                .findById(id)
                 .orElseThrow(() -> new NotFoundApiException("Неверный идентификатор файла", DomainUtils.getDomain(FileWeb.class), "NOT_FOUND"));
 
-        fileAdapter.getAdmin().delete(actor, file);
+        fileAdapter.getAdmin().delete(file);
         return OkApiResponse.of();
     }
 
@@ -72,7 +72,7 @@ public class FileEndpoints {
     @PostMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
     public SuccessApiResponse<String> upload(@PathVariable MultipartFile file) throws AuthenticationException, IOException, AuthorizationException {
         FileDTO fileDTO = fileAdapter.getAdmin()
-                .create(tokenAdapter.currentUser(), file.getInputStream(), file.getOriginalFilename(), file.getContentType(), false);
+                .create(file.getInputStream(), file.getOriginalFilename(), file.getContentType(), false);
 
         return SuccessApiResponse.of(fileDTO.getId());
     }

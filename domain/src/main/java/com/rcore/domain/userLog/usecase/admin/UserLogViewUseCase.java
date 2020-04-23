@@ -1,6 +1,8 @@
 package com.rcore.domain.userLog.usecase.admin;
 
 import com.rcore.domain.base.port.SearchResult;
+import com.rcore.domain.token.exception.AuthenticationException;
+import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.userLog.entity.UserLogEntity;
 import com.rcore.domain.userLog.port.UserLogRepository;
 import com.rcore.domain.userLog.access.AdminUserLogViewAccess;
@@ -11,19 +13,22 @@ import java.util.Optional;
 
 public class UserLogViewUseCase extends UserLogAdminBaseUseCase {
 
-    public UserLogViewUseCase(UserEntity actor, UserLogRepository userLogRepository) throws AuthorizationException {
-        super(actor, userLogRepository, new AdminUserLogViewAccess());
+    public UserLogViewUseCase(UserLogRepository userLogRepository, AuthorizationByTokenUseCase authorizationByTokenUseCase) {
+        super(userLogRepository, new AdminUserLogViewAccess(), authorizationByTokenUseCase);
     }
 
-    public Optional<UserLogEntity> findById(String id) {
+    public Optional<UserLogEntity> findById(String id) throws AuthenticationException, AuthorizationException {
+        checkAccess();
         return userLogRepository.findById(id);
     }
 
-    public Optional<UserLogEntity> search(String id) {
+    public Optional<UserLogEntity> search(String id) throws AuthenticationException, AuthorizationException {
+        checkAccess();
         return userLogRepository.findById(id);
     }
 
-    public SearchResult<UserLogEntity> find(Long size, Long skip) {
+    public SearchResult<UserLogEntity> find(Long size, Long skip) throws AuthenticationException, AuthorizationException {
+        checkAccess();
         return userLogRepository.find(size, skip);
     }
 

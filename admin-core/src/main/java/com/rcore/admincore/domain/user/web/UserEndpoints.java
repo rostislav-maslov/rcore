@@ -51,7 +51,7 @@ public class UserEndpoints {
     @GetMapping(value = Routes.BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
     public SuccessApiResponse<UserWeb> get(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException {
         return SuccessApiResponse.of(userAdapter.getAdmin()
-                .findById(tokenAdapter.currentUser(), id)
+                .findById(id)
                 .map(userWebMapper::map)
                 .orElseThrow(() -> new NotFoundApiException("Передан неверный идентификатор пользователя", "USER", "NOT_FOUND")));
     }
@@ -60,7 +60,7 @@ public class UserEndpoints {
     @PostMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
     public SuccessApiResponse<UserWeb> create(@RequestBody CreateUserDTO request) throws AuthenticationException, AuthorizationException, UserAlreadyExistException {
         UserDTO user = userAdapter.getAdmin()
-                .createUserByEmail(tokenAdapter.currentUser(), request.getEmail(), request.getPassword());
+                .createUserByEmail(request.getEmail(), request.getPassword());
 
         return SuccessApiResponse.of(userWebMapper.map(user));
     }
@@ -69,7 +69,7 @@ public class UserEndpoints {
     @PatchMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
     public SuccessApiResponse<UserWeb> edit(@RequestBody UserDTO request) throws AuthenticationException, UserNotFoundException, AuthorizationException, UserAlreadyExistException {
         UserDTO user = userAdapter.getAdmin()
-                .updateUser(tokenAdapter.currentUser(), request);
+                .updateUser(request);
 
         return SuccessApiResponse.of(userWebMapper.map(user));
     }
@@ -80,11 +80,11 @@ public class UserEndpoints {
         UserDTO actor = tokenAdapter.currentUser();
 
         UserDTO user = userAdapter.getAdmin()
-                .findById(actor, id)
+                .findById(id)
                 .orElseThrow(() -> new NotFoundApiException("Передан неверный идентификатор пользователя", "USER", "NOT_FOUND"));
 
         userAdapter.getAdmin()
-                .deleteUser(actor, user);
+                .deleteUser(user);
 
         return OkApiResponse.of();
     }
@@ -95,11 +95,11 @@ public class UserEndpoints {
         UserDTO actor = tokenAdapter.currentUser();
 
         UserDTO user = userAdapter.getAdmin()
-                .findById(actor, id)
+                .findById(id)
                 .orElseThrow(() -> new NotFoundApiException("Передан неверный идентификатор пользователя", "USER", "NOT_FOUND"));
 
         userAdapter.getAdmin()
-                .deleteUser(actor, user);
+                .deleteUser(user);
 
         return OkApiResponse.of();
     }

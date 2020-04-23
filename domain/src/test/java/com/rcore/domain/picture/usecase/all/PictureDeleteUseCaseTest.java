@@ -1,6 +1,5 @@
 package com.rcore.domain.picture.usecase.all;
 
-import com.rcore.domain.file.entity.FileEntity;
 import com.rcore.domain.picture.PictureAppConfig;
 import com.rcore.domain.picture.entity.PictureEntity;
 import com.rcore.domain.picture.exception.PictureAccessException;
@@ -12,8 +11,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Optional;
-
-import static org.junit.Assert.*;
 
 public class PictureDeleteUseCaseTest {
 

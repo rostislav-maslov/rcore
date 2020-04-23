@@ -1,6 +1,8 @@
 package com.rcore.domain.user.usecase.admin;
 
+import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
+import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.exception.UserAlreadyExistException;
 import com.rcore.domain.user.exception.UserNotFoundException;
@@ -11,11 +13,13 @@ import java.time.LocalDateTime;
 
 public class UpdateUserUseCase  extends AdminBaseUseCase {
 
-    public UpdateUserUseCase(UserEntity actor, UserRepository userRepository)throws AuthorizationException {
-        super(actor, userRepository, new AdminUserUpdateAccess());
+    public UpdateUserUseCase(UserRepository userRepository, AuthorizationByTokenUseCase authorizationByTokenUseCase)throws AuthorizationException {
+        super(userRepository, new AdminUserUpdateAccess(), authorizationByTokenUseCase);
     }
 
-    public UserEntity update(UserEntity userEntity) throws UserAlreadyExistException, UserNotFoundException {
+    public UserEntity update(UserEntity userEntity) throws UserNotFoundException, AuthenticationException, AuthorizationException {
+        checkAccess();
+
         UserEntity old = userRepository.findById(userEntity.getId())
                 .orElseThrow(() -> new UserNotFoundException());
 

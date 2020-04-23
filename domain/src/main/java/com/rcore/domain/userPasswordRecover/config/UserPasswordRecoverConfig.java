@@ -1,29 +1,27 @@
 package com.rcore.domain.userPasswordRecover.config;
 
+import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.userPasswordRecover.port.UserPasswordRecoverIdGenerator;
 import com.rcore.domain.userPasswordRecover.port.UserPasswordRecoverRepository;
 import com.rcore.domain.userPasswordRecover.usecase.admin.UserPasswordRecoverDeleteUseCase;
 import com.rcore.domain.userPasswordRecover.usecase.admin.UserPasswordRecoverViewUseCase;
 import com.rcore.domain.token.exception.AuthorizationException;
-import com.rcore.domain.user.entity.UserEntity;
+import lombok.RequiredArgsConstructor;
 
 public class UserPasswordRecoverConfig {
 
+    @RequiredArgsConstructor
     public static class Admin {
         protected final UserPasswordRecoverRepository userPasswordRecoverRepository;
         protected final UserPasswordRecoverIdGenerator idGenerator;
+        protected final AuthorizationByTokenUseCase authorizationByTokenUseCase;
 
-        public Admin(UserPasswordRecoverRepository userPasswordRecoverRepository, UserPasswordRecoverIdGenerator idGenerator) {
-            this.userPasswordRecoverRepository = userPasswordRecoverRepository;
-            this.idGenerator = idGenerator;
+        public UserPasswordRecoverDeleteUseCase deleteUseCase() throws AuthorizationException {
+            return new UserPasswordRecoverDeleteUseCase(this.userPasswordRecoverRepository, authorizationByTokenUseCase);
         }
 
-        public UserPasswordRecoverDeleteUseCase deleteUseCase(UserEntity actor) throws AuthorizationException {
-            return new UserPasswordRecoverDeleteUseCase(actor, this.userPasswordRecoverRepository);
-        }
-
-        public UserPasswordRecoverViewUseCase viewUseCase(UserEntity actor) throws AuthorizationException {
-            return new UserPasswordRecoverViewUseCase(actor, this.userPasswordRecoverRepository);
+        public UserPasswordRecoverViewUseCase viewUseCase() throws AuthorizationException {
+            return new UserPasswordRecoverViewUseCase(this.userPasswordRecoverRepository, authorizationByTokenUseCase);
         }
     }
 
@@ -36,18 +34,20 @@ public class UserPasswordRecoverConfig {
 
     private final UserPasswordRecoverRepository userPasswordRecoverRepository;
     private final UserPasswordRecoverIdGenerator idGenerator;
+    private final AuthorizationByTokenUseCase authorizationByTokenUseCase;
 
     public final Admin admin;
     public final All all;
 
     public UserPasswordRecoverConfig(
             UserPasswordRecoverRepository userPasswordRecoverRepository,
-            UserPasswordRecoverIdGenerator idGenerator
-    ) {
+            UserPasswordRecoverIdGenerator idGenerator,
+            AuthorizationByTokenUseCase authorizationByTokenUseCase) {
         this.userPasswordRecoverRepository = userPasswordRecoverRepository;
         this.idGenerator = idGenerator;
+        this.authorizationByTokenUseCase = authorizationByTokenUseCase;
 
-        this.admin = new Admin(this.userPasswordRecoverRepository, this.idGenerator);
+        this.admin = new Admin(this.userPasswordRecoverRepository, this.idGenerator, this.authorizationByTokenUseCase);
         this.all = new All();
     }
 

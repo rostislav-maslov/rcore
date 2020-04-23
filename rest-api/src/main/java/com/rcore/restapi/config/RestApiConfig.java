@@ -20,6 +20,7 @@ import com.rcore.domain.token.port.AccessTokenStorage;
 import com.rcore.domain.token.port.RefreshTokenIdGenerator;
 import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.domain.token.port.impl.TokenSaltGeneratorImpl;
+import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.token.usecase.CreateAccessTokenUseCase;
 import com.rcore.domain.token.usecase.CreateRefreshTokenUseCase;
 import com.rcore.domain.token.usecase.ExpireTokenUseCase;
@@ -64,12 +65,12 @@ public class RestApiConfig {
 
     @Bean
     public PictureAdapter pictureAdapter() {
-        return new PictureAdapter(new PictureConfig(pictureRepository, pictureIdGenerator, pictureStorage, pictureCompressor));
+        return new PictureAdapter(new PictureConfig(pictureRepository, pictureIdGenerator, pictureStorage, pictureCompressor, new AuthorizationByTokenUseCase(refreshTokenRepository, accessTokenStorage, userRepository)));
     }
 
     @Bean
     public FileAdapter fileAdapter() {
-        return new FileAdapter(new FileConfig(fileRepository, fileIdGenerator, fileStorage));
+        return new FileAdapter(new FileConfig(fileRepository, fileIdGenerator, fileStorage, new AuthorizationByTokenUseCase(refreshTokenRepository, accessTokenStorage, userRepository)));
     }
 
     @Bean
@@ -85,7 +86,8 @@ public class RestApiConfig {
                 new CreateRefreshTokenUseCase(refreshTokenIdGenerator, refreshTokenRepository, tokenSaltGenerator),
                 new CreateAccessTokenUseCase(accessTokenIdGenerator, new CreateRefreshTokenUseCase(refreshTokenIdGenerator, refreshTokenRepository, tokenSaltGenerator)),
                 refreshTokenRepository,
-                roleRepository)
+                roleRepository,
+                new AuthorizationByTokenUseCase(refreshTokenRepository, accessTokenStorage, userRepository))
         );
     }
 

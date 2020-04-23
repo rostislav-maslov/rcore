@@ -5,7 +5,9 @@ import com.rcore.domain.file.exception.FileNotFoundException;
 import com.rcore.domain.file.port.FileRepository;
 import com.rcore.domain.file.port.FileStorage;
 import com.rcore.domain.file.access.AdminFileViewAccess;
+import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
+import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.base.port.SearchResult;
 
@@ -16,24 +18,29 @@ public class FileViewUseCase extends FileAdminBaseUseCase {
 
     private final FileStorage fileStorage;
 
-    public FileViewUseCase(UserEntity actor, FileRepository fileRepository, FileStorage fileStorage) throws AuthorizationException {
-        super(actor, fileRepository, new AdminFileViewAccess());
+    public FileViewUseCase(FileRepository fileRepository, FileStorage fileStorage, AuthorizationByTokenUseCase authorizationByTokenUseCase) throws AuthorizationException {
+        super(fileRepository, new AdminFileViewAccess(), authorizationByTokenUseCase);
         this.fileStorage = fileStorage;
     }
 
-    public Optional<FileEntity> findById(String id) {
+    public Optional<FileEntity> findById(String id) throws AuthenticationException, AuthorizationException {
+        checkAccess();
         return fileRepository.findById(id);
     }
 
-    public Optional<FileEntity> search(String id) {
+    public Optional<FileEntity> search(String id) throws AuthenticationException, AuthorizationException {
+        checkAccess();
         return fileRepository.findById(id);
     }
 
-    public SearchResult<FileEntity> find(Long size, Long skip) {
+    public SearchResult<FileEntity> find(Long size, Long skip) throws AuthenticationException, AuthorizationException {
+        checkAccess();
         return fileRepository.find(size, skip);
     }
 
-    public Optional<InputStream> getInputStream(String id) throws FileNotFoundException {
+    public Optional<InputStream> getInputStream(String id) throws FileNotFoundException, AuthenticationException, AuthorizationException {
+        checkAccess();
+
         FileEntity fileEntity = findById(id)
                 .orElseThrow(() -> new FileNotFoundException());
 

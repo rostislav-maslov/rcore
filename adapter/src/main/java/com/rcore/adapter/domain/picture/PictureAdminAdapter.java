@@ -9,6 +9,7 @@ import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.file.exception.FileNotFoundException;
 import com.rcore.domain.picture.config.PictureConfig;
 import com.rcore.domain.picture.entity.PictureEntity;
+import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import lombok.RequiredArgsConstructor;
 
@@ -21,30 +22,30 @@ public class PictureAdminAdapter {
     private UserMapper userMapper = new UserMapper(new RoleMapper());
     private final PictureConfig pictureConfig;
 
-    public PictureDTO create(UserDTO actor, InputStream content, String fileName, String contentType, boolean isPrivate) throws AuthorizationException {
-        return pictureMapper.map(pictureConfig.admin.createUseCase(userMapper.inverseMap(actor))
+    public PictureDTO create(UserDTO actor, InputStream content, String fileName, String contentType, boolean isPrivate) throws AuthorizationException, AuthenticationException {
+        return pictureMapper.map(pictureConfig.admin.createUseCase()
                 .create(content, fileName, contentType, isPrivate));
     }
 
-    public Boolean delete(UserDTO actor, PictureDTO picture) throws AuthorizationException {
-        return pictureConfig.admin.deleteUseCase(userMapper.inverseMap(actor))
+    public Boolean delete(UserDTO actor, PictureDTO picture) throws AuthorizationException, AuthenticationException {
+        return pictureConfig.admin.deleteUseCase()
                 .delete(pictureMapper.inverseMap(picture));
     }
 
-    public PictureDTO update(UserDTO actor, PictureDTO picture) throws AuthorizationException, FileNotFoundException {
-        return pictureMapper.map(pictureConfig.admin.updateUseCase(userMapper.inverseMap(actor))
+    public PictureDTO update(UserDTO actor, PictureDTO picture) throws AuthorizationException, FileNotFoundException, AuthenticationException {
+        return pictureMapper.map(pictureConfig.admin.updateUseCase()
                 .update(pictureMapper.inverseMap(picture)));
     }
 
-    public Optional<PictureDTO> findById(UserDTO actor, String id) throws AuthorizationException {
-        return pictureConfig.admin.viewUseCase(userMapper.inverseMap(actor))
+    public Optional<PictureDTO> findById(UserDTO actor, String id) throws AuthorizationException, AuthenticationException {
+        return pictureConfig.admin.viewUseCase()
                 .findById(id)
                 .map(pictureMapper::map);
     }
 
-    public SearchResult<PictureDTO> find(UserDTO actor, Long size, Long skip) throws AuthorizationException {
+    public SearchResult<PictureDTO> find(UserDTO actor, Long size, Long skip) throws AuthorizationException, AuthenticationException {
         SearchResult<PictureEntity> result = pictureConfig.admin
-                .viewUseCase(userMapper.inverseMap(actor)).find(size, skip);
+                .viewUseCase().find(size, skip);
 
         return SearchResult.withItemsAndCount(
                 pictureMapper.mapAll(result.getItems()),

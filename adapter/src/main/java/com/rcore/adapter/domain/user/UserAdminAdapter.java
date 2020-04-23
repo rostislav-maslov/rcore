@@ -1,9 +1,10 @@
 package com.rcore.adapter.domain.user;
 
 import com.rcore.adapter.domain.role.mapper.RoleMapper;
-import com.rcore.adapter.domain.user.mapper.UserMapper;
 import com.rcore.adapter.domain.user.dto.UserDTO;
+import com.rcore.adapter.domain.user.mapper.UserMapper;
 import com.rcore.domain.base.port.SearchResult;
+import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.config.UserConfig;
 import com.rcore.domain.user.entity.UserEntity;
@@ -20,23 +21,23 @@ public class UserAdminAdapter {
     private UserMapper userMapper = new UserMapper(new RoleMapper());
     private final UserConfig userConfig;
 
-    public UserDTO activateUser(UserDTO actor, UserDTO userDTO) throws AuthorizationException {
-        return userMapper.map(userConfig.admin.activateUseCase(userMapper.inverseMap(actor))
+    public UserDTO activateUser(UserDTO userDTO) throws AuthorizationException, AuthenticationException {
+        return userMapper.map(userConfig.admin.activateUseCase()
                 .activate(userMapper.inverseMap(userDTO)));
     }
 
-    public UserDTO blockUser(UserDTO actor, UserDTO userDTO) throws AuthorizationException {
-        return userMapper.map(userConfig.admin.BlockUseCase(userMapper.inverseMap(actor))
+    public UserDTO blockUser(UserDTO userDTO) throws AuthorizationException, AuthenticationException {
+        return userMapper.map(userConfig.admin.BlockUseCase()
                 .block(userMapper.inverseMap(userDTO)));
     }
 
-    public UserDTO createUserByEmail(UserDTO actor, String email, String password) throws UserAlreadyExistException, AuthorizationException {
-        return userMapper.map(userConfig.admin.CreateUseCase(userMapper.inverseMap(actor))
+    public UserDTO createUserByEmail(String email, String password) throws UserAlreadyExistException, AuthorizationException, AuthenticationException {
+        return userMapper.map(userConfig.admin.CreateUseCase()
                 .createByEmail(email, password));
     }
 
-    public Boolean deleteUser(UserDTO actor, UserDTO userDTO) throws UserAlreadyExistException, AuthorizationException {
-        return userConfig.admin.DeleteUserUseCase(userMapper.inverseMap(actor))
+    public Boolean deleteUser(UserDTO userDTO) throws UserAlreadyExistException, AuthorizationException, AuthenticationException {
+        return userConfig.admin.DeleteUserUseCase()
                 .delete(userMapper.inverseMap(userDTO));
     }
 
@@ -45,18 +46,19 @@ public class UserAdminAdapter {
                 .init(email, password);
     }
 
-    public UserDTO updateUser(UserDTO actor, UserDTO userDTO) throws UserNotFoundException, UserAlreadyExistException, AuthorizationException {
-        return userMapper.map(userConfig.admin.UpdateUserUseCase(userMapper.inverseMap(actor))
+    public UserDTO updateUser(UserDTO userDTO) throws UserNotFoundException, UserAlreadyExistException, AuthorizationException, AuthenticationException {
+        return userMapper.map(userConfig.admin.UpdateUserUseCase()
                 .update(userMapper.inverseMap(userDTO)));
     }
 
-    public Optional<UserDTO> findById(UserDTO actor, String id) throws AuthorizationException {
-        return userConfig.admin.ViewUserUseCase(userMapper.inverseMap(actor))
-                .findById(id).map(userMapper::map);
+    public Optional<UserDTO> findById(String id) throws AuthorizationException, AuthenticationException {
+        return userConfig.admin.ViewUserUseCase()
+                .findById(id)
+                .map(userMapper::map);
     }
 
-    public SearchResult<UserDTO> find(UserDTO actor, Long size, Long skip) throws AuthorizationException {
-        SearchResult<UserEntity> result = userConfig.admin.ViewUserUseCase(userMapper.inverseMap(actor))
+    public SearchResult<UserDTO> find(UserDTO actor, Long size, Long skip) throws AuthorizationException, AuthenticationException {
+        SearchResult<UserEntity> result = userConfig.admin.ViewUserUseCase()
                 .find(size, skip);
 
         return SearchResult.withItemsAndCount(

@@ -1,5 +1,6 @@
 package com.rcore.domain.userEmailVerification.config;
 
+import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.userEmailVerification.port.UserEmailVerificationIdGenerator;
 import com.rcore.domain.userEmailVerification.port.UserEmailVerificationRepository;
 import com.rcore.domain.userEmailVerification.usecase.admin.UserEmailVerificationCreateUseCase;
@@ -7,33 +8,30 @@ import com.rcore.domain.userEmailVerification.usecase.admin.UserEmailVerificatio
 import com.rcore.domain.userEmailVerification.usecase.admin.UserEmailVerificationUpdateUseCase;
 import com.rcore.domain.userEmailVerification.usecase.admin.UserEmailVerificationViewUseCase;
 import com.rcore.domain.token.exception.AuthorizationException;
-import com.rcore.domain.user.entity.UserEntity;
+import lombok.RequiredArgsConstructor;
 
 public class UserEmailVerificationConfig {
 
+    @RequiredArgsConstructor
     public static class Admin {
         protected final UserEmailVerificationRepository userEmailVerificationRepository;
         protected final UserEmailVerificationIdGenerator idGenerator;
+        protected final AuthorizationByTokenUseCase authorizationByTokenUseCase;
 
-        public Admin(UserEmailVerificationRepository userEmailVerificationRepository, UserEmailVerificationIdGenerator idGenerator) {
-            this.userEmailVerificationRepository = userEmailVerificationRepository;
-            this.idGenerator = idGenerator;
+        public UserEmailVerificationCreateUseCase createUseCase() throws AuthorizationException {
+            return new UserEmailVerificationCreateUseCase(this.userEmailVerificationRepository, idGenerator, authorizationByTokenUseCase);
         }
 
-        public UserEmailVerificationCreateUseCase createUseCase(UserEntity actor) throws AuthorizationException {
-            return new UserEmailVerificationCreateUseCase(actor, this.userEmailVerificationRepository, idGenerator);
+        public UserEmailVerificationDeleteUseCase deleteUseCase() throws AuthorizationException {
+            return new UserEmailVerificationDeleteUseCase(this.userEmailVerificationRepository, authorizationByTokenUseCase);
         }
 
-        public UserEmailVerificationDeleteUseCase deleteUseCase(UserEntity actor) throws AuthorizationException {
-            return new UserEmailVerificationDeleteUseCase(actor, this.userEmailVerificationRepository);
+        public UserEmailVerificationUpdateUseCase updateUseCase() throws AuthorizationException {
+            return new UserEmailVerificationUpdateUseCase(this.userEmailVerificationRepository, authorizationByTokenUseCase);
         }
 
-        public UserEmailVerificationUpdateUseCase updateUseCase(UserEntity actor) throws AuthorizationException {
-            return new UserEmailVerificationUpdateUseCase(actor, this.userEmailVerificationRepository);
-        }
-
-        public UserEmailVerificationViewUseCase viewUseCase(UserEntity actor) throws AuthorizationException {
-            return new UserEmailVerificationViewUseCase(actor, this.userEmailVerificationRepository);
+        public UserEmailVerificationViewUseCase viewUseCase() throws AuthorizationException {
+            return new UserEmailVerificationViewUseCase(this.userEmailVerificationRepository, authorizationByTokenUseCase);
         }
     }
 
@@ -46,18 +44,20 @@ public class UserEmailVerificationConfig {
 
     private final UserEmailVerificationRepository userEmailVerificationRepository;
     private final UserEmailVerificationIdGenerator idGenerator;
+    private final AuthorizationByTokenUseCase authorizationByTokenUseCase;
 
     public final Admin admin;
     public final All all;
 
     public UserEmailVerificationConfig(
             UserEmailVerificationRepository userEmailVerificationRepository,
-            UserEmailVerificationIdGenerator idGenerator
-    ) {
+            UserEmailVerificationIdGenerator idGenerator,
+            AuthorizationByTokenUseCase authorizationByTokenUseCase) {
         this.userEmailVerificationRepository = userEmailVerificationRepository;
         this.idGenerator = idGenerator;
+        this.authorizationByTokenUseCase = authorizationByTokenUseCase;
 
-        this.admin = new Admin(this.userEmailVerificationRepository, this.idGenerator);
+        this.admin = new Admin(this.userEmailVerificationRepository, this.idGenerator, this.authorizationByTokenUseCase);
         this.all = new All();
     }
 

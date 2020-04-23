@@ -1,6 +1,8 @@
 package com.rcore.domain.user.usecase.admin;
 
+import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
+import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.token.usecase.ExpireTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.entity.UserStatus;
@@ -11,13 +13,15 @@ public class BlockUseCase extends AdminBaseUseCase {
 
     private final ExpireTokenUseCase expireTokenUseCase;
 
-    public BlockUseCase(UserEntity actor, UserRepository userRepository, ExpireTokenUseCase expireTokenUseCase) throws AuthorizationException {
-        super(actor, userRepository, new AdminUserBlockAccess());
+    public BlockUseCase(UserRepository userRepository, ExpireTokenUseCase expireTokenUseCase, AuthorizationByTokenUseCase authorizationByTokenUseCase) {
+        super(userRepository, new AdminUserBlockAccess(), authorizationByTokenUseCase);
         this.expireTokenUseCase = expireTokenUseCase;
     }
 
 
-    public UserEntity block(UserEntity userEntity) {
+    public UserEntity block(UserEntity userEntity) throws AuthorizationException, AuthenticationException {
+        checkAccess();
+
         userEntity.setStatus(UserStatus.BLOCK);
         userEntity.setFails(0);
         userEntity = userRepository.save(userEntity);

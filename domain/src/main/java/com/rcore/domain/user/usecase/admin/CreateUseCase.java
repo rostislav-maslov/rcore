@@ -1,6 +1,8 @@
 package com.rcore.domain.user.usecase.admin;
 
+import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
+import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.exception.UserAlreadyExistException;
 import com.rcore.domain.user.port.UserIdGenerator;
@@ -12,13 +14,15 @@ public class CreateUseCase extends AdminBaseUseCase {
     private final PasswordGenerator passwordGenerator;
     private final UserIdGenerator userIdGenerator;
 
-    public CreateUseCase(UserEntity actor, UserRepository userRepository, PasswordGenerator passwordGenerator, UserIdGenerator userIdGenerator) throws AuthorizationException {
-        super(actor, userRepository, new AdminUserCreateAccess());
+    public CreateUseCase(UserRepository userRepository, PasswordGenerator passwordGenerator, UserIdGenerator userIdGenerator, AuthorizationByTokenUseCase authorizationByTokenUseCase) {
+        super(userRepository, new AdminUserCreateAccess(), authorizationByTokenUseCase);
         this.passwordGenerator = passwordGenerator;
         this.userIdGenerator = userIdGenerator;
     }
 
-    public UserEntity createByEmail(String email, String password) throws UserAlreadyExistException {
+    public UserEntity createByEmail(String email, String password) throws UserAlreadyExistException, AuthenticationException, AuthorizationException {
+        checkAccess();
+
         userRepository.findByEmail(email.toLowerCase())
                 .orElseThrow(() -> new UserAlreadyExistException());
 

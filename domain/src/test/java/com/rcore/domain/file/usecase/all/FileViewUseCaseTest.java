@@ -13,8 +13,6 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
-
 public class FileViewUseCaseTest {
 
     private final FileAppConfig fileAppConfig = new FileAppConfig();
