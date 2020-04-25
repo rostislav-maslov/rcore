@@ -11,6 +11,7 @@ import com.rcore.domain.user.port.UserIdGenerator;
 import com.rcore.domain.user.port.PasswordGenerator;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.usecase.admin.*;
+import com.rcore.domain.user.usecase.all.CreateUserByPhoneNumber;
 import com.rcore.domain.user.usecase.all.EmailAuthenticationUseCase;
 import com.rcore.domain.user.usecase.all.ViewUserUserCase;
 import lombok.RequiredArgsConstructor;
@@ -62,6 +63,7 @@ public class UserConfig {
     @RequiredArgsConstructor
     public static class All {
         private final UserRepository userRepository;
+        private final UserIdGenerator userIdGenerator;
         private final PasswordGenerator passwordGenerator;
         private final CreateRefreshTokenUseCase createRefreshTokenUseCase;
         private final CreateAccessTokenUseCase createAccessTokenUseCase;
@@ -73,6 +75,10 @@ public class UserConfig {
 
         public ViewUserUserCase viewUserUserCase() {
             return new ViewUserUserCase(userRepository);
+        }
+
+        public CreateUserByPhoneNumber createUserByPhoneNumber() {
+            return new CreateUserByPhoneNumber(userRepository, userIdGenerator);
         }
 
     }
@@ -109,7 +115,7 @@ public class UserConfig {
         this.authorizationByTokenUseCase = authorizationByTokenUseCase;
 
         this.admin = new Admin(this.userRepository, this.userIdGenerator, this.passwordGenerator, this.expireTokenUseCase, this.roleRepository, this.authorizationByTokenUseCase);
-        this.all = new All(this.userRepository, this.passwordGenerator, this.createRefreshTokenUseCase, this.createAccessTokenUseCase, this.refreshTokenRepository);
+        this.all = new All(this.userRepository, this.userIdGenerator, this.passwordGenerator, this.createRefreshTokenUseCase, this.createAccessTokenUseCase, this.refreshTokenRepository);
     }
 
 }

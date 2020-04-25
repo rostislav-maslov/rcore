@@ -37,6 +37,14 @@ public class UserEntity extends BaseEntity {
     protected Integer fails = 0;
     protected LocalDateTime lastFailDate = LocalDateTime.now();
 
+    public UserEntity(Long phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public UserEntity(String email) {
+        this.email = email;
+    }
+
     public Boolean hasAccess(Access access) {
 
         for (RoleEntity role : roles) {

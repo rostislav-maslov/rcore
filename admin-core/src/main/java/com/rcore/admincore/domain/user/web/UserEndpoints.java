@@ -31,14 +31,13 @@ import org.springframework.web.bind.annotation.*;
 public class UserEndpoints {
 
     private final UserAdapter userAdapter;
-    private final TokenAdapter tokenAdapter;
     private final UserWebMapper userWebMapper;
 
     @ApiOperation("Метод получения списка пользователей")
     @GetMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
     public SuccessApiResponse<SearchApiResponse<UserWeb>> all(@ModelAttribute SearchApiRequest request) throws AuthenticationException, AuthorizationException {
         SearchResult<UserDTO> result = userAdapter.getAdmin()
-                .find(tokenAdapter.currentUser(), request.getLimit(), request.getOffset());
+                .find(request.getLimit(), request.getOffset());
 
         return SuccessApiResponse.of(
                 SearchApiResponse.withItemsAndCount(
@@ -77,8 +76,6 @@ public class UserEndpoints {
     @ApiOperation("Удаление пользователя")
     @DeleteMapping(value = Routes.BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
     public OkApiResponse delete(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException, UserAlreadyExistException {
-        UserDTO actor = tokenAdapter.currentUser();
-
         UserDTO user = userAdapter.getAdmin()
                 .findById(id)
                 .orElseThrow(() -> new NotFoundApiException("Передан неверный идентификатор пользователя", "USER", "NOT_FOUND"));
@@ -92,8 +89,6 @@ public class UserEndpoints {
     @ApiOperation("Блокировка пользователя")
     @PatchMapping(value = Routes.BLOCK, produces = MediaType.APPLICATION_JSON_VALUE)
     public OkApiResponse block(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException, UserAlreadyExistException {
-        UserDTO actor = tokenAdapter.currentUser();
-
         UserDTO user = userAdapter.getAdmin()
                 .findById(id)
                 .orElseThrow(() -> new NotFoundApiException("Передан неверный идентификатор пользователя", "USER", "NOT_FOUND"));

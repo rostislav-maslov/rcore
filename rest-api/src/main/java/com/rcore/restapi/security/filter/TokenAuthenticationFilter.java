@@ -49,14 +49,14 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
 
         AccessTokenDTO accessToken = null;
 
-        if (!StringUtils.hasText(token))
-            new AccessDeniedException("");
-
-        try {
-            accessToken = authTokenGenerator.parseToken(token, secret);
-        } catch (InvalidTokenFormatException e) {
-            throw new InvalidTokenFormatApiException();
+        if (StringUtils.hasText(token)) {
+            try {
+                accessToken = authTokenGenerator.parseToken(token, secret);
+            } catch (InvalidTokenFormatException e) {
+                throw new InvalidTokenFormatApiException();
+            }
         }
+
 
         return getAuthenticationManager().authenticate(AuthenticationTokenFactory.ofRawToken(accessToken));
     }

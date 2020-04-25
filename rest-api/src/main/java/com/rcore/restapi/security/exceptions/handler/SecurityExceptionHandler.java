@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-@Order(1)
+@Order(100)
 @RestControllerAdvice
 public class SecurityExceptionHandler {
 
@@ -37,8 +37,9 @@ public class SecurityExceptionHandler {
             UserNotExistException.class,
             TokenExpiredException.class
     })
-    public ErrorApiResponse<ExceptionDTO> handleForbidden(ApiAuthenticationException e) {
-        return ErrorApiResponse.of(e.getError());
+    public ErrorApiResponse<ExceptionDTO> handleForbidden(Exception e) {
+        return ErrorApiResponse.of(ExceptionDTO.builder()
+                .build());
     }
 
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)

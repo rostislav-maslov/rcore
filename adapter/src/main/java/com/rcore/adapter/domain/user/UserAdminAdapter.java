@@ -57,7 +57,7 @@ public class UserAdminAdapter {
                 .map(userMapper::map);
     }
 
-    public SearchResult<UserDTO> find(UserDTO actor, Long size, Long skip) throws AuthorizationException, AuthenticationException {
+    public SearchResult<UserDTO> find(Long size, Long skip) throws AuthorizationException, AuthenticationException {
         SearchResult<UserEntity> result = userConfig.admin.ViewUserUseCase()
                 .find(size, skip);
 
