@@ -2,7 +2,9 @@ package com.rcore.database.mongo.domain.role.port;
 
 import com.rcore.database.mongo.common.utils.CollectionNameUtils;
 import com.rcore.database.mongo.domain.role.model.RoleDoc;
+import com.rcore.database.mongo.domain.role.query.FindAllWithSearch;
 import com.rcore.database.mongo.domain.role.query.FindByName;
+import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.role.entity.RoleEntity;
 import com.rcore.domain.role.port.RoleRepository;
@@ -39,7 +41,7 @@ public class RoleRepositoryImpl implements RoleRepository {
 
     @Override
     public Boolean deleteById(String id) {
-        long deletedCount = mongoTemplate.remove(Query.query(Criteria.where("id").is(id)), CollectionNameUtils.getCollectionName(RoleDoc.class)).getDeletedCount();
+        long deletedCount = mongoTemplate.remove(Query.query(Criteria.where("_id").is(id)), CollectionNameUtils.getCollectionName(RoleDoc.class)).getDeletedCount();
         return deletedCount > 0;
     }
 
@@ -49,12 +51,13 @@ public class RoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public SearchResult<RoleEntity> find(Long size, Long skip) {
+    public SearchResult<RoleEntity> find(SearchRequest request) {
+        Query query = new FindAllWithSearch(request).getQuery();
         return SearchResult.withItemsAndCount(
-                mongoTemplate.find(new Query().skip(skip).limit(size.intValue()), RoleDoc.class)
+                mongoTemplate.find(new FindAllWithSearch(request).getQuery(), RoleDoc.class)
                         .stream()
                         .collect(Collectors.toList()),
-                count()
+                mongoTemplate.count(query, RoleDoc.class)
         );
     }
 

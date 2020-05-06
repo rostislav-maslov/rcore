@@ -1,5 +1,6 @@
 package com.rcore.domain.user.usecase.admin;
 
+import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
@@ -21,9 +22,14 @@ public class ViewUserUseCase extends AdminBaseUseCase {
         return userRepository.findById(id);
     }
 
-    public SearchResult<UserEntity> find(Long size, Long skip) throws AuthenticationException, AuthorizationException {
+    public SearchResult<UserEntity> find(SearchRequest request) throws AuthenticationException, AuthorizationException {
         checkAccess();
-        return userRepository.find(size, skip);
+        return userRepository.find(request);
+    }
+
+    public SearchResult<UserEntity> findWithSearch(SearchRequest request, String roleId) throws AuthenticationException, AuthorizationException {
+        checkAccess();
+        return userRepository.findWithFilters(request, roleId);
     }
 
 }

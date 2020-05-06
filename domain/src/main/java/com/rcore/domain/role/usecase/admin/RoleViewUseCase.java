@@ -1,5 +1,6 @@
 package com.rcore.domain.role.usecase.admin;
 
+import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.role.entity.RoleEntity;
 import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.role.access.AdminRoleViewAccess;
@@ -27,9 +28,9 @@ public class RoleViewUseCase extends RoleAdminBaseUseCase {
         return roleRepository.findById(id);
     }
 
-    public SearchResult<RoleEntity> find(Long size, Long skip) throws AuthenticationException, AuthorizationException {
+    public SearchResult<RoleEntity> find(SearchRequest request) throws AuthenticationException, AuthorizationException {
         checkAccess();
-        return roleRepository.find(size, skip);
+        return roleRepository.find(request);
     }
 
 }

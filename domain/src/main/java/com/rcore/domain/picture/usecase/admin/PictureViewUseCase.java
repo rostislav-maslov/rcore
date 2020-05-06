@@ -1,5 +1,6 @@
 package com.rcore.domain.picture.usecase.admin;
 
+import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.file.exception.FileNotFoundException;
 import com.rcore.domain.picture.entity.PictureEntity;
 import com.rcore.domain.picture.port.PictureRepository;
@@ -34,9 +35,9 @@ public class PictureViewUseCase extends PictureAdminBaseUseCase {
         return pictureRepository.findById(id);
     }
 
-    public SearchResult<PictureEntity> find(Long size, Long skip) throws AuthenticationException, AuthorizationException {
+    public SearchResult<PictureEntity> find(SearchRequest request) throws AuthenticationException, AuthorizationException {
         checkAccess();
-        return pictureRepository.find(size, skip);
+        return pictureRepository.find(request);
     }
 
     public Optional<InputStream> getInputStream(String id) throws FileNotFoundException, AuthenticationException, AuthorizationException {

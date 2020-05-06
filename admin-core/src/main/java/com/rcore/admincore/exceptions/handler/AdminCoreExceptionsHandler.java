@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class AdminCoreExceptionsHandler {
 
-
     @ExceptionHandler({UserAlreadyExistException.class})
     public ErrorApiResponse<ExceptionDTO> handleUserExistException(BaseApiException e) {
         return ErrorApiResponse.of(e.getError());

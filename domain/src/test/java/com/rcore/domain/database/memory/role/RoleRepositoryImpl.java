@@ -1,5 +1,6 @@
 package com.rcore.domain.database.memory.role;
 
+import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.picture.entity.PictureEntity;
 import com.rcore.domain.role.entity.RoleEntity;
@@ -47,7 +48,7 @@ public class RoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public SearchResult<RoleEntity> find(Long size, Long skip) {
+    public SearchResult<RoleEntity> find(SearchRequest request) {
         return null;
     }
 

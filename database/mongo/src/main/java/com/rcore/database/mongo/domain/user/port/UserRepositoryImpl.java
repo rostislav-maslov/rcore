@@ -4,6 +4,7 @@ import com.rcore.database.mongo.common.utils.CollectionNameUtils;
 import com.rcore.database.mongo.domain.picture.model.PictureDoc;
 import com.rcore.database.mongo.domain.user.model.UserDoc;
 import com.rcore.database.mongo.domain.user.query.*;
+import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.port.UserRepository;
@@ -51,7 +52,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Boolean deleteById(String id) {
-        Long deleteCount = mongoTemplate.remove(Query.query(Criteria.where("id").is(id)), CollectionNameUtils.getCollectionName(UserDoc.class)).getDeletedCount();
+        Long deleteCount = mongoTemplate.remove(Query.query(Criteria.where("_id").is(id)), CollectionNameUtils.getCollectionName(UserDoc.class)).getDeletedCount();
         return deleteCount > 0 ? true : false;
     }
 
@@ -61,12 +62,24 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public SearchResult<UserEntity> find(Long size, Long skip) {
+    public SearchResult<UserEntity> find(SearchRequest request) {
+        Query query = new FindAllWithSearch(request).getQuery();
         return SearchResult.withItemsAndCount(
-                mongoTemplate.find(new Query().skip(skip).limit(size.intValue()), UserDoc.class)
+                mongoTemplate.find(query, UserDoc.class)
                         .stream()
                         .collect(Collectors.toList()),
-                count()
+                mongoTemplate.count(query, UserDoc.class)
+        );
+    }
+
+    @Override
+    public SearchResult<UserEntity> findWithFilters(SearchRequest request, String roleId) {
+        Query query = new FindAllWithSearch(request).withRoleId(roleId).getQuery();
+        return SearchResult.withItemsAndCount(
+                mongoTemplate.find(query, UserDoc.class)
+                        .stream()
+                        .collect(Collectors.toList()),
+                mongoTemplate.count(query, UserDoc.class)
         );
     }
 

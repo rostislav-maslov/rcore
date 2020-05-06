@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 @CompoundIndexes({
-        @CompoundIndex(def = "{'title': 1}", name = "title", unique = true)
+        @CompoundIndex(def = "{'name': 1}", name = "name", unique = true)
 })
 @SuperBuilder
 @Data

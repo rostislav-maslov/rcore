@@ -1,5 +1,6 @@
 package com.rcore.domain.userPasswordRecover.usecase.admin;
 
+import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.userPasswordRecover.entity.UserPasswordRecoverEntity;
@@ -25,9 +26,9 @@ public class UserPasswordRecoverViewUseCase extends UserPasswordRecoverAdminBase
         return userPasswordRecoverRepository.findById(id).get();
     }
 
-    public SearchResult<UserPasswordRecoverEntity> find(Long size, Long skip) throws AuthenticationException, AuthorizationException {
+    public SearchResult<UserPasswordRecoverEntity> find(SearchRequest request) throws AuthenticationException, AuthorizationException {
         checkAccess();
-        return userPasswordRecoverRepository.find(size, skip);
+        return userPasswordRecoverRepository.find(request);
     }
 
 }

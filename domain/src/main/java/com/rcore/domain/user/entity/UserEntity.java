@@ -14,11 +14,10 @@ import java.util.*;
 @NoArgsConstructor
 @SuperBuilder
 public class UserEntity extends BaseEntity {
+
     protected String id;
 
     protected Set<RoleEntity> roles = new HashSet<>();
-
-//    protected Set<Access> accesses = new HashSet<Access>();
 
     protected UserStatus status = UserStatus.ACTIVE;
 

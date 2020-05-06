@@ -2,20 +2,19 @@ package com.rcore.domain.base.port;
 
 import com.rcore.domain.base.entity.BaseEntity;
 
-import java.util.Date;
 import java.util.Optional;
 
-public interface CRUDRepository<IdT, ObjectT extends BaseEntity> {
+public interface CRUDRepository<Id, Entity extends BaseEntity> {
 
-    ObjectT save(ObjectT object);
+    Entity save(Entity entity);
 
-    Boolean delete(ObjectT object);
+    Boolean delete(Entity entity);
 
-    Boolean deleteById(IdT id);
+    Boolean deleteById(Id id);
 
-    Optional<ObjectT> findById(IdT id);
+    Optional<Entity> findById(Id id);
 
-    SearchResult<ObjectT> find(Long size, Long skip);
+    SearchResult<Entity> find(SearchRequest request);
 
     Long count();
 

@@ -10,10 +10,11 @@ import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.access.AdminUserUpdateAccess;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
-public class UpdateUserUseCase  extends AdminBaseUseCase {
+public class UpdateUserUseCase extends AdminBaseUseCase {
 
-    public UpdateUserUseCase(UserRepository userRepository, AuthorizationByTokenUseCase authorizationByTokenUseCase)throws AuthorizationException {
+    public UpdateUserUseCase(UserRepository userRepository, AuthorizationByTokenUseCase authorizationByTokenUseCase) {
         super(userRepository, new AdminUserUpdateAccess(), authorizationByTokenUseCase);
     }
 
@@ -23,10 +24,17 @@ public class UpdateUserUseCase  extends AdminBaseUseCase {
         UserEntity old = userRepository.findById(userEntity.getId())
                 .orElseThrow(() -> new UserNotFoundException());
 
-        old.setFirstName(userEntity.getFirstName());
-        old.setLastName(userEntity.getLastName());
-        old.setSecondName(userEntity.getSecondName());
-        old.setFullName(userEntity.getFullName());
+        old.setFirstName(Optional.ofNullable(userEntity.getFirstName())
+                .orElse(old.getFirstName()));
+
+        old.setLastName(Optional.ofNullable(userEntity.getLastName())
+                .orElse(old.getLastName()));
+
+        old.setSecondName(Optional.ofNullable(userEntity.getSecondName())
+                .orElse(old.getSecondName()));
+
+        old.setFullName(Optional.ofNullable(userEntity.getFullName())
+                .orElse(old.getFullName()));
 
         old.setUpdatedAt(LocalDateTime.now());
 

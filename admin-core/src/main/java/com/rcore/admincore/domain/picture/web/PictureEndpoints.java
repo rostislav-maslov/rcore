@@ -36,7 +36,7 @@ public class PictureEndpoints {
     @GetMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
     public SuccessApiResponse<SearchApiResponse<PictureWeb>> all(@ModelAttribute SearchApiRequest request) throws AuthenticationException, AuthorizationException {
         SearchResult<PictureDTO> result = pictureAdapter.getAdmin()
-                .find(tokenAdapter.currentUser(), request.getLimit(), request.getOffset());
+                .find(request.toSearchRequest());
         return SuccessApiResponse.of(
                 SearchApiResponse.withItemsAndCount(
                         pictureWebMapper.mapAll(result.getItems()),
@@ -48,7 +48,7 @@ public class PictureEndpoints {
     @GetMapping(value = Routes.BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
     public SuccessApiResponse<PictureWeb> get(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException {
         return SuccessApiResponse.of(pictureAdapter.getAdmin()
-                .findById(tokenAdapter.currentUser(), id)
+                .findById(id)
                 .map(pictureWebMapper::map)
                 .orElseThrow(() -> new NotFoundApiException("Неверный идентификатор изображения", "PICTURE", "NOT_FOUND")));
     }
@@ -56,12 +56,11 @@ public class PictureEndpoints {
     @ApiOperation("Удаление изображения")
     @DeleteMapping(value = Routes.BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
     public OkApiResponse delete(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException {
-        UserDTO actor = tokenAdapter.currentUser();
         PictureDTO picture = pictureAdapter.getAdmin()
-                .findById(actor, id)
+                .findById(id)
                 .orElseThrow(() -> new NotFoundApiException("Неверный идентификатор изображения", "PICTURE", "NOT_FOUND"));
 
-        pictureAdapter.getAdmin().delete(actor, picture);
+        pictureAdapter.getAdmin().delete(picture);
         return OkApiResponse.of();
     }
 
@@ -69,7 +68,7 @@ public class PictureEndpoints {
     @PostMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
     public SuccessApiResponse<String> upload(@RequestParam MultipartFile file) throws AuthenticationException, IOException, AuthorizationException {
        PictureDTO picture = pictureAdapter.getAdmin()
-               .create(tokenAdapter.currentUser(), file.getInputStream(), file.getOriginalFilename(), file.getContentType(), false);
+               .create(file.getInputStream(), file.getOriginalFilename(), file.getContentType(), false);
 
        return SuccessApiResponse.of(picture.getId());
     }

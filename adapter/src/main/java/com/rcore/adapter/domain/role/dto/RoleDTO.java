@@ -15,7 +15,7 @@ import java.util.Set;
 @Data
 public class RoleDTO {
     private String id;
-    private String title;
+    private String name;
     private String locale;
     private Set<Access> accesses;
     private LocalDateTime createdAt;

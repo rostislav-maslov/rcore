@@ -1,6 +1,7 @@
 package com.rcore.restapi.web.api.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.rcore.domain.base.port.SearchRequest;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -34,5 +35,15 @@ public class SearchApiRequest {
     public SearchApiRequest(String query, Long limit) {
         this.query = query;
         this.limit = limit;
+    }
+
+    public SearchRequest toSearchRequest() {
+        return SearchRequest.builder()
+                .limit(this.limit)
+                .offset(this.offset)
+                .query(this.query)
+                .sortDirection(this.sortDirection)
+                .sortName(this.sortName)
+                .build();
     }
 }

@@ -1,5 +1,6 @@
 package com.rcore.domain.file.usecase.admin;
 
+import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.file.entity.FileEntity;
 import com.rcore.domain.file.exception.FileNotFoundException;
 import com.rcore.domain.file.port.FileRepository;
@@ -33,9 +34,9 @@ public class FileViewUseCase extends FileAdminBaseUseCase {
         return fileRepository.findById(id);
     }
 
-    public SearchResult<FileEntity> find(Long size, Long skip) throws AuthenticationException, AuthorizationException {
+    public SearchResult<FileEntity> find(SearchRequest request) throws AuthenticationException, AuthorizationException {
         checkAccess();
-        return fileRepository.find(size, skip);
+        return fileRepository.find(request);
     }
 
     public Optional<InputStream> getInputStream(String id) throws FileNotFoundException, AuthenticationException, AuthorizationException {

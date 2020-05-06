@@ -2,7 +2,9 @@ package com.rcore.database.mongo.domain.file.port;
 
 import com.rcore.database.mongo.common.utils.CollectionNameUtils;
 import com.rcore.database.mongo.domain.file.model.FileDoc;
+import com.rcore.database.mongo.domain.file.query.FindAllWithSearch;
 import com.rcore.database.mongo.domain.file.query.FindByPath;
+import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.file.entity.FileEntity;
 import com.rcore.domain.file.port.FileRepository;
@@ -39,7 +41,7 @@ public class FileRepositoryImpl implements FileRepository {
 
     @Override
     public Boolean deleteById(String id) {
-        long deleteCount = mongoTemplate.remove(Query.query(Criteria.where("id").is(id)), CollectionNameUtils.getCollectionName(FileDoc.class)).getDeletedCount();
+        long deleteCount = mongoTemplate.remove(Query.query(Criteria.where("_id").is(id)), CollectionNameUtils.getCollectionName(FileDoc.class)).getDeletedCount();
         return deleteCount > 0;
     }
 
@@ -49,12 +51,14 @@ public class FileRepositoryImpl implements FileRepository {
     }
 
     @Override
-    public SearchResult<FileEntity> find(Long size, Long skip) {
+    public SearchResult<FileEntity> find(SearchRequest request) {
+        Query query = new FindAllWithSearch(request).getQuery();
+
         return SearchResult.withItemsAndCount(
-                mongoTemplate.find(new Query().skip(skip).limit(size.intValue()), FileDoc.class)
+                mongoTemplate.find(query, FileDoc.class)
                         .stream()
                         .collect(Collectors.toList()),
-                count()
+                mongoTemplate.count(query, FileDoc.class)
         );
     }
 

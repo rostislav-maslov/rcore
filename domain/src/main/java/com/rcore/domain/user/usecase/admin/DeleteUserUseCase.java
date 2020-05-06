@@ -19,5 +19,11 @@ public class DeleteUserUseCase extends AdminBaseUseCase {
         return userRepository.delete(userEntity);
     }
 
+    public Boolean deleteById(String id) throws AuthenticationException, AuthorizationException {
+        checkAccess();
+
+        return userRepository.deleteById(id);
+    }
+
 
 }

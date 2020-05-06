@@ -39,7 +39,7 @@ public class BaseAuthEndpoints {
 
     @PostMapping(value = BaseAuthRoutes.INIT_ADMIN)
     public OkApiResponse initAdmin(@RequestBody UserCredentialsDTO request) throws AdminUserIsExistException {
-        userAdapter.getAdmin().initAdminUser(request.getEmail(), request.getPassword());
+        userAdapter.getSecure().initAdminUser(request.getEmail(), request.getPassword());
         return OkApiResponse.of();
     }
 

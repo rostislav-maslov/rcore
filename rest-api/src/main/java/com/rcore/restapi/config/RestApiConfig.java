@@ -2,6 +2,7 @@ package com.rcore.restapi.config;
 
 import com.rcore.adapter.domain.file.FileAdapter;
 import com.rcore.adapter.domain.picture.PictureAdapter;
+import com.rcore.adapter.domain.role.RoleAdapter;
 import com.rcore.adapter.domain.token.TokenAdapter;
 import com.rcore.adapter.domain.user.UserAdapter;
 import com.rcore.domain.file.config.FileConfig;
@@ -13,6 +14,8 @@ import com.rcore.domain.picture.port.PictureCompressor;
 import com.rcore.domain.picture.port.PictureIdGenerator;
 import com.rcore.domain.picture.port.PictureRepository;
 import com.rcore.domain.picture.port.PictureStorage;
+import com.rcore.domain.role.config.RoleConfig;
+import com.rcore.domain.role.port.RoleIdGenerator;
 import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.token.config.TokenConfig;
 import com.rcore.domain.token.port.AccessTokenIdGenerator;
@@ -56,6 +59,7 @@ public class RestApiConfig {
     private final PasswordGenerator passwordGenerator = new PasswordGeneratorImpl();
 
     private final RoleRepository roleRepository;
+    private final RoleIdGenerator roleIdGenerator;
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final AccessTokenStorage accessTokenStorage;
@@ -89,6 +93,11 @@ public class RestApiConfig {
                 roleRepository,
                 new AuthorizationByTokenUseCase(refreshTokenRepository, accessTokenStorage, userRepository))
         );
+    }
+
+    @Bean
+    public RoleAdapter roleAdapter() {
+        return new RoleAdapter(new RoleConfig(roleRepository, roleIdGenerator, new AuthorizationByTokenUseCase(refreshTokenRepository, accessTokenStorage, userRepository)));
     }
 
 }

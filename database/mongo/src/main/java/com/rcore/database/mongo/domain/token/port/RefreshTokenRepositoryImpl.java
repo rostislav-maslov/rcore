@@ -6,7 +6,9 @@ import com.rcore.database.mongo.common.utils.CollectionNameUtils;
 import com.rcore.database.mongo.domain.token.model.RefreshTokenDoc;
 import com.rcore.database.mongo.domain.token.query.ExpireRefreshTokenQuery;
 import com.rcore.database.mongo.domain.token.query.FindAllActiveByUserId;
+import com.rcore.database.mongo.domain.token.query.FindAllWithSearch;
 import com.rcore.database.mongo.domain.user.model.UserDoc;
+import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.port.RefreshTokenRepository;
@@ -52,7 +54,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
     @Override
     public Boolean deleteById(String id) {
-        long deletedCount = mongoTemplate.remove(Query.query(Criteria.where("id").is(id)), RefreshTokenDoc.class).getDeletedCount();
+        long deletedCount = mongoTemplate.remove(Query.query(Criteria.where("_id").is(id)), RefreshTokenDoc.class).getDeletedCount();
         return deletedCount > 0 ? true : false;
     }
 
@@ -62,12 +64,13 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     }
 
     @Override
-    public SearchResult<RefreshTokenEntity> find(Long size, Long skip) {
+    public SearchResult<RefreshTokenEntity> find(SearchRequest request) {
+        Query query = new FindAllWithSearch(request).getQuery();
         return SearchResult.withItemsAndCount(
-                mongoTemplate.find(new Query().limit(size.intValue()).skip(skip), RefreshTokenDoc.class)
+                mongoTemplate.find(query, RefreshTokenDoc.class)
                         .stream()
                         .collect(Collectors.toList()),
-                count()
+                mongoTemplate.count(query, RefreshTokenDoc.class)
         );
     }
 

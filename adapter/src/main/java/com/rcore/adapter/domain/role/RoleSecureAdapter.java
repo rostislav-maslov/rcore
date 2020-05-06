@@ -8,7 +8,7 @@ import com.rcore.domain.token.exception.AuthorizationException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class RoleAdminAdapter {
+public class RoleSecureAdapter {
 
     private RoleMapper roleMapper = new RoleMapper();
     private final RoleConfig roleConfig;

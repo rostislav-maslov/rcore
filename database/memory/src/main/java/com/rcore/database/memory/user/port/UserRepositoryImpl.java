@@ -1,5 +1,6 @@
 package com.rcore.database.memory.user.port;
 
+import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.entity.UserEntity;
@@ -41,7 +42,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public SearchResult<UserEntity> find(Long size, Long skip) {
+    public SearchResult<UserEntity> find(SearchRequest request) {
         return null;
     }
 
@@ -70,5 +71,10 @@ public class UserRepositoryImpl implements UserRepository {
         }
 
         return Optional.empty();
+    }
+
+    @Override
+    public SearchResult<UserEntity> findWithFilters(SearchRequest request, String roleId) {
+        return null;
     }
 }

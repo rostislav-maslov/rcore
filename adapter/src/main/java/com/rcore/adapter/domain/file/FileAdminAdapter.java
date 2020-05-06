@@ -2,6 +2,7 @@ package com.rcore.adapter.domain.file;
 
 import com.rcore.adapter.domain.file.dto.FileDTO;
 import com.rcore.adapter.domain.file.mapper.FileMapper;
+import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.file.config.FileConfig;
 import com.rcore.domain.file.entity.FileEntity;
@@ -38,9 +39,9 @@ public class FileAdminAdapter {
                 .findById(id)
                 .map(fileMapper::map);
     }
-    public SearchResult<FileDTO> find(Long size, Long skip) throws AuthorizationException, AuthenticationException {
+    public SearchResult<FileDTO> find(SearchRequest request) throws AuthorizationException, AuthenticationException {
         SearchResult<FileEntity> result = fileConfig.admin
-                .viewUseCase().find(size, skip);
+                .viewUseCase().find(request);
 
         return SearchResult.withItemsAndCount(
                 fileMapper.mapAll(result.getItems()),

@@ -8,6 +8,9 @@ public class AccessTokenMapper implements ExampleDataMapper<AccessTokenEntity, A
 
     @Override
     public AccessTokenDTO map(AccessTokenEntity accessTokenEntity) {
+        if (accessTokenEntity == null)
+            return null;
+
         return AccessTokenDTO.builder()
                 .id(accessTokenEntity.getId())
                 .createdAt(accessTokenEntity.getCreatedAt())
@@ -23,6 +26,9 @@ public class AccessTokenMapper implements ExampleDataMapper<AccessTokenEntity, A
 
     @Override
     public AccessTokenEntity inverseMap(AccessTokenDTO accessTokenDTO) {
+        if (accessTokenDTO == null)
+            return null;
+
         return AccessTokenEntity.builder()
                 .id(accessTokenDTO.getId())
                 .createdAt(accessTokenDTO.getCreatedAt())

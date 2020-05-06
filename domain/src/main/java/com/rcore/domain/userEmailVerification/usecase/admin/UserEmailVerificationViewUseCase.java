@@ -1,5 +1,6 @@
 package com.rcore.domain.userEmailVerification.usecase.admin;
 
+import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.userEmailVerification.entity.UserEmailVerificationEntity;
@@ -27,9 +28,9 @@ public class UserEmailVerificationViewUseCase extends UserEmailVerificationAdmin
         return userEmailVerificationRepository.findById(id);
     }
 
-    public SearchResult<UserEmailVerificationEntity> find(Long size, Long skip) throws AuthenticationException, AuthorizationException {
+    public SearchResult<UserEmailVerificationEntity> find(SearchRequest request) throws AuthenticationException, AuthorizationException {
         checkAccess();
-        return userEmailVerificationRepository.find(size, skip);
+        return userEmailVerificationRepository.find(request);
     }
 
 }

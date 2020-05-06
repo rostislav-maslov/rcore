@@ -1,11 +1,12 @@
 package com.rcore.admincore.domain.user.web;
 
-import com.rcore.adapter.domain.token.TokenAdapter;
 import com.rcore.adapter.domain.user.UserAdapter;
 import com.rcore.adapter.domain.user.dto.UserDTO;
 import com.rcore.admincore.domain.user.application.UserWebMapper;
 import com.rcore.admincore.domain.user.web.api.CreateUserDTO;
+import com.rcore.admincore.domain.user.web.api.SearchWithFilters;
 import com.rcore.admincore.domain.user.web.api.UserWeb;
+import com.rcore.commons.utils.DomainUtils;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.base.roles.BaseRoles;
 import com.rcore.domain.token.exception.AuthenticationException;
@@ -30,14 +31,16 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class UserEndpoints {
 
+    private final String DOMAIN = DomainUtils.getDomain(UserEndpoints.class);
+
     private final UserAdapter userAdapter;
     private final UserWebMapper userWebMapper;
 
     @ApiOperation("Метод получения списка пользователей")
     @GetMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public SuccessApiResponse<SearchApiResponse<UserWeb>> all(@ModelAttribute SearchApiRequest request) throws AuthenticationException, AuthorizationException {
-        SearchResult<UserDTO> result = userAdapter.getAdmin()
-                .find(request.getLimit(), request.getOffset());
+    public SuccessApiResponse<SearchApiResponse<UserWeb>> all(@ModelAttribute SearchWithFilters request) throws AuthenticationException, AuthorizationException {
+        SearchResult<UserDTO> result = userAdapter.view
+                .findWithFilters(request.toSearchRequest(), request.getRoleId());
 
         return SuccessApiResponse.of(
                 SearchApiResponse.withItemsAndCount(
@@ -49,16 +52,16 @@ public class UserEndpoints {
     @ApiOperation(value = "Получение информации о пользователе по ID")
     @GetMapping(value = Routes.BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
     public SuccessApiResponse<UserWeb> get(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException {
-        return SuccessApiResponse.of(userAdapter.getAdmin()
+        return SuccessApiResponse.of(userAdapter.view
                 .findById(id)
                 .map(userWebMapper::map)
-                .orElseThrow(() -> new NotFoundApiException("Передан неверный идентификатор пользователя", "USER", "NOT_FOUND")));
+                .orElseThrow(() -> new NotFoundApiException("Передан неверный идентификатор пользователя", DOMAIN, "NOT_FOUND")));
     }
 
     @ApiOperation("Создание пользователя по Email")
     @PostMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
     public SuccessApiResponse<UserWeb> create(@RequestBody CreateUserDTO request) throws AuthenticationException, AuthorizationException, UserAlreadyExistException {
-        UserDTO user = userAdapter.getAdmin()
+        UserDTO user = userAdapter.secure
                 .createUserByEmail(request.getEmail(), request.getPassword());
 
         return SuccessApiResponse.of(userWebMapper.map(user));
@@ -67,7 +70,7 @@ public class UserEndpoints {
     @ApiOperation("Редактирование пользователяв")
     @PatchMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
     public SuccessApiResponse<UserWeb> edit(@RequestBody UserDTO request) throws AuthenticationException, UserNotFoundException, AuthorizationException, UserAlreadyExistException {
-        UserDTO user = userAdapter.getAdmin()
+        UserDTO user = userAdapter.secure
                 .updateUser(request);
 
         return SuccessApiResponse.of(userWebMapper.map(user));
@@ -76,11 +79,11 @@ public class UserEndpoints {
     @ApiOperation("Удаление пользователя")
     @DeleteMapping(value = Routes.BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
     public OkApiResponse delete(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException, UserAlreadyExistException {
-        UserDTO user = userAdapter.getAdmin()
+        UserDTO user = userAdapter.view
                 .findById(id)
-                .orElseThrow(() -> new NotFoundApiException("Передан неверный идентификатор пользователя", "USER", "NOT_FOUND"));
+                .orElseThrow(() -> new NotFoundApiException("Передан неверный идентификатор пользователя", DOMAIN, "NOT_FOUND"));
 
-        userAdapter.getAdmin()
+        userAdapter.getSecure()
                 .deleteUser(user);
 
         return OkApiResponse.of();
@@ -88,13 +91,26 @@ public class UserEndpoints {
 
     @ApiOperation("Блокировка пользователя")
     @PatchMapping(value = Routes.BLOCK, produces = MediaType.APPLICATION_JSON_VALUE)
-    public OkApiResponse block(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException, UserAlreadyExistException {
-        UserDTO user = userAdapter.getAdmin()
+    public OkApiResponse block(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException {
+        UserDTO user = userAdapter.view
                 .findById(id)
-                .orElseThrow(() -> new NotFoundApiException("Передан неверный идентификатор пользователя", "USER", "NOT_FOUND"));
+                .orElseThrow(() -> new NotFoundApiException("Передан неверный идентификатор пользователя", DOMAIN, "NOT_FOUND"));
 
-        userAdapter.getAdmin()
-                .deleteUser(user);
+        userAdapter.secure
+                .blockUser(user);
+
+        return OkApiResponse.of();
+    }
+
+    @ApiOperation("Активация пользователя")
+    @PatchMapping(value = Routes.ACTIVATE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public OkApiResponse activate(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException {
+        UserDTO user = userAdapter.view
+                .findById(id)
+                .orElseThrow(() -> new NotFoundApiException("Передан неверный идентификатор пользователя", DOMAIN, "NOT_FOUND"));
+
+        userAdapter.secure
+                .activateUser(user);
 
         return OkApiResponse.of();
     }

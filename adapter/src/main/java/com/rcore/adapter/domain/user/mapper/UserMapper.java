@@ -7,6 +7,7 @@ import com.rcore.commons.mapper.ExampleDataMapper;
 import com.rcore.domain.user.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -49,12 +50,14 @@ public class UserMapper implements ExampleDataMapper<UserEntity, UserDTO> {
                 .socialAccounts(userDTO.getSocialAccounts())
                 .status(userDTO.getUserStatus())
                 .secondName(userDTO.getSecondName())
-                .roles(roleMapper
-                        .inverseMapAll(userDTO.getRoles()
+                .roles(Optional.ofNullable(userDTO.getRoles())
+                        .map(roles -> roleMapper
+                                .inverseMapAll(userDTO.getRoles()
+                                        .stream()
+                                        .collect(Collectors.toList()))
                                 .stream()
-                                .collect(Collectors.toList()))
-                        .stream()
-                        .collect(Collectors.toSet()))
+                                .collect(Collectors.toSet()))
+                        .orElse(null))
                 .phoneNumber(userDTO.getPhoneNumber())
                 .password(userDTO.getPassword())
                 .login(userDTO.getLogin())

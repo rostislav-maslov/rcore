@@ -8,6 +8,7 @@ import com.rcore.admincore.domain.file.application.FileWebMapper;
 import com.rcore.admincore.domain.file.web.api.FileWeb;
 import com.rcore.commons.utils.DomainUtils;
 import com.rcore.domain.base.port.SearchResult;
+import com.rcore.domain.base.roles.BaseRoles;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.restapi.exceptions.NotFoundApiException;
@@ -19,11 +20,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
+@Secured(BaseRoles.SUPER_USER)
 @Api(tags = "File API", description = "API Файлов")
 @RequiredArgsConstructor
 @RestController("fileAdminEndpoints")
@@ -37,7 +40,7 @@ public class FileEndpoints {
     @GetMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
     public SuccessApiResponse<SearchApiResponse<FileWeb>> all(@ModelAttribute SearchApiRequest request) throws AuthenticationException, AuthorizationException {
         SearchResult<FileDTO> result = fileAdapter.getAdmin()
-                .find(request.getLimit(), request.getOffset());
+                .find(request.toSearchRequest());
 
         return SuccessApiResponse.of(
                 SearchApiResponse.withItemsAndCount(

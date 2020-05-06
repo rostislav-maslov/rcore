@@ -62,7 +62,7 @@ public class SecurityExceptionHandler {
                         .message("Ошибка прав доступа")
                         .build())
                 .domain("SERVER")
-                .details(e.getMessage())
+                .details("Доступ запрещен")
                 .build());
     }
 

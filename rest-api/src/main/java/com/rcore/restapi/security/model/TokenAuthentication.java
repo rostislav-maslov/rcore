@@ -3,7 +3,6 @@ package com.rcore.restapi.security.model;
 import com.rcore.adapter.domain.role.dto.RoleDTO;
 import com.rcore.adapter.domain.token.dto.AccessTokenDTO;
 import com.rcore.adapter.domain.user.dto.UserDTO;
-import com.rcore.domain.access.entity.Access;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.Authentication;
@@ -33,7 +32,7 @@ public class TokenAuthentication implements Authentication {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.user.getRoles().stream()
-                .map(RoleDTO::getTitle)
+                .map(RoleDTO::getName)
                 .map(role -> new SimpleGrantedAuthority(role))
                 .collect(Collectors.toList());
     }

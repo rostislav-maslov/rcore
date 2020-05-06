@@ -40,6 +40,9 @@ public class UserWeb {
     @ApiModelProperty("Email")
     private String email;
 
+    @ApiModelProperty("Пароль")
+    private String password;
+
     @ApiModelProperty("Номер телефонв")
     private Long phoneNumber;
 
