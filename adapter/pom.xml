@@ -15,45 +15,6 @@
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Adapter component for Clean Arch apps</description>
     <url>https://github.com/rostislav-maslov/rcore</url>
-    <licenses>
-        <license>
-            <name>MIT License</name>
-            <url>http://www.opensource.org/licenses/mit-license.php</url>
-        </license>
-    </licenses>
-
-    <developers>
-        <developer>
-            <name>Rostislav Maslov</name>
-            <email>maslov.rostislav@gmail.com</email>
-            <organization>com.github.rostislav-maslov</organization>
-            <organizationUrl>https://github.com/rostislav-maslov</organizationUrl>
-        </developer>
-        <developer>
-            <name>Kozlov Vladimir</name>
-            <email>kozlovvladimir6@gmail.com</email>
-            <organization>com.github.kozlovva</organization>
-            <organizationUrl>https://github.com/kozlovva</organizationUrl>
-        </developer>
-    </developers>
-
-    <scm>
-        <connection>scm:git:git://github.com/rostislav-maslov/rcore.git</connection>
-        <developerConnection>scm:git:ssh://github.com:rostislav-maslov/rcore.git</developerConnection>
-        <url>http://github.com/rostislav-maslov/rcore</url>
-    </scm>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
-
 
     <dependencies>
 
@@ -89,8 +50,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>8</source>
-                    <target>8</target>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
                 <version>3.8.1</version>
             </plugin>
@@ -150,6 +111,45 @@
             </plugin>
         </plugins>
     </build>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Rostislav Maslov</name>
+            <email>maslov.rostislav@gmail.com</email>
+            <organization>com.github.rostislav-maslov</organization>
+            <organizationUrl>https://github.com/rostislav-maslov</organizationUrl>
+        </developer>
+        <developer>
+            <name>Kozlov Vladimir</name>
+            <email>kozlovvladimir6@gmail.com</email>
+            <organization>com.github.kozlovva</organization>
+            <organizationUrl>https://github.com/kozlovva</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/rostislav-maslov/rcore.git</connection>
+        <developerConnection>scm:git:ssh://github.com:rostislav-maslov/rcore.git</developerConnection>
+        <url>http://github.com/rostislav-maslov/rcore</url>
+    </scm>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
 
 
 </project>
