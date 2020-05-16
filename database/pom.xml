@@ -18,7 +18,7 @@
 
 
     <properties>
-        <rcore.version>0.9.3</rcore.version>
+        <rcore.version>0.9.4</rcore.version>
     </properties>
 
 </project>
