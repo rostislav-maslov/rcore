@@ -22,7 +22,7 @@ import java.util.List;
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    private final ObjectMapperBuilder objectMapperBuilder;
+    private final CustomObjectMapperBuilder customObjectMapperBuilder;
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -55,6 +55,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     //Инициируем кастомный ObjectMapper
     @Bean
     public Jackson2ObjectMapperBuilder objectMapperBuilder() {
-        return objectMapperBuilder.getJackson2ObjectMapperBuilder();
+        return customObjectMapperBuilder.getJackson2ObjectMapperBuilder();
     }
 }

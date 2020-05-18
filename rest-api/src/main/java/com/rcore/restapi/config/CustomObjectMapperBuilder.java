@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDateTime;
 
 @Component
-public class ObjectMapperBuilder {
+public class CustomObjectMapperBuilder {
 
     public Jackson2ObjectMapperBuilder getJackson2ObjectMapperBuilder() {
         Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
