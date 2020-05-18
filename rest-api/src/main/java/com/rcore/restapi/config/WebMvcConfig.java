@@ -1,7 +1,7 @@
 package com.rcore.restapi.config;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -17,9 +17,12 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Configuration
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
+
+    private final ObjectMapperBuilder objectMapperBuilder;
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
@@ -52,9 +55,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     //Инициируем кастомный ObjectMapper
     @Bean
     public Jackson2ObjectMapperBuilder objectMapperBuilder() {
-        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
-        builder.serializerByType(LocalDateTime.class, new ToStringSerializer());
-        builder.serializationInclusion(JsonInclude.Include.NON_NULL);
-        return builder;
+        return objectMapperBuilder.getJackson2ObjectMapperBuilder();
     }
 }
