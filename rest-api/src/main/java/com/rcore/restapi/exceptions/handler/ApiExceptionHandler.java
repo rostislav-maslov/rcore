@@ -1,9 +1,6 @@
 package com.rcore.restapi.exceptions.handler;
 
-import com.rcore.restapi.exceptions.BadRequestApiException;
-import com.rcore.restapi.exceptions.BaseApiException;
-import com.rcore.restapi.exceptions.ExceptionDTO;
-import com.rcore.restapi.exceptions.NotFoundApiException;
+import com.rcore.restapi.exceptions.*;
 import com.rcore.restapi.web.api.response.ErrorApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,6 +19,12 @@ public class ApiExceptionHandler {
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ExceptionHandler(value = NotFoundApiException.class)
     public ErrorApiResponse<ExceptionDTO> handleNotFountApiException(NotFoundApiException e) {
+        return ErrorApiResponse.of(e.getError());
+    }
+
+    @ResponseStatus(value = HttpStatus.TOO_MANY_REQUESTS)
+    @ExceptionHandler(value = TooManyRequestApiException.class)
+    public ErrorApiResponse<ExceptionDTO> handleTooManyRequestsApiException(TooManyRequestApiException e) {
         return ErrorApiResponse.of(e.getError());
     }
 
