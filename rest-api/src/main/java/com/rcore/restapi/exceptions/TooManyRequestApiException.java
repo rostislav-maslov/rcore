@@ -1,6 +1,12 @@
 package com.rcore.restapi.exceptions;
 
+import java.util.List;
+
 public class TooManyRequestApiException extends BaseApiException {
+
+    public TooManyRequestApiException(List<ExceptionDTO> error) {
+        super(error);
+    }
 
     public TooManyRequestApiException(ExceptionDTO error) {
         super(error);

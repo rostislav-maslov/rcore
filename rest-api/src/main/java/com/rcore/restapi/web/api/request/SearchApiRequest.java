@@ -4,12 +4,16 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.rcore.domain.base.port.SearchRequest;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @ApiModel("Поиск с пагинацией")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
 @Data
 public class SearchApiRequest {
 

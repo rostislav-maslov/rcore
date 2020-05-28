@@ -1,11 +1,17 @@
 package com.rcore.restapi.exceptions;
 
+import java.util.List;
+
 public class InternalServerException extends BaseApiException {
 
     public InternalServerException() {
     }
 
-    public InternalServerException(ExceptionDTO errors) {
+    public InternalServerException(ExceptionDTO error) {
+        super(error);
+    }
+
+    public InternalServerException(List<ExceptionDTO> errors) {
         super(errors);
     }
 
