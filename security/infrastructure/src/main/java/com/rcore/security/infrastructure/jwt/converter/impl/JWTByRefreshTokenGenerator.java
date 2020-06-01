@@ -8,8 +8,8 @@ import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.rcore.adapter.domain.token.dto.RefreshTokenDTO;
 import com.rcore.security.infrastructure.AuthTokenGenerator;
-import com.rcore.security.infrastructure.exceptions.TokenGenerateException;
 import com.rcore.security.infrastructure.exceptions.InvalidTokenFormatException;
+import com.rcore.security.infrastructure.exceptions.TokenGenerateException;
 
 public class JWTByRefreshTokenGenerator implements AuthTokenGenerator<RefreshTokenDTO> {
 
@@ -28,8 +28,7 @@ public class JWTByRefreshTokenGenerator implements AuthTokenGenerator<RefreshTok
     public RefreshTokenDTO parseToken(String token, String secret) throws InvalidTokenFormatException {
         try {
             JWSObject jwsObject = JWSObject.parse(token);
-            jwsObject.getPayload();
-            return new ObjectMapper().readValue(token, RefreshTokenDTO.class);
+            return new ObjectMapper().readValue(jwsObject.getPayload().toString(), RefreshTokenDTO.class);
         } catch (Exception e) {
             throw new InvalidTokenFormatException();
         }
