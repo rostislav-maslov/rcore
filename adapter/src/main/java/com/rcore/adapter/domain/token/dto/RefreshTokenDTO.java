@@ -25,11 +25,5 @@ public class RefreshTokenDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String timeZone;
-
-    public Boolean isActive() {
-        if (status.equals(RefreshTokenEntity.Status.ACTIVE) == false) return false;
-        if (LocalDateTime.now().isAfter(expireAt)) return false;
-
-        return true;
-    }
+    private Boolean active;
 }

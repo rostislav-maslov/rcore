@@ -31,6 +31,12 @@ public class ApiExceptionHandler {
         return ErrorApiResponse.of(e.getErrors());
     }
 
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(value = UnauthorizedRequestApiException.class)
+    public ErrorApiResponse<List<ExceptionDTO>> handleUnauthorizedRequestApiException(UnauthorizedRequestApiException e) {
+        return ErrorApiResponse.of(e.getErrors());
+    }
+
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = Exception.class)
     public ErrorApiResponse<List<ExceptionDTO>> handleInternalServerError(Exception e) {

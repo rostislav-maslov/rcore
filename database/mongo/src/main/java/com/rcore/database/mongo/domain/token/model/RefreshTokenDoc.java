@@ -8,9 +8,6 @@ import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-@CompoundIndexes({
-        @CompoundIndex(def = "{'_id': 1}", name = "_id_")
-})
 @SuperBuilder
 @NoArgsConstructor
 public class RefreshTokenDoc extends RefreshTokenEntity {

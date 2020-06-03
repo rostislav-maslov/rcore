@@ -62,12 +62,17 @@ public class TestAppConfig {
             public void put(AccessTokenEntity accessTokenEntity) {
 
             }
+
+            @Override
+            public Optional<AccessTokenEntity> findById(String id) {
+                return Optional.empty();
+            }
         };
 
         this.authorizationByTokenUseCase = new AuthorizationByTokenUseCase(this.refreshTokenRepository, this.accessTokenStorage, this.userRepository);
 
 
-        this.userConfig = new UserConfig(userRepository, userIdGenerator, passwordGenerator, expireTokenUseCase, createRefreshTokenUseCase, createAccessTokenUseCase, refreshTokenRepository, this.roleRepository, authorizationByTokenUseCase);
+        this.userConfig = new UserConfig(userRepository, userIdGenerator, passwordGenerator, expireTokenUseCase, createRefreshTokenUseCase, createAccessTokenUseCase, refreshTokenRepository, this.roleRepository, authorizationByTokenUseCase, accessTokenStorage);
     }
 
 }

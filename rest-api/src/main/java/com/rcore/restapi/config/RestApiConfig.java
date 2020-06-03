@@ -85,13 +85,16 @@ public class RestApiConfig {
     @Bean
     public UserAdapter userAdapter() {
         return new UserAdapter(new UserConfig(
-                userRepository, userIdGenerator, passwordGenerator,
+                userRepository,
+                userIdGenerator,
+                passwordGenerator,
                 new ExpireTokenUseCase(refreshTokenRepository),
                 new CreateRefreshTokenUseCase(refreshTokenIdGenerator, refreshTokenRepository, tokenSaltGenerator),
                 new CreateAccessTokenUseCase(accessTokenIdGenerator, new CreateRefreshTokenUseCase(refreshTokenIdGenerator, refreshTokenRepository, tokenSaltGenerator)),
                 refreshTokenRepository,
                 roleRepository,
-                new AuthorizationByTokenUseCase(refreshTokenRepository, accessTokenStorage, userRepository))
+                new AuthorizationByTokenUseCase(refreshTokenRepository, accessTokenStorage, userRepository),
+                accessTokenStorage)
         );
     }
 

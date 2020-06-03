@@ -10,13 +10,16 @@ import com.rcore.adapter.domain.token.dto.RefreshTokenDTO;
 import com.rcore.security.infrastructure.AuthTokenGenerator;
 import com.rcore.security.infrastructure.exceptions.InvalidTokenFormatException;
 import com.rcore.security.infrastructure.exceptions.TokenGenerateException;
+import com.rcore.security.infrastructure.utils.ObjectMapperUtils;
 
 public class JWTByRefreshTokenGenerator implements AuthTokenGenerator<RefreshTokenDTO> {
+
+    private final ObjectMapper objectMapper = ObjectMapperUtils.localDateTimeMapper();
 
     @Override
     public String generate(RefreshTokenDTO refreshTokenDTO, String secret) throws TokenGenerateException {
         try {
-            JWSObject jwsObject = new JWSObject(new JWSHeader(JWSAlgorithm.HS256), new Payload(new ObjectMapper().writeValueAsString(refreshTokenDTO)));
+            JWSObject jwsObject = new JWSObject(new JWSHeader(JWSAlgorithm.HS256), new Payload(objectMapper.writeValueAsString(refreshTokenDTO)));
             jwsObject.sign(new MACSigner(secret));
             return jwsObject.serialize();
         } catch (Exception e) {
@@ -28,7 +31,7 @@ public class JWTByRefreshTokenGenerator implements AuthTokenGenerator<RefreshTok
     public RefreshTokenDTO parseToken(String token, String secret) throws InvalidTokenFormatException {
         try {
             JWSObject jwsObject = JWSObject.parse(token);
-            return new ObjectMapper().readValue(jwsObject.getPayload().toString(), RefreshTokenDTO.class);
+            return objectMapper.readValue(jwsObject.getPayload().toString(), RefreshTokenDTO.class);
         } catch (Exception e) {
             throw new InvalidTokenFormatException();
         }
