@@ -2,11 +2,13 @@ package com.rcore.restapi.security.filter;
 
 import com.rcore.adapter.domain.token.dto.AccessTokenDTO;
 import com.rcore.adapter.domain.token.mapper.AccessTokenMapper;
+import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.port.AccessTokenStorage;
 import com.rcore.restapi.headers.WebHeaders;
 import com.rcore.restapi.routes.BaseRoutes;
 import com.rcore.restapi.security.exceptions.ApiAuthenticationException;
 import com.rcore.restapi.security.exceptions.InvalidTokenFormatApiException;
+import com.rcore.restapi.security.exceptions.UserNotExistApiException;
 import com.rcore.restapi.security.factory.AuthenticationTokenFactory;
 import com.rcore.security.infrastructure.AuthTokenGenerator;
 import com.rcore.security.infrastructure.exceptions.InvalidTokenFormatException;
@@ -28,6 +30,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 
 @Component
@@ -55,11 +58,16 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
         AccessTokenDTO accessToken = null;
 
         if (StringUtils.hasText(token)) {
+            Optional<AccessTokenEntity> accessTokenEntity = null;
             try {
-                accessToken = new AccessTokenMapper().map(accessTokenStorage.findById(authTokenGenerator.parseToken(token, secret).getId()).get());
-            } catch (Exception e) {
+                accessTokenEntity = accessTokenStorage.findById(authTokenGenerator.parseToken(token, secret).getId());
+            } catch (InvalidTokenFormatException e) {
                 throw new InvalidTokenFormatApiException();
             }
+            if (!accessTokenEntity.isPresent())
+                throw new UserNotExistApiException();
+
+            accessToken = new AccessTokenMapper().map(accessTokenEntity.get());
         }
 
         return getAuthenticationManager().authenticate(AuthenticationTokenFactory.ofRawToken(accessToken));
