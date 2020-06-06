@@ -4,6 +4,8 @@ import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.entity.TokenPair;
 import com.rcore.domain.token.exception.AuthenticationException;
+import com.rcore.domain.token.exception.RefreshTokenIsExpiredException;
+import com.rcore.domain.token.port.AccessTokenStorage;
 import com.rcore.domain.token.port.AuthenticationPort;
 import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.domain.token.usecase.CreateAccessTokenUseCase;
@@ -23,18 +25,20 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
     private final CreateRefreshTokenUseCase createRefreshTokenUseCase;
     private final CreateAccessTokenUseCase createAccessTokenUseCase;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final AccessTokenStorage accessTokenStorage;
 
     public EmailAuthenticationUseCase(
             UserRepository userRepository,
             PasswordGenerator passwordGenerator,
             CreateRefreshTokenUseCase createRefreshTokenUseCase,
             CreateAccessTokenUseCase createAccessTokenUseCase,
-            RefreshTokenRepository refreshTokenRepository) {
+            RefreshTokenRepository refreshTokenRepository, AccessTokenStorage accessTokenStorage) {
         this.userRepository = userRepository;
         this.passwordGenerator = passwordGenerator;
         this.createRefreshTokenUseCase = createRefreshTokenUseCase;
         this.createAccessTokenUseCase = createAccessTokenUseCase;
         this.refreshTokenRepository = refreshTokenRepository;
+        this.accessTokenStorage = accessTokenStorage;
     }
 
 
@@ -67,6 +71,9 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
         RefreshTokenEntity refreshTokenEntity = createRefreshTokenUseCase.create(userEntity);
         AccessTokenEntity accessTokenEntity = createAccessTokenUseCase.create(userEntity, refreshTokenEntity);
 
+        //Записываем токен в storage
+        accessTokenStorage.put(accessTokenEntity);
+
         return TokenPair.builder()
                 .accessToken(accessTokenEntity)
                 .refreshToken(refreshTokenEntity)
@@ -74,17 +81,17 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
     }
 
     @Override
-    public TokenPair getNewTokenPairByRefreshToken(RefreshTokenEntity refreshTokenEntity) throws UserNotFoundException, UserBlockedException, AuthenticationException {
+    public TokenPair getNewTokenPairByRefreshToken(RefreshTokenEntity refreshTokenEntity) throws UserNotFoundException, UserBlockedException, AuthenticationException, RefreshTokenIsExpiredException {
         UserEntity userEntity = userRepository.findById(refreshTokenEntity.getUserId()).orElseThrow(() -> new UserNotFoundException());
 
-        if (userEntity.getStatus().equals(UserStatus.ACTIVE) == false) {
+        if (userEntity.getStatus().equals(UserStatus.ACTIVE) == false)
             throw new UserBlockedException();
-        }
+
 
         RefreshTokenEntity fromRepo = refreshTokenRepository.findById(refreshTokenEntity.getId())
                 .orElseThrow(() -> new AuthenticationException());
 
-        if (fromRepo.isActive() == false) throw new AuthenticationException();
+        if (fromRepo.isActive() == false) throw new RefreshTokenIsExpiredException();
 
         AccessTokenEntity accessTokenEntity = createAccessTokenUseCase.create(userEntity, refreshTokenEntity);
 

@@ -2,6 +2,7 @@ package com.rcore.domain.user.config;
 
 import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.token.exception.AuthorizationException;
+import com.rcore.domain.token.port.AccessTokenStorage;
 import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.token.usecase.CreateAccessTokenUseCase;
@@ -68,9 +69,10 @@ public class UserConfig {
         private final CreateRefreshTokenUseCase createRefreshTokenUseCase;
         private final CreateAccessTokenUseCase createAccessTokenUseCase;
         private final RefreshTokenRepository refreshTokenRepository;
+        private final AccessTokenStorage accessTokenStorage;
 
         public EmailAuthenticationUseCase emailAuthenticationUseCase() {
-            return new EmailAuthenticationUseCase(userRepository, passwordGenerator, createRefreshTokenUseCase, createAccessTokenUseCase, refreshTokenRepository);
+            return new EmailAuthenticationUseCase(userRepository, passwordGenerator, createRefreshTokenUseCase, createAccessTokenUseCase, refreshTokenRepository, accessTokenStorage);
         }
 
         public ViewUserUserCase viewUserUserCase() {
@@ -83,16 +85,6 @@ public class UserConfig {
 
     }
 
-    private final UserRepository userRepository;
-    private final UserIdGenerator userIdGenerator;
-    private final PasswordGenerator passwordGenerator;
-    private final ExpireTokenUseCase expireTokenUseCase;
-    private final CreateRefreshTokenUseCase createRefreshTokenUseCase;
-    private final CreateAccessTokenUseCase createAccessTokenUseCase;
-    private final RefreshTokenRepository refreshTokenRepository;
-    private final RoleRepository roleRepository;
-    private final AuthorizationByTokenUseCase authorizationByTokenUseCase;
-
     public final Admin admin;
     public final All all;
 
@@ -103,19 +95,13 @@ public class UserConfig {
             ExpireTokenUseCase expireTokenUseCase,
             CreateRefreshTokenUseCase createRefreshTokenUseCase,
             CreateAccessTokenUseCase createAccessTokenUseCase,
-            RefreshTokenRepository refreshTokenRepository, RoleRepository roleRepository, AuthorizationByTokenUseCase authorizationByTokenUseCase) {
-        this.userRepository = userRepository;
-        this.userIdGenerator = userIdGenerator;
-        this.passwordGenerator = passwordGenerator;
-        this.expireTokenUseCase = expireTokenUseCase;
-        this.createRefreshTokenUseCase = createRefreshTokenUseCase;
-        this.createAccessTokenUseCase = createAccessTokenUseCase;
-        this.refreshTokenRepository = refreshTokenRepository;
-        this.roleRepository = roleRepository;
-        this.authorizationByTokenUseCase = authorizationByTokenUseCase;
+            RefreshTokenRepository refreshTokenRepository,
+            RoleRepository roleRepository,
+            AuthorizationByTokenUseCase authorizationByTokenUseCase,
+            AccessTokenStorage accessTokenStorage) {
 
-        this.admin = new Admin(this.userRepository, this.userIdGenerator, this.passwordGenerator, this.expireTokenUseCase, this.roleRepository, this.authorizationByTokenUseCase);
-        this.all = new All(this.userRepository, this.userIdGenerator, this.passwordGenerator, this.createRefreshTokenUseCase, this.createAccessTokenUseCase, this.refreshTokenRepository);
+        this.admin = new Admin(userRepository, userIdGenerator, passwordGenerator, expireTokenUseCase, roleRepository, authorizationByTokenUseCase);
+        this.all = new All(userRepository, userIdGenerator, passwordGenerator, createRefreshTokenUseCase, createAccessTokenUseCase, refreshTokenRepository, accessTokenStorage);
     }
 
 }

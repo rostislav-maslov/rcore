@@ -1,12 +1,13 @@
 package com.rcore.domain.base.port;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.Map;
 
 @AllArgsConstructor
-@NoArgsConstructor(staticName = "of")
-@Builder
+@NoArgsConstructor
+@SuperBuilder
 @Data
 public class SearchRequest {
     private String query;

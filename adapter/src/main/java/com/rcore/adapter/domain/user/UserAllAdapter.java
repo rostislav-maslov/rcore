@@ -9,6 +9,7 @@ import com.rcore.adapter.domain.user.dto.UserDTO;
 import com.rcore.adapter.domain.user.mapper.TokenPairMapper;
 import com.rcore.adapter.domain.user.mapper.UserMapper;
 import com.rcore.domain.token.exception.AuthenticationException;
+import com.rcore.domain.token.exception.RefreshTokenIsExpiredException;
 import com.rcore.domain.user.config.UserConfig;
 import com.rcore.domain.user.exception.UserBlockedException;
 import com.rcore.domain.user.exception.UserNotFoundException;
@@ -36,7 +37,7 @@ public class UserAllAdapter {
                 .authentication(email, password));
     }
 
-    public TokenPairDTO getNewTokenPairByRefreshToken(RefreshTokenDTO refreshToken) throws UserNotFoundException, UserBlockedException, AuthenticationException {
+    public TokenPairDTO getNewTokenPairByRefreshToken(RefreshTokenDTO refreshToken) throws UserNotFoundException, UserBlockedException, AuthenticationException, RefreshTokenIsExpiredException {
         return tokenPairMapper.map(userConfig.all.emailAuthenticationUseCase()
                 .getNewTokenPairByRefreshToken(refreshTokenMapper.inverseMap(refreshToken)));
     }

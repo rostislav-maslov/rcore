@@ -4,10 +4,13 @@ import com.rcore.restapi.exceptions.ExceptionDTO;
 import lombok.Getter;
 import org.springframework.security.core.AuthenticationException;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Getter
 public abstract class ApiAuthenticationException extends AuthenticationException {
 
-    private ExceptionDTO error;
+    private List<ExceptionDTO> errors;
 
     public ApiAuthenticationException(String msg) {
         super(msg);
@@ -15,24 +18,24 @@ public abstract class ApiAuthenticationException extends AuthenticationException
 
     public ApiAuthenticationException(String title, String message, String domain, String details) {
         super(message);
-        this.error = ExceptionDTO.builder()
+        this.errors = Arrays.asList(ExceptionDTO.builder()
                 .presentationData(ExceptionDTO.PresentationData.builder()
                         .title(title)
                         .message(message)
                         .build())
                 .details(details)
                 .domain(domain)
-                .build();
+                .build());
     }
 
     public ApiAuthenticationException(String message, String domain, String details) {
         super(message);
-        this.error = ExceptionDTO.builder()
+        this.errors = Arrays.asList(ExceptionDTO.builder()
                 .presentationData(ExceptionDTO.PresentationData.builder()
                         .message(message)
                         .build())
                 .details(details)
                 .domain(domain)
-                .build();
+                .build());
     }
 }

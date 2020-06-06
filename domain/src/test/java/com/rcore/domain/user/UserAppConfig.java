@@ -48,6 +48,6 @@ public class UserAppConfig {
         this.roleRepository = new RoleRepositoryImpl();
         this.authorizationByTokenUseCase = new AuthorizationByTokenUseCase(this.refreshTokenRepository, this.accessTokenStorage, this.userRepository);
 
-        this.userConfig = new UserConfig(userRepository, userIdGenerator, passwordGenerator, expireTokenUseCase, createRefreshTokenUseCase, createAccessTokenUseCase, refreshTokenRepository, roleRepository, this.authorizationByTokenUseCase);
+        this.userConfig = new UserConfig(userRepository, userIdGenerator, passwordGenerator, expireTokenUseCase, createRefreshTokenUseCase, createAccessTokenUseCase, refreshTokenRepository, roleRepository, this.authorizationByTokenUseCase, accessTokenStorage);
     }
 }

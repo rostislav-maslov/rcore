@@ -18,4 +18,11 @@ public interface AccessTokenStorage {
      */
     void put(AccessTokenEntity accessTokenEntity);
 
+    /**
+     * Поиск токена в storage
+     * @param id
+     * @return
+     */
+    Optional<AccessTokenEntity> findById(String id);
+
 }

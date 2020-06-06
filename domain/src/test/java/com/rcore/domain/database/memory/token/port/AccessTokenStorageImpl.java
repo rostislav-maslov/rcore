@@ -19,4 +19,9 @@ public class AccessTokenStorageImpl implements AccessTokenStorage {
     public void put(AccessTokenEntity accessTokenEntity) {
 
     }
+
+    @Override
+    public Optional<AccessTokenEntity> findById(String id) {
+        return null;
+    }
 }
