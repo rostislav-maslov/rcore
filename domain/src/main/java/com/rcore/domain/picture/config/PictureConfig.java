@@ -6,60 +6,50 @@ import com.rcore.domain.picture.port.PictureRepository;
 import com.rcore.domain.picture.port.PictureStorage;
 import com.rcore.domain.picture.usecase.admin.*;
 import com.rcore.domain.token.exception.AuthorizationException;
-import com.rcore.domain.user.entity.UserEntity;
+import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 public class PictureConfig {
 
     @Getter
+    @RequiredArgsConstructor
     public static class Admin {
         protected final PictureRepository pictureRepository;
         protected final PictureIdGenerator pictureIdGenerator;
         protected final PictureStorage pictureStorage;
         protected final PictureCompressor pictureCompressor;
+        protected final AuthorizationByTokenUseCase authorizationByTokenUseCase;
 
-        public Admin(PictureRepository pictureRepository, PictureIdGenerator pictureIdGenerator, PictureStorage pictureStorage, PictureCompressor pictureCompressor) {
-            this.pictureRepository = pictureRepository;
-            this.pictureIdGenerator = pictureIdGenerator;
-            this.pictureStorage = pictureStorage;
-            this.pictureCompressor = pictureCompressor;
+        public PictureCreateUseCase createUseCase() throws AuthorizationException {
+            return new PictureCreateUseCase(this.pictureRepository, pictureIdGenerator, pictureStorage, authorizationByTokenUseCase);
         }
 
-        public PictureCreateUseCase createUseCase(UserEntity actor) throws AuthorizationException {
-            return new PictureCreateUseCase(actor, this.pictureRepository, pictureIdGenerator, pictureStorage);
+        public PictureDeleteUseCase deleteUseCase() throws AuthorizationException {
+            return new PictureDeleteUseCase(this.pictureRepository, pictureStorage, authorizationByTokenUseCase);
         }
 
-        public PictureDeleteUseCase deleteUseCase(UserEntity actor) throws AuthorizationException {
-            return new PictureDeleteUseCase(actor, this.pictureRepository, pictureStorage);
+        public PictureUpdateUseCase updateUseCase() throws AuthorizationException {
+            return new PictureUpdateUseCase(this.pictureRepository, pictureCompressor, authorizationByTokenUseCase);
         }
 
-        public PictureUpdateUseCase updateUseCase(UserEntity actor) throws AuthorizationException {
-            return new PictureUpdateUseCase(actor, this.pictureRepository, pictureCompressor);
+        public PictureViewUseCase viewUseCase() throws AuthorizationException {
+            return new PictureViewUseCase(this.pictureRepository, pictureStorage, authorizationByTokenUseCase);
         }
 
-        public PictureViewUseCase viewUseCase(UserEntity actor) throws AuthorizationException {
-            return new PictureViewUseCase(actor, this.pictureRepository, pictureStorage);
-        }
-
-        public PictureAddCompressedSize addCompressedSizeUseCase(UserEntity actor) throws AuthorizationException {
-            return new PictureAddCompressedSize(actor, this.pictureRepository, this.pictureCompressor);
+        public PictureAddCompressedSize addCompressedSizeUseCase() throws AuthorizationException {
+            return new PictureAddCompressedSize(this.pictureRepository, this.pictureCompressor, authorizationByTokenUseCase);
         }
     }
 
     @Getter
+    @RequiredArgsConstructor
     public static class All {
 
         protected final PictureRepository pictureRepository;
         protected final PictureIdGenerator pictureIdGenerator;
         protected final PictureStorage pictureStorage;
         protected final PictureCompressor pictureCompressor;
-
-        public All(PictureRepository pictureRepository, PictureIdGenerator pictureIdGenerator, PictureStorage pictureStorage, PictureCompressor pictureCompressor) {
-            this.pictureRepository = pictureRepository;
-            this.pictureIdGenerator = pictureIdGenerator;
-            this.pictureStorage = pictureStorage;
-            this.pictureCompressor = pictureCompressor;
-        }
 
         public com.rcore.domain.picture.usecase.all.PictureCreateUseCase createUseCase() {
             return new com.rcore.domain.picture.usecase.all.PictureCreateUseCase(this.pictureRepository, this.pictureIdGenerator, this.pictureStorage);
@@ -78,17 +68,19 @@ public class PictureConfig {
     private final PictureIdGenerator idGenerator;
     protected final PictureStorage pictureStorage;
     protected final PictureCompressor pictureCompressor;
+    protected final AuthorizationByTokenUseCase authorizationByTokenUseCase;
 
     public final Admin admin;
     public final All all;
 
-    public PictureConfig(PictureRepository pictureRepository, PictureIdGenerator idGenerator, PictureStorage pictureStorage, PictureCompressor pictureCompressor) {
+    public PictureConfig(PictureRepository pictureRepository, PictureIdGenerator idGenerator, PictureStorage pictureStorage, PictureCompressor pictureCompressor, AuthorizationByTokenUseCase authorizationByTokenUseCase) {
         this.pictureRepository = pictureRepository;
         this.idGenerator = idGenerator;
         this.pictureStorage = pictureStorage;
         this.pictureCompressor = pictureCompressor;
+        this.authorizationByTokenUseCase = authorizationByTokenUseCase;
 
-        this.admin = new Admin(this.pictureRepository, this.idGenerator, this.pictureStorage, this.pictureCompressor);
+        this.admin = new Admin(this.pictureRepository, this.idGenerator, this.pictureStorage, this.pictureCompressor, this.authorizationByTokenUseCase);
         this.all = new All(this.pictureRepository, this.idGenerator, this.pictureStorage, this.pictureCompressor);
     }
 

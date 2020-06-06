@@ -1,5 +1,6 @@
 package com.rcore.restapi.security.support;
 
+import com.rcore.adapter.domain.role.mapper.RoleMapper;
 import com.rcore.adapter.domain.token.dto.AccessTokenDTO;
 import com.rcore.adapter.domain.user.dto.UserDTO;
 import com.rcore.adapter.domain.user.mapper.UserMapper;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class UserAuthenticationMediator implements AuthenticationMediator<UserDTO> {
 
     private final UserRepository userRepository;
-    private UserMapper userMapper = new UserMapper();
+    private UserMapper userMapper = new UserMapper(new RoleMapper());
 
     @Override
     public Authentication getAuthentication() {

@@ -1,7 +1,8 @@
 package com.rcore.adapter.domain.user.dto;
 
 
-import com.rcore.domain.role.entity.Role;
+import com.rcore.adapter.domain.role.dto.RoleDTO;
+import com.rcore.domain.access.entity.Access;
 import com.rcore.domain.user.entity.SocialAccount;
 import com.rcore.domain.user.entity.UserStatus;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.*;
 @Getter
 public class UserDTO {
     private String id;
-    private Set<Role> roles;
+    private Set<RoleDTO> roles;
 
     private UserStatus userStatus;
 
@@ -37,7 +38,7 @@ public class UserDTO {
     private Integer fails = 0;
     private LocalDateTime lastFailDate;
 
-    protected LocalDateTime createdAt;
-    protected LocalDateTime updatedAt;
-    protected String timeZone;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private String timeZone;
 }

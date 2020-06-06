@@ -1,11 +1,20 @@
 package com.rcore.adapter.domain.user.mapper;
 
 
+import com.rcore.adapter.domain.role.mapper.RoleMapper;
 import com.rcore.adapter.domain.user.dto.UserDTO;
 import com.rcore.commons.mapper.ExampleDataMapper;
 import com.rcore.domain.user.entity.UserEntity;
+import lombok.RequiredArgsConstructor;
 
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@RequiredArgsConstructor
 public class UserMapper implements ExampleDataMapper<UserEntity, UserDTO> {
+
+    private final RoleMapper roleMapper;
+
     @Override
     public UserDTO map(UserEntity userEntity) {
         return UserDTO.builder()
@@ -19,7 +28,12 @@ public class UserMapper implements ExampleDataMapper<UserEntity, UserDTO> {
                 .login(userEntity.getLogin())
                 .password(userEntity.getPassword())
                 .phoneNumber(userEntity.getPhoneNumber())
-                .roles(userEntity.getRoles())
+                .roles(roleMapper
+                        .mapAll(userEntity.getRoles()
+                                .stream()
+                                .collect(Collectors.toList()))
+                        .stream()
+                        .collect(Collectors.toSet()))
                 .secondName(userEntity.getSecondName())
                 .socialAccounts(userEntity.getSocialAccounts())
                 .userStatus(userEntity.getStatus())
@@ -36,7 +50,14 @@ public class UserMapper implements ExampleDataMapper<UserEntity, UserDTO> {
                 .socialAccounts(userDTO.getSocialAccounts())
                 .status(userDTO.getUserStatus())
                 .secondName(userDTO.getSecondName())
-                .roles(userDTO.getRoles())
+                .roles(Optional.ofNullable(userDTO.getRoles())
+                        .map(roles -> roleMapper
+                                .inverseMapAll(userDTO.getRoles()
+                                        .stream()
+                                        .collect(Collectors.toList()))
+                                .stream()
+                                .collect(Collectors.toSet()))
+                        .orElse(null))
                 .phoneNumber(userDTO.getPhoneNumber())
                 .password(userDTO.getPassword())
                 .login(userDTO.getLogin())

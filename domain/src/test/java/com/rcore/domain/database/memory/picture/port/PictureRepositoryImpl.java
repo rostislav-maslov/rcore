@@ -1,5 +1,6 @@
 package com.rcore.domain.database.memory.picture.port;
 
+import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.picture.entity.PictureEntity;
 import com.rcore.domain.picture.port.PictureRepository;
@@ -36,7 +37,7 @@ public class PictureRepositoryImpl implements PictureRepository {
     }
 
     @Override
-    public SearchResult<PictureEntity> find(Long size, Long skip) {
+    public SearchResult<PictureEntity> find(SearchRequest request) {
         return null;
     }
 

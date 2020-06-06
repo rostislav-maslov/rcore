@@ -2,14 +2,18 @@ package com.rcore.database.mongo.common.query;
 
 import com.rcore.database.mongo.common.dto.SearchDTO;
 import com.rcore.domain.base.entity.BaseEntity;
+import com.rcore.domain.base.port.SearchRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Query;
+
+import java.util.Map;
+import java.util.Optional;
 
 public abstract class AbstractExampleQuery<Entity extends BaseEntity> implements ExampleQuery<Entity> {
 
     protected String query = "";
-    protected Integer limit = 20;
-    protected Integer offset = 0;
+    protected Long limit = 20l;
+    protected Long offset = 0l;
 
     protected Sort sort;
     protected String sortName = "id";
@@ -19,19 +23,19 @@ public abstract class AbstractExampleQuery<Entity extends BaseEntity> implements
         this.sort = Sort.by(sortDirection, sortName);
     }
 
-    public AbstractExampleQuery(SearchDTO request) {
-        this.query = request.getQuery();
-        this.limit = request.getLimit();
-        this.offset = request.getOffset();
-        this.sortName = request.getSortName();
-        this.sortDirection = request.getSortDirection();
+    public AbstractExampleQuery(SearchRequest request) {
+        this.query = Optional.ofNullable(request.getQuery()).orElse("");
+        this.limit = Optional.ofNullable(request.getLimit()).orElse(20l);
+        this.offset = Optional.ofNullable(request.getOffset()).orElse(0l);
+        this.sortName = Optional.ofNullable(request.getSortName()).orElse("_id");
+        this.sortDirection = Optional.ofNullable(request.getSortDirection()).map(Sort.Direction::fromString).orElse(Sort.Direction.DESC);
         this.sort = Sort.by(sortDirection, sortName);
     }
 
     @Override
     public Query getQuery() {
         return Query.query(getCriteria())
-                .limit(limit)
+                .limit(limit.intValue())
                 .skip(offset)
                 .with(sort);
     }

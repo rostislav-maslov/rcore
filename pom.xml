@@ -13,12 +13,13 @@
         <module>commons</module>
         <module>rest-api</module>
         <module>security</module>
+        <module>admin-core</module>
     </modules>
 
     <packaging>pom</packaging>
 
     <properties>
-        <rcore.version>0.9.1</rcore.version>
+        <rcore.version>0.9.5</rcore.version>
     </properties>
 
     <build>

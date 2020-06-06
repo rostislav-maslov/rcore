@@ -1,12 +1,9 @@
 package com.rcore.restapi.config;
 
 import com.rcore.adapter.domain.file.FileAdapter;
-import com.rcore.adapter.domain.file.FileAllAdapter;
 import com.rcore.adapter.domain.picture.PictureAdapter;
-import com.rcore.adapter.domain.picture.PictureAllAdapter;
+import com.rcore.adapter.domain.role.RoleAdapter;
 import com.rcore.adapter.domain.token.TokenAdapter;
-import com.rcore.adapter.domain.token.dto.AccessTokenDTO;
-import com.rcore.adapter.domain.token.dto.RefreshTokenDTO;
 import com.rcore.adapter.domain.user.UserAdapter;
 import com.rcore.domain.file.config.FileConfig;
 import com.rcore.domain.file.port.FileIdGenerator;
@@ -17,12 +14,16 @@ import com.rcore.domain.picture.port.PictureCompressor;
 import com.rcore.domain.picture.port.PictureIdGenerator;
 import com.rcore.domain.picture.port.PictureRepository;
 import com.rcore.domain.picture.port.PictureStorage;
+import com.rcore.domain.role.config.RoleConfig;
+import com.rcore.domain.role.port.RoleIdGenerator;
+import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.token.config.TokenConfig;
 import com.rcore.domain.token.port.AccessTokenIdGenerator;
 import com.rcore.domain.token.port.AccessTokenStorage;
 import com.rcore.domain.token.port.RefreshTokenIdGenerator;
 import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.domain.token.port.impl.TokenSaltGeneratorImpl;
+import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.token.usecase.CreateAccessTokenUseCase;
 import com.rcore.domain.token.usecase.CreateRefreshTokenUseCase;
 import com.rcore.domain.token.usecase.ExpireTokenUseCase;
@@ -31,13 +32,9 @@ import com.rcore.domain.user.port.PasswordGenerator;
 import com.rcore.domain.user.port.UserIdGenerator;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.port.impl.PasswordGeneratorImpl;
-import com.rcore.security.infrastructure.AuthTokenGenerator;
-import com.rcore.security.infrastructure.jwt.converter.impl.JWTByAccessTokenGenerator;
-import com.rcore.security.infrastructure.jwt.converter.impl.JWTByRefreshTokenGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
@@ -59,7 +56,10 @@ public class RestApiConfig {
 
     private final UserRepository userRepository;
     private final UserIdGenerator userIdGenerator;
-    private PasswordGenerator passwordGenerator;
+    private final PasswordGenerator passwordGenerator = new PasswordGeneratorImpl();
+
+    private final RoleRepository roleRepository;
+    private final RoleIdGenerator roleIdGenerator;
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final AccessTokenStorage accessTokenStorage;
@@ -68,19 +68,13 @@ public class RestApiConfig {
     private final TokenSaltGeneratorImpl tokenSaltGenerator = new TokenSaltGeneratorImpl();
 
     @Bean
-    public PasswordGenerator passwordGenerator() {
-        this.passwordGenerator = new PasswordGeneratorImpl();
-        return this.passwordGenerator;
-    }
-
-    @Bean
     public PictureAdapter pictureAdapter() {
-        return new PictureAdapter(new PictureConfig(pictureRepository, pictureIdGenerator, pictureStorage, pictureCompressor));
+        return new PictureAdapter(new PictureConfig(pictureRepository, pictureIdGenerator, pictureStorage, pictureCompressor, new AuthorizationByTokenUseCase(refreshTokenRepository, accessTokenStorage, userRepository)));
     }
 
     @Bean
     public FileAdapter fileAdapter() {
-        return new FileAdapter(new FileConfig(fileRepository, fileIdGenerator, fileStorage));
+        return new FileAdapter(new FileConfig(fileRepository, fileIdGenerator, fileStorage, new AuthorizationByTokenUseCase(refreshTokenRepository, accessTokenStorage, userRepository)));
     }
 
     @Bean
@@ -91,12 +85,22 @@ public class RestApiConfig {
     @Bean
     public UserAdapter userAdapter() {
         return new UserAdapter(new UserConfig(
-                userRepository, userIdGenerator, passwordGenerator,
+                userRepository,
+                userIdGenerator,
+                passwordGenerator,
                 new ExpireTokenUseCase(refreshTokenRepository),
                 new CreateRefreshTokenUseCase(refreshTokenIdGenerator, refreshTokenRepository, tokenSaltGenerator),
                 new CreateAccessTokenUseCase(accessTokenIdGenerator, new CreateRefreshTokenUseCase(refreshTokenIdGenerator, refreshTokenRepository, tokenSaltGenerator)),
-                refreshTokenRepository)
+                refreshTokenRepository,
+                roleRepository,
+                new AuthorizationByTokenUseCase(refreshTokenRepository, accessTokenStorage, userRepository),
+                accessTokenStorage)
         );
+    }
+
+    @Bean
+    public RoleAdapter roleAdapter() {
+        return new RoleAdapter(new RoleConfig(roleRepository, roleIdGenerator, new AuthorizationByTokenUseCase(refreshTokenRepository, accessTokenStorage, userRepository)));
     }
 
 }

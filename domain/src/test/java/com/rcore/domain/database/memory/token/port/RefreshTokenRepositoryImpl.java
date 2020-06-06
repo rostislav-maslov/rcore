@@ -1,5 +1,6 @@
 package com.rcore.domain.database.memory.token.port;
 
+import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.port.RefreshTokenRepository;
@@ -39,12 +40,12 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     }
 
     @Override
-    public SearchResult<RefreshTokenEntity> find(Long size, Long skip) {
+    public SearchResult<RefreshTokenEntity> find(SearchRequest request) {
         return SearchResult.withItemsAndCount(
                 container.values()
                         .stream()
-                        .skip(skip)
-                        .limit(size)
+                        .skip(request.getOffset())
+                        .limit(request.getLimit())
                         .collect(Collectors.toList()),
                 count()
         );

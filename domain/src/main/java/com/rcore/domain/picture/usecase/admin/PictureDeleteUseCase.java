@@ -3,20 +3,24 @@ package com.rcore.domain.picture.usecase.admin;
 import com.rcore.domain.picture.entity.PictureEntity;
 import com.rcore.domain.picture.port.PictureRepository;
 import com.rcore.domain.picture.port.PictureStorage;
-import com.rcore.domain.picture.role.AdminPictureDeleteRole;
+import com.rcore.domain.picture.access.AdminPictureDeleteAccess;
+import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
+import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
 
 public class PictureDeleteUseCase  extends PictureAdminBaseUseCase {
 
     private final PictureStorage pictureStorage;
 
-    public PictureDeleteUseCase(UserEntity actor, PictureRepository pictureRepository, PictureStorage pictureStorage) throws AuthorizationException {
-        super(actor, pictureRepository, new AdminPictureDeleteRole());
+    public PictureDeleteUseCase(PictureRepository pictureRepository, PictureStorage pictureStorage, AuthorizationByTokenUseCase authorizationByTokenUseCase) throws AuthorizationException {
+        super(pictureRepository, new AdminPictureDeleteAccess(), authorizationByTokenUseCase);
         this.pictureStorage = pictureStorage;
     }
 
-    public Boolean delete(PictureEntity pictureEntity){
+    public Boolean delete(PictureEntity pictureEntity) throws AuthenticationException, AuthorizationException {
+        checkAccess();
+
         if (pictureEntity.getFilePath() != null && pictureEntity.getFilePath().length() > 0)
             pictureStorage.remove(pictureEntity.getFilePath());
 

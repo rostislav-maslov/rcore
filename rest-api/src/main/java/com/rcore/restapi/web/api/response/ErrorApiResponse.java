@@ -5,13 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@ApiModel(" ")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 public class ErrorApiResponse<Error> {
 
-    protected Error error;
+    protected Error errors;
 
     public static <Error> ErrorApiResponse<Error> of(Error error) {
         return new ErrorApiResponse<>(error);

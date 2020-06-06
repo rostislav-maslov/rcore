@@ -1,5 +1,6 @@
 package com.rcore.domain.database.memory.file.port;
 
+import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.file.entity.FileEntity;
 import com.rcore.domain.file.port.FileRepository;
@@ -43,7 +44,7 @@ public class FileRepositoryImpl implements FileRepository {
     }
 
     @Override
-    public SearchResult<FileEntity> find(Long size, Long skip) {
+    public SearchResult<FileEntity> find(SearchRequest request) {
         return null;
     }
 

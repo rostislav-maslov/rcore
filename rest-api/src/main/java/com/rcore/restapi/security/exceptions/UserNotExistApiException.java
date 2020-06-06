@@ -3,6 +3,6 @@ package com.rcore.restapi.security.exceptions;
 public class UserNotExistApiException extends ApiAuthenticationException {
 
     public UserNotExistApiException() {
-        super("Пользователя не существует", "USER", "NOT_EXIST");
+        super("Ошибка доступа", "Переданы некорректные данные. Пожалуйста, выполните вход повторно", "USER", "NOT_EXIST");
     }
 }

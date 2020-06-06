@@ -1,7 +1,7 @@
 package com.rcore.domain.token.entity;
 
 import com.rcore.domain.base.entity.BaseEntity;
-import com.rcore.domain.role.entity.Role;
+import com.rcore.domain.access.entity.Access;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,7 +22,7 @@ import java.util.Set;
 public class AccessTokenEntity extends BaseEntity {
     private String id;
     private String userId;
-    private Set<Role> roles;
+    private Set<Access> accesses;
     private LocalDateTime expireAt = LocalDateTime.now();
 
     private String createFromRefreshTokenId;

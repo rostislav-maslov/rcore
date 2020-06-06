@@ -27,3 +27,7 @@ cd ../..
 cd rest-api
 mvn clean deploy -P release -U
 cd ..
+
+cd admin-core
+mvn clean deploy -P release -U
+cd ..

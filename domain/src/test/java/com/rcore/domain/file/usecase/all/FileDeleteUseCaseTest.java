@@ -12,8 +12,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
-
 public class FileDeleteUseCaseTest {
 
     private final FileAppConfig fileAppConfig = new FileAppConfig();

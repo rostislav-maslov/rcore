@@ -32,7 +32,7 @@ public class TokenAuthenticationFailureHandler implements AuthenticationFailureH
 
         if (exception instanceof UserNotExistApiException || exception instanceof TokenExpiredApiException || exception instanceof UserBlockedApiException || exception instanceof InvalidTokenFormatApiException) {
             ApiAuthenticationException e = (ApiAuthenticationException) exception;
-            ErrorApiResponse error = ErrorApiResponse.of(e.getError());
+            ErrorApiResponse error = ErrorApiResponse.of(e.getErrors());
             response.getWriter().write(objectMapper.writeValueAsString(error));
         }
     }

@@ -1,5 +1,6 @@
 package com.rcore.adapter.domain.user;
 
+import com.rcore.adapter.domain.role.mapper.RoleMapper;
 import com.rcore.adapter.domain.token.dto.RefreshTokenDTO;
 import com.rcore.adapter.domain.token.mapper.AccessTokenMapper;
 import com.rcore.adapter.domain.token.mapper.RefreshTokenMapper;
@@ -8,6 +9,7 @@ import com.rcore.adapter.domain.user.dto.UserDTO;
 import com.rcore.adapter.domain.user.mapper.TokenPairMapper;
 import com.rcore.adapter.domain.user.mapper.UserMapper;
 import com.rcore.domain.token.exception.AuthenticationException;
+import com.rcore.domain.token.exception.RefreshTokenIsExpiredException;
 import com.rcore.domain.user.config.UserConfig;
 import com.rcore.domain.user.exception.UserBlockedException;
 import com.rcore.domain.user.exception.UserNotFoundException;
@@ -19,7 +21,7 @@ import java.util.Optional;
 public class UserAllAdapter {
     private final UserConfig userConfig;
 
-    private UserMapper userMapper = new UserMapper();
+    private UserMapper userMapper = new UserMapper(new RoleMapper());
     private AccessTokenMapper accessTokenMapper = new AccessTokenMapper();
     private RefreshTokenMapper refreshTokenMapper = new RefreshTokenMapper();
     private TokenPairMapper tokenPairMapper = new TokenPairMapper(accessTokenMapper,refreshTokenMapper);
@@ -35,7 +37,7 @@ public class UserAllAdapter {
                 .authentication(email, password));
     }
 
-    public TokenPairDTO getNewTokenPairByRefreshToken(RefreshTokenDTO refreshToken) throws UserNotFoundException, UserBlockedException, AuthenticationException {
+    public TokenPairDTO getNewTokenPairByRefreshToken(RefreshTokenDTO refreshToken) throws UserNotFoundException, UserBlockedException, AuthenticationException, RefreshTokenIsExpiredException {
         return tokenPairMapper.map(userConfig.all.emailAuthenticationUseCase()
                 .getNewTokenPairByRefreshToken(refreshTokenMapper.inverseMap(refreshToken)));
     }

@@ -1,25 +1,35 @@
 package com.rcore.domain.user.usecase.admin;
 
+import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
+import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
+import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.port.UserRepository;
-import com.rcore.domain.user.role.AdminUserViewRole;
+import com.rcore.domain.user.access.AdminUserViewAccess;
 
 import java.util.Optional;
 
 public class ViewUserUseCase extends AdminBaseUseCase {
 
-    public ViewUserUseCase(UserEntity actor, UserRepository userRepository) throws AuthorizationException {
-        super(actor, userRepository, new AdminUserViewRole());
+    public ViewUserUseCase(UserRepository userRepository, AuthorizationByTokenUseCase authorizationByTokenUseCase) {
+        super(userRepository, new AdminUserViewAccess(), authorizationByTokenUseCase);
     }
 
-    public Optional<UserEntity> findById(String id) {
+    public Optional<UserEntity> findById(String id) throws AuthenticationException, AuthorizationException {
+        checkAccess();
         return userRepository.findById(id);
     }
 
-    public SearchResult<UserEntity> find(Long size, Long skip) {
-        return userRepository.find(size, skip);
+    public SearchResult<UserEntity> find(SearchRequest request) throws AuthenticationException, AuthorizationException {
+        checkAccess();
+        return userRepository.find(request);
+    }
+
+    public SearchResult<UserEntity> findWithSearch(SearchRequest request, String roleId) throws AuthenticationException, AuthorizationException {
+        checkAccess();
+        return userRepository.findWithFilters(request, roleId);
     }
 
 }
