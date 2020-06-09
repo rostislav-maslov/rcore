@@ -14,7 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class RestApiSwaggerConfig {
 
     @Bean
-    public Docket adminCoreApi() {
+    public Docket restApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(new ApiInfoBuilder()
                         .title("Базовое API из Rcore.rest-api")
