@@ -3,6 +3,7 @@ package com.rcore.adapter.domain.picture;
 import com.rcore.adapter.domain.picture.dto.PictureDTO;
 import com.rcore.adapter.domain.picture.mapper.PictureMapper;
 import com.rcore.domain.picture.config.PictureConfig;
+import com.rcore.domain.picture.entity.PictureEntity;
 import com.rcore.domain.picture.exception.PictureAccessException;
 import com.rcore.domain.picture.exception.PictureNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -29,5 +30,13 @@ public class PictureAllAdapter {
 
     public Optional<InputStream> getInputStreamByWidth(String id, Integer width) throws PictureAccessException {
         return pictureConfig.all.viewUseCase().getInputStreamByWidth(id, width);
+    }
+
+    public Boolean delete(PictureEntity pictureEntity) {
+        return pictureConfig.all.deleteUseCase().delete(pictureEntity);
+    }
+
+    public Boolean deleteById(String id) throws PictureNotFoundException {
+        return pictureConfig.all.deleteUseCase().deleteById(id);
     }
 }

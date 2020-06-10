@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Getter
@@ -28,8 +29,11 @@ public class Access {
     }
 
     public static Boolean hasAccess(Set<Access> userAccesses, Access needAccess){
+        Optional<Access> access = userAccesses.stream().filter(a -> a.getId().equals(needAccess.getId())).findFirst();
+        Boolean b = userAccesses.contains(needAccess);
         if(userAccesses.contains(new GodModAccess())) return true;
-        if(userAccesses.contains(needAccess)) return true;
+        if(userAccesses.contains(needAccess))
+            return true;
 
         return false;
     }

@@ -2,6 +2,7 @@ package com.rcore.database.mongo.domain.user.port;
 
 import com.rcore.database.mongo.common.utils.CollectionNameUtils;
 import com.rcore.database.mongo.domain.picture.model.PictureDoc;
+import com.rcore.database.mongo.domain.role.model.RoleDoc;
 import com.rcore.database.mongo.domain.user.model.UserDoc;
 import com.rcore.database.mongo.domain.user.query.*;
 import com.rcore.domain.base.port.SearchRequest;
@@ -14,6 +15,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -58,7 +60,18 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<UserEntity> findById(String id) {
-        return Optional.ofNullable(mongoTemplate.findById(id, UserDoc.class));
+        UserEntity userEntity = Optional.ofNullable(mongoTemplate.findById(id, UserDoc.class))
+                .map(userDoc -> {
+                    //Синхронизуем роли из бд
+                    userDoc.setRoles(userDoc.getRoles()
+                            .stream()
+                            .map(roleEntity -> mongoTemplate.findById(roleEntity.getId(), RoleDoc.class))
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.toSet()));
+                    return userDoc;
+                })
+                .orElse(null);
+        return Optional.of(userEntity);
     }
 
     @Override

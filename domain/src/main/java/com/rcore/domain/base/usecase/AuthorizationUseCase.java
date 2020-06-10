@@ -35,10 +35,10 @@ public abstract class AuthorizationUseCase {
         if (actor.hasAccess(new GodModAccess())) return true;
 
         for (Access access : availableAccesses) {
-            if (Access.hasAccess(actor.getAccesses(), access) == false) return false;
+            if (Access.hasAccess(actor.getAccesses(), access)) return true;
         }
 
-        return true;
+        return false;
     }
 
 
