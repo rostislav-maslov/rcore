@@ -43,7 +43,8 @@ public class TokenAdapter {
     }
 
     public UserDTO currentUser() throws AuthenticationException {
-        return userMapper.map(tokenConfig.getAll().authorizationByTokenUseCase().currentUser());
+        return userMapper.map(tokenConfig.getAll().authorizationByTokenUseCase()
+                .currentUser());
     }
 
     public AccessTokenDTO createAccessToken(UserDTO user) throws RefreshTokenCreationException {

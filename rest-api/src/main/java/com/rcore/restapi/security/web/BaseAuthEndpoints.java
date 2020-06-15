@@ -9,9 +9,7 @@ import com.rcore.adapter.domain.user.dto.UserDTO;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.RefreshTokenIsExpiredException;
 import com.rcore.domain.token.port.AccessTokenStorage;
-import com.rcore.domain.user.exception.AdminUserIsExistException;
-import com.rcore.domain.user.exception.UserBlockedException;
-import com.rcore.domain.user.exception.UserNotFoundException;
+import com.rcore.domain.user.exception.*;
 import com.rcore.restapi.exceptions.BadRequestApiException;
 import com.rcore.restapi.exceptions.InternalServerException;
 import com.rcore.restapi.exceptions.UnauthorizedRequestApiException;
@@ -101,8 +99,8 @@ public class BaseAuthEndpoints {
     }
 
     @PostMapping(value = BaseAuthRoutes.LOGOUT)
-    public OkApiResponse logout() throws AuthenticationException {
-        UserDTO user = tokenAdapter.currentUser();
+    public OkApiResponse logout() throws InvalidTokenFormatException, UserNotExistException, UserBlockedException, TokenExpiredException {
+        UserDTO user = tokenAdapter.getUserByAccessToken(accessTokenGenerator.parseToken(WebRequestUtils.getAuthToken(), secretKey));
         tokenAdapter.logout(user);
         return OkApiResponse.of();
     }
