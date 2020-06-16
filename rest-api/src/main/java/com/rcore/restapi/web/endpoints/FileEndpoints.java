@@ -16,6 +16,7 @@ import com.rcore.restapi.web.endpoints.api.UploadFileDTO;
 import com.rcore.restapi.web.endpoints.routes.FileRoutes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
@@ -38,6 +39,13 @@ public class FileEndpoints {
     public SuccessApiResponse<String> upload(@RequestBody UploadFileDTO file) throws IOException {
         return SuccessApiResponse.of(
                 fileAdapter.getAll().create(new ByteArrayInputStream(file.getData()), file.getFileName(), file.getContentType()).getId()
+        );
+    }
+
+    @PostMapping(FileRoutes.UPLOAD_MULTIPART)
+    public SuccessApiResponse<String> upload(@RequestParam MultipartFile file) throws IOException {
+        return SuccessApiResponse.of(
+                fileAdapter.getAll().create(file.getInputStream(), file.getOriginalFilename(), file.getContentType()).getId()
         );
     }
 

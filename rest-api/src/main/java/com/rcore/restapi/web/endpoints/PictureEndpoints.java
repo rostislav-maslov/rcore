@@ -17,6 +17,7 @@ import com.rcore.restapi.web.endpoints.routes.PictureRoutes;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
@@ -42,6 +43,13 @@ public class PictureEndpoints {
     public SuccessApiResponse<String> upload(@RequestBody UploadFileDTO request) throws AuthenticationException, AuthorizationException {
 
         PictureDTO picture = pictureAdapter.getAll().create(new ByteArrayInputStream(request.getData()), request.getFileName(), request.getContentType());
+        return SuccessApiResponse.of(picture.getId());
+    }
+
+    @PostMapping(value = PictureRoutes.UPLOAD_MULTIPART, produces = MediaType.APPLICATION_JSON_VALUE)
+    public SuccessApiResponse<String> upload(@RequestParam MultipartFile file) throws AuthenticationException, AuthorizationException, IOException {
+
+        PictureDTO picture = pictureAdapter.getAll().create(file.getInputStream(), file.getOriginalFilename(), file.getContentType());
         return SuccessApiResponse.of(picture.getId());
     }
 

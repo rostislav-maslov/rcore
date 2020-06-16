@@ -13,4 +13,5 @@ public class PictureRoutes {
     public static final String WIDTH = NOT_SECURE_BY_ID + "/width";
 
     public static final String UPLOAD = ROOT + "/upload";
+    public static final String UPLOAD_MULTIPART = UPLOAD + "/multipart";
 }

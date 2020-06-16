@@ -11,4 +11,5 @@ public class FileRoutes {
     public static final String BY_ID = ROOT + "/{id}";
 
     public static final String UPLOAD = ROOT + "/upload";
+    public static final String UPLOAD_MULTIPART = UPLOAD + "/multipart";
 }
