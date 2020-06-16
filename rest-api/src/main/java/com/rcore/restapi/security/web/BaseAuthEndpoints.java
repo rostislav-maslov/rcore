@@ -50,7 +50,7 @@ public class BaseAuthEndpoints {
 
     @PostMapping(value = BaseAuthRoutes.INIT_ADMIN)
     public OkApiResponse initAdmin(@RequestBody UserCredentialsDTO request) throws AdminUserIsExistException {
-        userAdapter.getSecure().initAdminUser(request.getEmail(), request.getPassword());
+        userAdapter.getAll().initAdminUser(request.getEmail(), request.getPassword());
         return OkApiResponse.of();
     }
 
@@ -99,7 +99,7 @@ public class BaseAuthEndpoints {
     }
 
     @PostMapping(value = BaseAuthRoutes.LOGOUT)
-    public OkApiResponse logout() throws InvalidTokenFormatException, UserNotExistException, UserBlockedException, TokenExpiredException {
+    public OkApiResponse logout() throws  InvalidTokenFormatException, UserNotExistException, UserBlockedException, TokenExpiredException {
         UserDTO user = tokenAdapter.getUserByAccessToken(accessTokenGenerator.parseToken(WebRequestUtils.getAuthToken(), secretKey));
         tokenAdapter.logout(user);
         return OkApiResponse.of();

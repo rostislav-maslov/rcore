@@ -42,11 +42,6 @@ public class UserSecureAdapter {
                 .delete(userMapper.inverseMap(userDTO));
     }
 
-    public Boolean initAdminUser(String email, String password) throws AdminUserIsExistException {
-        return userConfig.admin.InitAdminUseCase()
-                .init(email, password);
-    }
-
     public UserDTO updateUser(UserDTO userDTO) throws UserNotFoundException, UserAlreadyExistException, AuthorizationException, AuthenticationException {
         return userMapper.map(userConfig.admin.UpdateUserUseCase()
                 .update(userMapper.inverseMap(userDTO)));
