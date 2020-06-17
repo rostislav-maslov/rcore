@@ -14,14 +14,14 @@
     <url>https://github.com/rostislav-maslov/rcore</url>
 
     <properties>
-        <rcore.version>0.9.6</rcore.version>
+        <rcore.version>0.9.7</rcore.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.github.rostislav-maslov.rcore</groupId>
             <artifactId>rest-api</artifactId>
-            <version>0.9.6</version>
+            <version>0.9.7</version>
         </dependency>
     </dependencies>
 
