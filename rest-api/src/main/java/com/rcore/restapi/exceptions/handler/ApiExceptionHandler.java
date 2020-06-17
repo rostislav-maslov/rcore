@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,6 +36,12 @@ public class ApiExceptionHandler {
     @ExceptionHandler(value = UnauthorizedRequestApiException.class)
     public ErrorApiResponse<List<ExceptionDTO>> handleUnauthorizedRequestApiException(UnauthorizedRequestApiException e) {
         return ErrorApiResponse.of(e.getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    @ExceptionHandler(value = MaxUploadSizeExceededException.class)
+    public ErrorApiResponse<List<ExceptionDTO>> handleMaxUploadSizeException(Exception e) {
+        return ErrorApiResponse.of(new MaxUploadSizeApiException().getErrors());
     }
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)

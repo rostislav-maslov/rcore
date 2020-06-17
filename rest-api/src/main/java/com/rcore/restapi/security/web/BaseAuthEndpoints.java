@@ -8,17 +8,19 @@ import com.rcore.adapter.domain.user.dto.TokenPairDTO;
 import com.rcore.adapter.domain.user.dto.UserDTO;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.RefreshTokenIsExpiredException;
-import com.rcore.domain.user.exception.AdminUserIsExistException;
-import com.rcore.domain.user.exception.UserBlockedException;
-import com.rcore.domain.user.exception.UserNotFoundException;
+import com.rcore.domain.token.port.AccessTokenStorage;
+import com.rcore.domain.user.exception.*;
 import com.rcore.restapi.exceptions.BadRequestApiException;
+import com.rcore.restapi.exceptions.InternalServerException;
 import com.rcore.restapi.exceptions.UnauthorizedRequestApiException;
 import com.rcore.restapi.routes.BaseAuthRoutes;
+import com.rcore.restapi.security.exceptions.UserNotExistApiException;
 import com.rcore.restapi.security.web.api.AuthenticationDTO;
 import com.rcore.restapi.security.web.api.RefreshTokenRequest;
 import com.rcore.restapi.security.web.api.UserCredentialsDTO;
 import com.rcore.restapi.security.web.validators.EmailAuthRequestValidator;
 import com.rcore.restapi.security.web.validators.RefreshTokenRequestValidator;
+import com.rcore.restapi.utils.WebRequestUtils;
 import com.rcore.restapi.web.api.response.OkApiResponse;
 import com.rcore.restapi.web.api.response.SuccessApiResponse;
 import com.rcore.security.infrastructure.AuthTokenGenerator;
@@ -41,13 +43,14 @@ public class BaseAuthEndpoints {
     private final TokenAdapter tokenAdapter;
     private final AuthTokenGenerator<AccessTokenDTO> accessTokenGenerator;
     private final AuthTokenGenerator<RefreshTokenDTO> refreshTokenGenerator;
+    private final AccessTokenStorage accessTokenStorage;
 
     private final EmailAuthRequestValidator emailAuthRequestValidator;
     private final RefreshTokenRequestValidator refreshTokenRequestValidator;
 
     @PostMapping(value = BaseAuthRoutes.INIT_ADMIN)
     public OkApiResponse initAdmin(@RequestBody UserCredentialsDTO request) throws AdminUserIsExistException {
-        userAdapter.getSecure().initAdminUser(request.getEmail(), request.getPassword());
+        userAdapter.getAll().initAdminUser(request.getEmail(), request.getPassword());
         return OkApiResponse.of();
     }
 
@@ -71,6 +74,13 @@ public class BaseAuthEndpoints {
     @PostMapping(value = BaseAuthRoutes.REFRESH)
     public SuccessApiResponse<AuthenticationDTO> refresh(@RequestBody RefreshTokenRequest request) throws InvalidTokenFormatException, UserBlockedException, TokenGenerateException, UnauthorizedRequestApiException {
         refreshTokenRequestValidator.validate(request);
+        AccessTokenDTO accessToken = accessTokenGenerator.parseToken(WebRequestUtils.getAuthToken(), secretKey);
+
+        //Проверка существование accessToken
+        accessTokenStorage.findById(accessToken.getId())
+                .orElseThrow(() -> new UserNotExistApiException());
+
+
 
         TokenPairDTO tokenPair = null;
         try {
@@ -89,8 +99,8 @@ public class BaseAuthEndpoints {
     }
 
     @PostMapping(value = BaseAuthRoutes.LOGOUT)
-    public OkApiResponse logout() throws AuthenticationException {
-        UserDTO user = tokenAdapter.currentUser();
+    public OkApiResponse logout() throws  InvalidTokenFormatException, UserNotExistException, UserBlockedException, TokenExpiredException {
+        UserDTO user = tokenAdapter.getUserByAccessToken(accessTokenGenerator.parseToken(WebRequestUtils.getAuthToken(), secretKey));
         tokenAdapter.logout(user);
         return OkApiResponse.of();
     }

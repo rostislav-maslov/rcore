@@ -24,6 +24,7 @@ public class FileAdminAdapter {
                 .create(content, fileName, contentType, isPrivate));
     }
 
+
     public Boolean delete(FileDTO file) throws AuthorizationException, AuthenticationException {
         return fileConfig.admin.deleteUseCase()
                 .delete(fileMapper.inverseMap(file));

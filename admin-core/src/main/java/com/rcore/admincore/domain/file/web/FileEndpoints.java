@@ -62,7 +62,6 @@ public class FileEndpoints {
     @ApiOperation("Удаление файла")
     @DeleteMapping(value = Routes.BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
     public OkApiResponse delete(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException {
-        UserDTO actor = tokenAdapter.currentUser();
         FileDTO file = fileAdapter.getAdmin()
                 .findById(id)
                 .orElseThrow(() -> new NotFoundApiException("Неверный идентификатор файла", DomainUtils.getDomain(FileWeb.class), "NOT_FOUND"));

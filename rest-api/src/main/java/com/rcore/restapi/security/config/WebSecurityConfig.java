@@ -1,6 +1,7 @@
 package com.rcore.restapi.security.config;
 
 import com.rcore.restapi.routes.BaseAuthRoutes;
+import com.rcore.restapi.routes.BaseNotSecureApiRoutes;
 import com.rcore.restapi.routes.BaseRoutes;
 import com.rcore.restapi.security.authentication.RestAuthenticationEntryPoint;
 import com.rcore.restapi.security.filter.TokenAuthenticationFilter;
@@ -35,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 //Эндпоинты БЕЗ аутентификации пользователя
-                .antMatchers(BaseAuthRoutes.AUTH + "/**", BaseRoutes.EXTERNAL_API + "/**", BaseAuthRoutes.INIT_ADMIN).permitAll()
+                .antMatchers(BaseNotSecureApiRoutes.NOT_SECURE + "/**").permitAll()
                 .and()
                 .authorizeRequests()
                 //Эедпоинты C аутентификацией
