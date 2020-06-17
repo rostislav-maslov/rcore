@@ -1,6 +1,5 @@
 package com.rcore.restapi.security.config;
 
-import com.rcore.restapi.routes.BaseAuthRoutes;
 import com.rcore.restapi.routes.BaseNotSecureApiRoutes;
 import com.rcore.restapi.routes.BaseRoutes;
 import com.rcore.restapi.security.authentication.RestAuthenticationEntryPoint;
@@ -20,7 +19,7 @@ import org.springframework.security.web.authentication.AbstractAuthenticationPro
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-@Order(1)
+@Order(100)
 @RequiredArgsConstructor
 @EnableWebSecurity
 @Configuration

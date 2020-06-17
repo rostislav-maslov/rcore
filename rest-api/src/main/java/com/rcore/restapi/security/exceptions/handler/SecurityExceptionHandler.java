@@ -86,4 +86,6 @@ public class SecurityExceptionHandler {
     public ErrorApiResponse<List<ExceptionDTO>> handleTokenGenerate(Exception e) {
         return ErrorApiResponse.of(new TokenGenerateApiException().getErrors());
     }
+
+
 }

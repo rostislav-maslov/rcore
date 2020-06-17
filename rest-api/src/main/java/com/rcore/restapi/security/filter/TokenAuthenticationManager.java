@@ -11,6 +11,7 @@ import com.rcore.restapi.security.exceptions.UserNotExistApiException;
 import com.rcore.restapi.security.model.AnonymousTokenAuthentication;
 import com.rcore.restapi.security.model.TokenAuthentication;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;

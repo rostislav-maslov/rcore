@@ -31,9 +31,7 @@ public class UserMapper implements ExampleDataMapper<UserEntity, UserDTO> {
                 .roles(roleMapper
                         .mapAll(userEntity.getRoles()
                                 .stream()
-                                .collect(Collectors.toList()))
-                        .stream()
-                        .collect(Collectors.toSet()))
+                                .collect(Collectors.toList())))
                 .secondName(userEntity.getSecondName())
                 .socialAccounts(userEntity.getSocialAccounts())
                 .userStatus(userEntity.getStatus())

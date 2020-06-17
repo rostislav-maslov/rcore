@@ -19,7 +19,7 @@ import java.util.*;
 @Getter
 public class UserDTO {
     private String id;
-    private Set<RoleDTO> roles;
+    private List<RoleDTO> roles;
 
     private UserStatus userStatus;
 

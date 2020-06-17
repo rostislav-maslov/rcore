@@ -17,7 +17,7 @@ public class AccessPortInMemoryImp implements AccessPort {
 
     public AccessPortInMemoryImp() {
         Set<Access> accesses = Collections.emptySet();
-        accesses.addAll(findAllRoleClassesByClassPath());
+//        accesses.addAll(findAllRoleClassesByClassPath());
         this.accesses = accesses;
     }
 
@@ -42,7 +42,7 @@ public class AccessPortInMemoryImp implements AccessPort {
 
             Set<Access> accesses = new HashSet<>();
             for (Class<? extends Access> roleClass : classes) {
-                accesses.add(Access.getInstance(roleClass));
+//                accesses.add(Access.getInstance(roleClass));
             }
             return accesses;
         } catch (Exception e) {
