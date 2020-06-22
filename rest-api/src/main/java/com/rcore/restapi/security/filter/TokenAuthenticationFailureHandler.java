@@ -1,9 +1,11 @@
 package com.rcore.restapi.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rcore.restapi.exceptions.BaseApiException;
 import com.rcore.restapi.security.exceptions.*;
 import com.rcore.restapi.web.api.response.ErrorApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Primary
 @RequiredArgsConstructor
 @Component
 public class TokenAuthenticationFailureHandler implements AuthenticationFailureHandler {
@@ -30,7 +33,7 @@ public class TokenAuthenticationFailureHandler implements AuthenticationFailureH
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.setCharacterEncoding("UTF-8");
 
-        if (exception instanceof UserNotExistApiException || exception instanceof TokenExpiredApiException || exception instanceof UserBlockedApiException || exception instanceof InvalidTokenFormatApiException) {
+        if (exception instanceof ApiAuthenticationException) {
             ApiAuthenticationException e = (ApiAuthenticationException) exception;
             ErrorApiResponse error = ErrorApiResponse.of(e.getErrors());
             response.getWriter().write(objectMapper.writeValueAsString(error));

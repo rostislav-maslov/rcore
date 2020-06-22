@@ -82,6 +82,12 @@ public class SecurityExceptionHandler {
     }
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler({AuthInternalServerException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleAuthInternalServerException(AuthInternalServerException e) {
+        return ErrorApiResponse.of(e.getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler({TokenGenerateException.class})
     public ErrorApiResponse<List<ExceptionDTO>> handleTokenGenerate(Exception e) {
         return ErrorApiResponse.of(new TokenGenerateApiException().getErrors());

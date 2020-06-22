@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
+@Order(100)
 @RequiredArgsConstructor
 @Component
 public class TokenAuthenticationManager implements AuthenticationManager {

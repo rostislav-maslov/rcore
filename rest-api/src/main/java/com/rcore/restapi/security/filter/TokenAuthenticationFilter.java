@@ -33,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+@Order(1)
 @Component
 public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 

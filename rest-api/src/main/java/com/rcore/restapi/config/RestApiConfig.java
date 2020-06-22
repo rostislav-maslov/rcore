@@ -18,10 +18,7 @@ import com.rcore.domain.role.config.RoleConfig;
 import com.rcore.domain.role.port.RoleIdGenerator;
 import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.token.config.TokenConfig;
-import com.rcore.domain.token.port.AccessTokenIdGenerator;
-import com.rcore.domain.token.port.AccessTokenStorage;
-import com.rcore.domain.token.port.RefreshTokenIdGenerator;
-import com.rcore.domain.token.port.RefreshTokenRepository;
+import com.rcore.domain.token.port.*;
 import com.rcore.domain.token.port.impl.TokenSaltGeneratorImpl;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.token.usecase.CreateAccessTokenUseCase;
@@ -63,23 +60,24 @@ public class RestApiConfig {
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final AccessTokenStorage accessTokenStorage;
+    private final RefreshTokenStorage refreshTokenStorage;
     private final AccessTokenIdGenerator accessTokenIdGenerator;
     private final RefreshTokenIdGenerator refreshTokenIdGenerator;
     private final TokenSaltGeneratorImpl tokenSaltGenerator = new TokenSaltGeneratorImpl();
 
     @Bean
     public PictureAdapter pictureAdapter() {
-        return new PictureAdapter(new PictureConfig(pictureRepository, pictureIdGenerator, pictureStorage, pictureCompressor, new AuthorizationByTokenUseCase(refreshTokenRepository, accessTokenStorage, userRepository)));
+        return new PictureAdapter(new PictureConfig(pictureRepository, pictureIdGenerator, pictureStorage, pictureCompressor, new AuthorizationByTokenUseCase(accessTokenStorage, refreshTokenStorage, userRepository)));
     }
 
     @Bean
     public FileAdapter fileAdapter() {
-        return new FileAdapter(new FileConfig(fileRepository, fileIdGenerator, fileStorage, new AuthorizationByTokenUseCase(refreshTokenRepository, accessTokenStorage, userRepository)));
+        return new FileAdapter(new FileConfig(fileRepository, fileIdGenerator, fileStorage, new AuthorizationByTokenUseCase(accessTokenStorage, refreshTokenStorage, userRepository)));
     }
 
     @Bean
     public TokenAdapter tokenAdapter() {
-        return new TokenAdapter(new TokenConfig(refreshTokenRepository, accessTokenStorage, userRepository, accessTokenIdGenerator, refreshTokenIdGenerator, tokenSaltGenerator));
+        return new TokenAdapter(new TokenConfig(refreshTokenRepository, accessTokenStorage, refreshTokenStorage, userRepository, accessTokenIdGenerator, refreshTokenIdGenerator, tokenSaltGenerator));
     }
 
     @Bean
@@ -89,18 +87,18 @@ public class RestApiConfig {
                 userIdGenerator,
                 passwordGenerator,
                 new ExpireTokenUseCase(refreshTokenRepository),
-                new CreateRefreshTokenUseCase(refreshTokenIdGenerator, refreshTokenRepository, tokenSaltGenerator),
-                new CreateAccessTokenUseCase(accessTokenIdGenerator, new CreateRefreshTokenUseCase(refreshTokenIdGenerator, refreshTokenRepository, tokenSaltGenerator)),
+                new CreateRefreshTokenUseCase(refreshTokenIdGenerator, refreshTokenStorage, tokenSaltGenerator),
+                new CreateAccessTokenUseCase(accessTokenIdGenerator, accessTokenStorage, new CreateRefreshTokenUseCase(refreshTokenIdGenerator, refreshTokenStorage, tokenSaltGenerator)),
                 refreshTokenRepository,
                 roleRepository,
-                new AuthorizationByTokenUseCase(refreshTokenRepository, accessTokenStorage, userRepository),
+                new AuthorizationByTokenUseCase(accessTokenStorage, refreshTokenStorage, userRepository),
                 accessTokenStorage)
         );
     }
 
     @Bean
     public RoleAdapter roleAdapter() {
-        return new RoleAdapter(new RoleConfig(roleRepository, roleIdGenerator, new AuthorizationByTokenUseCase(refreshTokenRepository, accessTokenStorage, userRepository)));
+        return new RoleAdapter(new RoleConfig(roleRepository, roleIdGenerator, new AuthorizationByTokenUseCase(accessTokenStorage, refreshTokenStorage, userRepository)));
     }
 
 }
