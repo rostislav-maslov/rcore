@@ -5,21 +5,25 @@ import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.exception.RefreshTokenCreationException;
 import com.rcore.domain.token.port.AccessTokenIdGenerator;
+import com.rcore.domain.token.port.AccessTokenStorage;
 import com.rcore.domain.user.entity.UserEntity;
 
 public class CreateAccessTokenUseCase {
     private final AccessTokenIdGenerator idGenerator;
+    private final AccessTokenStorage accessTokenStorage;
     private final CreateRefreshTokenUseCase createRefreshTokenUseCase;
 
-    public CreateAccessTokenUseCase(AccessTokenIdGenerator idGenerator, CreateRefreshTokenUseCase createRefreshTokenUseCase) {
+    public CreateAccessTokenUseCase(AccessTokenIdGenerator idGenerator, AccessTokenStorage accessTokenStorage, CreateRefreshTokenUseCase createRefreshTokenUseCase) {
         this.idGenerator = idGenerator;
+        this.accessTokenStorage = accessTokenStorage;
         this.createRefreshTokenUseCase = createRefreshTokenUseCase;
     }
 
     public AccessTokenEntity create(UserEntity userEntity) throws RefreshTokenCreationException {
         RefreshTokenEntity refreshTokenEntity = createRefreshTokenUseCase.create(userEntity);
-
-        return create(userEntity, refreshTokenEntity);
+        AccessTokenEntity accessTokenEntity = create(userEntity, refreshTokenEntity);
+        accessTokenStorage.put(accessTokenEntity);
+        return accessTokenEntity;
     }
 
     public AccessTokenEntity create(UserEntity userEntity, RefreshTokenEntity refreshTokenEntity) {
@@ -32,6 +36,7 @@ public class CreateAccessTokenUseCase {
 
         accessTokenEntity.setSign(AccessTokenEntity.sign(accessTokenEntity.getId(), DateTimeUtils.getMillis(accessTokenEntity.getExpireAt()), refreshTokenEntity));
 
+        accessTokenStorage.put(accessTokenEntity);
         return accessTokenEntity;
     }
 }

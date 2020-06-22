@@ -7,7 +7,7 @@ import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.port.AccessTokenStorage;
 import com.rcore.domain.token.port.AuthorizationPort;
-import com.rcore.domain.token.port.RefreshTokenRepository;
+import com.rcore.domain.token.port.RefreshTokenStorage;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.entity.UserStatus;
 import com.rcore.domain.user.exception.TokenExpiredException;
@@ -22,13 +22,13 @@ import java.util.Set;
 
 public class AuthorizationByTokenUseCase implements AuthorizationPort {
 
-    private final RefreshTokenRepository refreshTokenRepository;
     private final AccessTokenStorage accessTokenStorage;
+    private final RefreshTokenStorage refreshTokenStorage;
     private final UserRepository userRepository;
 
-    public AuthorizationByTokenUseCase(RefreshTokenRepository refreshTokenRepository, AccessTokenStorage accessTokenStorage, UserRepository userRepository) {
-        this.refreshTokenRepository = refreshTokenRepository;
+    public AuthorizationByTokenUseCase(AccessTokenStorage accessTokenStorage, RefreshTokenStorage refreshTokenStorage, UserRepository userRepository) {
         this.accessTokenStorage = accessTokenStorage;
+        this.refreshTokenStorage = refreshTokenStorage;
         this.userRepository = userRepository;
     }
 
@@ -36,7 +36,7 @@ public class AuthorizationByTokenUseCase implements AuthorizationPort {
     public Boolean checkAccess(AccessTokenEntity accessToken, Set<Access> userAccesses) {
         if (LocalDateTime.now().isAfter(accessToken.getExpireAt())) return false;
 
-        Optional<RefreshTokenEntity> refreshTokenEntity = refreshTokenRepository.findById(accessToken.getCreateFromRefreshTokenId());
+        Optional<RefreshTokenEntity> refreshTokenEntity = refreshTokenStorage.findById(accessToken.getCreateFromRefreshTokenId());
         if (!refreshTokenEntity.isPresent()) return false;
 
         if (!refreshTokenEntity.get().isActive()) return false;
@@ -62,7 +62,7 @@ public class AuthorizationByTokenUseCase implements AuthorizationPort {
         return accessTokenEntity;
     }
 
-    public UserEntity getUserByAccessToken(AccessTokenEntity accessToken) throws UserNotExistException, UserBlockedException, TokenExpiredException {
+    public UserEntity getUserByAccessToken(AccessTokenEntity accessToken) throws  UserBlockedException, UserNotExistException, TokenExpiredException {
         UserEntity user = userRepository.findById(accessToken.getUserId())
                 .orElseThrow(UserNotExistException::new);
         if (user.getStatus().equals(UserStatus.BLOCK))

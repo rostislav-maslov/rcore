@@ -25,11 +25,17 @@ public class UserAllAdapter {
     private UserMapper userMapper = new UserMapper(new RoleMapper());
     private AccessTokenMapper accessTokenMapper = new AccessTokenMapper();
     private RefreshTokenMapper refreshTokenMapper = new RefreshTokenMapper();
-    private TokenPairMapper tokenPairMapper = new TokenPairMapper(accessTokenMapper,refreshTokenMapper);
+    private TokenPairMapper tokenPairMapper = new TokenPairMapper(accessTokenMapper, refreshTokenMapper);
 
     public Optional<UserDTO> findById(String id) {
         return userConfig.all.viewUserUserCase()
                 .findById(id)
+                .map(userMapper::map);
+    }
+
+    public Optional<UserDTO> findByPhone(Long phone) {
+        return userConfig.all.viewUserUserCase()
+                .findByPhone(phone)
                 .map(userMapper::map);
     }
 

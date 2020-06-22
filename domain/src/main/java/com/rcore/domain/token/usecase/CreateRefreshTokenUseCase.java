@@ -4,26 +4,20 @@ import com.rcore.commons.utils.DateTimeUtils;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.port.RefreshTokenIdGenerator;
 import com.rcore.domain.token.port.RefreshTokenRepository;
+import com.rcore.domain.token.port.RefreshTokenStorage;
 import com.rcore.domain.token.port.TokenSaltGenerator;
 import com.rcore.domain.user.entity.UserEntity;
-
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Date;
-import java.util.Optional;
 
 public class CreateRefreshTokenUseCase {
 
     private final RefreshTokenIdGenerator idGenerator;
-    private final RefreshTokenRepository repository;
+    private final RefreshTokenStorage refreshTokenStorage;
     private final TokenSaltGenerator tokenSaltGenerator;
 
 
-    public CreateRefreshTokenUseCase(RefreshTokenIdGenerator idGenerator, RefreshTokenRepository repository, TokenSaltGenerator tokenSaltGenerator) {
+    public CreateRefreshTokenUseCase(RefreshTokenIdGenerator idGenerator, RefreshTokenStorage refreshTokenStorage, TokenSaltGenerator tokenSaltGenerator) {
         this.idGenerator = idGenerator;
-        this.repository = repository;
+        this.refreshTokenStorage = refreshTokenStorage;
         this.tokenSaltGenerator = tokenSaltGenerator;
     }
 
@@ -43,11 +37,15 @@ public class CreateRefreshTokenUseCase {
     }
 
     public RefreshTokenEntity create(UserEntity userEntity){
-        return repository.save(create(userEntity.getId(), RefreshTokenEntity.CreateFrom.LOGIN, null));
+        RefreshTokenEntity refreshTokenEntity = create(userEntity.getId(), RefreshTokenEntity.CreateFrom.LOGIN, null);
+        refreshTokenStorage.put(refreshTokenEntity);
+        return refreshTokenEntity;
     }
 
     public RefreshTokenEntity create(RefreshTokenEntity oldRefreshTokenEntity){
-        return repository.save(create(oldRefreshTokenEntity.getUserId(), RefreshTokenEntity.CreateFrom.LOGIN, oldRefreshTokenEntity.getId()));
+        RefreshTokenEntity refreshTokenEntity = create(oldRefreshTokenEntity.getUserId(), RefreshTokenEntity.CreateFrom.LOGIN, oldRefreshTokenEntity.getId());
+        refreshTokenStorage.put(refreshTokenEntity);
+        return refreshTokenEntity;
     }
 
 }
