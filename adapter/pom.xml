@@ -9,7 +9,7 @@
     <artifactId>adapter</artifactId>
     <version>${rcore.version}</version>
     <properties>
-        <rcore.version>0.9.8</rcore.version>
+        <rcore.version>0.9.9</rcore.version>
     </properties>
 
     <name>${project.groupId}:${project.artifactId}</name>
