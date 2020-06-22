@@ -14,6 +14,7 @@ import com.rcore.security.infrastructure.AuthTokenGenerator;
 import com.rcore.security.infrastructure.exceptions.InvalidTokenFormatException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -32,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-
+@Order(1)
 @Component
 public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
@@ -70,7 +71,7 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
             accessToken = new AccessTokenMapper().map(accessTokenEntity.get());
         }
 
-        return getAuthenticationManager().authenticate(AuthenticationTokenFactory.ofRawToken(accessToken));
+        return getAuthenticationManager().authenticate(AuthenticationTokenFactory.ofRawToken(accessToken, token));
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.rcore.domain.base.usecase;
 
 import com.rcore.domain.access.entity.GodModAccess;
 import com.rcore.domain.access.entity.Access;
+import com.rcore.domain.access.utils.AccessUtils;
 import com.rcore.domain.role.entity.RoleEntity;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
@@ -35,7 +36,7 @@ public abstract class AuthorizationUseCase {
         if (actor.hasAccess(new GodModAccess())) return true;
 
         for (Access access : availableAccesses) {
-            if (Access.hasAccess(actor.getAccesses(), access)) return true;
+            if (AccessUtils.hasAccess(actor.getAccesses(), access)) return true;
         }
 
         return false;

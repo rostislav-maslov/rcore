@@ -23,6 +23,11 @@ public class RoleViewUseCase extends RoleAdminBaseUseCase {
         return roleRepository.findById(id);
     }
 
+    public Optional<RoleEntity> findByName(String name) throws AuthenticationException, AuthorizationException {
+        checkAccess();
+        return roleRepository.findByName(name);
+    }
+
     public Optional<RoleEntity> search(String id) throws AuthenticationException, AuthorizationException {
         checkAccess();
         return roleRepository.findById(id);

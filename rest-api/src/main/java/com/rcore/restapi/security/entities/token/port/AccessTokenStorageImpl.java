@@ -1,5 +1,6 @@
 package com.rcore.restapi.security.entities.token.port;
 
+import com.rcore.adapter.domain.token.dto.AccessTokenDTO;
 import com.rcore.adapter.domain.token.mapper.AccessTokenMapper;
 import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.port.AccessTokenRepository;
@@ -20,6 +21,7 @@ public class AccessTokenStorageImpl implements AccessTokenStorage {
 
     @Override
     public Optional<AccessTokenEntity> current() {
+        AccessTokenDTO e = userAuthenticationMediator.getAccessToken();
         return Optional.ofNullable(accessTokenMapper.inverseMap(userAuthenticationMediator.getAccessToken()));
     }
 

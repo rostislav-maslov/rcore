@@ -45,8 +45,27 @@ public class ApiExceptionHandler {
     }
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(value = InternalServerException.class)
+    public ErrorApiResponse<List<ExceptionDTO>> handleInternalServerException(InternalServerException e) {
+        return ErrorApiResponse.of(e.getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = Exception.class)
-    public ErrorApiResponse<List<ExceptionDTO>> handleInternalServerError(Exception e) {
+    public ErrorApiResponse<List<ExceptionDTO>> handleError(Exception e) {
+        e.printStackTrace();
+        return ErrorApiResponse.of(Arrays.asList(ExceptionDTO.builder()
+                .presentationData(ExceptionDTO.PresentationData.builder()
+                        .message("Ошибка сервера. Попробуйте повторить позже")
+                        .build())
+                .domain("SERVER")
+                .details(e.getMessage())
+                .build()));
+    }
+
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(value = RuntimeException.class)
+    public ErrorApiResponse<List<ExceptionDTO>> handleError(RuntimeException e) {
         e.printStackTrace();
         return ErrorApiResponse.of(Arrays.asList(ExceptionDTO.builder()
                 .presentationData(ExceptionDTO.PresentationData.builder()

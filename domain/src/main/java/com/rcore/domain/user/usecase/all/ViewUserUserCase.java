@@ -14,4 +14,8 @@ public class ViewUserUserCase {
     public Optional<UserEntity> findById(String id) {
         return userRepository.findById(id);
     }
+
+    public Optional<UserEntity> findByPhone(Long phone) {
+        return userRepository.findByPhoneNumber(phone);
+    }
 }

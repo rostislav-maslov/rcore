@@ -17,16 +17,18 @@ import java.util.stream.Collectors;
 public class TokenAuthentication implements Authentication {
 
     private AccessTokenDTO token;
+    private String stringToken;
     private UserDTO user;
     private boolean authenticated;
 
-    public TokenAuthentication(AccessTokenDTO token, boolean authenticated) {
+    public TokenAuthentication(AccessTokenDTO token, String stringToken, boolean authenticated) {
         this.token = token;
+        this.stringToken = stringToken;
         this.authenticated = authenticated;
     }
 
-    public static Authentication ofToken(AccessTokenDTO token) {
-        return new TokenAuthentication(token, false);
+    public static Authentication ofToken(AccessTokenDTO token, String stringToken) {
+        return new TokenAuthentication(token, stringToken, false);
     }
 
     @Override

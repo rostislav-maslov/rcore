@@ -18,21 +18,22 @@ public class TokenConfig {
 
         protected final RefreshTokenRepository refreshTokenRepository;
         protected final AccessTokenStorage accessTokenStorage;
+        protected final RefreshTokenStorage refreshTokenStorage;
         protected final UserRepository userRepository;
         protected final AccessTokenIdGenerator accessTokenIdGenerator;
         protected final RefreshTokenIdGenerator refreshTokenIdGenerator;
         protected final TokenSaltGenerator tokenSaltGenerator;
 
         public AuthorizationByTokenUseCase authorizationByTokenUseCase() {
-            return new AuthorizationByTokenUseCase(refreshTokenRepository, accessTokenStorage, userRepository);
+            return new AuthorizationByTokenUseCase(accessTokenStorage, refreshTokenStorage, userRepository);
         }
 
         public CreateAccessTokenUseCase createAccessTokenUseCase() {
-            return new CreateAccessTokenUseCase(accessTokenIdGenerator, createRefreshTokenUseCase());
+            return new CreateAccessTokenUseCase(accessTokenIdGenerator, accessTokenStorage, createRefreshTokenUseCase());
         }
 
         public CreateRefreshTokenUseCase createRefreshTokenUseCase() {
-            return new CreateRefreshTokenUseCase(refreshTokenIdGenerator, refreshTokenRepository, tokenSaltGenerator);
+            return new CreateRefreshTokenUseCase(refreshTokenIdGenerator, refreshTokenStorage, tokenSaltGenerator);
         }
 
         public ExpireTokenUseCase expireTokenUseCase() {
@@ -41,22 +42,11 @@ public class TokenConfig {
 
     }
 
-    protected final RefreshTokenRepository refreshTokenRepository;
-    protected final AccessTokenStorage accessTokenStorage;
-    protected final UserRepository userRepository;
-    protected final AccessTokenIdGenerator accessTokenIdGenerator;
-    protected final RefreshTokenIdGenerator refreshTokenIdGenerator;
-    protected final TokenSaltGenerator tokenSaltGenerator;
     protected final All all;
 
-    public TokenConfig(RefreshTokenRepository refreshTokenRepository, AccessTokenStorage accessTokenStorage, UserRepository userRepository, AccessTokenIdGenerator accessTokenIdGenerator, RefreshTokenIdGenerator refreshTokenIdGenerator, TokenSaltGenerator tokenSaltGenerator) {
-        this.refreshTokenRepository = refreshTokenRepository;
-        this.accessTokenStorage = accessTokenStorage;
-        this.userRepository = userRepository;
-        this.accessTokenIdGenerator = accessTokenIdGenerator;
-        this.refreshTokenIdGenerator = refreshTokenIdGenerator;
-        this.tokenSaltGenerator = tokenSaltGenerator;
+    public TokenConfig(RefreshTokenRepository refreshTokenRepository, AccessTokenStorage accessTokenStorage, RefreshTokenStorage refreshTokenStorage, UserRepository userRepository, AccessTokenIdGenerator accessTokenIdGenerator, RefreshTokenIdGenerator refreshTokenIdGenerator, TokenSaltGenerator tokenSaltGenerator) {
 
-        this.all = new All(refreshTokenRepository, accessTokenStorage, userRepository ,accessTokenIdGenerator, refreshTokenIdGenerator, tokenSaltGenerator);
+
+        this.all = new All(refreshTokenRepository, accessTokenStorage, refreshTokenStorage, userRepository, accessTokenIdGenerator, refreshTokenIdGenerator, tokenSaltGenerator);
     }
 }

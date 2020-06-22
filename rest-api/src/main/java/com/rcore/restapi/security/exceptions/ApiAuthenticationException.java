@@ -16,6 +16,11 @@ public abstract class ApiAuthenticationException extends AuthenticationException
         super(msg);
     }
 
+    public ApiAuthenticationException(List<ExceptionDTO> errors) {
+        super("Auth exception");
+        this.errors = errors;
+    }
+
     public ApiAuthenticationException(String title, String message, String domain, String details) {
         super(message);
         this.errors = Arrays.asList(ExceptionDTO.builder()

@@ -71,9 +71,6 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
         RefreshTokenEntity refreshTokenEntity = createRefreshTokenUseCase.create(userEntity);
         AccessTokenEntity accessTokenEntity = createAccessTokenUseCase.create(userEntity, refreshTokenEntity);
 
-        //Записываем токен в storage
-        accessTokenStorage.put(accessTokenEntity);
-
         return TokenPair.builder()
                 .accessToken(accessTokenEntity)
                 .refreshToken(refreshTokenEntity)
@@ -82,7 +79,8 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
 
     @Override
     public TokenPair getNewTokenPairByRefreshToken(RefreshTokenEntity refreshTokenEntity) throws UserNotFoundException, UserBlockedException, AuthenticationException, RefreshTokenIsExpiredException {
-        UserEntity userEntity = userRepository.findById(refreshTokenEntity.getUserId()).orElseThrow(() -> new UserNotFoundException());
+        UserEntity userEntity = userRepository.findById(refreshTokenEntity.getUserId())
+                .orElseThrow(() -> new UserNotFoundException());
 
         if (userEntity.getStatus().equals(UserStatus.ACTIVE) == false)
             throw new UserBlockedException();

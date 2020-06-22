@@ -26,7 +26,13 @@ public class RoleUpdateUseCase  extends RoleAdminBaseUseCase {
     }
 
     public RoleEntity addAccesses(RoleEntity role, Set<Access> accesses) {
-        role.getAccesses().addAll(accesses);
+        accesses.forEach(access -> {
+            role.getAccesses()
+                    .stream()
+                    .filter(a -> a.getId().equals(access.getId()))
+                    .findFirst()
+                    .ifPresentOrElse(a -> {}, () -> role.getAccesses().add(access));
+        });
         return roleRepository.save(role);
     }
 

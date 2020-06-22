@@ -8,8 +8,10 @@ import com.rcore.database.mongo.domain.user.port.UserIdGeneratorImpl;
 import com.rcore.database.mongo.domain.user.port.UserRepositoryImpl;
 import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.token.entity.AccessTokenEntity;
+import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.port.AccessTokenStorage;
 import com.rcore.domain.token.port.RefreshTokenRepository;
+import com.rcore.domain.token.port.RefreshTokenStorage;
 import com.rcore.domain.token.port.impl.TokenSaltGeneratorImpl;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.token.usecase.CreateAccessTokenUseCase;
@@ -40,6 +42,7 @@ public class TestAppConfig {
     private final RefreshTokenRepository refreshTokenRepository;
     private final RoleRepository roleRepository;
     private final AccessTokenStorage accessTokenStorage;
+    private final RefreshTokenStorage refreshTokenStorage;
     private final AuthorizationByTokenUseCase authorizationByTokenUseCase;
 
     public TestAppConfig() throws Exception {
@@ -49,9 +52,6 @@ public class TestAppConfig {
         this.passwordGenerator = new PasswordGeneratorImpl();
         this.refreshTokenRepository = new RefreshTokenRepositoryImpl(databaseConfig.getMongoTemplate());
         this.expireTokenUseCase = new ExpireTokenUseCase(refreshTokenRepository);
-        this.createRefreshTokenUseCase = new CreateRefreshTokenUseCase(new RefreshTokenIdGeneratorImpl(), refreshTokenRepository, new TokenSaltGeneratorImpl());
-        this.createAccessTokenUseCase = new CreateAccessTokenUseCase(new AccessTokenIdGeneratorImpl(), createRefreshTokenUseCase);
-        this.roleRepository = new RoleRepositoryImpl(databaseConfig.getMongoTemplate());
         this.accessTokenStorage = new AccessTokenStorage() {
             @Override
             public Optional<AccessTokenEntity> current() {
@@ -68,9 +68,22 @@ public class TestAppConfig {
                 return Optional.empty();
             }
         };
+        this.refreshTokenStorage = new RefreshTokenStorage() {
+            @Override
+            public void put(RefreshTokenEntity refreshTokenEntity) {
 
-        this.authorizationByTokenUseCase = new AuthorizationByTokenUseCase(this.refreshTokenRepository, this.accessTokenStorage, this.userRepository);
+            }
 
+            @Override
+            public Optional<RefreshTokenEntity> findById(String id) {
+                return Optional.empty();
+            }
+        };
+
+        this.authorizationByTokenUseCase = new AuthorizationByTokenUseCase(this.accessTokenStorage,this.refreshTokenStorage, this.userRepository);
+        this.createRefreshTokenUseCase = new CreateRefreshTokenUseCase(new RefreshTokenIdGeneratorImpl(), this.refreshTokenStorage, new TokenSaltGeneratorImpl());
+        this.createAccessTokenUseCase = new CreateAccessTokenUseCase(new AccessTokenIdGeneratorImpl(), this.accessTokenStorage, createRefreshTokenUseCase);
+        this.roleRepository = new RoleRepositoryImpl(databaseConfig.getMongoTemplate());
 
         this.userConfig = new UserConfig(userRepository, userIdGenerator, passwordGenerator, expireTokenUseCase, createRefreshTokenUseCase, createAccessTokenUseCase, refreshTokenRepository, this.roleRepository, authorizationByTokenUseCase, accessTokenStorage);
     }

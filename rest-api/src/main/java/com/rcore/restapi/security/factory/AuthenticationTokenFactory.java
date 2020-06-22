@@ -11,10 +11,10 @@ public class AuthenticationTokenFactory {
 
     private static String ANONYMOUS_TOKEN = "_anonymous";
 
-    public static Authentication ofRawToken(AccessTokenDTO token) {
+    public static Authentication ofRawToken(AccessTokenDTO token, String stringToken) {
         if (Objects.isNull(token))
             return ofAnonymous();
-        else return TokenAuthentication.ofToken(token);
+        else return TokenAuthentication.ofToken(token, stringToken);
     }
 
     private static Authentication ofAnonymous() {
