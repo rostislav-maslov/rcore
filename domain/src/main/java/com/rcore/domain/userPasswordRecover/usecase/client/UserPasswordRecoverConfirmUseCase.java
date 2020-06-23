@@ -11,13 +11,13 @@ import com.rcore.domain.userPasswordRecover.port.UserPasswordRecoverRepository;
 
 import java.util.Optional;
 
-class UserPasswordRecoverConfirmUseCase {
+public class UserPasswordRecoverConfirmUseCase {
 
     protected final UserPasswordRecoverRepository userPasswordRecoverRepository;
     protected final UserRepository userRepository;
     protected final PasswordGenerator passwordGenerator;
 
-    public UserPasswordRecoverConfirmUseCase(UserPasswordRecoverRepository userPasswordRecoverRepository, UserRepository userRepository, PasswordGenerator passwordGenerator, UserPasswordRecoverIdGenerator userPasswordRecoverIdGenerator, EmailSender emailSender) {
+    public UserPasswordRecoverConfirmUseCase(UserPasswordRecoverRepository userPasswordRecoverRepository, UserRepository userRepository, PasswordGenerator passwordGenerator) {
         this.userPasswordRecoverRepository = userPasswordRecoverRepository;
         this.userRepository = userRepository;
         this.passwordGenerator = passwordGenerator;

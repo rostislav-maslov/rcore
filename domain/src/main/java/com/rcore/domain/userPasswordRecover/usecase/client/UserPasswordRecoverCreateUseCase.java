@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.Random;
 
-class UserPasswordRecoverCreateUseCase {
+public class UserPasswordRecoverCreateUseCase {
     protected final UserPasswordRecoverRepository userPasswordRecoverRepository;
     protected final UserRepository userRepository;
     protected final UserPasswordRecoverIdGenerator userPasswordRecoverIdGenerator;
