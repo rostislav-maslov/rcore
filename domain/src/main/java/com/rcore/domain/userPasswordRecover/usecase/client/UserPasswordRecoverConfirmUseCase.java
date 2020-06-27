@@ -1,6 +1,7 @@
 package com.rcore.domain.userPasswordRecover.usecase.client;
 
 import com.rcore.domain.user.entity.UserEntity;
+import com.rcore.domain.user.exception.UserNotFoundException;
 import com.rcore.domain.user.port.PasswordGenerator;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.userPasswordRecover.entity.UserPasswordRecoverEntity;
@@ -23,9 +24,11 @@ public class UserPasswordRecoverConfirmUseCase {
         this.passwordGenerator = passwordGenerator;
     }
 
-    public UserPasswordRecoverEntity confirm(String email, String code, String newClearPassword) throws UserPasswordRecoverNotFoundException {
+    public UserPasswordRecoverEntity confirm(String email, String code, String newClearPassword) throws UserPasswordRecoverNotFoundException, UserNotFoundException {
         email = email.toLowerCase();
-        Optional<UserPasswordRecoverEntity> userPasswordCurrent = userPasswordRecoverRepository.findActiveByEmail(email);
+        UserEntity userEntity = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+
+        Optional<UserPasswordRecoverEntity> userPasswordCurrent = userPasswordRecoverRepository.findActiveByEmail(userEntity.getId());
 
         if(userPasswordCurrent.isPresent() == false){
             throw new UserPasswordRecoverNotFoundException();
@@ -39,9 +42,8 @@ public class UserPasswordRecoverConfirmUseCase {
         userPasswordRecoverEntity.setIsRecovered(true);
         userPasswordRecoverRepository.save(userPasswordRecoverEntity);
 
-        UserEntity userEntity = userRepository.findByEmail(email).get();
         userEntity.setPassword(passwordGenerator.generate(userEntity.getId(), newClearPassword));
-        userPasswordRecoverRepository.save(userPasswordRecoverEntity);
+        userRepository.save(userEntity);
 
         return userPasswordRecoverEntity;
     }

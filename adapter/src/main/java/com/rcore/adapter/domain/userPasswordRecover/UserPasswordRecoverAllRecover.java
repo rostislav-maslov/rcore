@@ -14,7 +14,7 @@ public class UserPasswordRecoverAllRecover {
                 .create(email);
     }
 
-    public void createUseCase(String email, String code, String newPassword) throws UserPasswordRecoverNotFoundException {
+    public void createUseCase(String email, String code, String newPassword) throws UserPasswordRecoverNotFoundException, UserNotFoundException {
         userPasswordRecoverConfig.all.confirmUseCase()
                 .confirm(email, code, newPassword);
     }

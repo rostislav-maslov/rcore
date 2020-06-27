@@ -13,9 +13,9 @@ public interface UserPasswordRecoverRepository extends CRUDRepository<String, Us
      * - retryLeft > 0
      * - isRecovered == false
      * - expiredAt > new Date
-     * @param email
+     * @param userId
      * @return
      */
-    Optional<UserPasswordRecoverEntity> findActiveByEmail(String email);
+    Optional<UserPasswordRecoverEntity> findActiveByEmail(String userId);
 
 }

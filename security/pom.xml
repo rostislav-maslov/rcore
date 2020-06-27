@@ -13,7 +13,7 @@
     </modules>
 
     <properties>
-        <rcore.version>0.9.10</rcore.version>
+        <rcore.version>0.10.0</rcore.version>
     </properties>
 
     <dependencies>

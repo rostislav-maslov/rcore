@@ -8,6 +8,7 @@ import com.rcore.domain.userPasswordRecover.port.EmailSender;
 import com.rcore.domain.userPasswordRecover.port.UserPasswordRecoverIdGenerator;
 import com.rcore.domain.userPasswordRecover.port.UserPasswordRecoverRepository;
 
+import javax.swing.text.html.Option;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Random;
@@ -44,16 +45,16 @@ public class UserPasswordRecoverCreateUseCase {
 
     public UserPasswordRecoverEntity create(String email) throws UserNotFoundException {
         email = email.toLowerCase();
-        Optional<UserPasswordRecoverEntity> userPasswordCurrent = userPasswordRecoverRepository.findActiveByEmail(email);
+        UserEntity userEntity = userRepository.findByEmail(email).orElseThrow(UserNotFoundException::new);
+
+        Optional<UserPasswordRecoverEntity> userPasswordCurrent = userPasswordRecoverRepository.findActiveByEmail(userEntity.getId());
 
         UserPasswordRecoverEntity userPasswordRecoverEntity = null;
 
         if(userPasswordCurrent.isPresent()){
             userPasswordRecoverEntity = userPasswordCurrent.get();
         }else {
-            Optional<UserEntity> userEntity = userRepository.findByEmail(email);
-            if (userEntity.isPresent() == false) throw new UserNotFoundException();
-            userPasswordRecoverEntity = create(userEntity.get());
+            userPasswordRecoverEntity = create(userEntity);
         }
 
         userPasswordRecoverEntity.tryIncrement();

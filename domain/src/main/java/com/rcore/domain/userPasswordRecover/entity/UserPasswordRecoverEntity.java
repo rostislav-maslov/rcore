@@ -1,13 +1,17 @@
 package com.rcore.domain.userPasswordRecover.entity;
 
 import com.rcore.domain.base.entity.BaseEntity;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.*;
 
 @Getter
 @Setter
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@SuperBuilder
 public class UserPasswordRecoverEntity extends BaseEntity {
     protected String id;
     /**
