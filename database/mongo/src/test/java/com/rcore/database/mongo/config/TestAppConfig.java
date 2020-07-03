@@ -25,6 +25,7 @@ import com.rcore.domain.user.port.impl.PasswordGeneratorImpl;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
 import java.util.Optional;
 
 @Getter
@@ -51,7 +52,6 @@ public class TestAppConfig {
         this.userIdGenerator = new UserIdGeneratorImpl();
         this.passwordGenerator = new PasswordGeneratorImpl();
         this.refreshTokenRepository = new RefreshTokenRepositoryImpl(databaseConfig.getMongoTemplate());
-        this.expireTokenUseCase = new ExpireTokenUseCase(refreshTokenRepository);
         this.accessTokenStorage = new AccessTokenStorage() {
             @Override
             public Optional<AccessTokenEntity> current() {
@@ -78,14 +78,25 @@ public class TestAppConfig {
             public Optional<RefreshTokenEntity> findById(String id) {
                 return Optional.empty();
             }
+
+            @Override
+            public void expireRefreshToken(RefreshTokenEntity refreshTokenEntity) {
+
+            }
+
+            @Override
+            public List<RefreshTokenEntity> findAllActiveByUserId(String userId) {
+                return null;
+            }
         };
+        this.expireTokenUseCase = new ExpireTokenUseCase(refreshTokenStorage);
 
         this.authorizationByTokenUseCase = new AuthorizationByTokenUseCase(this.accessTokenStorage,this.refreshTokenStorage, this.userRepository);
         this.createRefreshTokenUseCase = new CreateRefreshTokenUseCase(new RefreshTokenIdGeneratorImpl(), this.refreshTokenStorage, new TokenSaltGeneratorImpl());
         this.createAccessTokenUseCase = new CreateAccessTokenUseCase(new AccessTokenIdGeneratorImpl(), this.accessTokenStorage, createRefreshTokenUseCase);
         this.roleRepository = new RoleRepositoryImpl(databaseConfig.getMongoTemplate());
 
-        this.userConfig = new UserConfig(userRepository, userIdGenerator, passwordGenerator, expireTokenUseCase, createRefreshTokenUseCase, createAccessTokenUseCase, refreshTokenRepository, this.roleRepository, authorizationByTokenUseCase, accessTokenStorage);
+        this.userConfig = new UserConfig(userRepository, userIdGenerator, passwordGenerator, expireTokenUseCase, createRefreshTokenUseCase, createAccessTokenUseCase, this.roleRepository, authorizationByTokenUseCase, refreshTokenStorage, accessTokenStorage);
     }
 
 }

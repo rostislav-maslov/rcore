@@ -42,12 +42,12 @@ public class UserAppConfig {
         this.userIdGenerator = new UserIdGeneratorImpl();
         this.passwordGenerator = new PasswordGeneratorImpl();
         this.refreshTokenRepository = new RefreshTokenRepositoryImpl();
-        this.expireTokenUseCase = new ExpireTokenUseCase(refreshTokenRepository);
+        this.expireTokenUseCase = new ExpireTokenUseCase(refreshTokenStorage);
         this.createRefreshTokenUseCase = new CreateRefreshTokenUseCase(new RefreshTokenIdGeneratorImpl(), refreshTokenStorage, new TokenSaltGeneratorImpl());
         this.createAccessTokenUseCase = new CreateAccessTokenUseCase(new AccessTokenIdGeneratorImpl(), accessTokenStorage, createRefreshTokenUseCase);
         this.roleRepository = new RoleRepositoryImpl();
         this.authorizationByTokenUseCase = new AuthorizationByTokenUseCase(this.accessTokenStorage, refreshTokenStorage, this.userRepository);
 
-        this.userConfig = new UserConfig(userRepository, userIdGenerator, passwordGenerator, expireTokenUseCase, createRefreshTokenUseCase, createAccessTokenUseCase, refreshTokenRepository, roleRepository, this.authorizationByTokenUseCase, accessTokenStorage);
+        this.userConfig = new UserConfig(userRepository, userIdGenerator, passwordGenerator, expireTokenUseCase, createRefreshTokenUseCase, createAccessTokenUseCase, roleRepository, this.authorizationByTokenUseCase, refreshTokenStorage, accessTokenStorage);
     }
 }

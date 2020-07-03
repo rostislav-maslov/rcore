@@ -86,12 +86,12 @@ public class RestApiConfig {
                 userRepository,
                 userIdGenerator,
                 passwordGenerator,
-                new ExpireTokenUseCase(refreshTokenRepository),
+                new ExpireTokenUseCase(refreshTokenStorage),
                 new CreateRefreshTokenUseCase(refreshTokenIdGenerator, refreshTokenStorage, tokenSaltGenerator),
                 new CreateAccessTokenUseCase(accessTokenIdGenerator, accessTokenStorage, new CreateRefreshTokenUseCase(refreshTokenIdGenerator, refreshTokenStorage, tokenSaltGenerator)),
-                refreshTokenRepository,
                 roleRepository,
                 new AuthorizationByTokenUseCase(accessTokenStorage, refreshTokenStorage, userRepository),
+                refreshTokenStorage,
                 accessTokenStorage)
         );
     }

@@ -3,6 +3,7 @@ package com.rcore.domain.database.memory.token.port;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.port.RefreshTokenStorage;
 
+import java.util.List;
 import java.util.Optional;
 
 public class RefreshTokenStorageImpl implements RefreshTokenStorage {
@@ -15,5 +16,15 @@ public class RefreshTokenStorageImpl implements RefreshTokenStorage {
     @Override
     public Optional<RefreshTokenEntity> findById(String id) {
         return Optional.empty();
+    }
+
+    @Override
+    public void expireRefreshToken(RefreshTokenEntity refreshTokenEntity) {
+
+    }
+
+    @Override
+    public List<RefreshTokenEntity> findAllActiveByUserId(String userId) {
+        return null;
     }
 }

@@ -3,27 +3,26 @@ package com.rcore.domain.token.usecase;
 import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.port.RefreshTokenRepository;
+import com.rcore.domain.token.port.RefreshTokenStorage;
 import com.rcore.domain.user.entity.UserEntity;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 public class ExpireTokenUseCase {
 
-    private final RefreshTokenRepository repository;
-
-    public ExpireTokenUseCase(RefreshTokenRepository repository) {
-        this.repository = repository;
-    }
+    private final RefreshTokenStorage refreshTokenStorage;
 
     public void logout(UserEntity userEntity) {
-        List<RefreshTokenEntity> refreshTokenEntities = repository.findAllActiveByUserId(userEntity.getId());
+        List<RefreshTokenEntity> refreshTokenEntities = refreshTokenStorage.findAllActiveByUserId(userEntity.getId());
         for (RefreshTokenEntity refreshTokenEntity : refreshTokenEntities) {
-            repository.expireRefreshToken(refreshTokenEntity);
+            refreshTokenStorage.expireRefreshToken(refreshTokenEntity);
         }
     }
 
     public void logout(AccessTokenEntity accessTokenEntity) {
-        repository.findById(accessTokenEntity.getCreateFromRefreshTokenId())
+        refreshTokenStorage.findById(accessTokenEntity.getCreateFromRefreshTokenId())
                 .map(refreshToken -> {
                     logout(refreshToken);
                     return refreshToken;
@@ -31,10 +30,10 @@ public class ExpireTokenUseCase {
     }
 
     public void logout(RefreshTokenEntity refreshTokenEntity) {
-        repository.expireRefreshToken(refreshTokenEntity);
+        refreshTokenStorage.expireRefreshToken(refreshTokenEntity);
 
         if (refreshTokenEntity.getCreateFromType().equals(RefreshTokenEntity.CreateFrom.REFRESH)) {
-            repository.findById(refreshTokenEntity.getCreateFromTokenId()).map(refreshToken -> {
+            refreshTokenStorage.findById(refreshTokenEntity.getCreateFromTokenId()).map(refreshToken -> {
                 logout(refreshToken);
                 return refreshToken;
             });

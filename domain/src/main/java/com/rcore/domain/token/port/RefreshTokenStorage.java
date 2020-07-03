@@ -2,6 +2,7 @@ package com.rcore.domain.token.port;
 
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface RefreshTokenStorage {
@@ -19,4 +20,17 @@ public interface RefreshTokenStorage {
      * @return
      */
     Optional<RefreshTokenEntity> findById(String id);
+
+    /**
+     *
+     * @param refreshTokenEntity
+     */
+    void expireRefreshToken(RefreshTokenEntity refreshTokenEntity);
+
+    /**
+     *
+     * @param userId
+     * @return
+     */
+    List<RefreshTokenEntity> findAllActiveByUserId(String userId);
 }

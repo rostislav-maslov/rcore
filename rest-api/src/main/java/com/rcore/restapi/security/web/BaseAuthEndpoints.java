@@ -80,8 +80,6 @@ public class BaseAuthEndpoints {
         accessTokenStorage.findById(accessToken.getId())
                 .orElseThrow(() -> new UserNotExistApiException());
 
-
-
         TokenPairDTO tokenPair = null;
         try {
             tokenPair = userAdapter.getAll()

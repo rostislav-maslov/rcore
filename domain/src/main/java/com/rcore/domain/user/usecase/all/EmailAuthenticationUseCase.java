@@ -8,6 +8,7 @@ import com.rcore.domain.token.exception.RefreshTokenIsExpiredException;
 import com.rcore.domain.token.port.AccessTokenStorage;
 import com.rcore.domain.token.port.AuthenticationPort;
 import com.rcore.domain.token.port.RefreshTokenRepository;
+import com.rcore.domain.token.port.RefreshTokenStorage;
 import com.rcore.domain.token.usecase.CreateAccessTokenUseCase;
 import com.rcore.domain.token.usecase.CreateRefreshTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
@@ -24,7 +25,7 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
     private final PasswordGenerator passwordGenerator;
     private final CreateRefreshTokenUseCase createRefreshTokenUseCase;
     private final CreateAccessTokenUseCase createAccessTokenUseCase;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenStorage refreshTokenStorage;
     private final AccessTokenStorage accessTokenStorage;
 
     public EmailAuthenticationUseCase(
@@ -32,12 +33,13 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
             PasswordGenerator passwordGenerator,
             CreateRefreshTokenUseCase createRefreshTokenUseCase,
             CreateAccessTokenUseCase createAccessTokenUseCase,
-            RefreshTokenRepository refreshTokenRepository, AccessTokenStorage accessTokenStorage) {
+            RefreshTokenStorage refreshTokenStorage,
+            AccessTokenStorage accessTokenStorage) {
         this.userRepository = userRepository;
         this.passwordGenerator = passwordGenerator;
         this.createRefreshTokenUseCase = createRefreshTokenUseCase;
         this.createAccessTokenUseCase = createAccessTokenUseCase;
-        this.refreshTokenRepository = refreshTokenRepository;
+        this.refreshTokenStorage = refreshTokenStorage;
         this.accessTokenStorage = accessTokenStorage;
     }
 
@@ -86,7 +88,7 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
             throw new UserBlockedException();
 
 
-        RefreshTokenEntity fromRepo = refreshTokenRepository.findById(refreshTokenEntity.getId())
+        RefreshTokenEntity fromRepo = refreshTokenStorage.findById(refreshTokenEntity.getId())
                 .orElseThrow(() -> new AuthenticationException());
 
         if (fromRepo.isActive() == false) throw new RefreshTokenIsExpiredException();
