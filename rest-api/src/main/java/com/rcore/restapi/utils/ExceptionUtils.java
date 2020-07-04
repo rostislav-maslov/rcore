@@ -2,6 +2,8 @@ package com.rcore.restapi.utils;
 
 import com.rcore.restapi.exceptions.*;
 import com.rcore.restapi.security.exceptions.ApiAuthenticationException;
+import com.rcore.restapi.security.exceptions.AuthForbiddenApiException;
+import com.rcore.restapi.security.exceptions.AuthInternalServerException;
 
 public class ExceptionUtils {
 
@@ -43,10 +45,14 @@ public class ExceptionUtils {
             else if (baseApiException instanceof UnauthorizedRequestApiException)
                 throw new UnauthorizedRequestApiException(baseApiException.getErrors());
         } else if (e.getCause() instanceof ApiAuthenticationException) {
-
-
-
+            ApiAuthenticationException apiAuthenticationException = (ApiAuthenticationException) e.getCause();
+            if (apiAuthenticationException instanceof AuthForbiddenApiException)
+                throw new AuthForbiddenApiException(apiAuthenticationException.getErrors());
         }
+    }
+
+    public static void checkCauseRestApiAuthenticationExteption(Exception e) {
+
     }
 
 }
