@@ -30,7 +30,8 @@ public class SecurityExceptionHandler {
     @ExceptionHandler({
             UserNotExistApiException.class,
             TokenExpiredApiException.class,
-            InvalidTokenFormatApiException.class
+            InvalidTokenFormatApiException.class,
+            AuthForbiddenApiException.class
     })
     public ErrorApiResponse<List<ExceptionDTO>> handleApiForbidden(ApiAuthenticationException e) {
         return ErrorApiResponse.of(e.getErrors());
