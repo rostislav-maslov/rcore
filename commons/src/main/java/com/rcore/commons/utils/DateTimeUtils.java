@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class DateTimeUtils {
 
@@ -30,4 +31,7 @@ public class DateTimeUtils {
         return getMillis(LocalDateTime.now());
     }
 
+    public static DateTimeFormatter isoDateTimeFormatter() {
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+    }
 }
