@@ -1,9 +1,6 @@
 package com.rcore.commons.utils;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 
 public class DateTimeUtils {
@@ -33,5 +30,15 @@ public class DateTimeUtils {
 
     public static DateTimeFormatter isoDateTimeFormatter() {
         return DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+    }
+
+    public static DateTimeFormatter timeFormatter() {
+        return DateTimeFormatter.ofPattern("HH:mm:ss");
+    }
+
+    public static String formatWithTimeZone(LocalDateTime dateTime, DateTimeFormatter dateTimeFormatter , String tz) {
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(dateTime, ZoneOffset.systemDefault());
+        Instant instant = dateTime.toInstant(zonedDateTime.getOffset());
+        return dateTimeFormatter.format(LocalDateTime.ofInstant(instant, ZoneId.of(tz)));
     }
 }
