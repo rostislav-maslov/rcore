@@ -33,7 +33,7 @@ public class DateTimeUtils {
     }
 
     public static DateTimeFormatter timeFormatter() {
-        return DateTimeFormatter.ofPattern("HH:mm:ss");
+        return DateTimeFormatter.ofPattern("HH:mm");
     }
 
     public static String formatWithTimeZone(LocalDateTime dateTime, DateTimeFormatter dateTimeFormatter , String tz) {
