@@ -12,6 +12,7 @@ import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.exception.AdminUserIsExistException;
 import com.rcore.domain.user.exception.UserAlreadyExistException;
 import com.rcore.domain.user.exception.UserNotFoundException;
+import com.rcore.domain.user.usecase.admin.dto.UpdateUserFields;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
@@ -45,6 +46,11 @@ public class UserSecureAdapter {
     public UserDTO updateUser(UserDTO userDTO) throws UserNotFoundException, UserAlreadyExistException, AuthorizationException, AuthenticationException {
         return userMapper.map(userConfig.admin.UpdateUserUseCase()
                 .update(userMapper.inverseMap(userDTO)));
+    }
+
+    public UserDTO update(String userId, UpdateUserFields updateUserFields) throws AuthorizationException, AuthenticationException, UserNotFoundException {
+        return userMapper.map(userConfig.admin.UpdateUserUseCase()
+                .update(userId, updateUserFields));
     }
 
 }

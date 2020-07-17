@@ -30,6 +30,8 @@ public class ExceptionUtils {
     }
 
     public static void checkCauseRestApiException(Exception e) {
+        if (e.getCause() instanceof UnauthorizedRequestApiException)
+            throw new UnauthorizedRequestApiException(((UnauthorizedRequestApiException) e).getErrors());
         if (e.getCause() instanceof BaseApiException) {
             BaseApiException baseApiException = (BaseApiException) e.getCause();
             if (baseApiException instanceof BadRequestApiException)
@@ -49,10 +51,6 @@ public class ExceptionUtils {
             if (apiAuthenticationException instanceof AuthForbiddenApiException)
                 throw new AuthForbiddenApiException(apiAuthenticationException.getErrors());
         }
-    }
-
-    public static void checkCauseRestApiAuthenticationExteption(Exception e) {
-
     }
 
 }

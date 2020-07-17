@@ -8,6 +8,8 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Data
 @AllArgsConstructor
@@ -88,5 +90,14 @@ public class UserEntity extends BaseEntity {
         }
 
         return emails;
+    }
+
+    public String getFullName() {
+        if (fullName != null && fullName.length() > 0)
+            return fullName;
+        else
+            return Stream.of(lastName, firstName, secondName)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.joining(" "));
     }
 }

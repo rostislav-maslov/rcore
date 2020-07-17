@@ -1,5 +1,6 @@
 package com.rcore.adapter.domain.user;
 
+import com.rcore.adapter.domain.role.dto.RoleDTO;
 import com.rcore.adapter.domain.role.mapper.RoleMapper;
 import com.rcore.adapter.domain.token.dto.RefreshTokenDTO;
 import com.rcore.adapter.domain.token.mapper.AccessTokenMapper;
@@ -16,12 +17,13 @@ import com.rcore.domain.user.exception.UserBlockedException;
 import com.rcore.domain.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 
+import javax.management.relation.Role;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 public class UserAllAdapter {
     private final UserConfig userConfig;
-
+    private RoleMapper roleMapper = new RoleMapper();
     private UserMapper userMapper = new UserMapper(new RoleMapper());
     private AccessTokenMapper accessTokenMapper = new AccessTokenMapper();
     private RefreshTokenMapper refreshTokenMapper = new RefreshTokenMapper();
@@ -52,5 +54,10 @@ public class UserAllAdapter {
     public Boolean initAdminUser(String email, String password) throws AdminUserIsExistException {
         return userConfig.admin.InitAdminUseCase()
                 .init(email, password);
+    }
+
+    public UserDTO create(Long phone, RoleDTO role) {
+        return userMapper.map(userConfig.all.createUserByPhoneNumber()
+                .create(phone, roleMapper.inverseMap(role)));
     }
 }

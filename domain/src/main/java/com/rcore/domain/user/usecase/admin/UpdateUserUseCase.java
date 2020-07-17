@@ -8,6 +8,7 @@ import com.rcore.domain.user.exception.UserAlreadyExistException;
 import com.rcore.domain.user.exception.UserNotFoundException;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.access.AdminUserUpdateAccess;
+import com.rcore.domain.user.usecase.admin.dto.UpdateUserFields;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -41,5 +42,24 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         return userRepository.save(old);
     }
 
+    public UserEntity update(String userId, UpdateUserFields updateUserFields) throws AuthenticationException, AuthorizationException, UserNotFoundException {
+        checkAccess();
+
+        UserEntity old = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException());
+
+        old.setFirstName(Optional.ofNullable(updateUserFields.getFirstName())
+                .orElse(old.getFirstName()));
+
+        old.setLastName(Optional.ofNullable(updateUserFields.getLastName())
+                .orElse(old.getLastName()));
+
+        old.setSecondName(Optional.ofNullable(updateUserFields.getSecondName())
+                .orElse(old.getSecondName()));
+
+        old.setUpdatedAt(LocalDateTime.now());
+
+        return userRepository.save(old);
+    }
 
 }
