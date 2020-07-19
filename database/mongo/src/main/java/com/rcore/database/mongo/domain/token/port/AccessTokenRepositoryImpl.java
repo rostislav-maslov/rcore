@@ -51,7 +51,7 @@ public class AccessTokenRepositoryImpl implements AccessTokenRepository {
                 mongoTemplate.find(query, AccessTokenDoc.class)
                         .stream()
                         .collect(Collectors.toList()),
-                mongoTemplate.count(query, AccessTokenDoc.class)
+                mongoTemplate.count(query.limit(0), AccessTokenDoc.class)
         );
     }
 

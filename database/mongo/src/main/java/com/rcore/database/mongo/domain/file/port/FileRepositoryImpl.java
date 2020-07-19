@@ -58,7 +58,7 @@ public class FileRepositoryImpl implements FileRepository {
                 mongoTemplate.find(query, FileDoc.class)
                         .stream()
                         .collect(Collectors.toList()),
-                mongoTemplate.count(query, FileDoc.class)
+                mongoTemplate.count(query.limit(0), FileDoc.class)
         );
     }
 

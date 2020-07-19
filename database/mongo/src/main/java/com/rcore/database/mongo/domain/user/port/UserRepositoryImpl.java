@@ -81,7 +81,7 @@ public class UserRepositoryImpl implements UserRepository {
                 mongoTemplate.find(query, UserDoc.class)
                         .stream()
                         .collect(Collectors.toList()),
-                mongoTemplate.count(query, UserDoc.class)
+                mongoTemplate.count(query.limit(0), UserDoc.class)
         );
     }
 
@@ -92,7 +92,7 @@ public class UserRepositoryImpl implements UserRepository {
                 mongoTemplate.find(query, UserDoc.class)
                         .stream()
                         .collect(Collectors.toList()),
-                mongoTemplate.count(query, UserDoc.class)
+                mongoTemplate.count(query.limit(0), UserDoc.class)
         );
     }
 

@@ -51,7 +51,7 @@ public class PictureRepositoryImpl implements PictureRepository {
                 mongoTemplate.find(query, PictureDoc.class)
                         .stream()
                         .collect(Collectors.toList()),
-                mongoTemplate.count(query,PictureDoc.class)
+                mongoTemplate.count(query.limit(0), PictureDoc.class)
         );
     }
 

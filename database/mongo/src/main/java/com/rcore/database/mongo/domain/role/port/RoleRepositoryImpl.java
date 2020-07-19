@@ -57,7 +57,7 @@ public class RoleRepositoryImpl implements RoleRepository {
                 mongoTemplate.find(new FindAllWithSearch(request).getQuery(), RoleDoc.class)
                         .stream()
                         .collect(Collectors.toList()),
-                mongoTemplate.count(query, RoleDoc.class)
+                mongoTemplate.count(query.limit(0), RoleDoc.class)
         );
     }
 
