@@ -26,7 +26,7 @@ public class CreateRefreshTokenUseCase {
 
         refreshTokenEntity.setId(this.idGenerator.generate());
         refreshTokenEntity.setUserId(userId);
-        refreshTokenEntity.setExpireAt(DateTimeUtils.fromMillis(DateTimeUtils.getNowMillis() + refreshTokenEntity.getExpireTimeAccessToken()));
+        refreshTokenEntity.setExpireAt(DateTimeUtils.fromMillis(DateTimeUtils.getNowMillis() + refreshTokenEntity.getExpireTimeRefreshToken()));
         refreshTokenEntity.setStatus(RefreshTokenEntity.Status.ACTIVE);
 
         refreshTokenEntity.setCreateFromTokenId(refreshTokenId);

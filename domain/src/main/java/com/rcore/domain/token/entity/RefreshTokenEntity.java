@@ -24,7 +24,7 @@ public class RefreshTokenEntity extends BaseEntity {
 
     private String id;
     private String userId;
-    private Long expireTimeRefreshToken = 60 * 24 * 60 * 60 * 1000l;
+    private Long expireTimeRefreshToken = 365 * 24 * 60 * 60 * 1000l;
     private Long expireTimeAccessToken = 2 * 24 * 60 * 60 * 1000l;
 
     private LocalDateTime expireAt = LocalDateTime.now();
