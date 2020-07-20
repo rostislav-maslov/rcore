@@ -84,7 +84,7 @@ public class UserPasswordRecoverRepositoryImpl implements UserPasswordRecoverRep
                 mongoTemplate.find(query, UserPasswordRecoverDoc.class)
                         .stream()
                         .collect(Collectors.toList()),
-                mongoTemplate.count(query, UserPasswordRecoverDoc.class)
+                mongoTemplate.count(query.limit(0).skip(0), UserPasswordRecoverDoc.class)
         );
     }
 

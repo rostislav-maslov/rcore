@@ -70,7 +70,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
                 mongoTemplate.find(query, RefreshTokenDoc.class)
                         .stream()
                         .collect(Collectors.toList()),
-                mongoTemplate.count(query, RefreshTokenDoc.class)
+                mongoTemplate.count(query.limit(0).skip(0), RefreshTokenDoc.class)
         );
     }
 
