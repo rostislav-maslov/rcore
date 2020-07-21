@@ -19,7 +19,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <rcore.version>0.10.2</rcore.version>
+        <rcore.version>0.10.3</rcore.version>
     </properties>
 
     <build>
