@@ -32,7 +32,7 @@ public class InitAdminUseCase {
         userEntity.setEmail(email.toLowerCase());
         userEntity.setPassword(passwordGenerator.generate(userEntity.getId(), password));
         userEntity.setRoles(Collections.singleton(roleRepository.findByName(BaseRoles.SUPER_USER).get()));
-        userRepository.save(userEntity);
+        userEntity = userRepository.save(userEntity);
 
         return true;
     }

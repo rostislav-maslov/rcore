@@ -42,7 +42,8 @@ public class CreateUserUseCase extends AdminBaseUseCase {
         userEntity.setRoles(roles);
         userEntity.setPassword(passwordGenerator.generate(userEntity.getId(), password));
 
-        return userRepository.save(userEntity);
+        userEntity = userRepository.save(userEntity);
+        return userEntity;
     }
 
 

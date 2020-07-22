@@ -27,6 +27,7 @@ public class FileCreateUseCase extends FileBaseUseCase {
 
         fileEntity.setFilePath(fileStorage.store(content, fileName, contentType));
 
-        return fileRepository.save(fileEntity);
+        fileEntity = fileRepository.save(fileEntity);
+        return fileEntity;
     }
 }

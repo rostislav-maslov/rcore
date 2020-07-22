@@ -27,7 +27,8 @@ public class FileUpdateUseCase extends FileAdminBaseUseCase {
         oldFile.setFileName(fileEntity.getFileName());
         oldFile.setUpdatedAt(LocalDateTime.now());
 
-        return fileRepository.save(fileEntity);
+        oldFile = fileRepository.save(fileEntity);
+        return oldFile;
     }
 
 

@@ -15,7 +15,7 @@ public class RefreshTokenStorageImpl implements RefreshTokenStorage {
 
     @Override
     public void put(RefreshTokenEntity refreshTokenEntity) {
-        refreshTokenRepository.save(refreshTokenEntity);
+        refreshTokenEntity = refreshTokenRepository.save(refreshTokenEntity);
     }
 
     @Override

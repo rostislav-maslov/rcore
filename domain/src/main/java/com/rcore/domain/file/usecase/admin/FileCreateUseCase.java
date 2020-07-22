@@ -32,7 +32,8 @@ public class FileCreateUseCase  extends FileAdminBaseUseCase {
         fileEntity.setIsPrivate(isPrivate);
         fileEntity.setFilePath(fileStorage.store(content, fileName, contentType));
 
-        return fileRepository.save(fileEntity);
+        fileEntity = fileRepository.save(fileEntity);
+        return fileEntity;
     }
 
 

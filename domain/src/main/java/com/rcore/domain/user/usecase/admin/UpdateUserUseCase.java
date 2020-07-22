@@ -39,7 +39,8 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
 
         old.setUpdatedAt(LocalDateTime.now());
 
-        return userRepository.save(old);
+        old = userRepository.save(old);
+        return old;
     }
 
     public UserEntity update(String userId, UpdateUserFields updateUserFields) throws AuthenticationException, AuthorizationException, UserNotFoundException {
@@ -59,7 +60,8 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
 
         old.setUpdatedAt(LocalDateTime.now());
 
-        return userRepository.save(old);
+        old = userRepository.save(old);
+        return old;
     }
 
 }

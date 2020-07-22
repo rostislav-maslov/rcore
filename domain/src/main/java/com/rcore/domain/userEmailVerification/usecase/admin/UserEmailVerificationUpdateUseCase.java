@@ -20,7 +20,8 @@ public class UserEmailVerificationUpdateUseCase extends UserEmailVerificationAdm
         checkAccess();
 
         userEmailVerificationEntity.setUpdatedAt(LocalDateTime.now());
-        return userEmailVerificationRepository.save(userEmailVerificationEntity);
+        userEmailVerificationEntity = userEmailVerificationRepository.save(userEmailVerificationEntity);
+        return userEmailVerificationEntity;
     }
 
 

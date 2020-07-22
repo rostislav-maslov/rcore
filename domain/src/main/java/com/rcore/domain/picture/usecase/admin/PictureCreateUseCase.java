@@ -32,7 +32,8 @@ public class PictureCreateUseCase extends PictureAdminBaseUseCase {
         pictureEntity.setFileName(fileName);
         pictureEntity.setFilePath(pictureStorage.store(content, fileName, contentType));
 
-        return pictureRepository.save(pictureEntity);
+        pictureEntity = pictureRepository.save(pictureEntity);
+        return pictureEntity;
     }
 
 

@@ -31,7 +31,8 @@ public class PictureUpdateUseCase  extends PictureAdminBaseUseCase {
         oldPicture.setFileName(pictureEntity.getFileName());
         oldPicture.setUpdatedAt(LocalDateTime.now());
 
-        return pictureRepository.save(pictureEntity);
+        oldPicture = pictureRepository.save(pictureEntity);
+        return oldPicture;
     }
 
     public PictureEntity addCompressedSize(PictureEntity pictureEntity, Integer width, Double quality) throws AuthenticationException, AuthorizationException {

@@ -29,6 +29,7 @@ public class UserCreateFromConfirmUseCaseImpl implements UserCreateFromConfirmUs
         userEntity.setEmail(email);
         userEntity.setPassword(passwordGenerator.generate(userEntity.getId(), password));
 
-        return userRepository.save(userEntity);
+        userEntity = userRepository.save(userEntity);
+        return userEntity;
     }
 }

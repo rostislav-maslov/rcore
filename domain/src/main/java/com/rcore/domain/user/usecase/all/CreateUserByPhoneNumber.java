@@ -16,7 +16,8 @@ public class CreateUserByPhoneNumber {
         UserEntity user = new UserEntity(phone);
         user.setId(userIdGenerator.generate());
         user.getRoles().add(role);
-        return userRepository.save(user);
+        user = userRepository.save(user);
+        return user;
     }
 
 }

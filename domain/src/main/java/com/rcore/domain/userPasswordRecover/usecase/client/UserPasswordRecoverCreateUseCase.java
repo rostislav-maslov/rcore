@@ -59,7 +59,7 @@ public class UserPasswordRecoverCreateUseCase {
 
         userPasswordRecoverEntity.tryIncrement();
         emailSender.send(email, userPasswordRecoverEntity.getCode());
-        userPasswordRecoverRepository.save(userPasswordRecoverEntity);
+        userPasswordRecoverEntity = userPasswordRecoverRepository.save(userPasswordRecoverEntity);
 
         return userPasswordRecoverEntity;
     }
