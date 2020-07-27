@@ -23,8 +23,9 @@ public class ExceptionUtils {
             else if (baseApiException instanceof UnauthorizedRequestApiException)
                 throw new UnauthorizedRequestApiException(baseApiException.getErrors());
         } else if (e instanceof ApiAuthenticationException) {
-
-
+            ApiAuthenticationException apiAuthenticationException = (AuthForbiddenApiException) e;
+            if (apiAuthenticationException instanceof AuthForbiddenApiException)
+                throw new AuthForbiddenApiException(apiAuthenticationException.getErrors());
 
         }
     }
