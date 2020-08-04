@@ -41,6 +41,12 @@ public class UserAllAdapter {
                 .map(userMapper::map);
     }
 
+    public Optional<UserDTO> findByEmail(String email) {
+        return userConfig.all.viewUserUserCase()
+                .findByEmail(email)
+                .map(userMapper::map);
+    }
+
     public TokenPairDTO authentication(String email, String password) throws UserNotFoundException, UserBlockedException, AuthenticationException {
         return tokenPairMapper.map(userConfig.all.emailAuthenticationUseCase()
                 .authentication(email, password));

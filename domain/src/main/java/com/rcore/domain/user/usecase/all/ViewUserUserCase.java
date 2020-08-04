@@ -18,4 +18,8 @@ public class ViewUserUserCase {
     public Optional<UserEntity> findByPhone(Long phone) {
         return userRepository.findByPhoneNumber(phone);
     }
+
+    public Optional<UserEntity> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
 }
