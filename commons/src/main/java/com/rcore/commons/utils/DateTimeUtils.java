@@ -41,4 +41,20 @@ public class DateTimeUtils {
         Instant instant = dateTime.toInstant(zonedDateTime.getOffset());
         return dateTimeFormatter.format(LocalDateTime.ofInstant(instant, ZoneId.of(tz)));
     }
+
+    public static String formatFromUtcToTimeZone(LocalDateTime dateTime, DateTimeFormatter dateTimeFormatter , String tz) {
+        Instant instant = dateTime.toInstant(ZoneOffset.UTC);
+        return dateTimeFormatter.format(LocalDateTime.ofInstant(instant, ZoneId.of(tz)));
+    }
+
+    public static LocalDateTime dateTimeFromUtcToTimeZone(LocalDateTime localDateTime, String tz) {
+        Instant instant = localDateTime.toInstant(ZoneOffset.UTC);
+        return LocalDateTime.ofInstant(instant, ZoneId.of(tz));
+    }
+
+    public static LocalDateTime dateTimeToTimeZone(LocalDateTime localDateTime, String tz) {
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, ZoneOffset.systemDefault());
+        Instant instant = localDateTime.toInstant(zonedDateTime.getOffset());
+        return LocalDateTime.ofInstant(instant, ZoneId.of(tz));
+    }
 }
