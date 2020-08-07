@@ -3,7 +3,6 @@ package com.rcore.domain.user.config;
 import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.port.AccessTokenStorage;
-import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.domain.token.port.RefreshTokenStorage;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.token.usecase.CreateAccessTokenUseCase;
@@ -13,7 +12,7 @@ import com.rcore.domain.user.port.UserIdGenerator;
 import com.rcore.domain.user.port.PasswordGenerator;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.usecase.admin.*;
-import com.rcore.domain.user.usecase.all.CreateUserByPhoneNumber;
+import com.rcore.domain.user.usecase.all.CreateUserByPhoneNumberUseCase;
 import com.rcore.domain.user.usecase.all.EmailAuthenticationUseCase;
 import com.rcore.domain.user.usecase.all.ViewUserUserCase;
 import lombok.RequiredArgsConstructor;
@@ -80,8 +79,8 @@ public class UserConfig {
             return new ViewUserUserCase(userRepository);
         }
 
-        public CreateUserByPhoneNumber createUserByPhoneNumber() {
-            return new CreateUserByPhoneNumber(userRepository, userIdGenerator);
+        public CreateUserByPhoneNumberUseCase createUserByPhoneNumber() {
+            return new CreateUserByPhoneNumberUseCase(userRepository, userIdGenerator);
         }
 
     }

@@ -7,7 +7,7 @@ import com.rcore.domain.user.port.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class CreateUserByPhoneNumber {
+public class CreateUserByPhoneNumberUseCase {
 
     private final UserRepository userRepository;
     private final UserIdGenerator userIdGenerator;
