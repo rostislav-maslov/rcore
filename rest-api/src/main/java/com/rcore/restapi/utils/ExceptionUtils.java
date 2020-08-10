@@ -22,6 +22,8 @@ public class ExceptionUtils {
                 throw new TooManyRequestApiException(baseApiException.getErrors());
             else if (baseApiException instanceof UnauthorizedRequestApiException)
                 throw new UnauthorizedRequestApiException(baseApiException.getErrors());
+            else if (baseApiException instanceof TooManyRequestApiException)
+                throw new TooManyRequestApiException(baseApiException.getErrors());
         } else if (e instanceof ApiAuthenticationException) {
             ApiAuthenticationException apiAuthenticationException = (AuthForbiddenApiException) e;
             if (apiAuthenticationException instanceof AuthForbiddenApiException)
@@ -47,6 +49,8 @@ public class ExceptionUtils {
                 throw new TooManyRequestApiException(baseApiException.getErrors());
             else if (baseApiException instanceof UnauthorizedRequestApiException)
                 throw new UnauthorizedRequestApiException(baseApiException.getErrors());
+            else if (baseApiException instanceof TooManyRequestApiException)
+                throw new TooManyRequestApiException(baseApiException.getErrors());
         } else if (e.getCause() instanceof ApiAuthenticationException) {
             ApiAuthenticationException apiAuthenticationException = (ApiAuthenticationException) e.getCause();
             if (apiAuthenticationException instanceof AuthForbiddenApiException)
