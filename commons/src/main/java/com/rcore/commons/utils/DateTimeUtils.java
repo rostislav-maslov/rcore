@@ -57,4 +57,10 @@ public class DateTimeUtils {
         Instant instant = localDateTime.toInstant(zonedDateTime.getOffset());
         return LocalDateTime.ofInstant(instant, ZoneId.of(tz));
     }
+
+    public static LocalDateTime dateTimeFromTimeZoneToTimeZone(LocalDateTime localDateTime, String fromTz, String toTz) {
+        ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, ZoneId.of(fromTz));
+        Instant instant = localDateTime.toInstant(zonedDateTime.getOffset());
+        return LocalDateTime.ofInstant(instant, ZoneId.of(toTz));
+    }
 }
