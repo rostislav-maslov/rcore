@@ -63,10 +63,11 @@ public class SecurityExceptionHandler {
     public ErrorApiResponse<List<ExceptionDTO>> handleAccessDenied(Exception e) {
         return ErrorApiResponse.of(Arrays.asList(ExceptionDTO.builder()
                 .presentationData(ExceptionDTO.PresentationData.builder()
-                        .message("Ошибка прав доступа")
+                        .title("Ошибка аутентификации")
+                        .message("Доступ запрещен")
                         .build())
                 .domain("SERVER")
-                .details("Доступ запрещен")
+                .details("ACCESS_DENIED")
                 .build()));
     }
 
