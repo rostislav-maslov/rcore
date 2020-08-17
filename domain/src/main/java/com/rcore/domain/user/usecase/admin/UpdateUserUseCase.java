@@ -49,6 +49,9 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         UserEntity old = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException());
 
+        old.setPhoneNumber(Optional.ofNullable(updateUserFields.getPhoneNumber())
+                .orElse(old.getPhoneNumber()));
+
         old.setFirstName(Optional.ofNullable(updateUserFields.getFirstName())
                 .orElse(old.getFirstName()));
 

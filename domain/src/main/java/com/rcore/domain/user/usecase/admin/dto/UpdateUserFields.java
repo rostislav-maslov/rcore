@@ -13,4 +13,5 @@ public class UpdateUserFields {
     private String firstName;
     private String secondName;
     private String lastName;
+    private Long phoneNumber;
 }
