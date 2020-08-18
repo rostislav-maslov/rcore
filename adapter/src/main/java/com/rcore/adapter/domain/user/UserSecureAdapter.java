@@ -15,6 +15,7 @@ import com.rcore.domain.user.exception.UserNotFoundException;
 import com.rcore.domain.user.usecase.admin.dto.UpdateUserFields;
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -33,9 +34,9 @@ public class UserSecureAdapter {
                 .block(userMapper.inverseMap(userDTO)));
     }
 
-    public UserDTO createUserByEmail(String email, String password) throws UserAlreadyExistException, AuthorizationException, AuthenticationException {
+    public UserDTO createUserByEmail(String email, String password, List<String> roleIds) throws UserAlreadyExistException, AuthorizationException, AuthenticationException {
         return userMapper.map(userConfig.admin.CreateUseCase()
-                .createByEmail(email, password));
+                .createByEmail(email, password, roleIds));
     }
 
     public Boolean deleteUser(UserDTO userDTO) throws UserAlreadyExistException, AuthorizationException, AuthenticationException {

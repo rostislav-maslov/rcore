@@ -41,7 +41,7 @@ public class UserConfig {
         }
 
         public CreateUserUseCase CreateUseCase() throws AuthorizationException {
-            return new CreateUserUseCase(this.userRepository, passwordGenerator, userIdGenerator, authorizationByTokenUseCase);
+            return new CreateUserUseCase(this.userRepository, passwordGenerator, userIdGenerator, authorizationByTokenUseCase, roleRepository);
         }
 
         public DeleteUserUseCase DeleteUserUseCase() throws AuthorizationException {
