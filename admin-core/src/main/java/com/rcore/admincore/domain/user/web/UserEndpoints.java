@@ -62,7 +62,7 @@ public class UserEndpoints {
     @PostMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
     public SuccessApiResponse<UserWeb> create(@RequestBody CreateUserDTO request) throws AuthenticationException, AuthorizationException, UserAlreadyExistException {
         UserDTO user = userAdapter.secure
-                .createUserByEmail(request.getEmail(), request.getPassword());
+                .createUserByEmail(request.getEmail(), request.getPassword(), request.getRoleIds());
 
         return SuccessApiResponse.of(userWebMapper.map(user));
     }
