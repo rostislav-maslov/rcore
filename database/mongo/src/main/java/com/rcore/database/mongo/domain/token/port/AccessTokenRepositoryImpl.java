@@ -1,7 +1,11 @@
 package com.rcore.database.mongo.domain.token.port;
 
+import com.rcore.database.mongo.common.query.AbstractExampleQuery;
 import com.rcore.database.mongo.common.utils.CollectionNameUtils;
 import com.rcore.database.mongo.domain.token.model.AccessTokenDoc;
+import com.rcore.database.mongo.domain.token.query.DeactivateAllAccessTokenByRefreshTokenId;
+import com.rcore.database.mongo.domain.token.query.ExpireAccessToken;
+import com.rcore.database.mongo.domain.token.query.ExpireAllAccessTokenByRefreshTokenId;
 import com.rcore.database.mongo.domain.token.query.FindAllWithSearch;
 import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
@@ -58,5 +62,23 @@ public class AccessTokenRepositoryImpl implements AccessTokenRepository {
     @Override
     public Long count() {
         return mongoTemplate.count(new Query(), AccessTokenDoc.class);
+    }
+
+    @Override
+    public void expireAllAccessTokenByRefreshTokenId(String refreshTokenId) {
+        ExpireAllAccessTokenByRefreshTokenId query = ExpireAllAccessTokenByRefreshTokenId.of(refreshTokenId);
+        mongoTemplate.findAndModify(query.getQuery(), query.getUpdate(), query.getModifyOptions(), AccessTokenDoc.class);
+    }
+
+    @Override
+    public void deactivateAllAccessTokenByRefreshTokenId(String refreshTokenId) {
+        DeactivateAllAccessTokenByRefreshTokenId query = DeactivateAllAccessTokenByRefreshTokenId.of(refreshTokenId);
+        mongoTemplate.findAndModify(query.getQuery(), query.getUpdate(), query.getModifyOptions(), AccessTokenDoc.class);
+    }
+
+    @Override
+    public void expireAccessToken(String accessTokenId) {
+        ExpireAccessToken query = ExpireAccessToken.of(accessTokenId);
+        mongoTemplate.findAndModify(query.getQuery(), query.getUpdate(), query.getModifyOptions(), AccessTokenDoc.class);
     }
 }

@@ -67,6 +67,21 @@ public class TestAppConfig {
             public Optional<AccessTokenEntity> findById(String id) {
                 return Optional.empty();
             }
+
+            @Override
+            public void expireAccessToken(AccessTokenEntity accessTokenEntity) {
+
+            }
+
+            @Override
+            public void expireAllAccessTokenByRefreshTokenId(String refreshTokenId) {
+
+            }
+
+            @Override
+            public void deactivateAllAccessTokenByRefreshTokenId(String refreshTokenId) {
+
+            }
         };
         this.refreshTokenStorage = new RefreshTokenStorage() {
             @Override
@@ -89,7 +104,7 @@ public class TestAppConfig {
                 return null;
             }
         };
-        this.expireTokenUseCase = new ExpireTokenUseCase(refreshTokenStorage);
+        this.expireTokenUseCase = new ExpireTokenUseCase(refreshTokenStorage, accessTokenStorage);
 
         this.authorizationByTokenUseCase = new AuthorizationByTokenUseCase(this.accessTokenStorage,this.refreshTokenStorage, this.userRepository);
         this.createRefreshTokenUseCase = new CreateRefreshTokenUseCase(new RefreshTokenIdGeneratorImpl(), this.refreshTokenStorage, new TokenSaltGeneratorImpl());

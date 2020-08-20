@@ -48,7 +48,6 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     public void expireRefreshToken(RefreshTokenEntity refreshTokenEntity) {
         for (RefreshTokenEntity entity : container.values()) {
             if (entity.getId().equals(refreshTokenEntity.getId())) {
-
                 entity.setStatus(RefreshTokenEntity.Status.INACTIVE);
 
             }

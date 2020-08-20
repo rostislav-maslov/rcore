@@ -24,7 +24,7 @@ public class AccessTokenEntity extends BaseEntity {
     private String userId;
     private Set<Access> accesses;
     private LocalDateTime expireAt = LocalDateTime.now();
-
+    private RefreshTokenEntity.Status status = RefreshTokenEntity.Status.ACTIVE;
     private String createFromRefreshTokenId;
 
     private String sign;
@@ -52,7 +52,7 @@ public class AccessTokenEntity extends BaseEntity {
         return md5Hex;
     }
 
-    public static String sign(String accessTokenId, Long expireAt, RefreshTokenEntity refreshTokenEntity){
+    public static String sign(String accessTokenId, Long expireAt, RefreshTokenEntity refreshTokenEntity) {
         String signString = refreshTokenEntity.getId() +
                 refreshTokenEntity.getUserId() +
                 refreshTokenEntity.getExpireAt().toString() +

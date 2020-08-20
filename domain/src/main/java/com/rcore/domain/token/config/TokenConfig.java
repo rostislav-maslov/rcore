@@ -37,7 +37,7 @@ public class TokenConfig {
         }
 
         public ExpireTokenUseCase expireTokenUseCase() {
-            return new ExpireTokenUseCase(refreshTokenStorage);
+            return new ExpireTokenUseCase(refreshTokenStorage, accessTokenStorage);
         }
 
     }

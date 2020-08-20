@@ -91,7 +91,13 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
         RefreshTokenEntity fromRepo = refreshTokenStorage.findById(refreshTokenEntity.getId())
                 .orElseThrow(() -> new AuthenticationException());
 
-        if (fromRepo.isActive() == false) throw new RefreshTokenIsExpiredException();
+        if (!fromRepo.isActive()) {
+            refreshTokenStorage.expireRefreshToken(fromRepo);
+            accessTokenStorage.deactivateAllAccessTokenByRefreshTokenId(fromRepo.getId());
+            throw new RefreshTokenIsExpiredException();
+        }
+            //expire
+
 
         AccessTokenEntity accessTokenEntity = createAccessTokenUseCase.create(userEntity, refreshTokenEntity);
 

@@ -2,6 +2,7 @@ package com.rcore.domain.token.port;
 
 import com.rcore.domain.token.entity.AccessTokenEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface AccessTokenStorage {
@@ -24,5 +25,11 @@ public interface AccessTokenStorage {
      * @return
      */
     Optional<AccessTokenEntity> findById(String id);
+
+    void expireAccessToken(AccessTokenEntity accessTokenEntity);
+
+    void expireAllAccessTokenByRefreshTokenId(String refreshTokenId);
+
+    void deactivateAllAccessTokenByRefreshTokenId(String refreshTokenId);
 
 }

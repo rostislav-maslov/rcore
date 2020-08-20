@@ -19,13 +19,13 @@ public class RefreshTokenEntity extends BaseEntity {
     }
 
     public enum Status {
-        ACTIVE, INACTIVE
+        ACTIVE, INACTIVE, EXPIRED
     }
 
     private String id;
     private String userId;
     private Long expireTimeRefreshToken = 365 * 24 * 60 * 60 * 1000l;
-    private Long expireTimeAccessToken = 2 * 24 * 60 * 60 * 1000l;
+    private Long expireTimeAccessToken = 1 * 24 * 60 * 60 * 1000l;
 
     private LocalDateTime expireAt = LocalDateTime.now();
     private Status status = Status.ACTIVE;

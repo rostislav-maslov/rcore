@@ -21,7 +21,6 @@ public class AccessTokenStorageImpl implements AccessTokenStorage {
 
     @Override
     public Optional<AccessTokenEntity> current() {
-        AccessTokenDTO e = userAuthenticationMediator.getAccessToken();
         return Optional.ofNullable(accessTokenMapper.inverseMap(userAuthenticationMediator.getAccessToken()));
     }
 
@@ -33,5 +32,20 @@ public class AccessTokenStorageImpl implements AccessTokenStorage {
     @Override
     public Optional<AccessTokenEntity> findById(String id) {
        return  accessTokenRepository.findById(id);
+    }
+
+    @Override
+    public void expireAllAccessTokenByRefreshTokenId(String refreshTokenId) {
+        accessTokenRepository.expireAllAccessTokenByRefreshTokenId(refreshTokenId);
+    }
+
+    @Override
+    public void deactivateAllAccessTokenByRefreshTokenId(String refreshTokenId) {
+        accessTokenRepository.deactivateAllAccessTokenByRefreshTokenId(refreshTokenId);
+    }
+
+    @Override
+    public void expireAccessToken(AccessTokenEntity accessTokenEntity) {
+        accessTokenRepository.expireAccessToken(accessTokenEntity.getId());
     }
 }

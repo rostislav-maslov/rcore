@@ -24,4 +24,19 @@ public class AccessTokenStorageImpl implements AccessTokenStorage {
     public Optional<AccessTokenEntity> findById(String id) {
         return null;
     }
+
+    @Override
+    public void expireAccessToken(AccessTokenEntity accessTokenEntity) {
+
+    }
+
+    @Override
+    public void expireAllAccessTokenByRefreshTokenId(String refreshTokenId) {
+
+    }
+
+    @Override
+    public void deactivateAllAccessTokenByRefreshTokenId(String refreshTokenId) {
+
+    }
 }
