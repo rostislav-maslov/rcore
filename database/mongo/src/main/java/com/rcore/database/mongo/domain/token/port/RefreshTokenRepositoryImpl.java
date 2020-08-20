@@ -1,18 +1,20 @@
 package com.rcore.database.mongo.domain.token.port;
 
 
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.model.Indexes;
 import com.rcore.database.mongo.common.query.AbstractModifyQuery;
 import com.rcore.database.mongo.common.utils.CollectionNameUtils;
 import com.rcore.database.mongo.domain.token.model.RefreshTokenDoc;
 import com.rcore.database.mongo.domain.token.query.ExpireRefreshTokenQuery;
 import com.rcore.database.mongo.domain.token.query.FindAllActiveByUserId;
 import com.rcore.database.mongo.domain.token.query.FindAllWithSearch;
-import com.rcore.database.mongo.domain.user.model.UserDoc;
 import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.port.RefreshTokenRepository;
-import lombok.RequiredArgsConstructor;
+import org.bson.Document;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -20,13 +22,21 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Repository
 public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
 
     private final MongoTemplate mongoTemplate;
+
+    public RefreshTokenRepositoryImpl(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+        MongoCollection<Document> collection = this.mongoTemplate.getCollection(CollectionNameUtils.getCollectionName(RefreshTokenDoc.class));
+        //Устанавливаем время жизни документов - 30 дней после просрочки
+        collection.createIndex(Indexes.ascending("expireAt"),
+                new IndexOptions().expireAfter(30L, TimeUnit.DAYS));
+    }
 
     @Override
     public void expireRefreshToken(RefreshTokenEntity refreshTokenEntity) {

@@ -98,7 +98,6 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
         }
             //expire
 
-
         AccessTokenEntity accessTokenEntity = createAccessTokenUseCase.create(userEntity, refreshTokenEntity);
 
         return TokenPair.builder()

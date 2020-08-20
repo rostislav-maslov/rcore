@@ -1,6 +1,8 @@
 package com.rcore.database.mongo.domain.token.port;
 
-import com.rcore.database.mongo.common.query.AbstractExampleQuery;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.IndexOptions;
+import com.mongodb.client.model.Indexes;
 import com.rcore.database.mongo.common.utils.CollectionNameUtils;
 import com.rcore.database.mongo.domain.token.model.AccessTokenDoc;
 import com.rcore.database.mongo.domain.token.query.DeactivateAllAccessTokenByRefreshTokenId;
@@ -11,20 +13,28 @@ import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.port.AccessTokenRepository;
-import lombok.RequiredArgsConstructor;
+import org.bson.Document;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Repository
 public class AccessTokenRepositoryImpl implements AccessTokenRepository {
-    
+
     private final MongoTemplate mongoTemplate;
+
+    public AccessTokenRepositoryImpl(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+        MongoCollection<Document> collection = this.mongoTemplate.getCollection(CollectionNameUtils.getCollectionName(AccessTokenDoc.class));
+        //Устанавливаем время жизни документов - 30 дней после просрочки
+        collection.createIndex(Indexes.ascending("expireAt"),
+                new IndexOptions().expireAfter(30L, TimeUnit.DAYS));
+    }
 
     @Override
     public AccessTokenEntity save(AccessTokenEntity object) {
