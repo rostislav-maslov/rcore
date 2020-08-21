@@ -1,5 +1,6 @@
 package com.rcore.restapi.exceptions.handler;
 
+import com.rcore.commons.exceptions.InvalidPhoneNumberFormatException;
 import com.rcore.restapi.exceptions.*;
 import com.rcore.restapi.web.api.response.ErrorApiResponse;
 import org.springframework.http.HttpStatus;
@@ -48,6 +49,12 @@ public class ApiExceptionHandler {
     @ExceptionHandler(value = InternalServerException.class)
     public ErrorApiResponse<List<ExceptionDTO>> handleInternalServerException(InternalServerException e) {
         return ErrorApiResponse.of(e.getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({InvalidPhoneNumberFormatException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleBadRequestApiException(Exception e) {
+        return ErrorApiResponse.of(new InvalidPhoneNumberFormatApiException().getErrors());
     }
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)

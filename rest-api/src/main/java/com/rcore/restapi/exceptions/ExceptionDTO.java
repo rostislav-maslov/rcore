@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @ApiModel("Модель ошибки")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @AllArgsConstructor
@@ -38,6 +40,24 @@ public class ExceptionDTO {
 
         @ApiModelProperty("Описание ошибки")
         private String message;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof PresentationData)) return false;
+            PresentationData that = (PresentationData) o;
+            return Objects.equals(title, that.title) &&
+                    Objects.equals(message, that.message);
+        }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ExceptionDTO)) return false;
+        ExceptionDTO that = (ExceptionDTO) o;
+        return Objects.equals(presentationData, that.presentationData) &&
+                Objects.equals(domain, that.domain) &&
+                Objects.equals(details, that.details);
+    }
 }

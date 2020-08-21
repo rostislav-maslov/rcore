@@ -1,5 +1,7 @@
 package com.rcore.commons.utils;
 
+import com.rcore.commons.exceptions.InvalidPhoneNumberFormatException;
+
 import java.io.StringWriter;
 import java.text.ParseException;
 import java.util.regex.Matcher;
@@ -7,10 +9,10 @@ import java.util.regex.Pattern;
 
 public class PhoneNumberUtils {
 
-    public static String format(Long phoneNumber) throws Exception {
+    public static String format(Long phoneNumber) throws InvalidPhoneNumberFormatException {
         String phone = phoneNumber.toString();
         if (phone.length() != 11 && phone.length() != 12) {
-            throw new Exception("Invalid length: " + phone.length());
+            throw new InvalidPhoneNumberFormatException();
         }
 
         if (phone.length() == 11) {
@@ -65,7 +67,7 @@ public class PhoneNumberUtils {
         }
     }
 
-    public static Long parse(String phone) throws ParseException {
+    public static Long parse(String phone) throws InvalidPhoneNumberFormatException {
 
         StringWriter phoneNumber = new StringWriter();
         phone.chars()
@@ -85,19 +87,19 @@ public class PhoneNumberUtils {
             return Long.parseLong(phone);
         }
 
-        throw new ParseException("errors.invalid.length", phone.length());
+        throw new InvalidPhoneNumberFormatException();
     }
 
-    public static Long smartParse(String phone) throws ParseException {
+    public static Long smartParse(String phone) throws InvalidPhoneNumberFormatException {
         return smartParse(phone, 10);
     }
 
-    public static Long smartParse(String phone, int lengthWithoutCode) throws ParseException {
+    public static Long smartParse(String phone, int lengthWithoutCode) throws InvalidPhoneNumberFormatException {
         phone = phone.replaceAll("\\D", "");
 
         if (phone.length() == 10) return Long.parseLong(phone);
         if (phone.length() > 14 || phone.length() < 10)
-            throw new ParseException("errors.invalid.length", phone.length());
+            throw new InvalidPhoneNumberFormatException();
 
         String regex = "(\\d*)(\\d{" + lengthWithoutCode + "})$";
         Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);

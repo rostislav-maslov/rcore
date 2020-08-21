@@ -14,10 +14,10 @@ import com.rcore.domain.token.exception.RefreshTokenIsExpiredException;
 import com.rcore.domain.user.config.UserConfig;
 import com.rcore.domain.user.exception.AdminUserIsExistException;
 import com.rcore.domain.user.exception.UserBlockedException;
+import com.rcore.domain.user.exception.UserWithPhoneAlreadyExistException;
 import com.rcore.domain.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 
-import javax.management.relation.Role;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -62,7 +62,7 @@ public class UserAllAdapter {
                 .init(email, password);
     }
 
-    public UserDTO create(Long phone, RoleDTO role) {
+    public UserDTO create(Long phone, RoleDTO role) throws UserWithPhoneAlreadyExistException {
         return userMapper.map(userConfig.all.createUserByPhoneNumber()
                 .create(phone, roleMapper.inverseMap(role)));
     }

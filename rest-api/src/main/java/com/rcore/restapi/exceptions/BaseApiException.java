@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @NoArgsConstructor
 @Getter
@@ -41,4 +42,11 @@ public class BaseApiException extends RuntimeException {
                 .build());
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BaseApiException)) return false;
+        BaseApiException that = (BaseApiException) o;
+        return Objects.equals(errors, that.errors);
+    }
 }
