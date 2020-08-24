@@ -1,6 +1,9 @@
 package com.rcore.restapi.security.web.validators;
 
 import com.rcore.restapi.exceptions.BadRequestApiException;
+import com.rcore.restapi.exceptions.InvalidEmailApiException;
+import com.rcore.restapi.exceptions.InvalidEmailOrPasswordApiException;
+import com.rcore.restapi.exceptions.InvalidPasswordApiException;
 import com.rcore.restapi.security.web.api.UserCredentialsDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -8,9 +11,9 @@ import org.springframework.util.StringUtils;
 @Service
 public class EmailAuthRequestValidator {
 
-    public final BadRequestApiException invalidEmail = new BadRequestApiException("Ошибка авторизации", "Пожалуйста, укажите корректный email-адрес", "AUTH", "INVALID_EMAIL");
-    public final BadRequestApiException invalidPassword = new BadRequestApiException("Ошибка авторизации", "Пожалуйста, укажите корректный пароль", "AUTH", "INVALID_PASSWORD");
-    public final BadRequestApiException invalidEmailOrPassword = new BadRequestApiException("Ошибка авторизации", "Пожалуйста, укажите корректные email и пароль ", "AUTH", "INVALID_DATA");
+    public final InvalidEmailApiException invalidEmail = new InvalidEmailApiException();
+    public final InvalidPasswordApiException invalidPassword = new InvalidPasswordApiException();
+    public final InvalidEmailOrPasswordApiException invalidEmailOrPassword = new InvalidEmailOrPasswordApiException();
 
     public void validate(UserCredentialsDTO request) throws BadRequestApiException {
         if (!StringUtils.hasText(request.getEmail()) && !StringUtils.hasText(request.getPassword()))

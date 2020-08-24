@@ -20,12 +20,14 @@ public abstract class AuthorizationUseCase {
     protected final Boolean onlyAuthorized;
     protected final AuthorizationByTokenUseCase authorizationByTokenUseCase;
 
-    protected void checkAccess() throws AuthorizationException, AuthenticationException {
+    protected UserEntity checkAccess() throws AuthorizationException, AuthenticationException {
         this.actor = authorizationByTokenUseCase.currentUser();
 
         if (canExecute() == false) {
             throw new AuthorizationException();
         }
+
+        return actor;
     }
 
     public Boolean canExecute() {
