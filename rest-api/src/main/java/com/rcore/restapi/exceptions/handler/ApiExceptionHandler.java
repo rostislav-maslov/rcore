@@ -3,6 +3,7 @@ package com.rcore.restapi.exceptions.handler;
 import com.rcore.commons.exceptions.InvalidPhoneNumberFormatException;
 import com.rcore.restapi.exceptions.*;
 import com.rcore.restapi.web.api.response.ErrorApiResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import java.util.Arrays;
 import java.util.List;
 
+@Slf4j
 @RestControllerAdvice
 public class ApiExceptionHandler {
 
@@ -73,7 +75,7 @@ public class ApiExceptionHandler {
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = RuntimeException.class)
     public ErrorApiResponse<List<ExceptionDTO>> handleError(RuntimeException e) {
-        e.printStackTrace();
+        log.error("Exception:", e);
         return ErrorApiResponse.of(Arrays.asList(ExceptionDTO.builder()
                 .presentationData(ExceptionDTO.PresentationData.builder()
                         .message("Ошибка сервера. Попробуйте повторить позже")
