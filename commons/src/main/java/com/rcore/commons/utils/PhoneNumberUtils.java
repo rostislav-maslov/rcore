@@ -1,13 +1,54 @@
 package com.rcore.commons.utils;
 
 import com.rcore.commons.exceptions.InvalidPhoneNumberFormatException;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.StringWriter;
-import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PhoneNumberUtils {
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    @Data
+    public static class PhoneNumberFormat {
+        /**
+         * Код страны
+         */
+        private String code;
+
+        /**
+         * Маска
+         */
+        private String mask;
+
+        /**
+         * МПолная маска
+         */
+        private String fullMask;
+
+        /**
+         * Кол-во цифр
+         */
+        private Integer digitsQuantity;
+
+        /**
+         * Кол-во цифр с кодом
+         */
+        private Integer digitsQuantityWithCode;
+
+        /**
+         * Доступные первые цифры после кода
+         */
+        private List<Integer> allowedFirstDigits = new ArrayList<>();
+    }
 
     public static String format(Long phoneNumber) throws InvalidPhoneNumberFormatException {
         String phone = phoneNumber.toString();
