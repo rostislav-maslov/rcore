@@ -11,7 +11,9 @@ public interface ExampleDataMapper<Input, Output> {
         return list.stream().map(this::map).collect(Collectors.toList());
     }
 
-    Input inverseMap(Output output);
+    default Input inverseMap(Output output) {
+        return null;
+    }
 
     default List<Input> inverseMapAll(List<Output> list) {
         return list.stream().map(this::inverseMap).collect(Collectors.toList());
