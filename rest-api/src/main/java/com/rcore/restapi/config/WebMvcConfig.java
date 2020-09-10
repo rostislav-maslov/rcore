@@ -26,8 +26,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
-        builder.serializerByType(LocalDateTime.class, new ToStringSerializer());
+        Jackson2ObjectMapperBuilder builder = objectMapperBuilder();
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter(builder.build());
         converters.add(converter);
         StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter(StandardCharsets.UTF_8);
