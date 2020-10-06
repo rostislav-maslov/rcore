@@ -42,7 +42,7 @@ public class PictureEndpoints {
     @PostMapping(value = PictureRoutes.UPLOAD, produces = MediaType.APPLICATION_JSON_VALUE)
     public SuccessApiResponse<String> upload(@RequestBody UploadFileDTO request) throws AuthenticationException, AuthorizationException {
 
-        PictureDTO picture = pictureAdapter.getAll().create(new ByteArrayInputStream(request.getData()), request.getFileName(), request.getContentType());
+        PictureDTO picture = pictureAdapter.getAll().create(new ByteArrayInputStream(request.getData()), request.getFileName(), request.getContentType(), request.getIsUsed());
         return SuccessApiResponse.of(picture.getId());
     }
 

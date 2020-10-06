@@ -19,11 +19,12 @@ public class PictureCreateUseCase extends PictureBaseUseCase {
         this.pictureStorage = pictureStorage;
     }
 
-    public PictureEntity create(InputStream content, String fileName, String contentType) {
+    public PictureEntity create(InputStream content, String fileName, String contentType, Boolean isUsed) {
         PictureEntity pictureEntity = new PictureEntity();
         pictureEntity.setId(pictureIdGenerator.generate());
         pictureEntity.setIsPrivate(false);
         pictureEntity.setFileName(fileName);
+        pictureEntity.setIsUsed(isUsed);
         pictureEntity.setFilePath(pictureStorage.store(content, fileName, contentType));
 
         return pictureRepository.save(pictureEntity);

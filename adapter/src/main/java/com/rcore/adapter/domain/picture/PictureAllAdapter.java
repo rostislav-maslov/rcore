@@ -17,7 +17,11 @@ public class PictureAllAdapter {
     private final PictureConfig pictureConfig;
 
     public PictureDTO create(InputStream content, String fileName, String contentType) {
-        return pictureMapper.map(pictureConfig.all.createUseCase().create(content, fileName, contentType));
+        return pictureMapper.map(pictureConfig.all.createUseCase().create(content, fileName, contentType, false));
+    }
+
+    public PictureDTO create(InputStream content, String fileName, String contentType, Boolean isUsed) {
+        return pictureMapper.map(pictureConfig.all.createUseCase().create(content, fileName, contentType, isUsed));
     }
 
     public Optional<PictureDTO> findById(String id) throws PictureAccessException {

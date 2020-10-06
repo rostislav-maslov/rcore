@@ -8,5 +8,5 @@ public class UploadFileDTO {
     private String contentType;
     private String fileName;
     private byte[] data;
-
+    private Boolean isUsed = true;
 }

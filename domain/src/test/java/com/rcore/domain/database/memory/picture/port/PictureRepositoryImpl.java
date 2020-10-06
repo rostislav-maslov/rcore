@@ -45,4 +45,9 @@ public class PictureRepositoryImpl implements PictureRepository {
     public Long count() {
         return (long) container.size();
     }
+
+    @Override
+    public void deleteUnused() {
+
+    }
 }

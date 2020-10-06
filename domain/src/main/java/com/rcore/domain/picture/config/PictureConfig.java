@@ -4,7 +4,7 @@ import com.rcore.domain.picture.port.PictureCompressor;
 import com.rcore.domain.picture.port.PictureIdGenerator;
 import com.rcore.domain.picture.port.PictureRepository;
 import com.rcore.domain.picture.port.PictureStorage;
-import com.rcore.domain.picture.usecase.admin.*;
+import com.rcore.domain.picture.usecase.secured.*;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import lombok.Getter;
@@ -39,6 +39,14 @@ public class PictureConfig {
 
         public PictureAddCompressedSize addCompressedSizeUseCase() throws AuthorizationException {
             return new PictureAddCompressedSize(this.pictureRepository, this.pictureCompressor, authorizationByTokenUseCase);
+        }
+
+        public ChangeUsedPictureUseCase changeUsedPictureUseCase() throws AuthorizationException {
+            return new ChangeUsedPictureUseCase(this.pictureRepository, this.authorizationByTokenUseCase);
+        }
+
+        public PictureDeleteUnusedUseCase deleteUnusedUseCase() throws AuthorizationException {
+            return new PictureDeleteUnusedUseCase(this.pictureRepository, this.authorizationByTokenUseCase);
         }
     }
 

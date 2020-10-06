@@ -15,6 +15,7 @@ public class PictureEntity extends BaseEntity {
     protected String fileName;
     protected String filePath;
     protected Boolean isPrivate = false;
+    protected Boolean isUsed = false;
 
     protected Map<String, Size> sizes = new HashMap<>();
 

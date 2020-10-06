@@ -10,10 +10,8 @@ import com.rcore.domain.file.port.FileIdGenerator;
 import com.rcore.domain.file.port.FileRepository;
 import com.rcore.domain.file.port.FileStorage;
 import com.rcore.domain.picture.config.PictureConfig;
-import com.rcore.domain.picture.port.PictureCompressor;
-import com.rcore.domain.picture.port.PictureIdGenerator;
-import com.rcore.domain.picture.port.PictureRepository;
-import com.rcore.domain.picture.port.PictureStorage;
+import com.rcore.domain.picture.port.*;
+import com.rcore.domain.picture.port.impl.PictureCleanerImpl;
 import com.rcore.domain.role.config.RoleConfig;
 import com.rcore.domain.role.port.RoleIdGenerator;
 import com.rcore.domain.role.port.RoleRepository;
@@ -99,6 +97,11 @@ public class RestApiConfig {
     @Bean
     public RoleAdapter roleAdapter() {
         return new RoleAdapter(new RoleConfig(roleRepository, roleIdGenerator, new AuthorizationByTokenUseCase(accessTokenStorage, refreshTokenStorage, userRepository)));
+    }
+
+    @Bean
+    public PictureCleaner pictureCleaner() {
+        return new PictureCleanerImpl(pictureRepository);
     }
 
 }

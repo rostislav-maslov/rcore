@@ -10,6 +10,8 @@ import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.file.exception.FileNotFoundException;
 import com.rcore.domain.picture.config.PictureConfig;
 import com.rcore.domain.picture.entity.PictureEntity;
+import com.rcore.domain.picture.exception.PictureNotFoundException;
+import com.rcore.domain.picture.usecase.secured.commands.ChangeUsedPictureCommand;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +20,8 @@ import java.io.InputStream;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class PictureAdminAdapter {
+public class PictureSecuredAdapter {
     private PictureMapper pictureMapper = new PictureMapper();
-    private UserMapper userMapper = new UserMapper(new RoleMapper());
     private final PictureConfig pictureConfig;
 
     public PictureDTO create(InputStream content, String fileName, String contentType, boolean isPrivate) throws AuthorizationException, AuthenticationException {
@@ -31,6 +32,16 @@ public class PictureAdminAdapter {
     public Boolean delete(PictureDTO picture) throws AuthorizationException, AuthenticationException {
         return pictureConfig.admin.deleteUseCase()
                 .delete(pictureMapper.inverseMap(picture));
+    }
+
+    public void deleteUnused() throws AuthorizationException, AuthenticationException {
+        pictureConfig.admin.deleteUnusedUseCase()
+                .deleteUnused();
+    }
+
+    public PictureDTO changeUsed(ChangeUsedPictureCommand changeUsedPictureCommand) throws AuthorizationException, PictureNotFoundException, AuthenticationException {
+        return pictureMapper.map(pictureConfig.admin.changeUsedPictureUseCase()
+                .changeUsed(changeUsedPictureCommand));
     }
 
     public PictureDTO update(PictureDTO picture) throws AuthorizationException, FileNotFoundException, AuthenticationException {

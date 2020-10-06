@@ -1,4 +1,4 @@
-package com.rcore.domain.picture.usecase.admin;
+package com.rcore.domain.picture.usecase.secured;
 
 import com.rcore.domain.picture.entity.PictureEntity;
 import com.rcore.domain.picture.port.PictureIdGenerator;
@@ -8,7 +8,6 @@ import com.rcore.domain.picture.access.AdminPictureCreateAccess;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
-import com.rcore.domain.user.entity.UserEntity;
 
 import java.io.InputStream;
 
@@ -30,6 +29,7 @@ public class PictureCreateUseCase extends PictureAdminBaseUseCase {
         pictureEntity.setId(idGenerator.generate());
         pictureEntity.setIsPrivate(isPrivate);
         pictureEntity.setFileName(fileName);
+        pictureEntity.setIsUsed(false);
         pictureEntity.setFilePath(pictureStorage.store(content, fileName, contentType));
 
         pictureEntity = pictureRepository.save(pictureEntity);

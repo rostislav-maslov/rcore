@@ -7,11 +7,11 @@ import lombok.Getter;
 public class PictureAdapter {
     private final PictureConfig pictureConfig;
     private PictureAllAdapter all;
-    private PictureAdminAdapter admin;
+    private PictureSecuredAdapter admin;
 
     public PictureAdapter(PictureConfig pictureConfig) {
         this.pictureConfig = pictureConfig;
         this.all = new PictureAllAdapter(pictureConfig);
-        this.admin = new PictureAdminAdapter(pictureConfig);
+        this.admin = new PictureSecuredAdapter(pictureConfig);
     }
 }

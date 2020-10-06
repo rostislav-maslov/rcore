@@ -1,4 +1,4 @@
-package com.rcore.domain.picture.usecase.admin;
+package com.rcore.domain.picture.usecase.secured;
 
 import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.file.exception.FileNotFoundException;
@@ -9,7 +9,6 @@ import com.rcore.domain.picture.access.AdminPictureViewAccess;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
-import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.base.port.SearchResult;
 
 import java.io.InputStream;

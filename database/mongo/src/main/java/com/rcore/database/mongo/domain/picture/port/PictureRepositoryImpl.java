@@ -2,6 +2,7 @@ package com.rcore.database.mongo.domain.picture.port;
 
 import com.rcore.database.mongo.common.utils.CollectionNameUtils;
 import com.rcore.database.mongo.domain.picture.model.PictureDoc;
+import com.rcore.database.mongo.domain.picture.query.DeleteUnused;
 import com.rcore.database.mongo.domain.picture.query.FindAllWithSearch;
 import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
@@ -58,5 +59,10 @@ public class PictureRepositoryImpl implements PictureRepository {
     @Override
     public Long count() {
         return mongoTemplate.count(new Query(), PictureDoc.class);
+    }
+
+    @Override
+    public void deleteUnused() {
+        mongoTemplate.remove(new DeleteUnused(), CollectionNameUtils.getCollectionName(PictureDoc.class));
     }
 }

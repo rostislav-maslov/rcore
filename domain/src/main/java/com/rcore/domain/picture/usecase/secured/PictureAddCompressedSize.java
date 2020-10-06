@@ -1,4 +1,4 @@
-package com.rcore.domain.picture.usecase.admin;
+package com.rcore.domain.picture.usecase.secured;
 
 import com.rcore.domain.picture.entity.PictureEntity;
 import com.rcore.domain.picture.port.PictureCompressor;
@@ -6,7 +6,6 @@ import com.rcore.domain.picture.port.PictureRepository;
 import com.rcore.domain.picture.access.AdminAddCompressedSizeAccess;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
-import com.rcore.domain.user.entity.UserEntity;
 
 public class PictureAddCompressedSize extends PictureAdminBaseUseCase {
 
