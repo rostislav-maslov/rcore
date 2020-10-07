@@ -20,7 +20,7 @@ public class PictureDeleteUseCaseTest {
     @Before
     public void setUp() throws FileNotFoundException {
         File file = new File(pictureAppConfig.getFILE_PATH());
-        pictureEntity = pictureAppConfig.getPictureConfig().all.createUseCase().create(new FileInputStream(file), file.getName(), "jpg");
+        pictureEntity = pictureAppConfig.getPictureConfig().all.createUseCase().create(new FileInputStream(file), file.getName(), "jpg", false);
     }
 
     @Test

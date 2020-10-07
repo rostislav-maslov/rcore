@@ -16,7 +16,7 @@ public class PictureCreateUseCaseTest {
     @Test
     public void create() throws FileNotFoundException {
         File file = new File(pictureAppConfig.getFILE_PATH());
-        PictureEntity pictureEntity = pictureAppConfig.getPictureConfig().all.createUseCase().create(new FileInputStream(file), file.getName(), "jpg");
+        PictureEntity pictureEntity = pictureAppConfig.getPictureConfig().all.createUseCase().create(new FileInputStream(file), file.getName(), "jpg", false);
         Assert.assertNotNull("Изображение не создано", pictureEntity);
     }
 }
