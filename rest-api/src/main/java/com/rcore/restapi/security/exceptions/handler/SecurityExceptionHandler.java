@@ -46,7 +46,7 @@ public class SecurityExceptionHandler {
         return ErrorApiResponse.of(new UserNotExistApiException().getErrors());
     }
 
-    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
     @ExceptionHandler({UserBlockedApiException.class, UserBlockedException.class})
     public ErrorApiResponse<List<ExceptionDTO>> handleApiUnauthorized(Exception e) {
         return ErrorApiResponse.of(new UserBlockedApiException().getErrors());
