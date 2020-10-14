@@ -7,7 +7,8 @@ import com.rcore.domain.token.port.AccessTokenStorage;
 import com.rcore.restapi.headers.WebHeaders;
 import com.rcore.restapi.routes.BaseRoutes;
 import com.rcore.restapi.security.exceptions.ApiAuthenticationException;
-import com.rcore.restapi.security.exceptions.InvalidTokenFormatApiException;
+import com.rcore.restapi.security.exceptions. InvalidTokenFormatApiException;
+import com.rcore.restapi.security.exceptions.UnauthorizedApiException;
 import com.rcore.restapi.security.exceptions.UserNotExistApiException;
 import com.rcore.restapi.security.factory.AuthenticationTokenFactory;
 import com.rcore.security.infrastructure.AuthTokenGenerator;
@@ -55,6 +56,9 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
         final String token = request.getHeader(WebHeaders.X_AUTH_TOKEN);
+
+        if (!StringUtils.hasText(token))
+            throw new UnauthorizedApiException();
 
         AccessTokenDTO accessToken = null;
 

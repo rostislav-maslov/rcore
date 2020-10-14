@@ -7,6 +7,7 @@ import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.domain.user.exception.UserBlockedException;
 import com.rcore.domain.user.exception.UserNotExistException;
 import com.rcore.restapi.exceptions.ExceptionDTO;
+import com.rcore.restapi.exceptions.UnauthorizedRequestApiException;
 import com.rcore.restapi.security.exceptions.*;
 import com.rcore.restapi.web.api.response.ErrorApiResponse;
 import com.rcore.security.infrastructure.exceptions.InvalidTokenFormatException;
@@ -62,7 +63,7 @@ public class SecurityExceptionHandler {
 //    }
 
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler({AccessDeniedException.class, AuthorizationException.class, com.rcore.domain.token.exception.AuthenticationException.class})
+    @ExceptionHandler({AccessDeniedException.class, AuthorizationException.class})
     public ErrorApiResponse<List<ExceptionDTO>> handleAccessDenied(Exception e) {
         return ErrorApiResponse.of(Arrays.asList(ExceptionDTO.builder()
                 .presentationData(ExceptionDTO.PresentationData.builder()
@@ -72,6 +73,12 @@ public class SecurityExceptionHandler {
                 .domain("SERVER")
                 .details("ACCESS_DENIED")
                 .build()));
+    }
+
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler({com.rcore.domain.token.exception.AuthenticationException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleAuthenticationException(Exception e) {
+        return ErrorApiResponse.of(new UserNotExistApiException().getErrors());
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
@@ -98,5 +105,10 @@ public class SecurityExceptionHandler {
         return ErrorApiResponse.of(new TokenGenerateApiException().getErrors());
     }
 
+    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler({UnauthorizedApiException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleAuthenticationException(UnauthorizedApiException e) {
+        return ErrorApiResponse.of(e.getErrors());
+    }
 
 }
