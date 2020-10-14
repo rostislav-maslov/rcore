@@ -8,6 +8,7 @@ import com.rcore.domain.picture.usecase.secured.commands.ChangeUsedPictureComman
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
+import com.rcore.domain.user.exception.TokenExpiredException;
 
 public class ChangeUsedPictureUseCase extends PictureAdminBaseUseCase {
 
@@ -15,7 +16,7 @@ public class ChangeUsedPictureUseCase extends PictureAdminBaseUseCase {
         super(pictureRepository, new ChangeUsedPictureAccess(), authorizationByTokenUseCase);
     }
 
-    public PictureEntity changeUsed(ChangeUsedPictureCommand changeUsedPictureCommand) throws PictureNotFoundException, AuthenticationException, AuthorizationException {
+    public PictureEntity changeUsed(ChangeUsedPictureCommand changeUsedPictureCommand) throws PictureNotFoundException, AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
         PictureEntity picture = pictureRepository.findById(changeUsedPictureCommand.getId())
                 .orElseThrow(PictureNotFoundException::new);

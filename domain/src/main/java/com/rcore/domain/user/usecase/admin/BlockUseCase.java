@@ -6,6 +6,7 @@ import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.token.usecase.ExpireTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.entity.UserStatus;
+import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.access.AdminUserBlockAccess;
 
@@ -19,7 +20,7 @@ public class BlockUseCase extends AdminBaseUseCase {
     }
 
 
-    public UserEntity block(UserEntity userEntity) throws AuthorizationException, AuthenticationException {
+    public UserEntity block(UserEntity userEntity) throws AuthorizationException, AuthenticationException, TokenExpiredException {
         checkAccess();
 
         userEntity.setStatus(UserStatus.BLOCK);

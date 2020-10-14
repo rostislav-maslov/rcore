@@ -8,6 +8,7 @@ import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
+import com.rcore.domain.user.exception.TokenExpiredException;
 
 
 public class RoleCreateUseCase  extends RoleAdminBaseUseCase {
@@ -18,7 +19,7 @@ public class RoleCreateUseCase  extends RoleAdminBaseUseCase {
         this.idGenerator = idGenerator;
     }
 
-    public RoleEntity create(RoleEntity roleEntity) throws AuthenticationException, AuthorizationException {
+    public RoleEntity create(RoleEntity roleEntity) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
 
         roleEntity.setId(idGenerator.generate());

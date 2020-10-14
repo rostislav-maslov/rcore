@@ -9,6 +9,7 @@ import com.rcore.domain.file.entity.FileEntity;
 import com.rcore.domain.file.exception.FileNotFoundException;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
+import com.rcore.domain.user.exception.TokenExpiredException;
 import lombok.RequiredArgsConstructor;
 
 import java.io.InputStream;
@@ -19,28 +20,28 @@ public class FileAdminAdapter {
     private FileMapper fileMapper = new FileMapper();
     private final FileConfig fileConfig;
 
-    public FileDTO create(InputStream content, String fileName, String contentType, boolean isPrivate) throws AuthorizationException, AuthenticationException {
+    public FileDTO create(InputStream content, String fileName, String contentType, boolean isPrivate) throws AuthorizationException, AuthenticationException, TokenExpiredException {
         return fileMapper.map(fileConfig.admin.createUseCase()
                 .create(content, fileName, contentType, isPrivate));
     }
 
 
-    public Boolean delete(FileDTO file) throws AuthorizationException, AuthenticationException {
+    public Boolean delete(FileDTO file) throws AuthorizationException, AuthenticationException, TokenExpiredException {
         return fileConfig.admin.deleteUseCase()
                 .delete(fileMapper.inverseMap(file));
     }
 
-    public FileDTO update(FileDTO file) throws AuthorizationException, FileNotFoundException, AuthenticationException {
+    public FileDTO update(FileDTO file) throws AuthorizationException, FileNotFoundException, AuthenticationException, TokenExpiredException {
         return fileMapper.map(fileConfig.admin.updateUseCase()
                 .update(fileMapper.inverseMap(file)));
     }
 
-    public Optional<FileDTO> findById(String id) throws AuthorizationException, AuthenticationException {
+    public Optional<FileDTO> findById(String id) throws AuthorizationException, AuthenticationException, TokenExpiredException {
         return fileConfig.admin.viewUseCase()
                 .findById(id)
                 .map(fileMapper::map);
     }
-    public SearchResult<FileDTO> find(SearchRequest request) throws AuthorizationException, AuthenticationException {
+    public SearchResult<FileDTO> find(SearchRequest request) throws AuthorizationException, AuthenticationException, TokenExpiredException {
         SearchResult<FileEntity> result = fileConfig.admin
                 .viewUseCase().find(request);
 
@@ -50,7 +51,7 @@ public class FileAdminAdapter {
         );
     }
 
-    public Optional<InputStream> getInputStream(String id) throws AuthorizationException, FileNotFoundException, AuthenticationException {
+    public Optional<InputStream> getInputStream(String id) throws AuthorizationException, FileNotFoundException, AuthenticationException, TokenExpiredException {
         return fileConfig.admin.viewUseCase()
                 .getInputStream(id);
     }

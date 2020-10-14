@@ -14,6 +14,7 @@ import com.rcore.domain.picture.exception.PictureNotFoundException;
 import com.rcore.domain.picture.usecase.secured.commands.ChangeUsedPictureCommand;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
+import com.rcore.domain.user.exception.TokenExpiredException;
 import lombok.RequiredArgsConstructor;
 
 import java.io.InputStream;
@@ -24,38 +25,38 @@ public class PictureSecuredAdapter {
     private PictureMapper pictureMapper = new PictureMapper();
     private final PictureConfig pictureConfig;
 
-    public PictureDTO create(InputStream content, String fileName, String contentType, boolean isPrivate) throws AuthorizationException, AuthenticationException {
+    public PictureDTO create(InputStream content, String fileName, String contentType, boolean isPrivate) throws AuthorizationException, AuthenticationException, TokenExpiredException {
         return pictureMapper.map(pictureConfig.admin.createUseCase()
                 .create(content, fileName, contentType, isPrivate));
     }
 
-    public Boolean delete(PictureDTO picture) throws AuthorizationException, AuthenticationException {
+    public Boolean delete(PictureDTO picture) throws AuthorizationException, AuthenticationException, TokenExpiredException {
         return pictureConfig.admin.deleteUseCase()
                 .delete(pictureMapper.inverseMap(picture));
     }
 
-    public void deleteUnused() throws AuthorizationException, AuthenticationException {
+    public void deleteUnused() throws AuthorizationException, AuthenticationException, TokenExpiredException {
         pictureConfig.admin.deleteUnusedUseCase()
                 .deleteUnused();
     }
 
-    public PictureDTO changeUsed(ChangeUsedPictureCommand changeUsedPictureCommand) throws AuthorizationException, PictureNotFoundException, AuthenticationException {
+    public PictureDTO changeUsed(ChangeUsedPictureCommand changeUsedPictureCommand) throws AuthorizationException, PictureNotFoundException, AuthenticationException, TokenExpiredException {
         return pictureMapper.map(pictureConfig.admin.changeUsedPictureUseCase()
                 .changeUsed(changeUsedPictureCommand));
     }
 
-    public PictureDTO update(PictureDTO picture) throws AuthorizationException, FileNotFoundException, AuthenticationException {
+    public PictureDTO update(PictureDTO picture) throws AuthorizationException, FileNotFoundException, AuthenticationException, TokenExpiredException {
         return pictureMapper.map(pictureConfig.admin.updateUseCase()
                 .update(pictureMapper.inverseMap(picture)));
     }
 
-    public Optional<PictureDTO> findById(String id) throws AuthorizationException, AuthenticationException {
+    public Optional<PictureDTO> findById(String id) throws AuthorizationException, AuthenticationException, TokenExpiredException {
         return pictureConfig.admin.viewUseCase()
                 .findById(id)
                 .map(pictureMapper::map);
     }
 
-    public SearchResult<PictureDTO> find(SearchRequest request) throws AuthorizationException, AuthenticationException {
+    public SearchResult<PictureDTO> find(SearchRequest request) throws AuthorizationException, AuthenticationException, TokenExpiredException {
         SearchResult<PictureEntity> result = pictureConfig.admin
                 .viewUseCase().find(request);
 

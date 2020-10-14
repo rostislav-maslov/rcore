@@ -8,6 +8,7 @@ import com.rcore.domain.role.config.RoleConfig;
 import com.rcore.domain.role.entity.RoleEntity;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
+import com.rcore.domain.user.exception.TokenExpiredException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -15,7 +16,7 @@ public class RoleSecureViewAdapter {
     private final RoleConfig roleConfig;
     private final RoleMapper roleMapper = new RoleMapper();
 
-    public SearchResult<RoleDTO> find(SearchRequest request) throws AuthorizationException, AuthenticationException {
+    public SearchResult<RoleDTO> find(SearchRequest request) throws AuthorizationException, AuthenticationException, TokenExpiredException {
         SearchResult<RoleEntity> result = roleConfig.admin
                 .viewUseCase().find(request);
 

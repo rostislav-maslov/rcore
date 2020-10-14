@@ -9,6 +9,7 @@ import com.rcore.admincore.domain.picture.web.api.PictureWeb;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
+import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.restapi.exceptions.NotFoundApiException;
 import com.rcore.restapi.web.api.request.SearchApiRequest;
 import com.rcore.restapi.web.api.response.OkApiResponse;
@@ -34,7 +35,7 @@ public class PictureEndpoints {
 
     @ApiOperation("Список изображения")
     @GetMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public SuccessApiResponse<SearchApiResponse<PictureWeb>> all(@ModelAttribute SearchApiRequest request) throws AuthenticationException, AuthorizationException {
+    public SuccessApiResponse<SearchApiResponse<PictureWeb>> all(@ModelAttribute SearchApiRequest request) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         SearchResult<PictureDTO> result = pictureAdapter.getAdmin()
                 .find(request.toSearchRequest());
         return SuccessApiResponse.of(
@@ -46,7 +47,7 @@ public class PictureEndpoints {
 
     @ApiOperation("Информация об изображении")
     @GetMapping(value = Routes.BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
-    public SuccessApiResponse<PictureWeb> get(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException {
+    public SuccessApiResponse<PictureWeb> get(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException, TokenExpiredException {
         return SuccessApiResponse.of(pictureAdapter.getAdmin()
                 .findById(id)
                 .map(pictureWebMapper::map)
@@ -55,7 +56,7 @@ public class PictureEndpoints {
 
     @ApiOperation("Удаление изображения")
     @DeleteMapping(value = Routes.BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
-    public OkApiResponse delete(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException {
+    public OkApiResponse delete(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException, TokenExpiredException {
         PictureDTO picture = pictureAdapter.getAdmin()
                 .findById(id)
                 .orElseThrow(() -> new NotFoundApiException("Неверный идентификатор изображения", "PICTURE", "NOT_FOUND"));
@@ -66,7 +67,7 @@ public class PictureEndpoints {
 
     @ApiOperation("Загрузка изображения")
     @PostMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public SuccessApiResponse<String> upload(@RequestParam MultipartFile file) throws AuthenticationException, IOException, AuthorizationException {
+    public SuccessApiResponse<String> upload(@RequestParam MultipartFile file) throws AuthenticationException, IOException, AuthorizationException, TokenExpiredException {
        PictureDTO picture = pictureAdapter.getAdmin()
                .create(file.getInputStream(), file.getOriginalFilename(), file.getContentType(), false);
 

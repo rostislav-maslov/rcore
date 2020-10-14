@@ -7,6 +7,7 @@ import com.rcore.admincore.domain.role.web.api.RoleWeb;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
+import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.restapi.web.api.request.SearchApiRequest;
 import com.rcore.restapi.web.api.response.SearchApiResponse;
 import com.rcore.restapi.web.api.response.SuccessApiResponse;
@@ -28,7 +29,7 @@ public class RoleEndpoints {
 
     @ApiOperation("Получение списка ролей системы")
     @GetMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public SuccessApiResponse<SearchApiResponse<RoleWeb>> all(@ModelAttribute SearchApiRequest request) throws AuthenticationException, AuthorizationException {
+    public SuccessApiResponse<SearchApiResponse<RoleWeb>> all(@ModelAttribute SearchApiRequest request) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         SearchResult<RoleDTO> result = roleAdapter.view.find(request.toSearchRequest());
         return SuccessApiResponse.of(SearchApiResponse
                 .withItemsAndCount(

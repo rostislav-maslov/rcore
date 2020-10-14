@@ -9,6 +9,7 @@ import com.rcore.domain.role.config.RoleConfig;
 import com.rcore.domain.role.entity.RoleEntity;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
+import com.rcore.domain.user.exception.TokenExpiredException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
@@ -20,7 +21,7 @@ public class RoleSecureAdapter {
     private RoleMapper roleMapper = new RoleMapper();
     private final RoleConfig roleConfig;
 
-    public SearchResult<RoleDTO> find(SearchRequest request) throws AuthorizationException, AuthenticationException {
+    public SearchResult<RoleDTO> find(SearchRequest request) throws AuthorizationException, AuthenticationException, TokenExpiredException {
         SearchResult<RoleEntity> result = roleConfig.admin.viewUseCase()
                 .find(request);
 
@@ -30,7 +31,7 @@ public class RoleSecureAdapter {
         );
     }
 
-    public RoleDTO create(RoleDTO role) throws AuthorizationException, AuthenticationException {
+    public RoleDTO create(RoleDTO role) throws AuthorizationException, AuthenticationException, TokenExpiredException {
         return roleMapper.map(roleConfig.admin
                 .createUseCase().create(roleMapper.inverseMap(role)));
     }
@@ -40,13 +41,13 @@ public class RoleSecureAdapter {
                 .addAccesses(roleMapper.inverseMap(role), accesses);
     }
 
-    public Optional<RoleDTO> findById(String id) throws AuthorizationException, AuthenticationException {
+    public Optional<RoleDTO> findById(String id) throws AuthorizationException, AuthenticationException, TokenExpiredException {
         return roleConfig.admin.viewUseCase()
                 .findById(id)
                 .map(roleMapper::map);
     }
 
-    public Optional<RoleDTO> findByName(String name) throws AuthorizationException, AuthenticationException {
+    public Optional<RoleDTO> findByName(String name) throws AuthorizationException, AuthenticationException, TokenExpiredException {
         return roleConfig.admin.viewUseCase()
                 .findByName(name)
                 .map(roleMapper::map);

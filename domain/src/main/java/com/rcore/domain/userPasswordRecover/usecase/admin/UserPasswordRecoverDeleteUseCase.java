@@ -2,6 +2,7 @@ package com.rcore.domain.userPasswordRecover.usecase.admin;
 
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
+import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.domain.userPasswordRecover.entity.UserPasswordRecoverEntity;
 import com.rcore.domain.userPasswordRecover.port.UserPasswordRecoverRepository;
 import com.rcore.domain.userPasswordRecover.access.AdminUserPasswordRecoverDeleteAccess;
@@ -14,7 +15,7 @@ public class UserPasswordRecoverDeleteUseCase  extends UserPasswordRecoverAdminB
         super(userPasswordRecoverRepository, new AdminUserPasswordRecoverDeleteAccess(), authorizationByTokenUseCase);
     }
 
-    public Boolean delete(UserPasswordRecoverEntity userPasswordRecoverEntity) throws AuthenticationException, AuthorizationException {
+    public Boolean delete(UserPasswordRecoverEntity userPasswordRecoverEntity) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
 
         userPasswordRecoverRepository.delete(userPasswordRecoverEntity);

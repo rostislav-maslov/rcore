@@ -6,6 +6,7 @@ import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
+import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.domain.user.exception.UserAlreadyExistException;
 import com.rcore.domain.user.port.UserIdGenerator;
 import com.rcore.domain.user.port.PasswordGenerator;
@@ -30,7 +31,7 @@ public class CreateUserUseCase extends AdminBaseUseCase {
         this.roleRepository = roleRepository;
     }
 
-    public UserEntity createByEmail(String email, String password, List<String> roleIds) throws UserAlreadyExistException, AuthenticationException, AuthorizationException {
+    public UserEntity createByEmail(String email, String password, List<String> roleIds) throws UserAlreadyExistException, AuthenticationException, AuthorizationException, TokenExpiredException {
         return createByEmail(
                 email,
                 password,
@@ -42,7 +43,7 @@ public class CreateUserUseCase extends AdminBaseUseCase {
         );
     }
 
-    public UserEntity createByEmail(String email, String password, Set<RoleEntity> roles) throws AuthenticationException, AuthorizationException, UserAlreadyExistException {
+    public UserEntity createByEmail(String email, String password, Set<RoleEntity> roles) throws AuthenticationException, AuthorizationException, UserAlreadyExistException, TokenExpiredException {
         checkAccess();
 
         Optional<UserEntity> userByEmail =  userRepository.findByEmail(email.toLowerCase());

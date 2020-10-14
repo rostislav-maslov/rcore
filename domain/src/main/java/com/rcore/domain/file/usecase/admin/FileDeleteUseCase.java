@@ -8,6 +8,7 @@ import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
+import com.rcore.domain.user.exception.TokenExpiredException;
 
 public class FileDeleteUseCase extends FileAdminBaseUseCase {
 
@@ -18,7 +19,7 @@ public class FileDeleteUseCase extends FileAdminBaseUseCase {
         this.fileStorage = fileStorage;
     }
 
-    public Boolean delete(FileEntity fileEntity) throws AuthenticationException, AuthorizationException {
+    public Boolean delete(FileEntity fileEntity) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
 
         if (fileEntity.getFilePath() != null && fileEntity.getFilePath().length() > 0)

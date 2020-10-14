@@ -11,6 +11,7 @@ import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.base.roles.BaseRoles;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
+import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.domain.user.exception.UserAlreadyExistException;
 import com.rcore.domain.user.exception.UserNotFoundException;
 import com.rcore.restapi.exceptions.NotFoundApiException;
@@ -38,7 +39,7 @@ public class UserEndpoints {
 
     @ApiOperation("Метод получения списка пользователей")
     @GetMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public SuccessApiResponse<SearchApiResponse<UserWeb>> all(@ModelAttribute SearchWithFilters request) throws AuthenticationException, AuthorizationException {
+    public SuccessApiResponse<SearchApiResponse<UserWeb>> all(@ModelAttribute SearchWithFilters request) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         SearchResult<UserDTO> result = userAdapter.view
                 .findWithFilters(request.toSearchRequest(), request.getRoleId());
 
@@ -51,7 +52,7 @@ public class UserEndpoints {
 
     @ApiOperation(value = "Получение информации о пользователе по ID")
     @GetMapping(value = Routes.BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
-    public SuccessApiResponse<UserWeb> get(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException {
+    public SuccessApiResponse<UserWeb> get(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException, TokenExpiredException {
         return SuccessApiResponse.of(userAdapter.view
                 .findById(id)
                 .map(userWebMapper::map)
@@ -60,7 +61,7 @@ public class UserEndpoints {
 
     @ApiOperation("Создание пользователя по Email")
     @PostMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public SuccessApiResponse<UserWeb> create(@RequestBody CreateUserDTO request) throws AuthenticationException, AuthorizationException, UserAlreadyExistException {
+    public SuccessApiResponse<UserWeb> create(@RequestBody CreateUserDTO request) throws AuthenticationException, AuthorizationException, UserAlreadyExistException, TokenExpiredException {
         UserDTO user = userAdapter.secure
                 .createUserByEmail(request.getEmail(), request.getPassword(), request.getRoleIds());
 
@@ -69,7 +70,7 @@ public class UserEndpoints {
 
     @ApiOperation("Редактирование пользователяв")
     @PatchMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public SuccessApiResponse<UserWeb> edit(@RequestBody UserDTO request) throws AuthenticationException, UserNotFoundException, AuthorizationException, UserAlreadyExistException {
+    public SuccessApiResponse<UserWeb> edit(@RequestBody UserDTO request) throws AuthenticationException, UserNotFoundException, AuthorizationException, UserAlreadyExistException, TokenExpiredException {
         UserDTO user = userAdapter.secure
                 .updateUser(request);
 
@@ -78,7 +79,7 @@ public class UserEndpoints {
 
     @ApiOperation("Удаление пользователя")
     @DeleteMapping(value = Routes.BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
-    public OkApiResponse delete(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException, UserAlreadyExistException {
+    public OkApiResponse delete(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException, UserAlreadyExistException, TokenExpiredException {
         UserDTO user = userAdapter.view
                 .findById(id)
                 .orElseThrow(() -> new NotFoundApiException("Передан неверный идентификатор пользователя", DOMAIN, "NOT_FOUND"));
@@ -91,7 +92,7 @@ public class UserEndpoints {
 
     @ApiOperation("Блокировка пользователя")
     @PatchMapping(value = Routes.BLOCK, produces = MediaType.APPLICATION_JSON_VALUE)
-    public OkApiResponse block(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException {
+    public OkApiResponse block(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException, TokenExpiredException {
         UserDTO user = userAdapter.view
                 .findById(id)
                 .orElseThrow(() -> new NotFoundApiException("Передан неверный идентификатор пользователя", DOMAIN, "NOT_FOUND"));
@@ -104,7 +105,7 @@ public class UserEndpoints {
 
     @ApiOperation("Активация пользователя")
     @PatchMapping(value = Routes.ACTIVATE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public OkApiResponse activate(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException {
+    public OkApiResponse activate(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException, TokenExpiredException {
         UserDTO user = userAdapter.view
                 .findById(id)
                 .orElseThrow(() -> new NotFoundApiException("Передан неверный идентификатор пользователя", DOMAIN, "NOT_FOUND"));

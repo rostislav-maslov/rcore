@@ -9,6 +9,7 @@ import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.base.port.SearchResult;
+import com.rcore.domain.user.exception.TokenExpiredException;
 
 import java.util.Optional;
 
@@ -18,22 +19,22 @@ public class RoleViewUseCase extends RoleAdminBaseUseCase {
         super(roleRepository, new AdminRoleViewAccess(), authorizationByTokenUseCase);
     }
 
-    public Optional<RoleEntity> findById(String id) throws AuthenticationException, AuthorizationException {
+    public Optional<RoleEntity> findById(String id) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
         return roleRepository.findById(id);
     }
 
-    public Optional<RoleEntity> findByName(String name) throws AuthenticationException, AuthorizationException {
+    public Optional<RoleEntity> findByName(String name) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
         return roleRepository.findByName(name);
     }
 
-    public Optional<RoleEntity> search(String id) throws AuthenticationException, AuthorizationException {
+    public Optional<RoleEntity> search(String id) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
         return roleRepository.findById(id);
     }
 
-    public SearchResult<RoleEntity> find(SearchRequest request) throws AuthenticationException, AuthorizationException {
+    public SearchResult<RoleEntity> find(SearchRequest request) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
         return roleRepository.find(request);
     }

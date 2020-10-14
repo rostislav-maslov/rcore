@@ -8,6 +8,7 @@ import com.rcore.domain.picture.access.AdminPictureUpdateAccess;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
+import com.rcore.domain.user.exception.TokenExpiredException;
 
 import java.time.LocalDateTime;
 
@@ -20,7 +21,7 @@ public class PictureUpdateUseCase  extends PictureAdminBaseUseCase {
         this.pictureCompressor = pictureCompressor;
     }
 
-    public PictureEntity update(PictureEntity pictureEntity) throws FileNotFoundException, AuthenticationException, AuthorizationException {
+    public PictureEntity update(PictureEntity pictureEntity) throws FileNotFoundException, AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
 
         PictureEntity oldPicture = pictureRepository.findById(pictureEntity.getId())
@@ -34,7 +35,7 @@ public class PictureUpdateUseCase  extends PictureAdminBaseUseCase {
         return oldPicture;
     }
 
-    public PictureEntity addCompressedSize(PictureEntity pictureEntity, Integer width, Double quality) throws AuthenticationException, AuthorizationException {
+    public PictureEntity addCompressedSize(PictureEntity pictureEntity, Integer width, Double quality) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
 
         pictureEntity.addSize(pictureCompressor.compressImage(pictureEntity, width, quality));

@@ -9,6 +9,7 @@ import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
+import com.rcore.domain.user.exception.TokenExpiredException;
 
 import java.io.InputStream;
 
@@ -23,7 +24,7 @@ public class FileCreateUseCase  extends FileAdminBaseUseCase {
         this.fileStorage = fileStorage;
     }
 
-    public FileEntity create(InputStream content, String fileName, String contentType, boolean isPrivate) throws AuthenticationException, AuthorizationException {
+    public FileEntity create(InputStream content, String fileName, String contentType, boolean isPrivate) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
 
         FileEntity fileEntity = new FileEntity();

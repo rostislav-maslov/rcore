@@ -8,6 +8,7 @@ import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
+import com.rcore.domain.user.exception.TokenExpiredException;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -18,7 +19,7 @@ public class RoleUpdateUseCase  extends RoleAdminBaseUseCase {
         super(roleRepository, new AdminRoleUpdateAccess(), authorizationByTokenUseCase);
     }
 
-    public RoleEntity update(RoleEntity roleEntity) throws AuthenticationException, AuthorizationException {
+    public RoleEntity update(RoleEntity roleEntity) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
 
         roleEntity.setUpdatedAt(LocalDateTime.now());

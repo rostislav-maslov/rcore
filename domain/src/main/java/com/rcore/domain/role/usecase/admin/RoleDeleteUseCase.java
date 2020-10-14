@@ -7,6 +7,7 @@ import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
+import com.rcore.domain.user.exception.TokenExpiredException;
 
 public class RoleDeleteUseCase  extends RoleAdminBaseUseCase {
 
@@ -14,7 +15,7 @@ public class RoleDeleteUseCase  extends RoleAdminBaseUseCase {
         super(roleRepository, new AdminRoleDeleteAccess(), authorizationByTokenUseCase);
     }
 
-    public Boolean delete(RoleEntity roleEntity) throws AuthenticationException, AuthorizationException {
+    public Boolean delete(RoleEntity roleEntity) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
 
         roleRepository.delete(roleEntity);

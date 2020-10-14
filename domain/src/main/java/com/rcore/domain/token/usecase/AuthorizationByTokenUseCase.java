@@ -33,8 +33,9 @@ public class AuthorizationByTokenUseCase implements AuthorizationPort {
     }
 
     @Override
-    public Boolean checkAccess(AccessTokenEntity accessToken, Set<Access> userAccesses) {
-        if (LocalDateTime.now().isAfter(accessToken.getExpireAt())) return false;
+    public Boolean checkAccess(AccessTokenEntity accessToken, Set<Access> userAccesses) throws TokenExpiredException {
+        if (LocalDateTime.now().isAfter(accessToken.getExpireAt()))
+            throw new TokenExpiredException();
 
         Optional<RefreshTokenEntity> refreshTokenEntity = refreshTokenStorage.findById(accessToken.getCreateFromRefreshTokenId());
         if (!refreshTokenEntity.isPresent()) return false;
@@ -51,7 +52,7 @@ public class AuthorizationByTokenUseCase implements AuthorizationPort {
         accessTokenStorage.put(accessTokenEntity);
     }
 
-    public AccessTokenEntity currentAccessToken() throws AuthenticationException {
+    public AccessTokenEntity currentAccessToken() throws AuthenticationException, TokenExpiredException {
         AccessTokenEntity accessTokenEntity = accessTokenStorage.current()
                 .orElseThrow(() -> new AuthenticationException());
 
@@ -74,7 +75,7 @@ public class AuthorizationByTokenUseCase implements AuthorizationPort {
         return user;
     }
 
-    public UserEntity currentUser() throws AuthenticationException {
+    public UserEntity currentUser() throws AuthenticationException, TokenExpiredException {
         AccessTokenEntity accessTokenEntity = currentAccessToken();
 
         return userRepository.findById(accessTokenEntity.getUserId())

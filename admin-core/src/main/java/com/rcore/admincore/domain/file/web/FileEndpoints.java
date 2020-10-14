@@ -11,6 +11,7 @@ import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.base.roles.BaseRoles;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
+import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.restapi.exceptions.NotFoundApiException;
 import com.rcore.restapi.web.api.request.SearchApiRequest;
 import com.rcore.restapi.web.api.response.OkApiResponse;
@@ -38,7 +39,7 @@ public class FileEndpoints {
 
     @ApiOperation("Получение списка файлов")
     @GetMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public SuccessApiResponse<SearchApiResponse<FileWeb>> all(@ModelAttribute SearchApiRequest request) throws AuthenticationException, AuthorizationException {
+    public SuccessApiResponse<SearchApiResponse<FileWeb>> all(@ModelAttribute SearchApiRequest request) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         SearchResult<FileDTO> result = fileAdapter.getAdmin()
                 .find(request.toSearchRequest());
 
@@ -51,7 +52,7 @@ public class FileEndpoints {
 
     @ApiOperation("Получение информации о файле")
     @GetMapping(value = Routes.BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
-    public SuccessApiResponse<FileWeb> get(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException {
+    public SuccessApiResponse<FileWeb> get(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException, TokenExpiredException {
         return SuccessApiResponse.of(fileAdapter.getAdmin()
                 .findById(id)
                 .map(fileWebMapper::map)
@@ -61,7 +62,7 @@ public class FileEndpoints {
 
     @ApiOperation("Удаление файла")
     @DeleteMapping(value = Routes.BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
-    public OkApiResponse delete(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException {
+    public OkApiResponse delete(@PathVariable String id) throws AuthenticationException, AuthorizationException, NotFoundApiException, TokenExpiredException {
         FileDTO file = fileAdapter.getAdmin()
                 .findById(id)
                 .orElseThrow(() -> new NotFoundApiException("Неверный идентификатор файла", DomainUtils.getDomain(FileWeb.class), "NOT_FOUND"));
@@ -72,7 +73,7 @@ public class FileEndpoints {
 
     @ApiOperation("Загрузка файла")
     @PostMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public SuccessApiResponse<String> upload(@PathVariable MultipartFile file) throws AuthenticationException, IOException, AuthorizationException {
+    public SuccessApiResponse<String> upload(@PathVariable MultipartFile file) throws AuthenticationException, IOException, AuthorizationException, TokenExpiredException {
         FileDTO fileDTO = fileAdapter.getAdmin()
                 .create(file.getInputStream(), file.getOriginalFilename(), file.getContentType(), false);
 

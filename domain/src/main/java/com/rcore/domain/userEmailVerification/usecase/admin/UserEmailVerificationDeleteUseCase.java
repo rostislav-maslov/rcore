@@ -2,6 +2,7 @@ package com.rcore.domain.userEmailVerification.usecase.admin;
 
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
+import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.domain.userEmailVerification.entity.UserEmailVerificationEntity;
 import com.rcore.domain.userEmailVerification.port.UserEmailVerificationRepository;
 import com.rcore.domain.userEmailVerification.access.AdminUserEmailVerificationDeleteAccess;
@@ -14,7 +15,7 @@ public class UserEmailVerificationDeleteUseCase extends UserEmailVerificationAdm
         super(userEmailVerificationRepository, new AdminUserEmailVerificationDeleteAccess(), authorizationByTokenUseCase);
     }
 
-    public Boolean delete(UserEmailVerificationEntity userEmailVerificationEntity) throws AuthenticationException, AuthorizationException {
+    public Boolean delete(UserEmailVerificationEntity userEmailVerificationEntity) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
 
         userEmailVerificationRepository.delete(userEmailVerificationEntity);

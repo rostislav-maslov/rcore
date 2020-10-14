@@ -38,12 +38,15 @@ public class SecurityExceptionHandler {
     }
 
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
-    @ExceptionHandler({
-            UserNotExistException.class,
-            TokenExpiredException.class
-    })
+    @ExceptionHandler({UserNotExistException.class})
     public ErrorApiResponse<List<ExceptionDTO>> handleForbidden(Exception e) {
         return ErrorApiResponse.of(new UserNotExistApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    @ExceptionHandler({TokenExpiredException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleForbidden(TokenExpiredException e) {
+        return ErrorApiResponse.of(new TokenExpiredApiException().getErrors());
     }
 
     @ResponseStatus(value = HttpStatus.FORBIDDEN)

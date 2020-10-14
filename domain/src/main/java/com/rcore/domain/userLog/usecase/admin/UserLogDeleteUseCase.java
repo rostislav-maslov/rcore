@@ -2,6 +2,7 @@ package com.rcore.domain.userLog.usecase.admin;
 
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
+import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.domain.userLog.entity.UserLogEntity;
 import com.rcore.domain.userLog.port.UserLogRepository;
 import com.rcore.domain.userLog.access.AdminUserLogDeleteAccess;
@@ -14,7 +15,7 @@ public class UserLogDeleteUseCase  extends UserLogAdminBaseUseCase {
         super(userLogRepository, new AdminUserLogDeleteAccess(), authorizationByTokenUseCase);
     }
 
-    public Boolean delete(UserLogEntity userLogEntity) throws AuthenticationException, AuthorizationException {
+    public Boolean delete(UserLogEntity userLogEntity) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
         userLogRepository.delete(userLogEntity);
 

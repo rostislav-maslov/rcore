@@ -6,6 +6,7 @@ import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
+import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.access.AdminUserViewAccess;
 
@@ -17,17 +18,17 @@ public class ViewUserUseCase extends AdminBaseUseCase {
         super(userRepository, new AdminUserViewAccess(), authorizationByTokenUseCase);
     }
 
-    public Optional<UserEntity> findById(String id) throws AuthenticationException, AuthorizationException {
+    public Optional<UserEntity> findById(String id) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
         return userRepository.findById(id);
     }
 
-    public SearchResult<UserEntity> find(SearchRequest request) throws AuthenticationException, AuthorizationException {
+    public SearchResult<UserEntity> find(SearchRequest request) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
         return userRepository.find(request);
     }
 
-    public SearchResult<UserEntity> findWithSearch(SearchRequest request, String roleId) throws AuthenticationException, AuthorizationException {
+    public SearchResult<UserEntity> findWithSearch(SearchRequest request, String roleId) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
         return userRepository.findWithFilters(request, roleId);
     }

@@ -2,6 +2,7 @@ package com.rcore.domain.userEmailVerification.usecase.admin;
 
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
+import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.domain.userEmailVerification.entity.UserEmailVerificationEntity;
 import com.rcore.domain.userEmailVerification.port.UserEmailVerificationIdGenerator;
 import com.rcore.domain.userEmailVerification.port.UserEmailVerificationRepository;
@@ -18,7 +19,7 @@ public class UserEmailVerificationCreateUseCase extends UserEmailVerificationAdm
         this.idGenerator = idGenerator;
     }
 
-    public UserEmailVerificationEntity create(UserEmailVerificationEntity userEmailVerificationEntity) throws AuthenticationException, AuthorizationException {
+    public UserEmailVerificationEntity create(UserEmailVerificationEntity userEmailVerificationEntity) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
 
         userEmailVerificationEntity.setId(idGenerator.generate());

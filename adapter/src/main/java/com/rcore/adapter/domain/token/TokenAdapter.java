@@ -25,7 +25,7 @@ public class TokenAdapter {
     private UserMapper userMapper = new UserMapper(new RoleMapper());
     private final TokenConfig tokenConfig;
 
-    public Boolean checkAccess(AccessTokenDTO accessToken, Set<Access> accesses) {
+    public Boolean checkAccess(AccessTokenDTO accessToken, Set<Access> accesses) throws TokenExpiredException {
         return tokenConfig.getAll().authorizationByTokenUseCase().checkAccess(accessTokenMapper.inverseMap(accessToken), accesses);
     }
 
@@ -33,7 +33,7 @@ public class TokenAdapter {
         tokenConfig.getAll().authorizationByTokenUseCase().putInStorage(accessTokenMapper.inverseMap(accessToken));
     }
 
-    public AccessTokenDTO currentAccessToken() throws AuthenticationException {
+    public AccessTokenDTO currentAccessToken() throws AuthenticationException, TokenExpiredException {
         return accessTokenMapper.map(tokenConfig.getAll().authorizationByTokenUseCase().currentAccessToken());
     }
 
@@ -42,7 +42,7 @@ public class TokenAdapter {
                 .getUserByAccessToken(accessTokenMapper.inverseMap(accessToken)));
     }
 
-    public UserDTO currentUser() throws AuthenticationException {
+    public UserDTO currentUser() throws AuthenticationException, TokenExpiredException {
         return userMapper.map(tokenConfig.getAll().authorizationByTokenUseCase()
                 .currentUser());
     }

@@ -8,6 +8,7 @@ import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
+import com.rcore.domain.user.exception.TokenExpiredException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Set;
@@ -20,7 +21,7 @@ public abstract class AuthorizationUseCase {
     protected final Boolean onlyAuthorized;
     protected final AuthorizationByTokenUseCase authorizationByTokenUseCase;
 
-    protected UserEntity checkAccess() throws AuthorizationException, AuthenticationException {
+    protected UserEntity checkAccess() throws AuthorizationException, AuthenticationException, TokenExpiredException {
         this.actor = authorizationByTokenUseCase.currentUser();
 
         if (canExecute() == false) {

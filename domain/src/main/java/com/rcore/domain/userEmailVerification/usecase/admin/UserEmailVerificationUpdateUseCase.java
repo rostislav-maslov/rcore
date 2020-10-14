@@ -4,6 +4,7 @@ import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
+import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.domain.userEmailVerification.access.AdminUserEmailVerificationUpdateAccess;
 import com.rcore.domain.userEmailVerification.entity.UserEmailVerificationEntity;
 import com.rcore.domain.userEmailVerification.port.UserEmailVerificationRepository;
@@ -16,7 +17,7 @@ public class UserEmailVerificationUpdateUseCase extends UserEmailVerificationAdm
         super(userEmailVerificationRepository, new AdminUserEmailVerificationUpdateAccess(), authorizationByTokenUseCase);
     }
 
-    public UserEmailVerificationEntity update(UserEmailVerificationEntity userEmailVerificationEntity) throws AuthenticationException, AuthorizationException {
+    public UserEmailVerificationEntity update(UserEmailVerificationEntity userEmailVerificationEntity) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
 
         userEmailVerificationEntity.setUpdatedAt(LocalDateTime.now());

@@ -2,6 +2,7 @@ package com.rcore.domain.token.port;
 
 import com.rcore.domain.access.entity.Access;
 import com.rcore.domain.token.entity.AccessTokenEntity;
+import com.rcore.domain.user.exception.TokenExpiredException;
 
 import java.util.Set;
 
@@ -10,6 +11,6 @@ import java.util.Set;
  */
 public interface AuthorizationPort {
 
-    public Boolean checkAccess(AccessTokenEntity accessToken, Set<Access> userAccesses);
+    public Boolean checkAccess(AccessTokenEntity accessToken, Set<Access> userAccesses) throws TokenExpiredException;
 
 }

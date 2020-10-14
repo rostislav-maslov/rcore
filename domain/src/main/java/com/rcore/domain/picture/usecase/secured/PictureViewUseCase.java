@@ -10,6 +10,7 @@ import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.base.port.SearchResult;
+import com.rcore.domain.user.exception.TokenExpiredException;
 
 import java.io.InputStream;
 import java.util.Optional;
@@ -23,30 +24,30 @@ public class PictureViewUseCase extends PictureAdminBaseUseCase {
         this.pictureStorage = pictureStorage;
     }
 
-    public Optional<PictureEntity> findById(String id) throws AuthenticationException, AuthorizationException {
+    public Optional<PictureEntity> findById(String id) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
 
         return pictureRepository.findById(id);
     }
 
-    public Optional<PictureEntity> search(String id) throws AuthenticationException, AuthorizationException {
+    public Optional<PictureEntity> search(String id) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
         return pictureRepository.findById(id);
     }
 
-    public SearchResult<PictureEntity> find(SearchRequest request) throws AuthenticationException, AuthorizationException {
+    public SearchResult<PictureEntity> find(SearchRequest request) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
         return pictureRepository.find(request);
     }
 
-    public Optional<InputStream> getInputStream(String id) throws FileNotFoundException, AuthenticationException, AuthorizationException {
+    public Optional<InputStream> getInputStream(String id) throws FileNotFoundException, AuthenticationException, AuthorizationException, TokenExpiredException {
         PictureEntity fileEntity = findById(id)
                 .orElseThrow(() -> new FileNotFoundException());
 
         return pictureStorage.getInputStream(fileEntity.getFilePath());
     }
 
-    public Optional<InputStream> getInputStreamByWidth(String id, Integer width) throws AuthenticationException, AuthorizationException {
+    public Optional<InputStream> getInputStreamByWidth(String id, Integer width) throws AuthenticationException, AuthorizationException, TokenExpiredException {
 
         Optional<PictureEntity> pictureEntity = findById(id);
 

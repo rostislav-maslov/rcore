@@ -11,6 +11,7 @@ import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.base.port.SearchResult;
+import com.rcore.domain.user.exception.TokenExpiredException;
 
 import java.io.InputStream;
 import java.util.Optional;
@@ -24,22 +25,22 @@ public class FileViewUseCase extends FileAdminBaseUseCase {
         this.fileStorage = fileStorage;
     }
 
-    public Optional<FileEntity> findById(String id) throws AuthenticationException, AuthorizationException {
+    public Optional<FileEntity> findById(String id) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
         return fileRepository.findById(id);
     }
 
-    public Optional<FileEntity> search(String id) throws AuthenticationException, AuthorizationException {
+    public Optional<FileEntity> search(String id) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
         return fileRepository.findById(id);
     }
 
-    public SearchResult<FileEntity> find(SearchRequest request) throws AuthenticationException, AuthorizationException {
+    public SearchResult<FileEntity> find(SearchRequest request) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
         return fileRepository.find(request);
     }
 
-    public Optional<InputStream> getInputStream(String id) throws FileNotFoundException, AuthenticationException, AuthorizationException {
+    public Optional<InputStream> getInputStream(String id) throws FileNotFoundException, AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
 
         FileEntity fileEntity = findById(id)

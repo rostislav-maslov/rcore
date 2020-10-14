@@ -8,6 +8,7 @@ import com.rcore.domain.picture.access.AdminPictureCreateAccess;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
+import com.rcore.domain.user.exception.TokenExpiredException;
 
 import java.io.InputStream;
 
@@ -22,7 +23,7 @@ public class PictureCreateUseCase extends PictureAdminBaseUseCase {
         this.pictureStorage = pictureStorage;
     }
 
-    public PictureEntity create(InputStream content, String fileName, String contentType, boolean isPrivate) throws AuthenticationException, AuthorizationException {
+    public PictureEntity create(InputStream content, String fileName, String contentType, boolean isPrivate) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
 
         PictureEntity pictureEntity = new PictureEntity();
