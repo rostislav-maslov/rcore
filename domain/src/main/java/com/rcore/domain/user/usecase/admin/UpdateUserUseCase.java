@@ -38,6 +38,9 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         old.setFullName(Optional.ofNullable(userEntity.getFullName())
                 .orElse(old.getFullName()));
 
+        old.setStatus(Optional.ofNullable(userEntity.getStatus())
+                .orElse(old.getStatus()));
+
         old.setUpdatedAt(LocalDateTime.now());
 
         old = userRepository.save(old);
@@ -61,6 +64,9 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
 
         old.setSecondName(Optional.ofNullable(updateUserFields.getSecondName())
                 .orElse(old.getSecondName()));
+
+        old.setStatus(Optional.ofNullable(updateUserFields.getStatus())
+                .orElse(old.getStatus()));
 
         old.setUpdatedAt(LocalDateTime.now());
 
