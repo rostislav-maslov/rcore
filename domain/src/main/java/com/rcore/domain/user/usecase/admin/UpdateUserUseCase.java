@@ -4,7 +4,6 @@ import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
-import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.domain.user.exception.UserAlreadyExistException;
 import com.rcore.domain.user.exception.UserNotFoundException;
 import com.rcore.domain.user.port.UserRepository;
@@ -20,7 +19,7 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         super(userRepository, new AdminUserUpdateAccess(), authorizationByTokenUseCase);
     }
 
-    public UserEntity update(UserEntity userEntity) throws UserNotFoundException, AuthenticationException, AuthorizationException, TokenExpiredException {
+    public UserEntity update(UserEntity userEntity) throws UserNotFoundException, AuthenticationException, AuthorizationException {
         checkAccess();
 
         UserEntity old = userRepository.findById(userEntity.getId())
@@ -47,7 +46,7 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         return old;
     }
 
-    public UserEntity update(String userId, UpdateUserFields updateUserFields) throws AuthenticationException, AuthorizationException, UserNotFoundException, TokenExpiredException {
+    public UserEntity update(String userId, UpdateUserFields updateUserFields) throws AuthenticationException, AuthorizationException, UserNotFoundException {
         checkAccess();
 
         UserEntity old = userRepository.findById(userId)
