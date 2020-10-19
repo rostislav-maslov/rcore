@@ -4,7 +4,6 @@ import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
-import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.domain.user.exception.UserAlreadyExistException;
 import com.rcore.domain.user.exception.UserNotFoundException;
 import com.rcore.domain.user.port.UserRepository;
@@ -20,7 +19,7 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         super(userRepository, new AdminUserUpdateAccess(), authorizationByTokenUseCase);
     }
 
-    public UserEntity update(UserEntity userEntity) throws UserNotFoundException, AuthenticationException, AuthorizationException, TokenExpiredException {
+    public UserEntity update(UserEntity userEntity) throws UserNotFoundException, AuthenticationException, AuthorizationException {
         checkAccess();
 
         UserEntity old = userRepository.findById(userEntity.getId())
@@ -38,13 +37,16 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         old.setFullName(Optional.ofNullable(userEntity.getFullName())
                 .orElse(old.getFullName()));
 
+        old.setStatus(Optional.ofNullable(userEntity.getStatus())
+                .orElse(old.getStatus()));
+
         old.setUpdatedAt(LocalDateTime.now());
 
         old = userRepository.save(old);
         return old;
     }
 
-    public UserEntity update(String userId, UpdateUserFields updateUserFields) throws AuthenticationException, AuthorizationException, UserNotFoundException, TokenExpiredException {
+    public UserEntity update(String userId, UpdateUserFields updateUserFields) throws AuthenticationException, AuthorizationException, UserNotFoundException {
         checkAccess();
 
         UserEntity old = userRepository.findById(userId)
@@ -61,6 +63,9 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
 
         old.setSecondName(Optional.ofNullable(updateUserFields.getSecondName())
                 .orElse(old.getSecondName()));
+
+        old.setStatus(Optional.ofNullable(updateUserFields.getStatus())
+                .orElse(old.getStatus()));
 
         old.setUpdatedAt(LocalDateTime.now());
 
