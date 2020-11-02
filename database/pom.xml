@@ -15,7 +15,7 @@
     </modules>
 
     <properties>
-        <rcore.version>0.10.4</rcore.version>
+        <rcore.version>0.10.5</rcore.version>
     </properties>
 
 </project>
