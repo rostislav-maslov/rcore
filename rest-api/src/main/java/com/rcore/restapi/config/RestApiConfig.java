@@ -31,10 +31,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import springfox.documentation.oas.annotations.EnableOpenApi;
 
 /**
  * В данном конфиге создаем бины всех адаптеров
  */
+@EnableOpenApi
 @EnableWebMvc
 @RequiredArgsConstructor
 @Configuration

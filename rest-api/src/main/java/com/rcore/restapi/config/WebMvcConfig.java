@@ -1,9 +1,10 @@
 package com.rcore.restapi.config;
 
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
+import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -14,7 +15,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -55,5 +56,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Bean
     public Jackson2ObjectMapperBuilder objectMapperBuilder() {
         return customObjectMapperBuilder.getJackson2ObjectMapperBuilder();
+    }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        DateTimeFormatterRegistrar registrar = new DateTimeFormatterRegistrar();
+        registrar.setUseIsoFormat(true);
+        registrar.setDateFormatter(DateTimeFormatter.ISO_LOCAL_DATE);
+        registrar.setTimeFormatter(DateTimeFormatter.ISO_LOCAL_TIME);
+        registrar.setDateTimeFormatter(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        registrar.registerFormatters(registry);
     }
 }
