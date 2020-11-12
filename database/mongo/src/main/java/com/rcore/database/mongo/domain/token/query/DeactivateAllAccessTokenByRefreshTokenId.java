@@ -25,6 +25,9 @@ public class DeactivateAllAccessTokenByRefreshTokenId extends AbstractModifyQuer
 
     @Override
     public Criteria getCriteria() {
-        return Criteria.where("createFromRefreshTokenId").is(refreshTokenId);
+        return new Criteria().andOperator(
+                Criteria.where("createFromRefreshTokenId").is(refreshTokenId),
+                Criteria.where("status").ne(RefreshTokenEntity.Status.EXPIRED)
+        );
     }
 }
