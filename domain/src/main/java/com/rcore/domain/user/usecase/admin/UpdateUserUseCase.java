@@ -13,6 +13,7 @@ import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.access.AdminUserUpdateAccess;
 import com.rcore.domain.user.usecase.admin.commands.UpdateUserCommand;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -27,32 +28,32 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         this.roleRepository = roleRepository;
     }
 
-//    public UserEntity update(UserEntity userEntity) throws UserNotFoundException, AuthenticationException, AuthorizationException, TokenExpiredException {
-//        checkAccess();
-//
-//        UserEntity old = userRepository.findById(userEntity.getId())
-//                .orElseThrow(() -> new UserNotFoundException());
-//
-//        old.setFirstName(Optional.ofNullable(userEntity.getFirstName())
-//                .orElse(old.getFirstName()));
-//
-//        old.setLastName(Optional.ofNullable(userEntity.getLastName())
-//                .orElse(old.getLastName()));
-//
-//        old.setSecondName(Optional.ofNullable(userEntity.getSecondName())
-//                .orElse(old.getSecondName()));
-//
-//        old.setFullName(Optional.ofNullable(userEntity.getFullName())
-//                .orElse(old.getFullName()));
-//
-//        old.setStatus(Optional.ofNullable(userEntity.getStatus())
-//                .orElse(old.getStatus()));
-//
-//        old.setUpdatedAt(LocalDateTime.now());
-//
-//        old = userRepository.save(old);
-//        return old;
-//    }
+    public UserEntity update(UserEntity userEntity) throws UserNotFoundException, AuthenticationException, AuthorizationException, TokenExpiredException {
+        checkAccess();
+
+        UserEntity old = userRepository.findById(userEntity.getId())
+                .orElseThrow(() -> new UserNotFoundException());
+
+        old.setFirstName(Optional.ofNullable(userEntity.getFirstName())
+                .orElse(old.getFirstName()));
+
+        old.setLastName(Optional.ofNullable(userEntity.getLastName())
+                .orElse(old.getLastName()));
+
+        old.setSecondName(Optional.ofNullable(userEntity.getSecondName())
+                .orElse(old.getSecondName()));
+
+        old.setFullName(Optional.ofNullable(userEntity.getFullName())
+                .orElse(old.getFullName()));
+
+        old.setStatus(Optional.ofNullable(userEntity.getStatus())
+                .orElse(old.getStatus()));
+
+        old.setUpdatedAt(LocalDateTime.now());
+
+        old = userRepository.save(old);
+        return old;
+    }
 //
 //    public UserEntity update(String userId, UpdateUserCommand updateUserCommand) throws AuthenticationException, AuthorizationException, UserNotFoundException, TokenExpiredException {
 //        checkAccess();
