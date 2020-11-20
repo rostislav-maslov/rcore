@@ -48,7 +48,7 @@ public class UserSecureAdapter {
                 .update(updateUserCommand));
     }
 
-    public UserDTO changeUserPassword(ChangeUserPasswordCommand changeUserPasswordCommand) throws UserNotExistException, InvalidOldPasswordException {
+    public UserDTO changeUserPassword(ChangeUserPasswordCommand changeUserPasswordCommand) throws UserNotExistException, InvalidOldPasswordException, NewPasswordIsEmptyException {
         return userMapper.map(userConfig.admin.changeUserPasswordUseCase()
                 .changePassword(changeUserPasswordCommand));
     }
