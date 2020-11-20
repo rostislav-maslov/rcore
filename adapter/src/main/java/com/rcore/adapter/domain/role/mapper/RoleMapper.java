@@ -15,6 +15,7 @@ public class RoleMapper implements ExampleDataMapper<RoleEntity, RoleDTO> {
                 .locale(roleEntity.getLocale())
                 .timeZone(roleEntity.getTimeZone())
                 .name(roleEntity.getName())
+                .availableAuthTypes(roleEntity.getAvailableAuthTypes())
                 .updatedAt(roleEntity.getUpdatedAt())
                 .build();
     }
@@ -26,6 +27,7 @@ public class RoleMapper implements ExampleDataMapper<RoleEntity, RoleDTO> {
                 .id(roleDTO.getId())
                 .locale(roleDTO.getLocale())
                 .name(roleDTO.getName())
+                .availableAuthTypes(roleDTO.getAvailableAuthTypes())
                 .createdAt(roleDTO.getCreatedAt())
                 .updatedAt(roleDTO.getUpdatedAt())
                 .timeZone(roleDTO.getTimeZone())

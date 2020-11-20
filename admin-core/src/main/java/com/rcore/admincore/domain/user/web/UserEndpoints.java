@@ -37,18 +37,18 @@ public class UserEndpoints {
     private final UserAdapter userAdapter;
     private final UserWebMapper userWebMapper;
 
-    @ApiOperation("Метод получения списка пользователей")
-    @GetMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public SuccessApiResponse<SearchApiResponse<UserWeb>> all(@ModelAttribute SearchWithFilters request) throws AuthenticationException, AuthorizationException, TokenExpiredException {
-        SearchResult<UserDTO> result = userAdapter.view
-                .findWithFilters(request.toSearchRequest(), request.getRoleId());
-
-        return SuccessApiResponse.of(
-                SearchApiResponse.withItemsAndCount(
-                        userWebMapper.mapAll(result.getItems()),
-                        result.getCount()
-                ));
-    }
+//    @ApiOperation("Метод получения списка пользователей")
+//    @GetMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public SuccessApiResponse<SearchApiResponse<UserWeb>> all(@ModelAttribute SearchWithFilters request) throws AuthenticationException, AuthorizationException, TokenExpiredException {
+//        SearchResult<UserDTO> result = userAdapter.view
+//                .findWithFilters(request.to);
+//
+//        return SuccessApiResponse.of(
+//                SearchApiResponse.withItemsAndCount(
+//                        userWebMapper.mapAll(result.getItems()),
+//                        result.getCount()
+//                ));
+//    }
 
     @ApiOperation(value = "Получение информации о пользователе по ID")
     @GetMapping(value = Routes.BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -59,23 +59,23 @@ public class UserEndpoints {
                 .orElseThrow(() -> new NotFoundApiException("Передан неверный идентификатор пользователя", DOMAIN, "NOT_FOUND")));
     }
 
-    @ApiOperation("Создание пользователя по Email")
-    @PostMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public SuccessApiResponse<UserWeb> create(@RequestBody CreateUserDTO request) throws AuthenticationException, AuthorizationException, UserAlreadyExistException, TokenExpiredException {
-        UserDTO user = userAdapter.secure
-                .createUserByEmail(request.getEmail(), request.getPassword(), request.getRoleIds());
-
-        return SuccessApiResponse.of(userWebMapper.map(user));
-    }
-
-    @ApiOperation("Редактирование пользователяв")
-    @PatchMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
-    public SuccessApiResponse<UserWeb> edit(@RequestBody UserDTO request) throws AuthenticationException, UserNotFoundException, AuthorizationException, UserAlreadyExistException, TokenExpiredException {
-        UserDTO user = userAdapter.secure
-                .updateUser(request);
-
-        return SuccessApiResponse.of(userWebMapper.map(user));
-    }
+//    @ApiOperation("Создание пользователя по Email")
+//    @PostMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public SuccessApiResponse<UserWeb> create(@RequestBody CreateUserDTO request) throws AuthenticationException, AuthorizationException, UserAlreadyExistException, TokenExpiredException {
+//        UserDTO user = userAdapter.secure
+//                .createUserByEmail(request.getEmail(), request.getPassword(), request.getRoleIds());
+//
+//        return SuccessApiResponse.of(userWebMapper.map(user));
+//    }
+//
+//    @ApiOperation("Редактирование пользователяв")
+//    @PatchMapping(value = Routes.ROOT, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public SuccessApiResponse<UserWeb> edit(@RequestBody UserDTO request) throws AuthenticationException, UserNotFoundException, AuthorizationException, UserAlreadyExistException, TokenExpiredException {
+//        UserDTO user = userAdapter.secure
+//                .updateUser(request);
+//
+//        return SuccessApiResponse.of(userWebMapper.map(user));
+//    }
 
     @ApiOperation("Удаление пользователя")
     @DeleteMapping(value = Routes.BY_ID, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -85,7 +85,7 @@ public class UserEndpoints {
                 .orElseThrow(() -> new NotFoundApiException("Передан неверный идентификатор пользователя", DOMAIN, "NOT_FOUND"));
 
         userAdapter.getSecure()
-                .deleteUser(user);
+                .deleteUser(user.getId());
 
         return OkApiResponse.of();
     }

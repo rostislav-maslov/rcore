@@ -4,6 +4,7 @@ import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.port.UserRepository;
+import com.rcore.domain.user.port.filters.UserFilters;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -73,7 +74,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public SearchResult<UserEntity> findWithFilters(SearchRequest request, String roleId) {
+    public SearchResult<UserEntity> findWithFilters(UserFilters userFilters) {
         return null;
     }
 }

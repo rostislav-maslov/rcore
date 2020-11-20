@@ -10,6 +10,7 @@ import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.config.UserConfig;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.exception.TokenExpiredException;
+import com.rcore.domain.user.port.filters.UserFilters;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
@@ -25,6 +26,18 @@ public class UserViewAdapter {
                 .map(userMapper::map);
     }
 
+    public Optional<UserDTO> findByEmail(String email) throws AuthorizationException, AuthenticationException, TokenExpiredException {
+        return userConfig.admin.ViewUserUseCase()
+                .findByEmail(email)
+                .map(userMapper::map);
+    }
+
+    public Optional<UserDTO> findByPhone(Long phone) throws AuthorizationException, AuthenticationException, TokenExpiredException {
+        return userConfig.admin.ViewUserUseCase()
+                .findByPhone(phone)
+                .map(userMapper::map);
+    }
+
     public SearchResult<UserDTO> find(SearchRequest request) throws AuthorizationException, AuthenticationException, TokenExpiredException {
         SearchResult<UserEntity> result = userConfig.admin.ViewUserUseCase()
                 .find(request);
@@ -35,9 +48,9 @@ public class UserViewAdapter {
         );
     }
 
-    public SearchResult<UserDTO> findWithFilters(SearchRequest request, String roleId) throws AuthorizationException, AuthenticationException, TokenExpiredException {
+    public SearchResult<UserDTO> findWithFilters(UserFilters userFilters) throws AuthorizationException, AuthenticationException, TokenExpiredException {
         SearchResult<UserEntity> result = userConfig.admin.ViewUserUseCase()
-                .findWithSearch(request, roleId);
+                .findWithFilters(userFilters);
 
         return SearchResult.withItemsAndCount(
                 userMapper.mapAll(result.getItems()),

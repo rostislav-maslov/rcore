@@ -9,6 +9,7 @@ import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.access.AdminUserViewAccess;
+import com.rcore.domain.user.port.filters.UserFilters;
 
 import java.util.Optional;
 
@@ -23,14 +24,24 @@ public class ViewUserUseCase extends AdminBaseUseCase {
         return userRepository.findById(id);
     }
 
+    public Optional<UserEntity> findByPhone(Long phone) throws AuthorizationException, TokenExpiredException, AuthenticationException {
+        checkAccess();
+        return userRepository.findByPhoneNumber(phone);
+    }
+
+    public Optional<UserEntity> findByEmail(String email) throws AuthorizationException, TokenExpiredException, AuthenticationException {
+        checkAccess();
+        return userRepository.findByEmail(email);
+    }
+
     public SearchResult<UserEntity> find(SearchRequest request) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
         return userRepository.find(request);
     }
 
-    public SearchResult<UserEntity> findWithSearch(SearchRequest request, String roleId) throws AuthenticationException, AuthorizationException, TokenExpiredException {
+    public SearchResult<UserEntity> findWithFilters(UserFilters filters) throws AuthorizationException, TokenExpiredException, AuthenticationException {
         checkAccess();
-        return userRepository.findWithFilters(request, roleId);
+        return userRepository.findWithFilters(filters);
     }
 
 }

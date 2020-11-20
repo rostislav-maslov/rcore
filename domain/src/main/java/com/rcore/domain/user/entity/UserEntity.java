@@ -38,6 +38,20 @@ public class UserEntity extends BaseEntity {
     protected Integer fails = 0;
     protected LocalDateTime lastFailDate = LocalDateTime.now();
 
+    /**
+     * Идентификатор изображения профиля
+     */
+    protected String profileImageId;
+
+    /**
+     * Идентификатор страны
+     */
+    protected String countryId;
+
+    /**
+     * Methods
+     */
+
     public UserEntity(Long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
@@ -99,5 +113,12 @@ public class UserEntity extends BaseEntity {
             return Stream.of(lastName, firstName, secondName)
                     .filter(Objects::nonNull)
                     .collect(Collectors.joining(" "));
+    }
+
+    public void inverseStatus() {
+        if (status.equals(UserStatus.ACTIVE))
+            this.status = UserStatus.BLOCK;
+        else if (status.equals(UserStatus.BLOCK))
+            this.status = UserStatus.ACTIVE;
     }
 }

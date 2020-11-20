@@ -53,12 +53,25 @@ public class UserConfig {
         }
 
         public UpdateUserUseCase UpdateUserUseCase() throws AuthorizationException {
-            return new UpdateUserUseCase(this.userRepository, authorizationByTokenUseCase);
+            return new UpdateUserUseCase(this.userRepository, authorizationByTokenUseCase, roleRepository);
         }
 
         public ViewUserUseCase ViewUserUseCase() throws AuthorizationException {
             return new ViewUserUseCase(this.userRepository, authorizationByTokenUseCase);
         }
+
+        public ChangeUserActiveStatusUseCase changeUserActiveStatusUseCase() {
+            return new ChangeUserActiveStatusUseCase(userRepository, authorizationByTokenUseCase);
+        }
+
+        public ChangeUserPasswordUseCase changeUserPasswordUseCase() {
+            return new ChangeUserPasswordUseCase(userRepository, authorizationByTokenUseCase, passwordGenerator);
+        }
+
+        public DeleteUserProfileImageUseCase deleteUserProfileImageUseCase() {
+            return new DeleteUserProfileImageUseCase(userRepository, authorizationByTokenUseCase);
+        }
+
     }
 
     @RequiredArgsConstructor

@@ -38,6 +38,9 @@ public class UserDTO {
     private Integer fails = 0;
     private LocalDateTime lastFailDate;
 
+    private String profileImageId;
+    private String countryId;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String timeZone;

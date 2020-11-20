@@ -1,7 +1,7 @@
 package com.rcore.database.mongo.domain.user.port;
 
+import com.rcore.database.mongo.base.CountAggregationOutputDTO;
 import com.rcore.database.mongo.common.utils.CollectionNameUtils;
-import com.rcore.database.mongo.domain.picture.model.PictureDoc;
 import com.rcore.database.mongo.domain.role.model.RoleDoc;
 import com.rcore.database.mongo.domain.user.model.UserDoc;
 import com.rcore.database.mongo.domain.user.query.*;
@@ -9,12 +9,15 @@ import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.port.UserRepository;
+import com.rcore.domain.user.port.filters.UserFilters;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -86,13 +89,18 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public SearchResult<UserEntity> findWithFilters(SearchRequest request, String roleId) {
-        Query query = new FindAllWithSearch(request).withRoleId(roleId).getQuery();
+    public SearchResult<UserEntity> findWithFilters(UserFilters userFilters) {
+        FindWithFiltersAggregation findWithFiltersAggregation = new FindWithFiltersAggregation(userFilters);
+
         return SearchResult.withItemsAndCount(
-                mongoTemplate.find(query, UserDoc.class)
+                mongoTemplate.aggregate(findWithFiltersAggregation.getAggregation(), findWithFiltersAggregation.getInputType(), findWithFiltersAggregation.getOutputType())
+                        .getMappedResults()
                         .stream()
                         .collect(Collectors.toList()),
-                mongoTemplate.count(query.limit(0).skip(0), UserDoc.class)
+                Optional.ofNullable(mongoTemplate.aggregate(findWithFiltersAggregation.getCountAggregation(), findWithFiltersAggregation.getInputType(), CountAggregationOutputDTO.class)
+                        .getUniqueMappedResult())
+                        .map(CountAggregationOutputDTO::getCount)
+                        .orElse(0l)
         );
     }
 

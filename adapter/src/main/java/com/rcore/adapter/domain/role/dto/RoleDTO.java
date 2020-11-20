@@ -1,6 +1,7 @@
 package com.rcore.adapter.domain.role.dto;
 
 import com.rcore.domain.access.entity.Access;
+import com.rcore.domain.role.entity.RoleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,4 +23,5 @@ public class RoleDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String timeZone;
+    private List<RoleEntity.AuthType> availableAuthTypes;
 }

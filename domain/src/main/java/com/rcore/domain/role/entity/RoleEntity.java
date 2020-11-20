@@ -32,5 +32,17 @@ public class RoleEntity extends BaseEntity {
      */
     protected Set<Access> accesses = new HashSet<>();
 
+    /**
+     * Доступные типы авторизации для роли
+     */
+    protected List<AuthType> availableAuthTypes = new ArrayList<>();
+
+    /**
+     * Тип авторизации
+     */
+    public enum AuthType {
+        SMS, EMAIL
+    }
+
 
 }
