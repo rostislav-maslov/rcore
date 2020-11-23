@@ -72,6 +72,9 @@ public class UserConfig {
             return new DeleteUserProfileImageUseCase(userRepository, authorizationByTokenUseCase);
         }
 
+        public UpdateCurrentUserUseCase updateCurrentUserUseCase() {
+            return new UpdateCurrentUserUseCase(userRepository, authorizationByTokenUseCase, roleRepository);
+        }
     }
 
     @RequiredArgsConstructor

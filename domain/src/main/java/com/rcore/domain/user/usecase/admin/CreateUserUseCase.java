@@ -13,6 +13,7 @@ import com.rcore.domain.user.port.PasswordGenerator;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.access.AdminUserCreateAccess;
 import com.rcore.domain.user.usecase.admin.commands.CreateUserCommand;
+import com.rcore.domain.user.validators.ChangeUserUseCaseValidator;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,12 +25,14 @@ public class CreateUserUseCase extends AdminBaseUseCase {
     private final PasswordGenerator passwordGenerator;
     private final UserIdGenerator userIdGenerator;
     private final RoleRepository roleRepository;
+    private final ChangeUserUseCaseValidator changeUserUseCaseValidator;
 
     public CreateUserUseCase(UserRepository userRepository, PasswordGenerator passwordGenerator, UserIdGenerator userIdGenerator, AuthorizationByTokenUseCase authorizationByTokenUseCase, RoleRepository roleRepository) {
         super(userRepository, new AdminUserCreateAccess(), authorizationByTokenUseCase);
         this.passwordGenerator = passwordGenerator;
         this.userIdGenerator = userIdGenerator;
         this.roleRepository = roleRepository;
+        this.changeUserUseCaseValidator = new ChangeUserUseCaseValidator(roleRepository, userRepository);
     }
 
     public UserEntity createByEmail(String email, String password, List<String> roleIds) throws UserAlreadyExistException, AuthenticationException, AuthorizationException, TokenExpiredException {
@@ -61,7 +64,7 @@ public class CreateUserUseCase extends AdminBaseUseCase {
         return userEntity;
     }
 
-    public UserEntity create(CreateUserCommand createUserCommand) throws AuthorizationException, TokenExpiredException, AuthenticationException, RoleIsRequiredException, PhoneIsRequiredException, EmailAndPasswordIsRequiredException, UserAlreadyExistException, UserWithPhoneAlreadyExistException {
+    public UserEntity create(CreateUserCommand createUserCommand) throws AuthorizationException, TokenExpiredException, AuthenticationException, RoleIsRequiredException, PhoneIsRequiredException, InvalidEmailException, UserAlreadyExistException, UserWithPhoneAlreadyExistException, InvalidFirstNameException, InvalidLastNameException, InvalidRoleException, UserWithEmailAlreadyExistException {
         checkAccess();
 
         Set<RoleEntity> roles = createUserCommand.getRoleIds()
@@ -71,7 +74,7 @@ public class CreateUserUseCase extends AdminBaseUseCase {
                 .map(Optional::get)
                 .collect(Collectors.toSet());
 
-        validate(createUserCommand, roles);
+        changeUserUseCaseValidator.validate(createUserCommand);
 
         UserEntity userEntity = new UserEntity();
         userEntity.setId(userIdGenerator.generate());
@@ -91,36 +94,6 @@ public class CreateUserUseCase extends AdminBaseUseCase {
 
         userEntity = userRepository.save(userEntity);
         return userEntity;
-    }
-
-    public void validate(CreateUserCommand createUserCommand, Set<RoleEntity> roles) throws RoleIsRequiredException, PhoneIsRequiredException, EmailAndPasswordIsRequiredException, UserAlreadyExistException, UserWithPhoneAlreadyExistException {
-
-        if (roles.isEmpty())
-            throw new RoleIsRequiredException();
-
-        //Достаем типы авторизации из ролей
-        List<RoleEntity.AuthType> authTypes = roles
-                .stream()
-                .flatMap(r -> r.getAvailableAuthTypes().stream())
-                .collect(Collectors.toList());
-
-        //В зависимости от типов авторизации проверяем обязательные поля
-        //Если тип SMS, то phone - обязателен
-        if (authTypes.contains(RoleEntity.AuthType.SMS)) {
-            if (createUserCommand.getPhone() == null)
-                throw new PhoneIsRequiredException();
-
-            if (userRepository.findByPhoneNumber(createUserCommand.getPhone()).isPresent())
-                throw new UserWithPhoneAlreadyExistException();
-        }
-        //Если тип EMAIL, то email и password - обязательные поля
-        else if (authTypes.contains(RoleEntity.AuthType.EMAIL)) {
-            if (createUserCommand.getEmail() == null || createUserCommand.getPassword() == null)
-                throw new EmailAndPasswordIsRequiredException();
-
-            if (userRepository.findByEmail(createUserCommand.getEmail()).isPresent())
-                throw new UserAlreadyExistException();
-        }
     }
 
 

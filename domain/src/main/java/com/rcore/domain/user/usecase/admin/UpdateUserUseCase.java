@@ -1,7 +1,5 @@
 package com.rcore.domain.user.usecase.admin;
 
-import com.rcore.domain.picture.port.PictureRepository;
-import com.rcore.domain.picture.port.PictureStorage;
 import com.rcore.domain.role.entity.RoleEntity;
 import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.token.exception.AuthenticationException;
@@ -12,9 +10,9 @@ import com.rcore.domain.user.exception.*;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.access.AdminUserUpdateAccess;
 import com.rcore.domain.user.usecase.admin.commands.UpdateUserCommand;
+import com.rcore.domain.user.validators.ChangeUserUseCaseValidator;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -22,10 +20,12 @@ import java.util.stream.Collectors;
 public class UpdateUserUseCase extends AdminBaseUseCase {
 
     private final RoleRepository roleRepository;
+    private final ChangeUserUseCaseValidator changeUserUseCaseValidator;
 
     public UpdateUserUseCase(UserRepository userRepository, AuthorizationByTokenUseCase authorizationByTokenUseCase, RoleRepository roleRepository) {
         super(userRepository, new AdminUserUpdateAccess(), authorizationByTokenUseCase);
         this.roleRepository = roleRepository;
+        this.changeUserUseCaseValidator = new ChangeUserUseCaseValidator(roleRepository, userRepository);
     }
 
     public UserEntity update(UserEntity userEntity) throws UserNotFoundException, AuthenticationException, AuthorizationException, TokenExpiredException {
@@ -82,7 +82,7 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
 //        return old;
 //    }
 
-    public UserEntity update(UpdateUserCommand updateUserCommand) throws UserNotFoundException, AuthorizationException, TokenExpiredException, AuthenticationException, PhoneIsRequiredException, EmailAndPasswordIsRequiredException, UserAlreadyExistException, UserWithPhoneAlreadyExistException {
+    public UserEntity update(UpdateUserCommand updateUserCommand) throws UserNotFoundException, AuthorizationException, TokenExpiredException, AuthenticationException, PhoneIsRequiredException, InvalidEmailException, UserAlreadyExistException, UserWithPhoneAlreadyExistException, InvalidLastNameException, InvalidRoleException, RoleIsRequiredException, InvalidFirstNameException, UserWithEmailAlreadyExistException {
         checkAccess();
 
         UserEntity userEntity = userRepository.findById(updateUserCommand.getId())
@@ -95,7 +95,7 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
                 .map(Optional::get)
                 .collect(Collectors.toSet());
 
-        validate(userEntity, updateUserCommand, newRoles);
+        changeUserUseCaseValidator.validate(updateUserCommand);
 
         userEntity.setLogin(Optional.ofNullable(updateUserCommand.getLogin())
                 .orElse(userEntity.getLogin()));
@@ -123,6 +123,9 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         userEntity.setStatus(Optional.ofNullable(updateUserCommand.getStatus())
                 .orElse(userEntity.getStatus()));
 
+        userEntity.setRoles(Optional.ofNullable(newRoles)
+                .orElse(userEntity.getRoles()));
+
         userEntity.setCountryId(Optional.ofNullable(updateUserCommand.getCountryId())
                 .orElse(userEntity.getCountryId()));
 
@@ -130,33 +133,33 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         return userEntity;
     }
 
-    private void validate(UserEntity userEntity, UpdateUserCommand updateUserCommand, Set<RoleEntity> newRoles) throws PhoneIsRequiredException, UserAlreadyExistException, UserWithPhoneAlreadyExistException, EmailAndPasswordIsRequiredException {
-        if (!newRoles.isEmpty()) {
-            //Достаем типы авторизации из ролей
-            List<RoleEntity.AuthType> authTypes = newRoles
-                    .stream()
-                    .flatMap(r -> r.getAvailableAuthTypes().stream())
-                    .collect(Collectors.toList());
-
-            //В зависимости от типов авторизации проверяем обязательные поля
-            //Если тип SMS, то phone - обязателен
-            if (authTypes.contains(RoleEntity.AuthType.SMS)) {
-                if (userEntity.getPhoneNumber() == null && updateUserCommand.getPhone() == null)
-                    throw new PhoneIsRequiredException();
-
-                if (userRepository.findByPhoneNumber(updateUserCommand.getPhone()).isPresent())
-                    throw new UserWithPhoneAlreadyExistException();
-            }
-            //Если тип EMAIL, то email и password - обязательные поля
-            else if (authTypes.contains(RoleEntity.AuthType.EMAIL)) {
-                if (userEntity.getEmail() == null && updateUserCommand.getEmail() == null)
-                    throw new EmailAndPasswordIsRequiredException();
-
-                if (userRepository.findByEmail(updateUserCommand.getEmail()).isPresent())
-                    throw new UserAlreadyExistException();
-            }
-        }
-
-    }
+//    private void validate(UserEntity userEntity, UpdateUserCommand updateUserCommand, Set<RoleEntity> newRoles) throws PhoneIsRequiredException, UserAlreadyExistException, UserWithPhoneAlreadyExistException, EmailAndPasswordIsRequiredException {
+//        if (!newRoles.isEmpty()) {
+//            //Достаем типы авторизации из ролей
+//            List<RoleEntity.AuthType> authTypes = newRoles
+//                    .stream()
+//                    .flatMap(r -> r.getAvailableAuthTypes().stream())
+//                    .collect(Collectors.toList());
+//
+//            //В зависимости от типов авторизации проверяем обязательные поля
+//            //Если тип SMS, то phone - обязателен
+//            if (authTypes.contains(RoleEntity.AuthType.SMS)) {
+//                if (userEntity.getPhoneNumber() == null && updateUserCommand.getPhone() == null)
+//                    throw new PhoneIsRequiredException();
+//
+//                if (userRepository.findByPhoneNumber(updateUserCommand.getPhone()).isPresent())
+//                    throw new UserWithPhoneAlreadyExistException();
+//            }
+//            //Если тип EMAIL, то email и password - обязательные поля
+//            else if (authTypes.contains(RoleEntity.AuthType.EMAIL)) {
+//                if (userEntity.getEmail() == null && updateUserCommand.getEmail() == null)
+//                    throw new EmailAndPasswordIsRequiredException();
+//
+//                if (userRepository.findByEmail(updateUserCommand.getEmail()).isPresent())
+//                    throw new UserAlreadyExistException();
+//            }
+//        }
+//
+//    }
 
 }
