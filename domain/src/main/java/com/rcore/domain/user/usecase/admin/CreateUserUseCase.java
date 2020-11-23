@@ -67,9 +67,16 @@ public class CreateUserUseCase extends AdminBaseUseCase {
     public UserEntity create(CreateUserCommand createUserCommand) throws AuthorizationException, TokenExpiredException, AuthenticationException, RoleIsRequiredException, PhoneIsRequiredException, InvalidEmailException, UserAlreadyExistException, UserWithPhoneAlreadyExistException, InvalidFirstNameException, InvalidLastNameException, InvalidRoleException, UserWithEmailAlreadyExistException, InvalidAccountStatusException {
         checkAccess();
 
-        Set<RoleEntity> roles = createUserCommand.getRoleIds()
+        Set<RoleEntity> roles = createUserCommand.getRoles()
                 .stream()
-                .map(roleId -> roleRepository.findById(roleId))
+                .map(role -> {
+                    if (role.getId()!= null)
+                        return roleRepository.findById(role.getId());
+                    else if (role.getName() != null)
+                        return roleRepository.findByName(role.getName());
+
+                    return Optional.<RoleEntity>empty();
+                })
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toSet());

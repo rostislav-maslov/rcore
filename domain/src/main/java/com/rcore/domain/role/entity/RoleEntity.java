@@ -35,7 +35,7 @@ public class RoleEntity extends BaseEntity {
     /**
      * Доступные типы авторизации для роли
      */
-    protected List<AuthType> availableAuthTypes = new ArrayList<>();
+    protected List<AuthType> availableAuthTypes = Arrays.asList(AuthType.SMS, AuthType.EMAIL);
 
     /**
      * Тип авторизации

@@ -32,11 +32,15 @@ public class ChangeUserUseCaseValidator {
         List<RoleEntity> roles = new ArrayList<>();
 
         //Проверка ролей
-        if (createUserCommand.getRoleIds() != null) {
-            for (String roleId : createUserCommand.getRoleIds())
-                roleRepository.findById(roleId)
-                        .map(roles::add)
-                        .orElseThrow(InvalidRoleException::new);
+        if (createUserCommand.getRoles() != null) {
+            for (CreateUserCommand.Role role : createUserCommand.getRoles()) {
+                    if (role.getId()!= null)
+                        roles.add(roleRepository.findById(role.getId())
+                                .orElseThrow(InvalidRoleException::new));
+                    else if (role.getName() != null)
+                        roles.add(roleRepository.findByName(role.getName())
+                                .orElseThrow(InvalidRoleException::new));
+            }
         }
 
         if (roles.isEmpty())

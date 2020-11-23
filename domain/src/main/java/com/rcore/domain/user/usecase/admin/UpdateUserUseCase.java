@@ -88,9 +88,16 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         UserEntity userEntity = userRepository.findById(updateUserCommand.getId())
                 .orElseThrow(UserNotFoundException::new);
 
-        Set<RoleEntity> newRoles = updateUserCommand.getRoleIds()
+        Set<RoleEntity> newRoles = updateUserCommand.getRoles()
                 .stream()
-                .map(roleId -> roleRepository.findById(roleId))
+                .map(role -> {
+                    if (role.getId()!= null)
+                        return roleRepository.findById(role.getId());
+                    else if (role.getName() != null)
+                        return roleRepository.findByName(role.getName());
+
+                    return Optional.<RoleEntity>empty();
+                })
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toSet());

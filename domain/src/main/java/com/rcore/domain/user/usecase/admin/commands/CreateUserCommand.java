@@ -2,6 +2,7 @@ package com.rcore.domain.user.usecase.admin.commands;
 
 import com.rcore.domain.user.entity.UserStatus;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -23,6 +24,15 @@ public class CreateUserCommand {
     private String countryId;
     private Long phone;
     private String password;
-    private List<String> roleIds;
+    private List<Role> roles;
+
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Data
+    @Builder
+    public static class Role {
+        private String id;
+        private String name;
+    }
 
 }
