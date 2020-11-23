@@ -64,8 +64,8 @@ public class UserConfig {
             return new ChangeUserActiveStatusUseCase(userRepository, authorizationByTokenUseCase);
         }
 
-        public ChangeUserPasswordUseCase changeUserPasswordUseCase() {
-            return new ChangeUserPasswordUseCase(userRepository, authorizationByTokenUseCase, passwordGenerator);
+        public ChangeCurrentUserPasswordUseCase changeCurrentUserPasswordUseCase() {
+            return new ChangeCurrentUserPasswordUseCase(userRepository, authorizationByTokenUseCase, passwordGenerator);
         }
 
         public DeleteUserProfileImageUseCase deleteUserProfileImageUseCase() {
@@ -74,6 +74,14 @@ public class UserConfig {
 
         public UpdateCurrentUserUseCase updateCurrentUserUseCase() {
             return new UpdateCurrentUserUseCase(userRepository, authorizationByTokenUseCase, roleRepository);
+        }
+
+        public ChangeUserPasswordUseCase changeUserPasswordUseCase() {
+            return new ChangeUserPasswordUseCase(userRepository, authorizationByTokenUseCase, passwordGenerator);
+        }
+
+        public DeleteCurrentUserProfileImageUseCase deleteCurrentUserProfileImageUseCase() {
+            return new DeleteCurrentUserProfileImageUseCase(userRepository, authorizationByTokenUseCase);
         }
     }
 

@@ -9,6 +9,8 @@ import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.access.AdminUserChangeRolesAccess;
 
+import java.time.LocalDateTime;
+
 public class ChangeRoleUseCase extends AdminBaseUseCase {
 
     public ChangeRoleUseCase(UserRepository userRepository, AuthorizationByTokenUseCase authorizationByTokenUseCase) {
@@ -19,7 +21,7 @@ public class ChangeRoleUseCase extends AdminBaseUseCase {
         checkAccess();
 
         userEntity.getAccesses().remove(access);
-
+        userEntity.setUpdatedAt(LocalDateTime.now());
         return userRepository.save(userEntity);
     }
 
@@ -27,6 +29,7 @@ public class ChangeRoleUseCase extends AdminBaseUseCase {
         checkAccess();
 
         userEntity.getAccesses().add(access);
+        userEntity.setUpdatedAt(LocalDateTime.now());
         return userEntity;
     }
 }

@@ -6,6 +6,8 @@ import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.exception.UserNotFoundException;
 import com.rcore.domain.user.port.UserRepository;
 
+import java.time.LocalDateTime;
+
 public class DeleteUserProfileImageUseCase extends AdminBaseUseCase {
 
     public DeleteUserProfileImageUseCase(UserRepository userRepository,  AuthorizationByTokenUseCase authorizationByTokenUseCase) {
@@ -17,6 +19,7 @@ public class DeleteUserProfileImageUseCase extends AdminBaseUseCase {
                 .orElseThrow(UserNotFoundException::new);
 
         userEntity.setProfileImageId(null);
+        userEntity.setUpdatedAt(LocalDateTime.now());
         userEntity = userRepository.save(userEntity);
         return userEntity;
     }

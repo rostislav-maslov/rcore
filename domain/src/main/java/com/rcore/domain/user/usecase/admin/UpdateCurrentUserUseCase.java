@@ -11,23 +11,20 @@ import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.usecase.admin.commands.CreateUserCommand;
 import com.rcore.domain.user.validators.ChangeUserUseCaseValidator;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 public class UpdateCurrentUserUseCase extends AdminBaseUseCase {
 
-    private final RoleRepository roleRepository;
     private final ChangeUserUseCaseValidator changeUserUseCaseValidator;
 
     public UpdateCurrentUserUseCase(UserRepository userRepository, AuthorizationByTokenUseCase authorizationByTokenUseCase, RoleRepository roleRepository) {
         super(userRepository, new AdminUpdateCurrentUserAccess(), authorizationByTokenUseCase);
-        this.roleRepository = roleRepository;
         changeUserUseCaseValidator = new ChangeUserUseCaseValidator(roleRepository, userRepository);
     }
 
-    public UserEntity update(CreateUserCommand createUserCommand) throws AuthorizationException, TokenExpiredException, AuthenticationException, UserNotFoundException, InvalidLastNameException, PhoneIsRequiredException, UserAlreadyExistException, InvalidFirstNameException, InvalidRoleException, UserWithPhoneAlreadyExistException, RoleIsRequiredException, InvalidEmailException, UserWithEmailAlreadyExistException {
-        String userId = checkAccess().getId();
-        UserEntity userEntity = userRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new);
+    public UserEntity update(CreateUserCommand createUserCommand) throws AuthorizationException, TokenExpiredException, AuthenticationException, UserNotFoundException, InvalidLastNameException, PhoneIsRequiredException, UserAlreadyExistException, InvalidFirstNameException, InvalidRoleException, UserWithPhoneAlreadyExistException, RoleIsRequiredException, InvalidEmailException, UserWithEmailAlreadyExistException, InvalidAccountStatusException {
+        UserEntity userEntity = checkAccess();
 
         changeUserUseCaseValidator.validate(createUserCommand);
 
@@ -60,8 +57,9 @@ public class UpdateCurrentUserUseCase extends AdminBaseUseCase {
         userEntity.setCountryId(Optional.ofNullable(createUserCommand.getCountryId())
                 .orElse(userEntity.getCountryId()));
 
+        userEntity.setUpdatedAt(LocalDateTime.now());
         userEntity = userRepository.save(userEntity);
-        return userRepository.save(userEntity);
+        return userEntity;
 
     }
 }

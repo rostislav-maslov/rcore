@@ -82,7 +82,7 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
 //        return old;
 //    }
 
-    public UserEntity update(UpdateUserCommand updateUserCommand) throws UserNotFoundException, AuthorizationException, TokenExpiredException, AuthenticationException, PhoneIsRequiredException, InvalidEmailException, UserAlreadyExistException, UserWithPhoneAlreadyExistException, InvalidLastNameException, InvalidRoleException, RoleIsRequiredException, InvalidFirstNameException, UserWithEmailAlreadyExistException {
+    public UserEntity update(UpdateUserCommand updateUserCommand) throws UserNotFoundException, AuthorizationException, TokenExpiredException, AuthenticationException, PhoneIsRequiredException, InvalidEmailException, UserAlreadyExistException, UserWithPhoneAlreadyExistException, InvalidLastNameException, InvalidRoleException, RoleIsRequiredException, InvalidFirstNameException, UserWithEmailAlreadyExistException, InvalidAccountStatusException {
         checkAccess();
 
         UserEntity userEntity = userRepository.findById(updateUserCommand.getId())
@@ -129,37 +129,9 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         userEntity.setCountryId(Optional.ofNullable(updateUserCommand.getCountryId())
                 .orElse(userEntity.getCountryId()));
 
+        userEntity.setUpdatedAt(LocalDateTime.now());
         userEntity = userRepository.save(userEntity);
         return userEntity;
     }
-
-//    private void validate(UserEntity userEntity, UpdateUserCommand updateUserCommand, Set<RoleEntity> newRoles) throws PhoneIsRequiredException, UserAlreadyExistException, UserWithPhoneAlreadyExistException, EmailAndPasswordIsRequiredException {
-//        if (!newRoles.isEmpty()) {
-//            //Достаем типы авторизации из ролей
-//            List<RoleEntity.AuthType> authTypes = newRoles
-//                    .stream()
-//                    .flatMap(r -> r.getAvailableAuthTypes().stream())
-//                    .collect(Collectors.toList());
-//
-//            //В зависимости от типов авторизации проверяем обязательные поля
-//            //Если тип SMS, то phone - обязателен
-//            if (authTypes.contains(RoleEntity.AuthType.SMS)) {
-//                if (userEntity.getPhoneNumber() == null && updateUserCommand.getPhone() == null)
-//                    throw new PhoneIsRequiredException();
-//
-//                if (userRepository.findByPhoneNumber(updateUserCommand.getPhone()).isPresent())
-//                    throw new UserWithPhoneAlreadyExistException();
-//            }
-//            //Если тип EMAIL, то email и password - обязательные поля
-//            else if (authTypes.contains(RoleEntity.AuthType.EMAIL)) {
-//                if (userEntity.getEmail() == null && updateUserCommand.getEmail() == null)
-//                    throw new EmailAndPasswordIsRequiredException();
-//
-//                if (userRepository.findByEmail(updateUserCommand.getEmail()).isPresent())
-//                    throw new UserAlreadyExistException();
-//            }
-//        }
-//
-//    }
 
 }

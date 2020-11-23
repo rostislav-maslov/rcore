@@ -7,6 +7,7 @@ import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.config.UserConfig;
 import com.rcore.domain.user.exception.*;
+import com.rcore.domain.user.usecase.admin.commands.ChangeCurrentUserPasswordCommand;
 import com.rcore.domain.user.usecase.admin.commands.ChangeUserPasswordCommand;
 import com.rcore.domain.user.usecase.admin.commands.CreateUserCommand;
 import com.rcore.domain.user.usecase.admin.commands.UpdateUserCommand;
@@ -28,32 +29,32 @@ public class UserSecureAdapter {
                 .block(userMapper.inverseMap(userDTO)));
     }
 
-    public UserDTO create(CreateUserCommand createUserCommand) throws AuthorizationException, RoleIsRequiredException, PhoneIsRequiredException, TokenExpiredException, InvalidEmailException, UserWithPhoneAlreadyExistException, UserAlreadyExistException, AuthenticationException, InvalidFirstNameException, InvalidLastNameException, InvalidRoleException, UserWithEmailAlreadyExistException {
+    public UserDTO create(CreateUserCommand createUserCommand) throws AuthorizationException, RoleIsRequiredException, PhoneIsRequiredException, TokenExpiredException, InvalidEmailException, UserWithPhoneAlreadyExistException, UserAlreadyExistException, AuthenticationException, InvalidFirstNameException, InvalidLastNameException, InvalidRoleException, UserWithEmailAlreadyExistException, InvalidAccountStatusException {
         return userMapper.map(userConfig.admin.CreateUseCase()
                 .create(createUserCommand));
     }
 
-//    public UserDTO createUserByEmail(String email, String password, List<String> roleIds) throws UserAlreadyExistException, AuthorizationException, AuthenticationException, TokenExpiredException {
-//        return userMapper.map(userConfig.admin.CreateUseCase()
-//                .createByEmail(email, password, roleIds));
-//    }
-
-    public Boolean deleteUser(String id) throws UserAlreadyExistException, AuthorizationException, AuthenticationException, TokenExpiredException {
+    public Boolean deleteUser(String id) throws AuthorizationException, AuthenticationException, TokenExpiredException {
         return userConfig.admin.DeleteUserUseCase()
                 .deleteById(id);
     }
 
-    public UserDTO update(UpdateUserCommand updateUserCommand) throws AuthorizationException, PhoneIsRequiredException, TokenExpiredException, UserNotFoundException, UserWithPhoneAlreadyExistException, UserAlreadyExistException, AuthenticationException, InvalidEmailException, InvalidRoleException, InvalidFirstNameException, RoleIsRequiredException, InvalidLastNameException, UserWithEmailAlreadyExistException {
+    public UserDTO update(UpdateUserCommand updateUserCommand) throws AuthorizationException, PhoneIsRequiredException, TokenExpiredException, UserNotFoundException, UserWithPhoneAlreadyExistException, UserAlreadyExistException, AuthenticationException, InvalidEmailException, InvalidRoleException, InvalidFirstNameException, RoleIsRequiredException, InvalidLastNameException, UserWithEmailAlreadyExistException, InvalidAccountStatusException {
         return userMapper.map(userConfig.admin.UpdateUserUseCase()
                 .update(updateUserCommand));
     }
 
-    public UserDTO updateCurrentUser(CreateUserCommand createUserCommand) throws UserNotFoundException, PhoneIsRequiredException, AuthenticationException, TokenExpiredException, InvalidLastNameException, InvalidRoleException, UserWithPhoneAlreadyExistException, AuthorizationException, InvalidEmailException, UserAlreadyExistException, InvalidFirstNameException, RoleIsRequiredException, UserWithEmailAlreadyExistException {
+    public UserDTO updateCurrentUser(CreateUserCommand createUserCommand) throws UserNotFoundException, PhoneIsRequiredException, AuthenticationException, TokenExpiredException, InvalidLastNameException, InvalidRoleException, UserWithPhoneAlreadyExistException, AuthorizationException, InvalidEmailException, UserAlreadyExistException, InvalidFirstNameException, RoleIsRequiredException, UserWithEmailAlreadyExistException, InvalidAccountStatusException {
         return userMapper.map(userConfig.admin.updateCurrentUserUseCase()
                 .update(createUserCommand));
     }
 
-    public UserDTO changeUserPassword(ChangeUserPasswordCommand changeUserPasswordCommand) throws UserNotExistException, InvalidOldPasswordException, NewPasswordIsEmptyException {
+    public UserDTO changeCurrentUserPassword(ChangeCurrentUserPasswordCommand changeCurrentUserPasswordCommand) throws UserNotExistException, InvalidOldPasswordException, InvalidNewPasswordException, AuthorizationException, TokenExpiredException, AuthenticationException {
+        return userMapper.map(userConfig.admin.changeCurrentUserPasswordUseCase()
+                .changePassword(changeCurrentUserPasswordCommand));
+    }
+
+    public UserDTO changeUserPassword(ChangeUserPasswordCommand changeUserPasswordCommand) throws InvalidNewPasswordException, UserNotFoundException {
         return userMapper.map(userConfig.admin.changeUserPasswordUseCase()
                 .changePassword(changeUserPasswordCommand));
     }
@@ -68,14 +69,9 @@ public class UserSecureAdapter {
                 .deleteProfileImage(id));
     }
 
-//    public UserDTO updateUser(UserDTO userDTO) throws UserNotFoundException, UserAlreadyExistException, AuthorizationException, AuthenticationException, TokenExpiredException {
-//        return userMapper.map(userConfig.admin.UpdateUserUseCase()
-//                .update(userMapper.inverseMap(userDTO)));
-//    }
-//
-//    public UserDTO update(String userId, UpdateUserCommand updateUserCommand) throws AuthorizationException, AuthenticationException, UserNotFoundException, TokenExpiredException {
-//        return userMapper.map(userConfig.admin.UpdateUserUseCase()
-//                .update(userId, updateUserCommand));
-//    }
+    public UserDTO deleteCurrentUserProfileImage() throws AuthorizationException, TokenExpiredException, AuthenticationException {
+        return userMapper.map(userConfig.admin.deleteCurrentUserProfileImageUseCase()
+                .deleteProfileImage());
+    }
 
 }

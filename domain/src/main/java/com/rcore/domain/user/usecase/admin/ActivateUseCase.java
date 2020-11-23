@@ -9,6 +9,8 @@ import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.access.AdminUserBlockAccess;
 
+import java.time.LocalDateTime;
+
 
 public class ActivateUseCase extends AdminBaseUseCase {
 
@@ -21,6 +23,7 @@ public class ActivateUseCase extends AdminBaseUseCase {
 
         userEntity.setStatus(UserStatus.ACTIVE);
         userEntity.setFails(0);
+        userEntity.setUpdatedAt(LocalDateTime.now());
         return userRepository.save(userEntity);
     }
 }

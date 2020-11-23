@@ -10,6 +10,8 @@ import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.access.AdminUserBlockAccess;
 
+import java.time.LocalDateTime;
+
 public class BlockUseCase extends AdminBaseUseCase {
 
     private final ExpireTokenUseCase expireTokenUseCase;
@@ -25,6 +27,7 @@ public class BlockUseCase extends AdminBaseUseCase {
 
         userEntity.setStatus(UserStatus.BLOCK);
         userEntity.setFails(0);
+        userEntity.setUpdatedAt(LocalDateTime.now());
         userEntity = userRepository.save(userEntity);
 
         expireTokenUseCase.logout(userEntity);

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class ChangeUserPasswordCommand {
-    private String id;
+public class ChangeCurrentUserPasswordCommand {
+    private String oldPassword;
     private String newPassword;
 }
