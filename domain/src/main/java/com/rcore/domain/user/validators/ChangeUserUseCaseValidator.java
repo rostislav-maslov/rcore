@@ -69,6 +69,8 @@ public class ChangeUserUseCaseValidator {
             if (userRepository.findByEmail(createUserCommand.getEmail()).isPresent())
                 throw new UserWithEmailAlreadyExistException();
         }
+
+        //TODO Добавить проверку страны и номера телефона
     }
 
 }
