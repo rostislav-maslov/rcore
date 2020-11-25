@@ -17,6 +17,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -91,6 +92,11 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public SearchResult<UserEntity> findWithFilters(UserFilters userFilters) {
         FindWithFiltersAggregation findWithFiltersAggregation = new FindWithFiltersAggregation(userFilters);
+
+        List<HashMap> result =  mongoTemplate.aggregate(findWithFiltersAggregation.getAggregation(), findWithFiltersAggregation.getInputType(), HashMap.class)
+                .getMappedResults()
+                .stream()
+                .collect(Collectors.toList());
 
         return SearchResult.withItemsAndCount(
                 mongoTemplate.aggregate(findWithFiltersAggregation.getAggregation(), findWithFiltersAggregation.getInputType(), findWithFiltersAggregation.getOutputType())

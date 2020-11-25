@@ -40,8 +40,8 @@ public class FindWithFiltersAggregation extends AbstractAggregationQuery<UserDoc
                                                 Criteria.where("email").regex(userFilters.getQuery(), "i")
                                         )
                                         : new Criteria(),
-                                userFilters.getAuthTypes() != null ? Criteria.where("roleObjects.availableAuthTypes").in(userFilters.getAuthTypes()) : new Criteria(),
-                                StringUtils.hasText(userFilters.getRoleId()) ? Criteria.where("roleObjects.id").in(userFilters.getRoleId()) : new Criteria(),
+                                StringUtils.hasText(userFilters.getRoleId()) ? Criteria.where("roleObjects").elemMatch(Criteria.where("_id").is(userFilters.getRoleId())) : new Criteria(),
+                                userFilters.getAuthTypes() != null && !userFilters.getAuthTypes().isEmpty() ? Criteria.where("roleObjects").elemMatch(Criteria.where("availableAuthTypes").in(userFilters.getAuthTypes())) : new Criteria(),
                                 userFilters.getStatus() != null ? Criteria.where("status").is(userFilters.getStatus()) : new Criteria()
                         )));
     }
