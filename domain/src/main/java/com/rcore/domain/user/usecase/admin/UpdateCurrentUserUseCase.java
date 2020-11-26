@@ -26,7 +26,7 @@ public class UpdateCurrentUserUseCase extends AdminBaseUseCase {
     public UserEntity update(CreateUserCommand createUserCommand) throws AuthorizationException, TokenExpiredException, AuthenticationException, UserNotFoundException, InvalidLastNameException, PhoneIsRequiredException, UserAlreadyExistException, InvalidFirstNameException, InvalidRoleException, UserWithPhoneAlreadyExistException, RoleIsRequiredException, InvalidEmailException, UserWithEmailAlreadyExistException, InvalidAccountStatusException {
         UserEntity userEntity = checkAccess();
 
-        changeUserUseCaseValidator.validate(createUserCommand);
+        changeUserUseCaseValidator.validate(userEntity, createUserCommand);
 
         userEntity.setLogin(Optional.ofNullable(createUserCommand.getLogin())
                 .orElse(userEntity.getLogin()));

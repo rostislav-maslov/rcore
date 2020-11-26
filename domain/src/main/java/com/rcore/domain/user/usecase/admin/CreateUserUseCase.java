@@ -81,9 +81,10 @@ public class CreateUserUseCase extends AdminBaseUseCase {
                 .map(Optional::get)
                 .collect(Collectors.toSet());
 
-        changeUserUseCaseValidator.validate(createUserCommand);
-
         UserEntity userEntity = new UserEntity();
+
+        changeUserUseCaseValidator.validate(userEntity, createUserCommand);
+
         userEntity.setId(userIdGenerator.generate());
         userEntity.setEmail(createUserCommand.getEmail());
         userEntity.setRoles(roles);

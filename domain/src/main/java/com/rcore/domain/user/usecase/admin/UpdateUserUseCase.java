@@ -102,7 +102,7 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
                 .map(Optional::get)
                 .collect(Collectors.toSet());
 
-        changeUserUseCaseValidator.validate(updateUserCommand);
+        changeUserUseCaseValidator.validate(userEntity, updateUserCommand);
 
         userEntity.setLogin(Optional.ofNullable(updateUserCommand.getLogin())
                 .orElse(userEntity.getLogin()));
