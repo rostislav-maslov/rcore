@@ -5,6 +5,7 @@ import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.picture.entity.PictureEntity;
 import com.rcore.domain.role.entity.RoleEntity;
 import com.rcore.domain.role.port.RoleRepository;
+import com.rcore.domain.role.port.filters.RoleFilters;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -54,6 +55,11 @@ public class RoleRepositoryImpl implements RoleRepository {
 
     @Override
     public Long count() {
+        return null;
+    }
+
+    @Override
+    public SearchResult<RoleEntity> findWithFilters(RoleFilters roleFilters) {
         return null;
     }
 }

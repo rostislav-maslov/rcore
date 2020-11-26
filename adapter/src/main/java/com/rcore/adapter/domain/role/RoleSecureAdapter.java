@@ -7,6 +7,7 @@ import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.role.config.RoleConfig;
 import com.rcore.domain.role.entity.RoleEntity;
+import com.rcore.domain.role.port.filters.RoleFilters;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.user.exception.TokenExpiredException;
@@ -24,6 +25,16 @@ public class RoleSecureAdapter {
     public SearchResult<RoleDTO> find(SearchRequest request) throws AuthorizationException, AuthenticationException, TokenExpiredException {
         SearchResult<RoleEntity> result = roleConfig.admin.viewUseCase()
                 .find(request);
+
+        return SearchResult.withItemsAndCount(
+                roleMapper.mapAll(result.getItems()),
+                result.getCount()
+        );
+    }
+
+    public SearchResult<RoleDTO> findWithFilters(RoleFilters roleFilters) throws AuthorizationException, AuthenticationException, TokenExpiredException {
+        SearchResult<RoleEntity> result = roleConfig.admin.viewUseCase()
+                .findWithFilters(roleFilters);
 
         return SearchResult.withItemsAndCount(
                 roleMapper.mapAll(result.getItems()),

@@ -4,10 +4,12 @@ import com.rcore.database.mongo.common.utils.CollectionNameUtils;
 import com.rcore.database.mongo.domain.role.model.RoleDoc;
 import com.rcore.database.mongo.domain.role.query.FindAllWithSearch;
 import com.rcore.database.mongo.domain.role.query.FindByName;
+import com.rcore.database.mongo.domain.role.query.FindWithFilters;
 import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.role.entity.RoleEntity;
 import com.rcore.domain.role.port.RoleRepository;
+import com.rcore.domain.role.port.filters.RoleFilters;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -26,6 +28,16 @@ public class RoleRepositoryImpl implements RoleRepository {
     @Override
     public Optional<RoleEntity> findByName(String name) {
         return Optional.ofNullable(mongoTemplate.findOne(FindByName.of(name).getQuery(), RoleDoc.class));
+    }
+
+    @Override
+    public SearchResult<RoleEntity> findWithFilters(RoleFilters roleFilters) {
+        Query query = new FindWithFilters(roleFilters).getQuery();
+        return SearchResult.withItemsAndCount(
+                mongoTemplate.find(query, RoleDoc.class)
+                        .stream()
+                        .collect(Collectors.toList()),
+                mongoTemplate.count(query.limit(0).skip(0), RoleDoc.class));
     }
 
     @Override

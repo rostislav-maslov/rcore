@@ -4,6 +4,7 @@ import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.role.entity.RoleEntity;
 import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.role.access.AdminRoleViewAccess;
+import com.rcore.domain.role.port.filters.RoleFilters;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
@@ -37,6 +38,11 @@ public class RoleViewUseCase extends RoleAdminBaseUseCase {
     public SearchResult<RoleEntity> find(SearchRequest request) throws AuthenticationException, AuthorizationException, TokenExpiredException {
         checkAccess();
         return roleRepository.find(request);
+    }
+
+    public SearchResult<RoleEntity> findWithFilters(RoleFilters roleFilters) throws AuthorizationException, TokenExpiredException, AuthenticationException {
+        checkAccess();
+        return roleRepository.findWithFilters(roleFilters);
     }
 
 }
