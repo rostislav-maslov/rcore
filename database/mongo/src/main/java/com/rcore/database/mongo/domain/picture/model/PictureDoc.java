@@ -1,10 +1,12 @@
 package com.rcore.database.mongo.domain.picture.model;
 
 import com.rcore.domain.picture.entity.PictureEntity;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+@EqualsAndHashCode(callSuper = true)
 @Document
 @SuperBuilder
 @NoArgsConstructor

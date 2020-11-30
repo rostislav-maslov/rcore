@@ -3,6 +3,7 @@ package com.rcore.database.mongo.domain.userPasswordRecover.model;
 import com.rcore.database.mongo.domain.user.model.UserDoc;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.userPasswordRecover.entity.UserPasswordRecoverEntity;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -12,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @Document
 @CompoundIndexes({
         @CompoundIndex(def = "{'_id': 1}", name = "_id_")

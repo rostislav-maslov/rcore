@@ -1,6 +1,7 @@
 package com.rcore.database.mongo.domain.user.model;
 
 import com.rcore.domain.user.entity.UserEntity;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -11,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 /**
  * TODO прописать индекты
  */
+@EqualsAndHashCode(callSuper = true)
 @Document
 @CompoundIndexes({
         @CompoundIndex(def = "{'_id': 1}", name = "_id_")

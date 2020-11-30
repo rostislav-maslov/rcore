@@ -1,12 +1,14 @@
 package com.rcore.database.mongo.domain.file.model;
 
 import com.rcore.domain.file.entity.FileEntity;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.index.CompoundIndexes;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+@EqualsAndHashCode(callSuper = true)
 @CompoundIndexes({
         @CompoundIndex(def = "{'filePath': 1}")
 })
