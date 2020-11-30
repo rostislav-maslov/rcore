@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -31,7 +32,7 @@ public class ChangeUserUseCaseValidator {
         if (createUserCommand.getStatus() == null && userEntity.getStatus() == null)
             throw new InvalidAccountStatusException();
 
-        List<RoleEntity> roles = new ArrayList<>();
+        List<RoleEntity> roles = userEntity.getRoles().stream().collect(Collectors.toList());
 
         //Проверка ролей
         if (createUserCommand.getRoles() != null) {
@@ -59,16 +60,16 @@ public class ChangeUserUseCaseValidator {
         if (authTypes.contains(RoleEntity.AuthType.SMS)) {
             if (createUserCommand.getPhone() == null && userEntity.getPhoneNumber() == null)
                 throw new PhoneIsRequiredException();
-
-            if (createUserCommand.getPhone() != null && userRepository.findByPhoneNumber(createUserCommand.getPhone()).isPresent())
+            Optional<UserEntity> userWithTransferredNumber = userRepository.findByPhoneNumber(createUserCommand.getPhone());
+            if (createUserCommand.getPhone() != null && userWithTransferredNumber.isPresent() && !userWithTransferredNumber.get().getId().equals(userEntity.getId()))
                 throw new UserWithPhoneAlreadyExistException();
         }
         //Если тип EMAIL, то email и password - обязательные поля
-        else if (authTypes.contains(RoleEntity.AuthType.EMAIL)) {
+        if (authTypes.contains(RoleEntity.AuthType.EMAIL)) {
             if (!StringUtils.hasText(createUserCommand.getEmail()) && userEntity.getEmail() == null)
                 throw new InvalidEmailException();
-
-            if (!StringUtils.hasText(createUserCommand.getEmail()) && userRepository.findByEmail(createUserCommand.getEmail()).isPresent())
+            Optional<UserEntity> userWithTransferredEmail = userRepository.findByEmail(createUserCommand.getEmail());
+            if (createUserCommand.getEmail() != null && userWithTransferredEmail.isPresent() && !userWithTransferredEmail.get().getId().equals(userEntity.getId()))
                 throw new UserWithEmailAlreadyExistException();
         }
     }

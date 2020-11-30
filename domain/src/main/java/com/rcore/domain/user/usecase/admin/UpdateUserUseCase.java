@@ -130,8 +130,7 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         userEntity.setStatus(Optional.ofNullable(updateUserCommand.getStatus())
                 .orElse(userEntity.getStatus()));
 
-        userEntity.setRoles(Optional.ofNullable(newRoles)
-                .orElse(userEntity.getRoles()));
+        userEntity.setRoles(newRoles.isEmpty() ? userEntity.getRoles() : newRoles);
 
         userEntity.setCountryId(Optional.ofNullable(updateUserCommand.getCountryId())
                 .orElse(userEntity.getCountryId()));
