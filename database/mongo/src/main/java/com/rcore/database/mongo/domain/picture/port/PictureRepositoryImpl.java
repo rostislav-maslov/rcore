@@ -4,7 +4,7 @@ import com.rcore.database.mongo.common.utils.CollectionNameUtils;
 import com.rcore.database.mongo.domain.picture.model.PictureDoc;
 import com.rcore.database.mongo.domain.picture.query.DeleteUnused;
 import com.rcore.database.mongo.domain.picture.query.FindAllWithSearch;
-import com.rcore.domain.base.port.SearchRequest;
+import com.rcore.domain.base.port.SearchFilters;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.picture.entity.PictureEntity;
 import com.rcore.domain.picture.port.PictureRepository;
@@ -46,7 +46,7 @@ public class PictureRepositoryImpl implements PictureRepository {
     }
 
     @Override
-    public SearchResult<PictureEntity> find(SearchRequest request) {
+    public SearchResult<PictureEntity> find(SearchFilters request) {
         Query query = new FindAllWithSearch(request).getQuery();
         return SearchResult.withItemsAndCount(
                 mongoTemplate.find(query, PictureDoc.class)

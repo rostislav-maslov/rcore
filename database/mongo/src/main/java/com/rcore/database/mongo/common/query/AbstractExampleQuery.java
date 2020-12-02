@@ -1,12 +1,10 @@
 package com.rcore.database.mongo.common.query;
 
-import com.rcore.database.mongo.common.dto.SearchDTO;
 import com.rcore.domain.base.entity.BaseEntity;
-import com.rcore.domain.base.port.SearchRequest;
+import com.rcore.domain.base.port.SearchFilters;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Query;
 
-import java.util.Map;
 import java.util.Optional;
 
 public abstract class AbstractExampleQuery<Entity extends BaseEntity> implements ExampleQuery<Entity> {
@@ -23,7 +21,7 @@ public abstract class AbstractExampleQuery<Entity extends BaseEntity> implements
         this.sort = Sort.by(sortDirection, sortName);
     }
 
-    public AbstractExampleQuery(SearchRequest request) {
+    public AbstractExampleQuery(SearchFilters request) {
         this.query = Optional.ofNullable(request.getQuery()).orElse("");
         this.limit = Optional.ofNullable(request.getLimit()).orElse(20l);
         this.offset = Optional.ofNullable(request.getOffset()).orElse(0l);

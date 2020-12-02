@@ -4,7 +4,7 @@ import com.rcore.database.mongo.common.utils.CollectionNameUtils;
 import com.rcore.database.mongo.domain.file.model.FileDoc;
 import com.rcore.database.mongo.domain.file.query.FindAllWithSearch;
 import com.rcore.database.mongo.domain.file.query.FindByPath;
-import com.rcore.domain.base.port.SearchRequest;
+import com.rcore.domain.base.port.SearchFilters;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.file.entity.FileEntity;
 import com.rcore.domain.file.port.FileRepository;
@@ -51,7 +51,7 @@ public class FileRepositoryImpl implements FileRepository {
     }
 
     @Override
-    public SearchResult<FileEntity> find(SearchRequest request) {
+    public SearchResult<FileEntity> find(SearchFilters request) {
         Query query = new FindAllWithSearch(request).getQuery();
 
         return SearchResult.withItemsAndCount(

@@ -1,17 +1,10 @@
 package com.rcore.database.mongo.domain.userPasswordRecover.port;
 
 import com.rcore.database.mongo.common.utils.CollectionNameUtils;
-import com.rcore.database.mongo.domain.role.model.RoleDoc;
-import com.rcore.database.mongo.domain.user.model.UserDoc;
 import com.rcore.database.mongo.domain.user.query.FindAllWithSearch;
-import com.rcore.database.mongo.domain.user.query.FindByEmailQuery;
-import com.rcore.database.mongo.domain.user.query.FindByLoginQuery;
-import com.rcore.database.mongo.domain.user.query.FindByPhoneNumberQuery;
 import com.rcore.database.mongo.domain.userPasswordRecover.model.UserPasswordRecoverDoc;
-import com.rcore.domain.base.port.SearchRequest;
+import com.rcore.domain.base.port.SearchFilters;
 import com.rcore.domain.base.port.SearchResult;
-import com.rcore.domain.user.entity.UserEntity;
-import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.userPasswordRecover.entity.UserPasswordRecoverEntity;
 import com.rcore.domain.userPasswordRecover.port.UserPasswordRecoverRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +14,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -78,7 +70,7 @@ public class UserPasswordRecoverRepositoryImpl implements UserPasswordRecoverRep
     }
 
     @Override
-    public SearchResult<UserPasswordRecoverEntity> find(SearchRequest request) {
+    public SearchResult<UserPasswordRecoverEntity> find(SearchFilters request) {
         Query query = new FindAllWithSearch(request).getQuery();
         return SearchResult.withItemsAndCount(
                 mongoTemplate.find(query, UserPasswordRecoverDoc.class)

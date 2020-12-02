@@ -5,14 +5,13 @@ import com.rcore.database.mongo.common.utils.CollectionNameUtils;
 import com.rcore.database.mongo.domain.role.model.RoleDoc;
 import com.rcore.database.mongo.domain.user.model.UserDoc;
 import com.rcore.database.mongo.domain.user.query.*;
-import com.rcore.domain.base.port.SearchRequest;
+import com.rcore.domain.base.port.SearchFilters;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.port.filters.UserFilters;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -79,7 +78,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public SearchResult<UserEntity> find(SearchRequest request) {
+    public SearchResult<UserEntity> find(SearchFilters request) {
         Query query = new FindAllWithSearch(request).getQuery();
         return SearchResult.withItemsAndCount(
                 mongoTemplate.find(query, UserDoc.class)

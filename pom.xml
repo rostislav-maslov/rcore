@@ -9,20 +9,13 @@
     <modules>
         <module>domain</module>
         <module>database</module>
-        <module>adapter</module>
         <module>commons</module>
-        <module>rest-api</module>
-        <module>security</module>
-        <module>admin-core</module>
+        <module>domain/untitled</module>
     </modules>
 
     <packaging>pom</packaging>
 
     <properties>
-        <rcore.version>0.10.7</rcore.version>
+        <rcore.version>1.0.0</rcore.version>
     </properties>
-
-    <build>
-
-    </build>
 </project>

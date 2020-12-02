@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.rostislav-maslov.rcore</groupId>
     <artifactId>domain</artifactId>
-    <version>${rcore.version}</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -12,22 +12,34 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <rcore.version>0.10.7</rcore.version>
+        <rcore.version>1.0.0</rcore.version>
     </properties>
+
+    <modules>
+        <module>rcore-domain-auth</module>
+        <module>rcore-domain-commons</module>
+        <module>rcore-domain-security</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.7.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
 
-        <dependency>
-            <groupId>com.github.rostislav-maslov.rcore</groupId>
-            <artifactId>commons</artifactId>
-            <version>${rcore.version}</version>
-        </dependency>
-        
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.12</version>
+            <version>1.18.16</version>
             <scope>provided</scope>
         </dependency>
 
@@ -38,12 +50,10 @@
             <version>1.7.30</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/junit/junit -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13</version>
-<!--            <scope>test</scope>-->
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
@@ -51,11 +61,10 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>3.4.4</version>
-<!--            <scope>test</scope>-->
+            <!--            <scope>test</scope>-->
         </dependency>
 
     </dependencies>
-
 
 
     <build>

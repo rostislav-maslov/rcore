@@ -1,6 +1,6 @@
 package com.rcore.database.memory.user.port;
 
-import com.rcore.domain.base.port.SearchRequest;
+import com.rcore.domain.base.port.SearchFilters;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.port.UserRepository;
@@ -42,7 +42,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public SearchResult<UserEntity> find(SearchRequest request) {
+    public SearchResult<UserEntity> find(SearchFilters request) {
         return null;
     }
 

@@ -10,7 +10,7 @@ import com.rcore.database.mongo.domain.token.model.RefreshTokenDoc;
 import com.rcore.database.mongo.domain.token.query.ExpireRefreshTokenQuery;
 import com.rcore.database.mongo.domain.token.query.FindAllActiveByUserId;
 import com.rcore.database.mongo.domain.token.query.FindAllWithSearch;
-import com.rcore.domain.base.port.SearchRequest;
+import com.rcore.domain.base.port.SearchFilters;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.port.RefreshTokenRepository;
@@ -74,7 +74,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     }
 
     @Override
-    public SearchResult<RefreshTokenEntity> find(SearchRequest request) {
+    public SearchResult<RefreshTokenEntity> find(SearchFilters request) {
         Query query = new FindAllWithSearch(request).getQuery();
         return SearchResult.withItemsAndCount(
                 mongoTemplate.find(query, RefreshTokenDoc.class)

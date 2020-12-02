@@ -1,10 +1,9 @@
 package com.rcore.database.memory.token.port;
 
-import com.rcore.domain.base.port.SearchRequest;
+import com.rcore.domain.base.port.SearchFilters;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.port.RefreshTokenRepository;
-import com.rcore.database.memory.base.port.CRUDRepositoryImpl;
 
 import java.util.*;
 
@@ -40,7 +39,7 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     }
 
     @Override
-    public SearchResult<RefreshTokenEntity> find(SearchRequest request) {
+    public SearchResult<RefreshTokenEntity> find(SearchFilters request) {
         return null;
     }
 

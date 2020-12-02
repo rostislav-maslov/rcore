@@ -9,7 +9,7 @@ import com.rcore.database.mongo.domain.token.query.DeactivateAllAccessTokenByRef
 import com.rcore.database.mongo.domain.token.query.ExpireAccessToken;
 import com.rcore.database.mongo.domain.token.query.ExpireAllAccessTokenByRefreshTokenId;
 import com.rcore.database.mongo.domain.token.query.FindAllWithSearch;
-import com.rcore.domain.base.port.SearchRequest;
+import com.rcore.domain.base.port.SearchFilters;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.port.AccessTokenRepository;
@@ -59,7 +59,7 @@ public class AccessTokenRepositoryImpl implements AccessTokenRepository {
     }
 
     @Override
-    public SearchResult<AccessTokenEntity> find(SearchRequest request) {
+    public SearchResult<AccessTokenEntity> find(SearchFilters request) {
         Query query = new FindAllWithSearch(request).getQuery();
         return SearchResult.withItemsAndCount(
                 mongoTemplate.find(query, AccessTokenDoc.class)

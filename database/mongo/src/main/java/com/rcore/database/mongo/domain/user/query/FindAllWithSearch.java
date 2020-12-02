@@ -1,21 +1,16 @@
 package com.rcore.database.mongo.domain.user.query;
 
 import com.rcore.database.mongo.common.query.AbstractExampleQuery;
-import com.rcore.domain.base.port.SearchRequest;
+import com.rcore.domain.base.port.SearchFilters;
 import com.rcore.domain.user.entity.UserEntity;
-import lombok.Setter;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.util.StringUtils;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class FindAllWithSearch extends AbstractExampleQuery<UserEntity> {
 
     private String roleId;
 
-    public FindAllWithSearch(SearchRequest request) {
+    public FindAllWithSearch(SearchFilters request) {
         super(request);
     }
 

@@ -5,7 +5,7 @@ import com.rcore.database.mongo.domain.role.model.RoleDoc;
 import com.rcore.database.mongo.domain.role.query.FindAllWithSearch;
 import com.rcore.database.mongo.domain.role.query.FindByName;
 import com.rcore.database.mongo.domain.role.query.FindWithFilters;
-import com.rcore.domain.base.port.SearchRequest;
+import com.rcore.domain.base.port.SearchFilters;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.role.entity.RoleEntity;
 import com.rcore.domain.role.port.RoleRepository;
@@ -63,7 +63,7 @@ public class RoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public SearchResult<RoleEntity> find(SearchRequest request) {
+    public SearchResult<RoleEntity> find(SearchFilters request) {
         Query query = new FindAllWithSearch(request).getQuery();
         return SearchResult.withItemsAndCount(
                 mongoTemplate.find(new FindAllWithSearch(request).getQuery(), RoleDoc.class)

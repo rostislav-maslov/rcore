@@ -63,7 +63,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <rcore.version>0.10.7</rcore.version>
+        <rcore.version>1.0.0</rcore.version>
     </properties>
 
     <build>
