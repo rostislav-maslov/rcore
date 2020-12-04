@@ -32,9 +32,9 @@ public abstract class AbstractAggregationQuery<Input, Output> {
      */
     public Aggregation getAggregation() {
         List<AggregationOperation> operations = new ArrayList<>(getOperations());
+        operations.add(Aggregation.sort(Sort.by(Sort.Direction.fromString(searchRequest.getSortDirection()), searchRequest.getSortName())));
         operations.add(Aggregation.skip(searchRequest.getOffset()));
         operations.add(Aggregation.limit(searchRequest.getLimit()));
-        operations.add(Aggregation.sort(Sort.by(Sort.Direction.fromString(searchRequest.getSortDirection()), searchRequest.getSortName())));
         return Aggregation.newAggregation(operations);
     }
 
