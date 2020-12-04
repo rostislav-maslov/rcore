@@ -10,7 +10,7 @@
         <version>1.0.0</version>
     </parent>
 
-    <groupId>com.rcore</groupId>
+    <groupId>com.github.rostislav-maslov.rcore</groupId>
     <artifactId>rcore-domain-auth</artifactId>
     <version>${rcore.version}</version>
 
