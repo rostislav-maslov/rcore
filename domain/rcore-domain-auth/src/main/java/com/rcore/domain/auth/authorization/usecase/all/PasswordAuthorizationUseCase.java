@@ -2,7 +2,6 @@ package com.rcore.domain.auth.authorization.usecase.all;
 
 import com.rcore.commons.utils.StringUtils;
 import com.rcore.domain.auth.authorization.exceptions.BadCredentialsException;
-import com.rcore.domain.auth.authorization.exceptions.InvalidUsernameException;
 import com.rcore.domain.auth.authorization.exceptions.PasswordIsRequiredException;
 import com.rcore.domain.auth.authorization.exceptions.UsernameIsRequiredException;
 import com.rcore.domain.auth.authorization.usecase.all.commands.CreateAuthorizationCommand;
@@ -18,6 +17,9 @@ import com.rcore.domain.auth.token.usecase.CreateAccessTokenUseCase;
 import com.rcore.domain.auth.token.usecase.CreateRefreshTokenUseCase;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Авторизация по логину-паролю
+ */
 @RequiredArgsConstructor
 public class PasswordAuthorizationUseCase {
 
@@ -30,24 +32,31 @@ public class PasswordAuthorizationUseCase {
     public TokenPair login(PasswordAuthorizationCommand passwordAuthorizationCommand) throws UsernameIsRequiredException, PasswordIsRequiredException, BadCredentialsException, CredentialIsBlockedException {
         validate(passwordAuthorizationCommand);
 
+        //Находим учетные данные по username
         CredentialEntity credentialEntity = credentialRepository.findByUsername(passwordAuthorizationCommand.getUsername())
-                .orElseThrow(BadCredentialsException::new);
+                .orElseThrow(() -> {
+                    createFailedAuthentication(passwordAuthorizationCommand.getUsername());
+                    return new BadCredentialsException();
+                });
 
+        //Проверка правильности переданного пароля
         if (passwordCryptographer.validate(passwordAuthorizationCommand.getPassword(), credentialEntity.getPassword(), credentialEntity.getId()) == false) {
-            failAuthentication(credentialEntity);
+            createFailedAuthentication(passwordAuthorizationCommand.getUsername());
             throw new BadCredentialsException();
         }
 
+        //Проверка заблокированного пользователя, то 
         if (credentialEntity.isBlocked()) {
-            failAuthentication(credentialEntity);
+            createFailedAuthentication(passwordAuthorizationCommand.getUsername());
             throw new CredentialIsBlockedException();
         }
 
-        successAuthentication(credentialEntity);
+        //создаем токены авторизации для учетных данных
         RefreshTokenEntity refreshTokenEntity = createRefreshTokenUseCase.create(credentialEntity);
         AccessTokenEntity accessTokenEntity = createAccessTokenUseCase.create(credentialEntity, refreshTokenEntity);
 
-        createAuthentication(passwordAuthorizationCommand, accessTokenEntity.getId(), refreshTokenEntity.getId());
+        //Успешная авторизация
+        successAuthentication(credentialEntity, accessTokenEntity, refreshTokenEntity);
 
         return TokenPair.builder()
                 .accessToken(accessTokenEntity)
@@ -55,31 +64,36 @@ public class PasswordAuthorizationUseCase {
                 .build();
     }
 
-    private void createAuthentication(PasswordAuthorizationCommand passwordAuthorizationCommand, String accessTokenId, String refreshTokenId) {
+    private void createSuccessfulAuthentication(CredentialEntity credentialEntity, String accessTokenId, String refreshTokenId) {
         createAuthorizationUseCase.create(CreateAuthorizationCommand
-                .successfulPasswordAuthorization(passwordAuthorizationCommand.getUsername(), passwordAuthorizationCommand.getPassword(), accessTokenId, refreshTokenId));
+                .successfulPasswordAuthorization(credentialEntity, accessTokenId, refreshTokenId));
     }
+
+    private void createFailedAuthentication(String username) {
+        createAuthorizationUseCase.create(CreateAuthorizationCommand.failedPasswordAuthorization(username));
+    }
+
 
     /**
      * Успешная авторизация
+     *
      * @param credentialEntity
      */
-    private void successAuthentication(CredentialEntity credentialEntity) {
-        credentialEntity.clearFails();
-        credentialRepository.save(credentialEntity);
+    private void successAuthentication(CredentialEntity credentialEntity, AccessTokenEntity accessTokenEntity, RefreshTokenEntity refreshTokenEntity) {
+        //Создаем успешную авторизацию
+        createSuccessfulAuthentication(credentialEntity, accessTokenEntity.getId(), refreshTokenEntity.getId());
     }
 
     /**
-     * Провальная аутентификация
-     * @param credentialEntity
+     * Провальная авторизация
      */
-    private void failAuthentication(CredentialEntity credentialEntity) {
-        credentialEntity.addFail();
-        credentialRepository.save(credentialEntity);
+    private void failAuthentication(String username) {
+        createFailedAuthentication(username);
     }
 
     /**
      * Валидация входящих данных
+     *
      * @param passwordAuthorizationCommand
      * @throws UsernameIsRequiredException
      * @throws PasswordIsRequiredException

@@ -12,25 +12,25 @@
 
     <groupId>com.rcore</groupId>
     <artifactId>rcore-domain-auth</artifactId>
-    <version>1.0.0</version>
+    <version>${rcore.version}</version>
 
     <dependencies>
 
         <dependency>
             <groupId>com.github.rostislav-maslov.rcore</groupId>
             <artifactId>rcore-domain-commons</artifactId>
-            <version>1.0.0</version>
+            <version>${rcore.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.rcore</groupId>
             <artifactId>rcore-domain-security</artifactId>
-            <version>1.0.0</version>
+            <version>${rcore.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.rostislav-maslov.rcore</groupId>
             <artifactId>commons</artifactId>
-            <version>1.0.0</version>
+            <version>${rcore.version}</version>
         </dependency>
     </dependencies>
 

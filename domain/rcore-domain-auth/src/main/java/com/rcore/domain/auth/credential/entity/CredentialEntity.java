@@ -1,5 +1,6 @@
 package com.rcore.domain.auth.credential.entity;
 
+import com.rcore.commons.utils.StringUtils;
 import com.rcore.domain.commons.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,19 +44,14 @@ public class CredentialEntity extends BaseEntity {
     protected String phone;
 
     /**
+     * Адрес электронной почты для 2FA
+     */
+    protected String email;
+
+    /**
      * Пассив ролей учетной записи
      */
     protected List<Role> roles = new ArrayList<>();
-
-    /**
-     * Кол-во неудачных авторизаций подряд
-     */
-    protected Integer failsCount = 0;
-
-    /**
-     * Время последнего неудачного вызова
-     */
-    protected LocalDateTime lastFailDate;
 
     /**
      * Статус учетной записи
@@ -86,15 +82,6 @@ public class CredentialEntity extends BaseEntity {
     /**
      * Methods
      */
-
-    public void addFail() {
-        this.failsCount = failsCount++;
-        this.lastFailDate = LocalDateTime.now();
-    }
-
-    public void clearFails() {
-        this.failsCount = 0;
-    }
 
     public boolean isBlocked() {
         return this.status.equals(Status.BLOCK);

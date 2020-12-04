@@ -24,11 +24,6 @@ public class RoleEntity extends BaseEntity {
     protected String name;
 
     /**
-     * Локализованное название
-     */
-    protected String locale;
-
-    /**
      * Доступы данной роли
      */
     protected List<String> accesses = new ArrayList<>();

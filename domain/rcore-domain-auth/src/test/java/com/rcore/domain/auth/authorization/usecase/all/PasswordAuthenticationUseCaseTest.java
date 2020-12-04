@@ -1,6 +1,5 @@
-package com.rcore.domain.auth.auth.usecase.all;
+package com.rcore.domain.auth.authorization.usecase.all;
 
-import com.rcore.domain.auth.auth.usecase.AuthorizationUseCaseTestInfrastructure;
 import com.rcore.domain.auth.authorization.exceptions.BadCredentialsException;
 import com.rcore.domain.auth.authorization.exceptions.InvalidUsernameException;
 import com.rcore.domain.auth.authorization.exceptions.PasswordIsRequiredException;

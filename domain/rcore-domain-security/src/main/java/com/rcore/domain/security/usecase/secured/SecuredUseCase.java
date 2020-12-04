@@ -1,10 +1,10 @@
-package com.rcore.domain.auth.base.usecase;
+package com.rcore.domain.security.usecase.secured;
 
 import com.rcore.domain.security.port.CredentialVerifier;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public abstract class SecureUseCase {
+public abstract class SecuredUseCase {
 
     private final CredentialVerifier credentialVerifier;
 

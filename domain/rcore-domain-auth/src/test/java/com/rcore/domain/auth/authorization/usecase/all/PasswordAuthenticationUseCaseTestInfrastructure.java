@@ -1,6 +1,6 @@
-package com.rcore.domain.auth.auth.usecase.all;
+package com.rcore.domain.auth.authorization.usecase.all;
 
-import com.rcore.domain.auth.auth.usecase.AuthorizationUseCaseTestInfrastructure;
+import com.rcore.domain.auth.authorization.usecase.AuthorizationUseCaseTestInfrastructure;
 import com.rcore.domain.auth.credential.entity.CredentialEntity;
 import org.mockito.Mockito;
 
@@ -22,7 +22,6 @@ class PasswordAuthenticationUseCaseTestInfrastructure extends AuthorizationUseCa
                 .status(CredentialEntity.Status.ACTIVE)
                 .username(username)
                 .password(encodedPassword)
-                .failsCount(0)
                 .build();
 
 
