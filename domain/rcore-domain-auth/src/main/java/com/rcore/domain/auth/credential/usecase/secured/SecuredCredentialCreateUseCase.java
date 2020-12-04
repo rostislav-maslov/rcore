@@ -11,6 +11,9 @@ import com.rcore.domain.auth.credential.usecase.secured.commands.CreateCredentia
 import com.rcore.domain.security.port.CredentialVerifier;
 import com.rcore.domain.security.usecase.secured.SecuredCreateUseCase;
 
+/**
+ * Создание учетных данных
+ */
 public class SecuredCredentialCreateUseCase extends SecuredCreateUseCase<String, CredentialIdGenerator<String>, CredentialEntity, CredentialRepository, CreateCredentialCommand> {
 
     private final PasswordCryptographer passwordCryptographer;

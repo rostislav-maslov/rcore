@@ -10,6 +10,9 @@ import com.rcore.domain.security.usecase.secured.SecuredUpdateUseCase;
 
 import java.util.Optional;
 
+/**
+ * Изменение учетных данных
+ */
 public class SecuredCredentialUpdateUseCase extends SecuredUpdateUseCase<String, CredentialEntity, CredentialRepository, UpdateCredentialCommand> {
 
     public SecuredCredentialUpdateUseCase(CredentialVerifier credentialVerifier, CredentialRepository repository) {
@@ -25,7 +28,14 @@ public class SecuredCredentialUpdateUseCase extends SecuredUpdateUseCase<String,
 
         validate(credentialEntity, updateCredentialCommand);
 
-        return null;
+        credentialEntity.setEmail(updateCredentialCommand.getEmail());
+        credentialEntity.setPhone(updateCredentialCommand.getPhone());
+        credentialEntity.setRoles(updateCredentialCommand.getRoles());
+        credentialEntity.setStatus(updateCredentialCommand.getStatus());
+        credentialEntity.setUsername(updateCredentialCommand.getUsername());
+
+        credentialEntity = repository.save(credentialEntity);
+        return credentialEntity;
     }
 
     private void validate(CredentialEntity credentialEntity, UpdateCredentialCommand updateCredentialCommand) throws CredentialWithUsernameAlreadyExistException, CredentialWithPhoneAlreadyExistException, CredentialWithEmailAlreadyExistException {
