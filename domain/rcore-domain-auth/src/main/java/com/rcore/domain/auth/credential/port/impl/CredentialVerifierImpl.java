@@ -25,7 +25,7 @@ public class CredentialVerifierImpl implements CredentialVerifier {
 
     @Override
     public CredentialDetails getAuthorizedCredential() throws AuthorizedCredentialNotFoundException {
-        Optional<String> sessionToken = sessionTokenRepository.getSessionToken();
+        Optional<String> sessionToken = sessionTokenRepository.getSessionAccessToken();
         if (sessionToken.isPresent()) {
             AccessTokenData tokenData = tokenConverter.parse(sessionToken.get());
             return credentialRepository.findById(tokenData.getCredentialId())

@@ -4,7 +4,7 @@ import com.rcore.domain.auth.authorization.exceptions.BadCredentialsException;
 import com.rcore.domain.auth.authorization.exceptions.InvalidUsernameException;
 import com.rcore.domain.auth.authorization.exceptions.PasswordIsRequiredException;
 import com.rcore.domain.auth.authorization.exceptions.UsernameIsRequiredException;
-import com.rcore.domain.auth.authorization.usecase.all.commands.PasswordAuthorizationCommand;
+import com.rcore.domain.auth.authorization.usecases.PasswordAuthorizationUseCase;
 import com.rcore.domain.auth.credential.exceptions.CredentialIsBlockedException;
 import com.rcore.domain.auth.token.entity.TokenPair;
 import org.junit.jupiter.api.Assertions;
@@ -23,11 +23,10 @@ class PasswordAuthenticationUseCaseTest extends PasswordAuthenticationUseCaseTes
      */
     @Test
     void testSuccessfulLogin() throws InvalidUsernameException, UsernameIsRequiredException, BadCredentialsException, CredentialIsBlockedException, PasswordIsRequiredException {
-        TokenPair tokenPair = authorizationConfig.all.passwordAuthorizationUseCase()
-                .login(PasswordAuthorizationCommand.builder()
-                        .username(username)
-                        .password(password)
-                        .build());
+        TokenPair tokenPair = authorizationConfig.passwordAuthorizationUseCase()
+                .execute(PasswordAuthorizationUseCase.InputValues
+                        .of(username, password))
+                .getTokenPair();
 
         Assertions.assertNotNull(tokenPair);
         Assertions.assertNotNull(tokenPair.getAccessToken());
@@ -39,10 +38,9 @@ class PasswordAuthenticationUseCaseTest extends PasswordAuthenticationUseCaseTes
      */
     @Test
     void testFailedLoginWithEmptyUsername() {
-        Assertions.assertThrows(UsernameIsRequiredException.class, () -> authorizationConfig.all.passwordAuthorizationUseCase()
-                .login(PasswordAuthorizationCommand.builder()
-                        .password(password)
-                        .build()));
+        Assertions.assertThrows(UsernameIsRequiredException.class, () -> authorizationConfig.passwordAuthorizationUseCase()
+                .execute(PasswordAuthorizationUseCase.InputValues
+                        .of(null, password)));
     }
 
     /**
@@ -50,10 +48,9 @@ class PasswordAuthenticationUseCaseTest extends PasswordAuthenticationUseCaseTes
      */
     @Test
     void testFailedLoginWithEmptyPassword() {
-        Assertions.assertThrows(PasswordIsRequiredException.class, () -> authorizationConfig.all.passwordAuthorizationUseCase()
-                .login(PasswordAuthorizationCommand.builder()
-                        .username(username)
-                        .build()));
+        Assertions.assertThrows(PasswordIsRequiredException.class, () -> authorizationConfig.passwordAuthorizationUseCase()
+                .execute(PasswordAuthorizationUseCase.InputValues
+                        .of(username, null)));
     }
 
     /**
@@ -61,11 +58,9 @@ class PasswordAuthenticationUseCaseTest extends PasswordAuthenticationUseCaseTes
      */
     @Test
     void testFailedLoginWithInvalidUsername() {
-        Assertions.assertThrows(BadCredentialsException.class, () -> authorizationConfig.all.passwordAuthorizationUseCase()
-                .login(PasswordAuthorizationCommand.builder()
-                        .username(username + "1")
-                        .password(password)
-                        .build()));
+        Assertions.assertThrows(BadCredentialsException.class, () -> authorizationConfig.passwordAuthorizationUseCase()
+                .execute(PasswordAuthorizationUseCase.InputValues
+                        .of(username + "a", password)));
     }
 
     /**
@@ -73,10 +68,8 @@ class PasswordAuthenticationUseCaseTest extends PasswordAuthenticationUseCaseTes
      */
     @Test
     void testFailedLoginWithInvalidPassword() {
-        Assertions.assertThrows(BadCredentialsException.class, () -> authorizationConfig.all.passwordAuthorizationUseCase()
-                .login(PasswordAuthorizationCommand.builder()
-                        .username(username)
-                        .password(password + "1")
-                        .build()));
+        Assertions.assertThrows(BadCredentialsException.class, () -> authorizationConfig.passwordAuthorizationUseCase()
+                .execute(PasswordAuthorizationUseCase.InputValues
+                        .of(username, password + 1)));
     }
 }

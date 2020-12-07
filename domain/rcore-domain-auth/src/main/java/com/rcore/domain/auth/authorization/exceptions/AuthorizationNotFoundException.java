@@ -1,4 +1,10 @@
 package com.rcore.domain.auth.authorization.exceptions;
 
-public class AuthorizationNotFoundException extends Exception {
+import com.rcore.domain.commons.exception.DomainException;
+
+public class AuthorizationNotFoundException extends DomainException {
+
+    public AuthorizationNotFoundException(String id) {
+        super("Authorization not found by ID: " + id);
+    }
 }

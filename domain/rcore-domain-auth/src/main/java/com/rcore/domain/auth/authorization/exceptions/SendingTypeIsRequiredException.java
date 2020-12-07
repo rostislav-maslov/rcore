@@ -1,4 +1,10 @@
 package com.rcore.domain.auth.authorization.exceptions;
 
-public class SendingTypeIsRequiredException extends Exception {
+import com.rcore.domain.commons.exception.DomainException;
+
+public class SendingTypeIsRequiredException extends DomainException {
+
+    public SendingTypeIsRequiredException() {
+        super("Sending type is required");
+    }
 }

@@ -53,6 +53,8 @@ public class ConfirmTwoFactorAuthorizationUseCeseTestInfrastructure extends Auth
             .confirmationStatus(ConfirmationCodeEntity.ConfirmationStatus.NOT_CONFIRMED)
             .sendingStatus(ConfirmationCodeEntity.SendingStatus.SENT)
             .sendingDate(LocalDateTime.now())
+            .expiredAt(LocalDateTime.now()
+                    .plusSeconds(60))
             .recipient(ConfirmationCodeEntity.Recipient.of(phone, credentialId, ConfirmationCodeEntity.Recipient.SendingType.SMS))
             .build();
 

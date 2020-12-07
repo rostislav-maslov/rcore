@@ -1,4 +1,10 @@
 package com.rcore.domain.auth.authorization.exceptions;
 
-public class AddressIsRequiredException extends Exception {
+import com.rcore.domain.commons.exception.DomainException;
+
+public class AddressIsRequiredException extends DomainException {
+
+    public AddressIsRequiredException() {
+        super("Address is required");
+    }
 }

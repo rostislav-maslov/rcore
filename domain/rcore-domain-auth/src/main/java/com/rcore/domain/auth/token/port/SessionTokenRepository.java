@@ -5,8 +5,14 @@ import java.util.Optional;
 public interface SessionTokenRepository {
 
     /**
-     * Получение токена текущей сессии, например из хеадера запроса
+     * Получение токена авторизации текущей сессии
      * @return
      */
-    Optional<String> getSessionToken();
+    Optional<String> getSessionAccessToken();
+
+    /**
+     * Получение токена обноления текущей сессии
+     * @return
+     */
+    Optional<String> getSessionRefreshToken();
 }

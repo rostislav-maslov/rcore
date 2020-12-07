@@ -1,7 +1,7 @@
 package com.rcore.domain.auth.authorization.usecase.all;
 
 import com.rcore.domain.auth.authorization.exceptions.*;
-import com.rcore.domain.auth.authorization.usecase.all.commands.ConfirmTwoFactorAuthorizationCommand;
+import com.rcore.domain.auth.authorization.usecases.ConfirmTwoFactorAuthorizationUseCase;
 import com.rcore.domain.auth.confirmationCode.entity.ConfirmationCodeEntity;
 import com.rcore.domain.auth.confirmationCode.exceptions.ConfirmationCodeIsExpiredException;
 import com.rcore.domain.auth.credential.exceptions.CredentialNotFoundException;
@@ -12,7 +12,6 @@ import org.mockito.Mockito;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 
 class ConfirmTwoFactorAuthorizationUseCaseTest extends ConfirmTwoFactorAuthorizationUseCeseTestInfrastructure {
@@ -30,12 +29,12 @@ class ConfirmTwoFactorAuthorizationUseCaseTest extends ConfirmTwoFactorAuthoriza
      */
     @Test
     void testSuccessfulConfirmTwoFactorAuthorization() throws AuthorizationNotFoundException, InvalidAuthorizationStatusException, SendingTypeIsRequiredException, AddressIsRequiredException, CredentialNotFoundException, ConfirmationCodeIsRequiredException, BadCredentialsException, ConfirmationCodeIsExpiredException {
-        TokenPair tokenPair = authorizationConfig.all.confirmTwoFactorAuthorizationUseCase()
-                .confirm(ConfirmTwoFactorAuthorizationCommand.builder()
-                        .address(phone)
-                        .sendingType(ConfirmationCodeEntity.Recipient.SendingType.SMS)
-                        .code(code)
-                        .build());
+        TokenPair tokenPair = authorizationConfig.confirmTwoFactorAuthorizationUseCase()
+                .execute(ConfirmTwoFactorAuthorizationUseCase.InputValues.of(
+                        phone,
+                        ConfirmationCodeEntity.Recipient.SendingType.SMS,
+                        code))
+                .getTokenPair();
 
         Assertions.assertNotNull(tokenPair);
         Assertions.assertNotNull(tokenPair.getAccessToken());
@@ -50,12 +49,11 @@ class ConfirmTwoFactorAuthorizationUseCaseTest extends ConfirmTwoFactorAuthoriza
         Mockito.when(authorizationRepository.findById(anyString()))
                 .then(a -> Optional.of(rejectedAuthorization));
 
-        Assertions.assertThrows(InvalidAuthorizationStatusException.class, () -> authorizationConfig.all.confirmTwoFactorAuthorizationUseCase()
-                .confirm(ConfirmTwoFactorAuthorizationCommand.builder()
-                        .address(phone)
-                        .sendingType(ConfirmationCodeEntity.Recipient.SendingType.SMS)
-                        .code(code)
-                        .build()));
+        Assertions.assertThrows(InvalidAuthorizationStatusException.class, () -> authorizationConfig.confirmTwoFactorAuthorizationUseCase()
+                .execute(ConfirmTwoFactorAuthorizationUseCase.InputValues.of(
+                        phone,
+                        ConfirmationCodeEntity.Recipient.SendingType.SMS,
+                        code)));
     }
 
     /**
@@ -63,12 +61,11 @@ class ConfirmTwoFactorAuthorizationUseCaseTest extends ConfirmTwoFactorAuthoriza
      */
     @Test
     void testFailedConfirmTwoFactorAuthorizationWithBadCredentialException() {
-        Assertions.assertThrows(BadCredentialsException.class, () -> authorizationConfig.all.confirmTwoFactorAuthorizationUseCase()
-                .confirm(ConfirmTwoFactorAuthorizationCommand.builder()
-                        .address(phone + 1)
-                        .sendingType(ConfirmationCodeEntity.Recipient.SendingType.SMS)
-                        .code(code)
-                        .build()));
+        Assertions.assertThrows(BadCredentialsException.class, () -> authorizationConfig.confirmTwoFactorAuthorizationUseCase()
+                .execute(ConfirmTwoFactorAuthorizationUseCase.InputValues.of(
+                        phone + 1,
+                        ConfirmationCodeEntity.Recipient.SendingType.SMS,
+                        code)));
     }
 
     /**
@@ -76,11 +73,11 @@ class ConfirmTwoFactorAuthorizationUseCaseTest extends ConfirmTwoFactorAuthoriza
      */
     @Test
     void testFailedConfirmTwoFactorAuthorizationWithAddressIsRequiredException() {
-        Assertions.assertThrows(AddressIsRequiredException.class, () -> authorizationConfig.all.confirmTwoFactorAuthorizationUseCase()
-                .confirm(ConfirmTwoFactorAuthorizationCommand.builder()
-                        .sendingType(ConfirmationCodeEntity.Recipient.SendingType.SMS)
-                        .code(code)
-                        .build()));
+        Assertions.assertThrows(AddressIsRequiredException.class, () -> authorizationConfig.confirmTwoFactorAuthorizationUseCase()
+                .execute(ConfirmTwoFactorAuthorizationUseCase.InputValues.of(
+                        null,
+                        ConfirmationCodeEntity.Recipient.SendingType.SMS,
+                        code)));
     }
 
     /**
@@ -88,11 +85,11 @@ class ConfirmTwoFactorAuthorizationUseCaseTest extends ConfirmTwoFactorAuthoriza
      */
     @Test
     void testFailedConfirmTwoFactorAuthorizationWithConfirmedCodeIsRequiredException() {
-        Assertions.assertThrows(ConfirmationCodeIsRequiredException.class, () -> authorizationConfig.all.confirmTwoFactorAuthorizationUseCase()
-                .confirm(ConfirmTwoFactorAuthorizationCommand.builder()
-                        .address(phone)
-                        .sendingType(ConfirmationCodeEntity.Recipient.SendingType.SMS)
-                        .build()));
+        Assertions.assertThrows(ConfirmationCodeIsRequiredException.class, () -> authorizationConfig.confirmTwoFactorAuthorizationUseCase()
+                .execute(ConfirmTwoFactorAuthorizationUseCase.InputValues.of(
+                        phone,
+                        ConfirmationCodeEntity.Recipient.SendingType.SMS,
+                        null)));
     }
 
     /**
@@ -100,10 +97,10 @@ class ConfirmTwoFactorAuthorizationUseCaseTest extends ConfirmTwoFactorAuthoriza
      */
     @Test
     void testFailedConfirmTwoFactorAuthorizationWithSendingTypeIsRequiredException() {
-        Assertions.assertThrows(SendingTypeIsRequiredException.class, () -> authorizationConfig.all.confirmTwoFactorAuthorizationUseCase()
-                .confirm(ConfirmTwoFactorAuthorizationCommand.builder()
-                        .address(phone)
-                        .code(code)
-                        .build()));
+        Assertions.assertThrows(SendingTypeIsRequiredException.class, () -> authorizationConfig.confirmTwoFactorAuthorizationUseCase()
+                .execute(ConfirmTwoFactorAuthorizationUseCase.InputValues.of(
+                        phone,
+                        null,
+                        code)));
     }
 }

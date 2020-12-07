@@ -44,4 +44,12 @@ public class RefreshTokenEntity extends BaseEntity {
 
         return true;
     }
+
+    public void deactivate() {
+        this.status = Status.INACTIVE;
+    }
+
+    public void expire() {
+        this.status = Status.EXPIRED;
+    }
 }

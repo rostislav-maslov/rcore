@@ -1,4 +1,10 @@
 package com.rcore.domain.auth.authorization.exceptions;
 
-public class PasswordIsRequiredException extends Exception {
+import com.rcore.domain.commons.exception.DomainException;
+
+public class PasswordIsRequiredException extends DomainException {
+
+    public PasswordIsRequiredException() {
+        super("Password is required");
+    }
 }

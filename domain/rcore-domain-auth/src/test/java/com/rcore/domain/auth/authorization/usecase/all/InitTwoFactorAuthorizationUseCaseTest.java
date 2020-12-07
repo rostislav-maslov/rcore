@@ -3,14 +3,13 @@ package com.rcore.domain.auth.authorization.usecase.all;
 import com.rcore.domain.auth.authorization.exceptions.AddressIsRequiredException;
 import com.rcore.domain.auth.authorization.exceptions.BadCredentialsException;
 import com.rcore.domain.auth.authorization.exceptions.SendingTypeIsRequiredException;
-import com.rcore.domain.auth.authorization.usecase.all.commands.InitTwoFactorAuthorizationCommand;
+import com.rcore.domain.auth.authorization.usecases.InitTwoFactorAuthorizationUseCase;
 import com.rcore.domain.auth.confirmationCode.entity.ConfirmationCodeEntity;
 import com.rcore.domain.auth.confirmationCode.exceptions.ExistNotConfirmedCodeException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
 class InitTwoFactorAuthorizationUseCaseTest extends InitTwoFactorAuthorizationUseCaseTestInfrastructure {
@@ -25,11 +24,9 @@ class InitTwoFactorAuthorizationUseCaseTest extends InitTwoFactorAuthorizationUs
      */
     @Test
     void testSuccessfulInitTwoFactorAuthorizationViaSmsCode() throws BadCredentialsException, SendingTypeIsRequiredException, AddressIsRequiredException, ExistNotConfirmedCodeException {
-        authorizationConfig.all.initTwoFactorAuthorizationUseCase()
-                .init(InitTwoFactorAuthorizationCommand.builder()
-                        .address(phone)
-                        .sendingType(ConfirmationCodeEntity.Recipient.SendingType.SMS)
-                        .build());
+        authorizationConfig.initTwoFactorAuthorizationUseCase()
+                .execute(InitTwoFactorAuthorizationUseCase.InputValues
+                        .of(phone, ConfirmationCodeEntity.Recipient.SendingType.SMS, 60l));
     }
 
     /**
@@ -42,11 +39,9 @@ class InitTwoFactorAuthorizationUseCaseTest extends InitTwoFactorAuthorizationUs
      */
     @Test
     void testSuccessfulInitTwoFactorAuthorizationViaEmailCode() throws BadCredentialsException, SendingTypeIsRequiredException, AddressIsRequiredException, ExistNotConfirmedCodeException {
-        authorizationConfig.all.initTwoFactorAuthorizationUseCase()
-                .init(InitTwoFactorAuthorizationCommand.builder()
-                        .address(email)
-                        .sendingType(ConfirmationCodeEntity.Recipient.SendingType.EMAIL)
-                        .build());
+        authorizationConfig.initTwoFactorAuthorizationUseCase()
+                .execute(InitTwoFactorAuthorizationUseCase.InputValues
+                        .of(email, ConfirmationCodeEntity.Recipient.SendingType.EMAIL, 60l));
     }
 
     /**
@@ -54,11 +49,9 @@ class InitTwoFactorAuthorizationUseCaseTest extends InitTwoFactorAuthorizationUs
      */
     @Test
     void testFailedInitTwoFactorAuthorizationViaSmsCodeWithBadCredentialException() {
-        Assertions.assertThrows(BadCredentialsException.class, () -> authorizationConfig.all.initTwoFactorAuthorizationUseCase()
-                .init(InitTwoFactorAuthorizationCommand.builder()
-                        .address(phone + "1")
-                        .sendingType(ConfirmationCodeEntity.Recipient.SendingType.SMS)
-                        .build()));
+        Assertions.assertThrows(BadCredentialsException.class, () -> authorizationConfig.initTwoFactorAuthorizationUseCase()
+                .execute(InitTwoFactorAuthorizationUseCase.InputValues
+                        .of(phone + 1, ConfirmationCodeEntity.Recipient.SendingType.SMS, 60l)));
     }
 
     /**
@@ -66,11 +59,9 @@ class InitTwoFactorAuthorizationUseCaseTest extends InitTwoFactorAuthorizationUs
      */
     @Test
     void testFailedInitTwoFactorAuthorizationViaEmailCodeWithBadCredentialException() {
-        Assertions.assertThrows(BadCredentialsException.class, () -> authorizationConfig.all.initTwoFactorAuthorizationUseCase()
-                .init(InitTwoFactorAuthorizationCommand.builder()
-                        .address(email + "a")
-                        .sendingType(ConfirmationCodeEntity.Recipient.SendingType.EMAIL)
-                        .build()));
+        Assertions.assertThrows(BadCredentialsException.class, () -> authorizationConfig.initTwoFactorAuthorizationUseCase()
+                .execute(InitTwoFactorAuthorizationUseCase.InputValues
+                        .of(email + "a", ConfirmationCodeEntity.Recipient.SendingType.EMAIL, 60l)));
     }
 
     /**
@@ -78,10 +69,9 @@ class InitTwoFactorAuthorizationUseCaseTest extends InitTwoFactorAuthorizationUs
      */
     @Test
     void testFailedInitTwoFactorAuthorizationViaEmailCodeWithAddressIsRequiredException() {
-        Assertions.assertThrows(AddressIsRequiredException.class, () -> authorizationConfig.all.initTwoFactorAuthorizationUseCase()
-                .init(InitTwoFactorAuthorizationCommand.builder()
-                        .sendingType(ConfirmationCodeEntity.Recipient.SendingType.EMAIL)
-                        .build()));
+        Assertions.assertThrows(AddressIsRequiredException.class, () -> authorizationConfig.initTwoFactorAuthorizationUseCase()
+                .execute(InitTwoFactorAuthorizationUseCase.InputValues
+                        .of(null, ConfirmationCodeEntity.Recipient.SendingType.SMS, 60l)));
     }
 
     /**
@@ -89,10 +79,9 @@ class InitTwoFactorAuthorizationUseCaseTest extends InitTwoFactorAuthorizationUs
      */
     @Test
     void testFailedInitTwoFactorAuthorizationViaEmailCodeWithSendingTypeIsRequiredException() {
-        Assertions.assertThrows(SendingTypeIsRequiredException.class, () -> authorizationConfig.all.initTwoFactorAuthorizationUseCase()
-                .init(InitTwoFactorAuthorizationCommand.builder()
-                        .address(email)
-                        .build()));
+        Assertions.assertThrows(SendingTypeIsRequiredException.class, () -> authorizationConfig.initTwoFactorAuthorizationUseCase()
+                .execute(InitTwoFactorAuthorizationUseCase.InputValues
+                        .of(phone, null, 60l)));
     }
 
     /**
@@ -103,10 +92,8 @@ class InitTwoFactorAuthorizationUseCaseTest extends InitTwoFactorAuthorizationUs
         Mockito.when(confirmationCodeRepository.existNotConfirmedCode(any()))
                 .then(a -> true);
 
-        Assertions.assertThrows(ExistNotConfirmedCodeException.class, () -> authorizationConfig.all.initTwoFactorAuthorizationUseCase()
-                .init(InitTwoFactorAuthorizationCommand.builder()
-                        .address(email)
-                        .sendingType(ConfirmationCodeEntity.Recipient.SendingType.EMAIL)
-                        .build()));
+        Assertions.assertThrows(ExistNotConfirmedCodeException.class, () -> authorizationConfig.initTwoFactorAuthorizationUseCase()
+                .execute(InitTwoFactorAuthorizationUseCase.InputValues
+                        .of(email, ConfirmationCodeEntity.Recipient.SendingType.EMAIL, 60l)));
     }
 }

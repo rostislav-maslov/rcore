@@ -4,27 +4,28 @@ import com.rcore.domain.auth.authorization.config.AuthorizationConfig;
 import com.rcore.domain.auth.authorization.entity.AuthorizationEntity;
 import com.rcore.domain.auth.authorization.port.AuthorizationIdGenerator;
 import com.rcore.domain.auth.authorization.port.AuthorizationRepository;
-import com.rcore.domain.auth.authorization.usecase.all.CreateAuthorizationUseCase;
-import com.rcore.domain.auth.authorization.usecase.all.SuccessfulAuthorizationUseCase;
 import com.rcore.domain.auth.confirmationCode.entity.ConfirmationCodeEntity;
 import com.rcore.domain.auth.confirmationCode.port.ConfirmationCodeGenerator;
 import com.rcore.domain.auth.confirmationCode.port.ConfirmationCodeIdGenerator;
 import com.rcore.domain.auth.confirmationCode.port.ConfirmationCodeRepository;
-import com.rcore.domain.auth.confirmationCode.usecase.all.CreateConfirmationCodeUseCase;
+import com.rcore.domain.auth.confirmationCode.usecases.CreateConfirmationCodeUseCase;
 import com.rcore.domain.auth.credential.entity.CredentialEntity;
 import com.rcore.domain.auth.credential.port.CredentialRepository;
 import com.rcore.domain.auth.credential.port.PasswordCryptographer;
-import com.rcore.domain.auth.credential.port.impl.CredentialVerifierImpl;
 import com.rcore.domain.auth.credential.port.impl.PasswordCryptographerImpl;
+import com.rcore.domain.auth.credential.usecases.GetCredentialByEmailUseCase;
+import com.rcore.domain.auth.credential.usecases.GetCredentialByIdUseCase;
+import com.rcore.domain.auth.credential.usecases.GetCredentialByPhoneUseCase;
 import com.rcore.domain.auth.role.entity.RoleEntity;
 import com.rcore.domain.auth.role.port.RoleRepository;
 import com.rcore.domain.auth.token.entity.AccessTokenEntity;
 import com.rcore.domain.auth.token.entity.RefreshTokenEntity;
 import com.rcore.domain.auth.token.port.*;
 import com.rcore.domain.auth.token.port.impl.TokenSaltGeneratorImpl;
-import com.rcore.domain.auth.token.usecase.CreateAccessTokenUseCase;
-import com.rcore.domain.auth.token.usecase.CreateRefreshTokenUseCase;
+import com.rcore.domain.auth.token.usecases.CreateAccessTokenUseCase;
+import com.rcore.domain.auth.token.usecases.CreateRefreshTokenUseCase;
 import com.rcore.domain.security.model.AccessTokenData;
+import com.rcore.domain.security.model.RefreshTokenData;
 import com.rcore.domain.security.port.TokenConverter;
 import org.mockito.Mockito;
 
@@ -51,8 +52,11 @@ public class AuthorizationUseCaseTestInfrastructure {
     protected final ConfirmationCodeIdGenerator confirmationCodeIdGenerator = Mockito.mock(ConfirmationCodeIdGenerator.class);
     protected final ConfirmationCodeGenerator confirmationCodeGenerator = Mockito.mock(ConfirmationCodeGenerator.class);
     protected final SessionTokenRepository sessionTokenRepository = Mockito.mock(SessionTokenRepository.class);
-    protected final TokenConverter<AccessTokenData> tokenConverter = Mockito.mock(TokenConverter.class);
+    protected final TokenConverter<AccessTokenData> accessTokenDataTokenConverter = Mockito.mock(TokenConverter.class);
+    protected final TokenConverter<RefreshTokenData> refreshTokenDataTokenConverter = Mockito.mock(TokenConverter.class);
     protected final RoleRepository roleRepository = Mockito.mock(RoleRepository.class);
+
+    protected AuthorizationConfig authorizationConfig;
 
     protected final static RoleEntity superUserRole = RoleEntity.builder()
             .id(UUID.randomUUID().toString())
@@ -68,23 +72,26 @@ public class AuthorizationUseCaseTestInfrastructure {
                     .build()))
             .build();
 
-    protected final AuthorizationConfig authorizationConfig;
-
     public AuthorizationUseCaseTestInfrastructure() {
 
-        CreateRefreshTokenUseCase createRefreshTokenUseCase = new CreateRefreshTokenUseCase(refreshTokenIdGenerator, refreshTokenRepository, tokenSaltGenerator);
+        CreateRefreshTokenUseCase createRefreshTokenUseCase = new CreateRefreshTokenUseCase(refreshTokenRepository, refreshTokenIdGenerator, tokenSaltGenerator);
 
         this.authorizationConfig = new AuthorizationConfig(
-                new CreateAuthorizationUseCase(authorizationRepository, authorizationIdGenerator),
-                credentialRepository,
-                passwordCryptographer,
-                createRefreshTokenUseCase,
-                new CreateAccessTokenUseCase(accessTokenRepository, accessTokenIdGenerator, createRefreshTokenUseCase),
-                new CreateConfirmationCodeUseCase(confirmationCodeRepository, confirmationCodeIdGenerator, confirmationCodeGenerator),
                 authorizationRepository,
+                authorizationIdGenerator,
                 confirmationCodeRepository,
-                new SuccessfulAuthorizationUseCase(authorizationRepository),
-                new CredentialVerifierImpl(credentialRepository, sessionTokenRepository, tokenConverter, roleRepository)
+                new GetCredentialByIdUseCase(credentialRepository),
+                new CreateAccessTokenUseCase(accessTokenRepository, accessTokenIdGenerator),
+                createRefreshTokenUseCase,
+                new CreateConfirmationCodeUseCase(confirmationCodeRepository, confirmationCodeIdGenerator, confirmationCodeGenerator),
+                new GetCredentialByPhoneUseCase(credentialRepository),
+                new GetCredentialByEmailUseCase(credentialRepository),
+                sessionTokenRepository,
+                refreshTokenDataTokenConverter,
+                accessTokenRepository,
+                refreshTokenRepository,
+                credentialRepository,
+                passwordCryptographer
         );
 
         initAuthorizationMocks();
@@ -143,16 +150,22 @@ public class AuthorizationUseCaseTestInfrastructure {
     }
 
     private void initSessionTokenMocks() {
-        Mockito.when(sessionTokenRepository.getSessionToken())
+        Mockito.when(sessionTokenRepository.getSessionAccessToken())
                 .then(a -> Optional.of(UUID.randomUUID().toString()));
     }
 
     private void initTokenConverterMocks() {
-        Mockito.when(tokenConverter.convert(any(AccessTokenData.class)))
+        Mockito.when(accessTokenDataTokenConverter.convert(any(AccessTokenData.class)))
                 .then(a -> UUID.randomUUID().toString());
 
-        Mockito.when(tokenConverter.parse(anyString()))
+        Mockito.when(accessTokenDataTokenConverter.parse(anyString()))
                 .then(a -> new AccessTokenData(UUID.randomUUID().toString(), authorizedCredential.getId(), LocalDateTime.now().plusDays(1)));
+
+        Mockito.when(refreshTokenDataTokenConverter.convert(any(RefreshTokenData.class)))
+                .then(a -> UUID.randomUUID().toString());
+
+        Mockito.when(refreshTokenDataTokenConverter.parse(anyString()))
+                .then(a -> new RefreshTokenData(UUID.randomUUID().toString(), UUID.randomUUID().toString(), authorizedCredential.getId(), LocalDateTime.now().plusDays(1)));
     }
 
     private void initRoleMocks() {

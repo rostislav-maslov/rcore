@@ -66,4 +66,8 @@ public class AccessTokenEntity extends BaseEntity {
 
         return true;
     }
+
+    public void expire() {
+        this.status = RefreshTokenEntity.Status.EXPIRED;
+    }
 }

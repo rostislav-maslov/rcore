@@ -1,4 +1,10 @@
 package com.rcore.domain.auth.authorization.exceptions;
 
-public class InvalidUsernameException extends Exception {
+import com.rcore.domain.commons.exception.DomainException;
+
+public class InvalidUsernameException extends DomainException {
+
+    public InvalidUsernameException(String username) {
+        super("Invalid username: " + username);
+    }
 }

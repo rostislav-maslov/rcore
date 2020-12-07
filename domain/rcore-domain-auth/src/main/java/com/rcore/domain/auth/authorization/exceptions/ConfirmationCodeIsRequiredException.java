@@ -1,4 +1,10 @@
 package com.rcore.domain.auth.authorization.exceptions;
 
-public class ConfirmationCodeIsRequiredException extends Exception {
+import com.rcore.domain.commons.exception.DomainException;
+
+public class ConfirmationCodeIsRequiredException extends DomainException {
+
+    public ConfirmationCodeIsRequiredException() {
+        super("Confirmation code is required");
+    }
 }

@@ -1,73 +1,91 @@
 package com.rcore.domain.auth.authorization.config;
 
+import com.rcore.domain.auth.authorization.port.AuthorizationIdGenerator;
 import com.rcore.domain.auth.authorization.port.AuthorizationRepository;
-import com.rcore.domain.auth.authorization.usecase.all.*;
-import com.rcore.domain.auth.authorization.usecase.secured.SecuredAuthorizationViewUseCase;
+import com.rcore.domain.auth.authorization.usecases.*;
 import com.rcore.domain.auth.confirmationCode.port.ConfirmationCodeRepository;
-import com.rcore.domain.auth.confirmationCode.usecase.all.CreateConfirmationCodeUseCase;
+import com.rcore.domain.auth.confirmationCode.usecases.CreateConfirmationCodeUseCase;
 import com.rcore.domain.auth.credential.port.CredentialRepository;
 import com.rcore.domain.auth.credential.port.PasswordCryptographer;
-import com.rcore.domain.auth.token.usecase.CreateAccessTokenUseCase;
-import com.rcore.domain.auth.token.usecase.CreateRefreshTokenUseCase;
-import com.rcore.domain.security.port.CredentialVerifier;
+import com.rcore.domain.auth.credential.usecases.GetCredentialByEmailUseCase;
+import com.rcore.domain.auth.credential.usecases.GetCredentialByIdUseCase;
+import com.rcore.domain.auth.credential.usecases.GetCredentialByPhoneUseCase;
+import com.rcore.domain.auth.token.port.AccessTokenRepository;
+import com.rcore.domain.auth.token.port.RefreshTokenRepository;
+import com.rcore.domain.auth.token.port.SessionTokenRepository;
+import com.rcore.domain.auth.token.usecases.CreateAccessTokenUseCase;
+import com.rcore.domain.auth.token.usecases.CreateRefreshTokenUseCase;
+import com.rcore.domain.security.model.RefreshTokenData;
+import com.rcore.domain.security.port.TokenConverter;
 import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class AuthorizationConfig {
 
-    @RequiredArgsConstructor
-    public static class Secured {
+    private final AuthorizationRepository authorizationRepository;
+    private final AuthorizationIdGenerator authorizationIdGenerator;
+    private final ConfirmationCodeRepository confirmationCodeRepository;
+    private final GetCredentialByIdUseCase getCredentialByIdUseCase;
+    private final CreateAccessTokenUseCase createAccessTokenUseCase;
+    private final CreateRefreshTokenUseCase createRefreshTokenUseCase;
+    private final CreateConfirmationCodeUseCase createConfirmationCodeUseCase;
+    private final GetCredentialByPhoneUseCase getCredentialByPhoneUseCase;
+    private final GetCredentialByEmailUseCase getCredentialByEmailUseCase;
+    private final SessionTokenRepository sessionTokenRepository;
+    private final TokenConverter<RefreshTokenData> tokenConverter;
+    private final AccessTokenRepository accessTokenRepository;
+    private final RefreshTokenRepository refreshTokenRepository;
+    private final CredentialRepository credentialRepository;
+    private final PasswordCryptographer passwordCryptographer;
 
-        private final CredentialVerifier credentialVerifier;
-        private final AuthorizationRepository authorizationRepository;
-
-        public SecuredAuthorizationViewUseCase viewUseCase() {
-            return new SecuredAuthorizationViewUseCase(credentialVerifier, authorizationRepository);
-        }
-
+    public ConfirmTwoFactorAuthorizationUseCase confirmTwoFactorAuthorizationUseCase() {
+        return new ConfirmTwoFactorAuthorizationUseCase(
+                confirmationCodeRepository,
+                getAuthorizationByIdUseCase(),
+                getCredentialByIdUseCase,
+                createAccessTokenUseCase,
+                createRefreshTokenUseCase,
+                transferAuthorizationToSuccessStatusUseCase()
+        );
     }
 
-    @RequiredArgsConstructor
-    public static class All {
-
-        private final CreateAuthorizationUseCase createAuthorizationUseCase;
-        private final CredentialRepository credentialRepository;
-        private final PasswordCryptographer passwordCryptographer;
-        private final CreateRefreshTokenUseCase createRefreshTokenUseCase;
-        private final CreateAccessTokenUseCase createAccessTokenUseCase;
-        private final CreateConfirmationCodeUseCase createConfirmationCodeUseCase;
-        private final AuthorizationRepository authorizationRepository;
-        private final ConfirmationCodeRepository confirmationCodeRepository;
-        private final SuccessfulAuthorizationUseCase successfulAuthorizationUseCase;
-
-        public PasswordAuthorizationUseCase passwordAuthorizationUseCase() {
-            return new PasswordAuthorizationUseCase(createAuthorizationUseCase, credentialRepository, passwordCryptographer, createRefreshTokenUseCase, createAccessTokenUseCase);
-        }
-
-        public InitTwoFactorAuthorizationUseCase initTwoFactorAuthorizationUseCase() {
-            return new InitTwoFactorAuthorizationUseCase(createAuthorizationUseCase, credentialRepository, createConfirmationCodeUseCase);
-        }
-
-        public ConfirmTwoFactorAuthorizationUseCase confirmTwoFactorAuthorizationUseCase() {
-            return new ConfirmTwoFactorAuthorizationUseCase(authorizationRepository, confirmationCodeRepository, credentialRepository, createAccessTokenUseCase, createRefreshTokenUseCase, successfulAuthorizationUseCase);
-        }
+    public CreateAuthorizationUseCase createAuthorizationUseCase() {
+        return new CreateAuthorizationUseCase(authorizationRepository, authorizationIdGenerator);
     }
 
-    public final All all;
-    public final Secured secured;
+    public GetAuthorizationByIdUseCase getAuthorizationByIdUseCase() {
+        return new GetAuthorizationByIdUseCase(authorizationRepository);
+    }
 
-    public AuthorizationConfig(
-            CreateAuthorizationUseCase createAuthorizationUseCase,
-            CredentialRepository credentialRepository,
-            PasswordCryptographer passwordCryptographer,
-            CreateRefreshTokenUseCase createRefreshTokenUseCase,
-            CreateAccessTokenUseCase createAccessTokenUseCase,
-            CreateConfirmationCodeUseCase createConfirmationCodeUseCase,
-            AuthorizationRepository authorizationRepository,
-            ConfirmationCodeRepository confirmationCodeRepository,
-            SuccessfulAuthorizationUseCase successfulAuthorizationUseCase,
-            CredentialVerifier credentialVerifier
-    ) {
-        this.all = new All(createAuthorizationUseCase, credentialRepository, passwordCryptographer, createRefreshTokenUseCase, createAccessTokenUseCase, createConfirmationCodeUseCase, authorizationRepository, confirmationCodeRepository, successfulAuthorizationUseCase);
-        this.secured = new Secured(credentialVerifier, authorizationRepository);
+    public InitTwoFactorAuthorizationUseCase initTwoFactorAuthorizationUseCase() {
+        return new InitTwoFactorAuthorizationUseCase(
+                createAuthorizationUseCase(),
+                createConfirmationCodeUseCase,
+                getCredentialByEmailUseCase,
+                getCredentialByPhoneUseCase
+        );
+    }
+
+    public LogoutUseCase logoutUseCase() {
+        return new LogoutUseCase(
+                sessionTokenRepository,
+                tokenConverter,
+                refreshTokenRepository,
+                accessTokenRepository
+        );
+    }
+
+    public PasswordAuthorizationUseCase passwordAuthorizationUseCase() {
+        return new PasswordAuthorizationUseCase(
+                createAuthorizationUseCase(),
+                credentialRepository,
+                passwordCryptographer,
+                createRefreshTokenUseCase,
+                createAccessTokenUseCase
+        );
+    }
+
+    public TransferAuthorizationToSuccessStatusUseCase transferAuthorizationToSuccessStatusUseCase() {
+        return new TransferAuthorizationToSuccessStatusUseCase(authorizationRepository);
     }
 }

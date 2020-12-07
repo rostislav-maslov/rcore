@@ -128,8 +128,7 @@ public class ConfirmationCodeEntity extends BaseEntity {
     }
 
     public boolean isExpired() {
-        //Дата истечения срока годности ПОСЛЕ текушей даты
-        return this.expiredAt.isAfter(LocalDateTime.now());
+        return LocalDateTime.now().isAfter(this.expiredAt);
     }
 
     public void installExpiredAt(Long ttl) {
