@@ -13,9 +13,11 @@ import com.rcore.domain.user.usecase.admin.commands.UpdateUserCommand;
 import com.rcore.domain.user.validators.ChangeUserUseCaseValidator;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class UpdateUserUseCase extends AdminBaseUseCase {
 
@@ -122,7 +124,9 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         userEntity.setSecondName(Optional.ofNullable(updateUserCommand.getSecondName())
                 .orElse(userEntity.getSecondName()));
 
-        userEntity.setFullName(userEntity.getFullName());
+        userEntity.setFullName(Stream.of(userEntity.getLastName(), userEntity.getFirstName(), userEntity.getSecondName())
+                .filter(Objects::nonNull)
+                .collect(Collectors.joining(" ")));
 
         userEntity.setProfileImageId(Optional.ofNullable(updateUserCommand.getProfileImageId())
                 .orElse(userEntity.getProfileImageId()));
