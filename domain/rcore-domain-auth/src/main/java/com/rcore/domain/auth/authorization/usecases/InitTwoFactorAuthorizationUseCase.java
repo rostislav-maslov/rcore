@@ -8,8 +8,8 @@ import com.rcore.domain.auth.authorization.exceptions.SendingTypeIsRequiredExcep
 import com.rcore.domain.auth.confirmationCode.entity.ConfirmationCodeEntity;
 import com.rcore.domain.auth.confirmationCode.usecases.CreateConfirmationCodeUseCase;
 import com.rcore.domain.auth.credential.entity.CredentialEntity;
-import com.rcore.domain.auth.credential.usecases.GetCredentialByEmailUseCase;
-import com.rcore.domain.auth.credential.usecases.GetCredentialByPhoneUseCase;
+import com.rcore.domain.auth.credential.usecases.FindCredentialByEmailUseCase;
+import com.rcore.domain.auth.credential.usecases.FindCredentialByPhoneUseCase;
 import com.rcore.domain.commons.usecase.UseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -19,8 +19,8 @@ public class InitTwoFactorAuthorizationUseCase extends UseCase<InitTwoFactorAuth
 
     private final CreateAuthorizationUseCase createAuthorizationUseCase;
     private final CreateConfirmationCodeUseCase createConfirmationCodeUseCase;
-    private final GetCredentialByEmailUseCase getCredentialByEmailUseCase;
-    private final GetCredentialByPhoneUseCase getCredentialByPhoneUseCase;
+    private final FindCredentialByEmailUseCase findCredentialByEmailUseCase;
+    private final FindCredentialByPhoneUseCase findCredentialByPhoneUseCase;
 
     @Override
     public OutputValues execute(InputValues inputValues) {
@@ -30,14 +30,14 @@ public class InitTwoFactorAuthorizationUseCase extends UseCase<InitTwoFactorAuth
 
         //Если тип отправки сообщения SMS, то ищем по номеру телефона, иначе по email
         if (inputValues.getSendingType().equals(ConfirmationCodeEntity.Recipient.SendingType.SMS))
-            credentialEntity = getCredentialByPhoneUseCase.execute(new GetCredentialByPhoneUseCase.InputValues(inputValues.getAddress()))
+            credentialEntity = findCredentialByPhoneUseCase.execute(new FindCredentialByPhoneUseCase.InputValues(inputValues.getAddress()))
                     .getCredentialEntity()
                     .orElseThrow(() -> {
                         createFailedAuthorization(inputValues);
                         return new BadCredentialsException(inputValues.getAddress());
                     });
         else
-            credentialEntity = getCredentialByEmailUseCase.execute(new GetCredentialByEmailUseCase.InputValues(inputValues.getAddress()))
+            credentialEntity = findCredentialByEmailUseCase.execute(new FindCredentialByEmailUseCase.InputValues(inputValues.getAddress()))
                     .getCredentialEntity()
                     .orElseThrow(() -> {
                         createFailedAuthorization(inputValues);
@@ -79,7 +79,7 @@ public class InitTwoFactorAuthorizationUseCase extends UseCase<InitTwoFactorAuth
     private AuthorizationEntity createSuccessfulAuthorization(CredentialEntity credentialEntity, InputValues inputValues) {
         return createAuthorizationUseCase.execute(CreateAuthorizationUseCase.InputValues
                 .successfulInit2FAuthorization(credentialEntity, ConfirmationCodeEntity.Recipient.of(credentialEntity.getId(), inputValues.getAddress(), inputValues.getSendingType())))
-                .getAuthorizationEntity();
+                .getEntity();
     }
 
     private void createFailedAuthorization(InputValues inputValues) {

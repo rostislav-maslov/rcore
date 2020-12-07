@@ -4,7 +4,7 @@ import com.rcore.domain.auth.confirmationCode.port.ConfirmationCodeGenerator;
 import com.rcore.domain.auth.confirmationCode.port.ConfirmationCodeIdGenerator;
 import com.rcore.domain.auth.confirmationCode.port.ConfirmationCodeRepository;
 import com.rcore.domain.auth.confirmationCode.usecases.CreateConfirmationCodeUseCase;
-import com.rcore.domain.auth.confirmationCode.usecases.GetConfirmationCodeByIdUseCase;
+import com.rcore.domain.auth.confirmationCode.usecases.FindConfirmationCodeByIdUseCase;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -18,8 +18,8 @@ public class ConfirmationCodeConfig {
         return new CreateConfirmationCodeUseCase(confirmationCodeRepository, confirmationCodeIdGenerator, confirmationCodeGenerator);
     }
 
-    public GetConfirmationCodeByIdUseCase getConfirmationCodeByIdUseCase() {
-        return new GetConfirmationCodeByIdUseCase(confirmationCodeRepository);
+    public FindConfirmationCodeByIdUseCase getConfirmationCodeByIdUseCase() {
+        return new FindConfirmationCodeByIdUseCase(confirmationCodeRepository);
     }
 
 }

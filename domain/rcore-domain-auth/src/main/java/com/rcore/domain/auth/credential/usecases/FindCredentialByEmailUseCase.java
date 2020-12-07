@@ -10,21 +10,21 @@ import lombok.Value;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class GetCredentialByPhoneUseCase extends UseCase<GetCredentialByPhoneUseCase.InputValues, GetCredentialByPhoneUseCase.OutputValues> {
+public class FindCredentialByEmailUseCase extends UseCase<FindCredentialByEmailUseCase.InputValues, FindCredentialByEmailUseCase.OutputValues> {
 
     private final CredentialRepository credentialRepository;
 
     @Override
-    public GetCredentialByPhoneUseCase.OutputValues execute(GetCredentialByPhoneUseCase.InputValues inputValues) {
-        if (!StringUtils.hasText(inputValues.getPhone()))
-            return GetCredentialByPhoneUseCase.OutputValues.empty();
+    public OutputValues execute(InputValues inputValues) {
+        if (!StringUtils.hasText(inputValues.getEmail()))
+            return OutputValues.empty();
 
-        return new GetCredentialByPhoneUseCase.OutputValues(credentialRepository.findByPhone(inputValues.getPhone()));
+        return new OutputValues(credentialRepository.findByEmail(inputValues.getEmail()));
     }
 
     @Value
     public static class InputValues implements UseCase.InputValues {
-        private final String phone;
+        private final String email;
     }
 
     @Value
@@ -32,8 +32,8 @@ public class GetCredentialByPhoneUseCase extends UseCase<GetCredentialByPhoneUse
 
         private final Optional<CredentialEntity> credentialEntity;
 
-        public static GetCredentialByPhoneUseCase.OutputValues empty() {
-            return new GetCredentialByPhoneUseCase.OutputValues(Optional.empty());
+        public static OutputValues empty() {
+            return new OutputValues(Optional.empty());
         }
 
     }

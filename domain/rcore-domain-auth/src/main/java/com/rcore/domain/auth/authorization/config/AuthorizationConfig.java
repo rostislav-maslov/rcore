@@ -7,9 +7,9 @@ import com.rcore.domain.auth.confirmationCode.port.ConfirmationCodeRepository;
 import com.rcore.domain.auth.confirmationCode.usecases.CreateConfirmationCodeUseCase;
 import com.rcore.domain.auth.credential.port.CredentialRepository;
 import com.rcore.domain.auth.credential.port.PasswordCryptographer;
-import com.rcore.domain.auth.credential.usecases.GetCredentialByEmailUseCase;
-import com.rcore.domain.auth.credential.usecases.GetCredentialByIdUseCase;
-import com.rcore.domain.auth.credential.usecases.GetCredentialByPhoneUseCase;
+import com.rcore.domain.auth.credential.usecases.FindCredentialByEmailUseCase;
+import com.rcore.domain.auth.credential.usecases.FindCredentialByIdUseCase;
+import com.rcore.domain.auth.credential.usecases.FindCredentialByPhoneUseCase;
 import com.rcore.domain.auth.token.port.AccessTokenRepository;
 import com.rcore.domain.auth.token.port.RefreshTokenRepository;
 import com.rcore.domain.auth.token.port.SessionTokenRepository;
@@ -25,12 +25,12 @@ public class AuthorizationConfig {
     private final AuthorizationRepository authorizationRepository;
     private final AuthorizationIdGenerator authorizationIdGenerator;
     private final ConfirmationCodeRepository confirmationCodeRepository;
-    private final GetCredentialByIdUseCase getCredentialByIdUseCase;
+    private final FindCredentialByIdUseCase findCredentialByIdUseCase;
     private final CreateAccessTokenUseCase createAccessTokenUseCase;
     private final CreateRefreshTokenUseCase createRefreshTokenUseCase;
     private final CreateConfirmationCodeUseCase createConfirmationCodeUseCase;
-    private final GetCredentialByPhoneUseCase getCredentialByPhoneUseCase;
-    private final GetCredentialByEmailUseCase getCredentialByEmailUseCase;
+    private final FindCredentialByPhoneUseCase findCredentialByPhoneUseCase;
+    private final FindCredentialByEmailUseCase findCredentialByEmailUseCase;
     private final SessionTokenRepository sessionTokenRepository;
     private final TokenConverter<RefreshTokenData> tokenConverter;
     private final AccessTokenRepository accessTokenRepository;
@@ -42,7 +42,7 @@ public class AuthorizationConfig {
         return new ConfirmTwoFactorAuthorizationUseCase(
                 confirmationCodeRepository,
                 getAuthorizationByIdUseCase(),
-                getCredentialByIdUseCase,
+                findCredentialByIdUseCase,
                 createAccessTokenUseCase,
                 createRefreshTokenUseCase,
                 transferAuthorizationToSuccessStatusUseCase()
@@ -53,16 +53,16 @@ public class AuthorizationConfig {
         return new CreateAuthorizationUseCase(authorizationRepository, authorizationIdGenerator);
     }
 
-    public GetAuthorizationByIdUseCase getAuthorizationByIdUseCase() {
-        return new GetAuthorizationByIdUseCase(authorizationRepository);
+    public FindAuthorizationByIdUseCase getAuthorizationByIdUseCase() {
+        return new FindAuthorizationByIdUseCase(authorizationRepository);
     }
 
     public InitTwoFactorAuthorizationUseCase initTwoFactorAuthorizationUseCase() {
         return new InitTwoFactorAuthorizationUseCase(
                 createAuthorizationUseCase(),
                 createConfirmationCodeUseCase,
-                getCredentialByEmailUseCase,
-                getCredentialByPhoneUseCase
+                findCredentialByEmailUseCase,
+                findCredentialByPhoneUseCase
         );
     }
 

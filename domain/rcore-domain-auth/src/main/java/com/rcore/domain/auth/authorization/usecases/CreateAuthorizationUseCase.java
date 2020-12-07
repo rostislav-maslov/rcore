@@ -5,26 +5,28 @@ import com.rcore.domain.auth.authorization.port.AuthorizationIdGenerator;
 import com.rcore.domain.auth.authorization.port.AuthorizationRepository;
 import com.rcore.domain.auth.confirmationCode.entity.ConfirmationCodeEntity;
 import com.rcore.domain.auth.credential.entity.CredentialEntity;
+import com.rcore.domain.commons.usecase.AbstractCreateUseCase;
 import com.rcore.domain.commons.usecase.UseCase;
 import lombok.*;
 
-@RequiredArgsConstructor
-public class CreateAuthorizationUseCase extends UseCase<CreateAuthorizationUseCase.InputValues, CreateAuthorizationUseCase.OutputValues> {
+public class CreateAuthorizationUseCase
+        extends AbstractCreateUseCase<AuthorizationEntity, AuthorizationIdGenerator, AuthorizationRepository, CreateAuthorizationUseCase.InputValues> {
 
-    private final AuthorizationRepository authorizationRepository;
-    private final AuthorizationIdGenerator authorizationIdGenerator;
+    public CreateAuthorizationUseCase(AuthorizationRepository repository, AuthorizationIdGenerator<String> idGenerator) {
+        super(repository, idGenerator);
+    }
 
     @Override
-    public OutputValues execute(InputValues inputValues) {
+    public OutputValues<AuthorizationEntity> execute(InputValues inputValues) {
         AuthorizationEntity authorizationEntity = new AuthorizationEntity();
-        authorizationEntity.setId(authorizationIdGenerator.generate());
+        authorizationEntity.setId(idGenerator.generate());
         authorizationEntity.setAuthorizationData(inputValues.getAuthorizationData());
         authorizationEntity.setType(inputValues.getType());
         authorizationEntity.setStatus(inputValues.getStatus());
         authorizationEntity.setRejectionCause(inputValues.getRejectionCause());
         authorizationEntity.setAccessTokenId(inputValues.getAccessTokenId());
         authorizationEntity.setRefreshTokenId(inputValues.getRefreshTokenId());
-        return new OutputValues(authorizationRepository.save(authorizationEntity));
+        return OutputValues.of(repository.save(authorizationEntity));
     }
 
     @AllArgsConstructor
@@ -93,11 +95,6 @@ public class CreateAuthorizationUseCase extends UseCase<CreateAuthorizationUseCa
                     .build();
         }
 
-    }
-
-    @Value
-    public static class OutputValues implements UseCase.OutputValues {
-        private final AuthorizationEntity authorizationEntity;
     }
 
 }

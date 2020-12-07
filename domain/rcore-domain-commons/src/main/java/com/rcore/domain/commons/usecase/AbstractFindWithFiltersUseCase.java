@@ -6,12 +6,18 @@ import com.rcore.domain.commons.port.SearchFilters;
 import com.rcore.domain.commons.port.SearchResult;
 import lombok.Value;
 
-public abstract class FindWithFiltersUseCase<Id, Entity extends BaseEntity, Filters extends SearchFilters, Repository extends ReadRepository<Id, Entity, Filters>>
-        extends UseCase<FindWithFiltersUseCase.InputValues<Filters>, FindWithFiltersUseCase.OutputValues<Entity>> {
+/**
+ * Абстрактный класс для создающего use case
+ * @param <Entity> - Класс создаваемой сущности
+ * @param <Repository> - репозиторий чтения
+ * @param <Filters> - фильтры
+ */
+public abstract class AbstractFindWithFiltersUseCase<Entity extends BaseEntity, Filters extends SearchFilters, Repository extends ReadRepository>
+        extends UseCase<AbstractFindWithFiltersUseCase.InputValues<Filters>, AbstractFindWithFiltersUseCase.OutputValues<Entity>> {
 
-    private final Repository repository;
+    protected final Repository repository;
 
-    public FindWithFiltersUseCase(Repository repository) {
+    public AbstractFindWithFiltersUseCase(Repository repository) {
         this.repository = repository;
     }
 

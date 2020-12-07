@@ -13,9 +13,9 @@ import com.rcore.domain.auth.credential.entity.CredentialEntity;
 import com.rcore.domain.auth.credential.port.CredentialRepository;
 import com.rcore.domain.auth.credential.port.PasswordCryptographer;
 import com.rcore.domain.auth.credential.port.impl.PasswordCryptographerImpl;
-import com.rcore.domain.auth.credential.usecases.GetCredentialByEmailUseCase;
-import com.rcore.domain.auth.credential.usecases.GetCredentialByIdUseCase;
-import com.rcore.domain.auth.credential.usecases.GetCredentialByPhoneUseCase;
+import com.rcore.domain.auth.credential.usecases.FindCredentialByEmailUseCase;
+import com.rcore.domain.auth.credential.usecases.FindCredentialByIdUseCase;
+import com.rcore.domain.auth.credential.usecases.FindCredentialByPhoneUseCase;
 import com.rcore.domain.auth.role.entity.RoleEntity;
 import com.rcore.domain.auth.role.port.RoleRepository;
 import com.rcore.domain.auth.token.entity.AccessTokenEntity;
@@ -80,12 +80,12 @@ public class AuthorizationUseCaseTestInfrastructure {
                 authorizationRepository,
                 authorizationIdGenerator,
                 confirmationCodeRepository,
-                new GetCredentialByIdUseCase(credentialRepository),
+                new FindCredentialByIdUseCase(credentialRepository),
                 new CreateAccessTokenUseCase(accessTokenRepository, accessTokenIdGenerator),
                 createRefreshTokenUseCase,
                 new CreateConfirmationCodeUseCase(confirmationCodeRepository, confirmationCodeIdGenerator, confirmationCodeGenerator),
-                new GetCredentialByPhoneUseCase(credentialRepository),
-                new GetCredentialByEmailUseCase(credentialRepository),
+                new FindCredentialByPhoneUseCase(credentialRepository),
+                new FindCredentialByEmailUseCase(credentialRepository),
                 sessionTokenRepository,
                 refreshTokenDataTokenConverter,
                 accessTokenRepository,

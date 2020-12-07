@@ -8,12 +8,13 @@ import com.rcore.domain.auth.confirmationCode.exceptions.ConfirmationCodeIsExpir
 import com.rcore.domain.auth.confirmationCode.port.ConfirmationCodeRepository;
 import com.rcore.domain.auth.credential.entity.CredentialEntity;
 import com.rcore.domain.auth.credential.exceptions.CredentialNotFoundException;
-import com.rcore.domain.auth.credential.usecases.GetCredentialByIdUseCase;
+import com.rcore.domain.auth.credential.usecases.FindCredentialByIdUseCase;
 import com.rcore.domain.auth.token.entity.AccessTokenEntity;
 import com.rcore.domain.auth.token.entity.RefreshTokenEntity;
 import com.rcore.domain.auth.token.entity.TokenPair;
 import com.rcore.domain.auth.token.usecases.CreateAccessTokenUseCase;
 import com.rcore.domain.auth.token.usecases.CreateRefreshTokenUseCase;
+import com.rcore.domain.commons.usecase.AbstractFindByIdUseCase;
 import com.rcore.domain.commons.usecase.UseCase;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -22,8 +23,8 @@ import lombok.Value;
 public class ConfirmTwoFactorAuthorizationUseCase extends UseCase<ConfirmTwoFactorAuthorizationUseCase.InputValues, ConfirmTwoFactorAuthorizationUseCase.OutputValues> {
 
     private final ConfirmationCodeRepository confirmationCodeRepository;
-    private final GetAuthorizationByIdUseCase getAuthorizationByIdUseCase;
-    private final GetCredentialByIdUseCase getCredentialByIdUseCase;
+    private final FindAuthorizationByIdUseCase findAuthorizationByIdUseCase;
+    private final FindCredentialByIdUseCase findCredentialByIdUseCase;
     private final CreateAccessTokenUseCase createAccessTokenUseCase;
     private final CreateRefreshTokenUseCase createRefreshTokenUseCase;
     private final TransferAuthorizationToSuccessStatusUseCase transferAuthorizationToSuccessStatusUseCase;
@@ -35,12 +36,12 @@ public class ConfirmTwoFactorAuthorizationUseCase extends UseCase<ConfirmTwoFact
         ConfirmationCodeEntity confirmationCodeEntity = confirmationCodeRepository.findNotConfirmedByAddressAndSendingTypeAndCode(inputValues.getAddress(), inputValues.getSendingType(), inputValues.getCode())
                 .orElseThrow(BadCredentialsException::new);
 
-        AuthorizationEntity authorizationEntity = getAuthorizationByIdUseCase.execute(GetAuthorizationByIdUseCase.InputValues.of(confirmationCodeEntity.getAuthorizationId()))
-                .getAuthorizationEntity()
+        AuthorizationEntity authorizationEntity = findAuthorizationByIdUseCase.execute(AbstractFindByIdUseCase.InputValues.of(confirmationCodeEntity.getAuthorizationId()))
+                .getResult()
                 .orElseThrow(() -> new AuthorizationNotFoundException(confirmationCodeEntity.getAuthorizationId()));
 
-        CredentialEntity credentialEntity = getCredentialByIdUseCase.execute(GetCredentialByIdUseCase.InputValues.of(authorizationEntity.getCredentialId()))
-                .getCredentialEntity()
+        CredentialEntity credentialEntity = findCredentialByIdUseCase.execute(AbstractFindByIdUseCase.InputValues.of(authorizationEntity.getCredentialId()))
+                .getResult()
                 .orElseThrow(() -> new CredentialNotFoundException(authorizationEntity.getCredentialId()));
 
         if (confirmationCodeEntity.isExpired())

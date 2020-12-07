@@ -74,6 +74,11 @@ public class CredentialEntity extends BaseEntity {
         String roleId;
 
         /**
+         * Наименование роли
+         */
+        String name;
+
+        /**
          * Флаг - роль заблокированная для данной учетной записи
          */
         boolean isBlocked;
