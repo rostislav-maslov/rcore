@@ -1,7 +1,7 @@
 package com.rcore.domain.auth.role.port.filters;
 
 import com.rcore.domain.auth.role.entity.RoleEntity;
-import com.rcore.domain.commons.port.SearchFilters;
+import com.rcore.domain.commons.port.dto.SearchFilters;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

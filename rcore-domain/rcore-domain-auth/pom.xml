@@ -14,8 +14,6 @@
     <version>${rcore.version}</version>
 
     <dependencies>
-
-
         <dependency>
             <groupId>com.github.rostislav-maslov.rcore</groupId>
             <artifactId>rcore-domain-security</artifactId>

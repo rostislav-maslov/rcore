@@ -1,6 +1,6 @@
 package com.rcore.database.mongo.commons.query;
 
-import com.rcore.domain.commons.port.SearchFilters;
+import com.rcore.domain.commons.port.dto.SearchFilters;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Query;
 

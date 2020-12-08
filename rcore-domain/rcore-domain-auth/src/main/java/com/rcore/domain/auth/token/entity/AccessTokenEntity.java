@@ -23,7 +23,7 @@ public class AccessTokenEntity extends BaseEntity {
     private String credentialId;
     private LocalDateTime expireAt = LocalDateTime.now();
     private RefreshTokenEntity.Status status = RefreshTokenEntity.Status.ACTIVE;
-    private String createFromRefreshTokenId;
+    private String createByRefreshTokenId;
 
     private String sign;
 

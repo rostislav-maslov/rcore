@@ -26,6 +26,7 @@
         <module>rcore-domain-auth</module>
         <module>rcore-domain-commons</module>
         <module>rcore-domain-security</module>
+        <module>rcore-domain-file</module>
     </modules>
 
     <dependencyManagement>

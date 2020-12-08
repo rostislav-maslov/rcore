@@ -1,8 +1,8 @@
 package com.rcore.domain.auth.credential.usecases;
 
 import com.rcore.domain.auth.credential.entity.CredentialEntity;
-import com.rcore.domain.commons.port.SearchFilters;
-import com.rcore.domain.commons.port.SearchResult;
+import com.rcore.domain.commons.port.dto.SearchFilters;
+import com.rcore.domain.commons.port.dto.SearchResult;
 import com.rcore.domain.commons.usecase.AbstractFindByIdUseCase;
 import com.rcore.domain.commons.usecase.AbstractFindWithFiltersUseCase;
 import org.junit.jupiter.api.Assertions;

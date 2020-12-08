@@ -2,8 +2,8 @@ package com.rcore.domain.commons.usecase;
 
 import com.rcore.domain.commons.entity.BaseEntity;
 import com.rcore.domain.commons.port.ReadRepository;
-import com.rcore.domain.commons.port.SearchFilters;
-import com.rcore.domain.commons.port.SearchResult;
+import com.rcore.domain.commons.port.dto.SearchFilters;
+import com.rcore.domain.commons.port.dto.SearchResult;
 import lombok.Value;
 
 /**

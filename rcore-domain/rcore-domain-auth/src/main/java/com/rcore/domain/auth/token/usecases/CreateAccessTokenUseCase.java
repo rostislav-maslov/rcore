@@ -22,7 +22,7 @@ public class CreateAccessTokenUseCase extends UseCase<CreateAccessTokenUseCase.I
         accessTokenEntity.setId(accessTokenIdGenerator.generate());
         accessTokenEntity.setCredentialId(inputValues.getRefreshTokenEntity().getCredentialId());
         accessTokenEntity.setExpireAt(DateTimeUtils.fromMillis(DateTimeUtils.getNowMillis() + inputValues.getRefreshTokenEntity().getExpireTimeAccessToken()));
-        accessTokenEntity.setCreateFromRefreshTokenId(inputValues.getRefreshTokenEntity().getId());
+        accessTokenEntity.setCreateByRefreshTokenId(inputValues.getRefreshTokenEntity().getId());
         accessTokenEntity.setSign(AccessTokenEntity.sign(accessTokenEntity.getId(), DateTimeUtils.getMillis(accessTokenEntity.getExpireAt()), inputValues.getRefreshTokenEntity()));
         return new OutputValues(accessTokenRepository.save(accessTokenEntity));
     }

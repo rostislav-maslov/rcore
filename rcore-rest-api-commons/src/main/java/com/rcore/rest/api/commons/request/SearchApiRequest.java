@@ -1,6 +1,6 @@
 package com.rcore.rest.api.commons.request;
 
-import com.rcore.domain.commons.port.SearchFilters;
+import com.rcore.domain.commons.port.dto.SearchFilters;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

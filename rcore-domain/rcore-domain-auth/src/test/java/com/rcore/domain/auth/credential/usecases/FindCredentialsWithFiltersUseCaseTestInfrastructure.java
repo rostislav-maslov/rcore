@@ -2,7 +2,7 @@ package com.rcore.domain.auth.credential.usecases;
 
 import com.rcore.domain.auth.credential.entity.CredentialEntity;
 import com.rcore.domain.auth.credential.port.CredentialRepository;
-import com.rcore.domain.commons.port.SearchResult;
+import com.rcore.domain.commons.port.dto.SearchResult;
 import org.mockito.Mockito;
 
 import java.util.Arrays;

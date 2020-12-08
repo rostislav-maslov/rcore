@@ -1,4 +1,4 @@
-package com.rcore.domain.commons.port;
+package com.rcore.domain.commons.port.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
