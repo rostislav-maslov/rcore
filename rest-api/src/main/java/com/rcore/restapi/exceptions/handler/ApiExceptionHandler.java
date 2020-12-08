@@ -1,6 +1,9 @@
 package com.rcore.restapi.exceptions.handler;
 
 import com.rcore.commons.exceptions.InvalidPhoneNumberFormatException;
+import com.rcore.domain.user.exception.InvalidEmailException;
+import com.rcore.domain.user.exception.PhoneIsRequiredException;
+import com.rcore.domain.user.exception.RoleIsRequiredException;
 import com.rcore.restapi.exceptions.*;
 import com.rcore.restapi.web.api.response.ErrorApiResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -41,7 +44,7 @@ public class ApiExceptionHandler {
         return ErrorApiResponse.of(e.getErrors());
     }
 
-    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    @ResponseStatus(value = HttpStatus.PAYLOAD_TOO_LARGE)
     @ExceptionHandler(value = MaxUploadSizeExceededException.class)
     public ErrorApiResponse<List<ExceptionDTO>> handleMaxUploadSizeException(Exception e) {
         return ErrorApiResponse.of(new MaxUploadSizeApiException().getErrors());
@@ -57,6 +60,24 @@ public class ApiExceptionHandler {
     @ExceptionHandler({InvalidPhoneNumberFormatException.class})
     public ErrorApiResponse<List<ExceptionDTO>> handleBadRequestApiException(Exception e) {
         return ErrorApiResponse.of(new InvalidPhoneNumberFormatApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({RoleIsRequiredException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleRoleIsRequiredException(RoleIsRequiredException e) {
+        return ErrorApiResponse.of(new RoleIsRequiredApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({PhoneIsRequiredException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handlePhoneIsRequiredException(PhoneIsRequiredException e) {
+        return ErrorApiResponse.of(new PhoneIsRequiredApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({InvalidEmailException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidEmailException(InvalidEmailException e) {
+        return ErrorApiResponse.of(new EmailIsRequiredApiException().getErrors());
     }
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)

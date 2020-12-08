@@ -1,5 +1,6 @@
 package com.rcore.domain.user.usecase.admin;
 
+import com.rcore.commons.utils.StringUtils;
 import com.rcore.domain.role.entity.RoleEntity;
 import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.token.exception.AuthenticationException;
@@ -47,7 +48,7 @@ public class CreateUserUseCase extends AdminBaseUseCase {
     public UserEntity createByEmail(String email, String password, Set<RoleEntity> roles) throws AuthenticationException, AuthorizationException, UserAlreadyExistException, TokenExpiredException {
         checkAccess();
 
-        Optional<UserEntity> userByEmail =  userRepository.findByEmail(email.toLowerCase());
+        Optional<UserEntity> userByEmail = userRepository.findByEmail(email.toLowerCase());
         if (userByEmail.isPresent())
             throw new UserAlreadyExistException();
 
@@ -67,7 +68,7 @@ public class CreateUserUseCase extends AdminBaseUseCase {
         Set<RoleEntity> roles = createUserCommand.getRoles()
                 .stream()
                 .map(role -> {
-                    if (role.getId()!= null)
+                    if (role.getId() != null)
                         return roleRepository.findById(role.getId());
                     else if (role.getName() != null)
                         return roleRepository.findByName(role.getName());
@@ -80,7 +81,7 @@ public class CreateUserUseCase extends AdminBaseUseCase {
 
         UserEntity userEntity = new UserEntity();
 
-        changeUserUseCaseValidator.validate(userEntity, createUserCommand);
+        validate(createUserCommand);
 
         userEntity.setId(userIdGenerator.generate());
         userEntity.setEmail(createUserCommand.getEmail());
@@ -99,6 +100,66 @@ public class CreateUserUseCase extends AdminBaseUseCase {
 
         userEntity = userRepository.save(userEntity);
         return userEntity;
+    }
+
+    private void validate(CreateUserCommand createUserCommand) throws InvalidFirstNameException, InvalidLastNameException, InvalidAccountStatusException, InvalidRoleException, RoleIsRequiredException, PhoneIsRequiredException, UserWithPhoneAlreadyExistException, UserWithEmailAlreadyExistException, InvalidEmailException {
+        //Проверка firstName
+        if (!StringUtils.hasText(createUserCommand.getFirstName()))
+            throw new InvalidFirstNameException();
+
+        //Проверка lastName
+        if (!StringUtils.hasText(createUserCommand.getLastName()))
+            throw new InvalidLastNameException();
+
+        if (createUserCommand.getStatus() == null)
+            throw new InvalidAccountStatusException();
+
+        List<RoleEntity> roles = new ArrayList<>();
+
+        //Проверка ролей
+        if (createUserCommand.getRoles() != null) {
+            for (CreateUserCommand.Role role : createUserCommand.getRoles()) {
+                if (role.getId() != null)
+                    roles.add(roleRepository.findById(role.getId())
+                            .orElseThrow(InvalidRoleException::new));
+                else if (role.getName() != null)
+                    roles.add(roleRepository.findByName(role.getName())
+                            .orElseThrow(InvalidRoleException::new));
+            }
+        }
+
+        if (roles.isEmpty())
+            throw new RoleIsRequiredException();
+
+        //Достаем типы авторизации из ролей
+        List<RoleEntity.AuthType> authTypes = roles
+                .stream()
+                .flatMap(r -> r.getAvailableAuthTypes().stream())
+                .collect(Collectors.toList());
+
+
+
+        //В зависимости от типов авторизации проверяем обязательные поля
+        //Если тип SMS, то phone - обязателен
+        if (authTypes.contains(RoleEntity.AuthType.SMS)) {
+            if (createUserCommand.getPhone() == null)
+                throw new PhoneIsRequiredException();
+        }
+        //Если тип EMAIL, то email и password - обязательные поля
+        if (authTypes.contains(RoleEntity.AuthType.EMAIL)) {
+            if (!StringUtils.hasText(createUserCommand.getEmail()))
+                throw new InvalidEmailException();
+        }
+
+        if (createUserCommand.getPhone() != null) {
+            if (userRepository.findByPhoneNumber(createUserCommand.getPhone()).isPresent())
+                throw new UserWithPhoneAlreadyExistException();
+        }
+
+        if (createUserCommand.getEmail() != null) {
+            if (userRepository.findByEmail(createUserCommand.getEmail()).isPresent())
+                throw new UserWithEmailAlreadyExistException();
+        }
     }
 
 

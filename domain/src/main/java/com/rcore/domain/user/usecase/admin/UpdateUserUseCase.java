@@ -1,5 +1,6 @@
 package com.rcore.domain.user.usecase.admin;
 
+import com.rcore.commons.utils.StringUtils;
 import com.rcore.domain.role.entity.RoleEntity;
 import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.token.exception.AuthenticationException;
@@ -9,13 +10,12 @@ import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.exception.*;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.access.AdminUserUpdateAccess;
+import com.rcore.domain.user.usecase.admin.commands.CreateUserCommand;
 import com.rcore.domain.user.usecase.admin.commands.UpdateUserCommand;
 import com.rcore.domain.user.validators.ChangeUserUseCaseValidator;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -90,6 +90,10 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         UserEntity userEntity = userRepository.findById(updateUserCommand.getId())
                 .orElseThrow(UserNotFoundException::new);
 
+        if (updateUserCommand.getRoles().isEmpty()) {
+            throw new RoleIsRequiredException();
+        }
+
         Set<RoleEntity> newRoles = updateUserCommand.getRoles()
                 .stream()
                 .map(role -> {
@@ -104,7 +108,7 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
                 .map(Optional::get)
                 .collect(Collectors.toSet());
 
-        changeUserUseCaseValidator.validate(userEntity, updateUserCommand);
+        validate(updateUserCommand, userEntity);
 
         userEntity.setLogin(Optional.ofNullable(updateUserCommand.getLogin())
                 .orElse(userEntity.getLogin()));
@@ -142,6 +146,67 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         userEntity.setUpdatedAt(LocalDateTime.now());
         userEntity = userRepository.save(userEntity);
         return userEntity;
+    }
+
+    private void validate(UpdateUserCommand updateUserCommand, UserEntity userEntity) throws InvalidFirstNameException, InvalidLastNameException, InvalidAccountStatusException, InvalidRoleException, RoleIsRequiredException, PhoneIsRequiredException, UserWithPhoneAlreadyExistException, UserWithEmailAlreadyExistException, InvalidEmailException {
+        //Проверка firstName
+        if (!StringUtils.hasText(updateUserCommand.getFirstName()))
+            throw new InvalidFirstNameException();
+
+        //Проверка lastName
+        if (!StringUtils.hasText(updateUserCommand.getLastName()))
+            throw new InvalidLastNameException();
+
+        if (updateUserCommand.getStatus() == null)
+            throw new InvalidAccountStatusException();
+
+        List<RoleEntity> roles = new ArrayList<>();
+
+        //Проверка ролей
+        if (updateUserCommand.getRoles() != null) {
+            for (CreateUserCommand.Role role : updateUserCommand.getRoles()) {
+                if (role.getId() != null)
+                    roles.add(roleRepository.findById(role.getId())
+                            .orElseThrow(InvalidRoleException::new));
+                else if (role.getName() != null)
+                    roles.add(roleRepository.findByName(role.getName())
+                            .orElseThrow(InvalidRoleException::new));
+            }
+        }
+
+        if (roles.isEmpty())
+            throw new RoleIsRequiredException();
+
+        //Достаем типы авторизации из ролей
+        List<RoleEntity.AuthType> authTypes = roles
+                .stream()
+                .flatMap(r -> r.getAvailableAuthTypes().stream())
+                .collect(Collectors.toList());
+
+        //В зависимости от типов авторизации проверяем обязательные поля
+        //Если тип SMS, то phone - обязателен
+        if (authTypes.contains(RoleEntity.AuthType.SMS)) {
+            if (updateUserCommand.getPhone() == null)
+                throw new PhoneIsRequiredException();
+        }
+        //Если тип EMAIL, то email и password - обязательные поля
+        if (authTypes.contains(RoleEntity.AuthType.EMAIL)) {
+            if (!StringUtils.hasText(updateUserCommand.getEmail()))
+                throw new InvalidEmailException();
+        }
+
+        if (updateUserCommand.getPhone() != null) {
+            Optional<UserEntity> userWithTransferredNumber = userRepository.findByPhoneNumber(updateUserCommand.getPhone());
+            if (updateUserCommand.getPhone() != null && userWithTransferredNumber.isPresent() && !userWithTransferredNumber.get().getId().equals(userEntity.getId()))
+                throw new UserWithPhoneAlreadyExistException();
+        }
+
+        if (updateUserCommand.getEmail() != null) {
+            Optional<UserEntity> userWithTransferredEmail = userRepository.findByEmail(updateUserCommand.getEmail());
+            if (updateUserCommand.getEmail() != null && userWithTransferredEmail.isPresent() && !userWithTransferredEmail.get().getId().equals(userEntity.getId()))
+                throw new UserWithEmailAlreadyExistException();
+        }
+
     }
 
 }
