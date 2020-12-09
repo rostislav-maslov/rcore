@@ -12,7 +12,7 @@
     </parent>
 
     <groupId>com.github.rostislav-maslov.rcore</groupId>
-    <artifactId>rest-api-commons</artifactId>
+    <artifactId>rcore-rest-api-commons</artifactId>
     <version>${rcore.version}</version>
     <packaging>jar</packaging>
 

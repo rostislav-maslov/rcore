@@ -159,7 +159,7 @@ public class AuthorizationUseCaseTestInfrastructure {
                 .then(a -> UUID.randomUUID().toString());
 
         Mockito.when(accessTokenDataTokenConverter.parse(anyString()))
-                .then(a -> new AccessTokenData(UUID.randomUUID().toString(), authorizedCredential.getId(), LocalDateTime.now().plusDays(1)));
+                .then(a -> new AccessTokenData(UUID.randomUUID().toString(), authorizedCredential.getId(), LocalDateTime.now(), LocalDateTime.now().plusDays(1)));
 
         Mockito.when(refreshTokenDataTokenConverter.convert(any(RefreshTokenData.class)))
                 .then(a -> UUID.randomUUID().toString());
