@@ -1,47 +1,47 @@
 package com.rcore.domain.auth.authorization.usecases;
 
-import com.rcore.domain.auth.token.entity.RefreshTokenEntity;
-import com.rcore.domain.auth.token.exception.RefreshTokenNotFoundException;
+import com.rcore.domain.auth.token.entity.AccessTokenEntity;
+import com.rcore.domain.auth.token.exception.AccessTokenNotFoundException;
 import com.rcore.domain.auth.token.port.AccessTokenRepository;
 import com.rcore.domain.auth.token.port.RefreshTokenRepository;
-import com.rcore.domain.auth.token.port.SessionTokenRepository;
 import com.rcore.domain.commons.usecase.UseCase;
-import com.rcore.domain.security.model.RefreshTokenData;
+import com.rcore.domain.security.model.AccessTokenData;
 import com.rcore.domain.security.port.TokenConverter;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
-import java.util.Optional;
-
 @RequiredArgsConstructor
 public class LogoutUseCase extends UseCase<LogoutUseCase.InputValues, LogoutUseCase.OutputValues> {
 
-    private final SessionTokenRepository sessionTokenRepository;
-    private final TokenConverter<RefreshTokenData> tokenConverter;
+    private final TokenConverter<AccessTokenData> tokenConverter;
     private final RefreshTokenRepository refreshTokenRepository;
     private final AccessTokenRepository accessTokenRepository;
 
     @Override
     public OutputValues execute(InputValues inputValues) {
-        Optional<String> sessionToken = sessionTokenRepository.getSessionAccessToken();
-        if (sessionToken.isEmpty())
-            return new OutputValues();
+        AccessTokenData accessToken = tokenConverter.parse(inputValues.getAccessToken());
+        AccessTokenEntity accessTokenEntity = accessTokenRepository.findById(accessToken.getId())
+                .orElseThrow(() -> new AccessTokenNotFoundException(accessToken.getId()));
 
-        RefreshTokenData refreshTokenData = tokenConverter.parse(sessionToken.get());
-        RefreshTokenEntity refreshTokenEntity = refreshTokenRepository.findById(refreshTokenData.getId())
-                .orElseThrow(() -> new RefreshTokenNotFoundException(refreshTokenData.getId()));
+        if (accessTokenEntity.getCreateByRefreshTokenId() != null) {
+            refreshTokenRepository.findById(accessTokenEntity.getCreateByRefreshTokenId())
+                    .ifPresent(token -> {
+                        token.deactivate();
+                        refreshTokenRepository.save(token);
 
-        refreshTokenEntity.deactivate();
-        refreshTokenRepository.save(refreshTokenEntity);
-
-        //Деактивируем все accessToken выданные данным refreshToken
-        accessTokenRepository.deactivateAllAccessTokenByRefreshTokenId(refreshTokenEntity.getId());
+                        accessTokenRepository.deactivateAllAccessTokenByRefreshTokenId(token.getId());
+                    });
+        } else {
+            accessTokenEntity.deactivate();
+            accessTokenRepository.save(accessTokenEntity);
+        }
 
         return new OutputValues();
     }
 
-    @Value
+    @Value(staticConstructor = "of")
     public static class InputValues implements UseCase.InputValues {
+        private final String accessToken;
     }
 
 

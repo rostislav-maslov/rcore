@@ -27,7 +27,7 @@ public class CreateAccessTokenUseCase extends UseCase<CreateAccessTokenUseCase.I
         return new OutputValues(accessTokenRepository.save(accessTokenEntity));
     }
 
-    @Value
+    @Value(staticConstructor = "of")
     public static class InputValues implements UseCase.InputValues {
         private final CredentialEntity credentialEntity;
         private final RefreshTokenEntity refreshTokenEntity;

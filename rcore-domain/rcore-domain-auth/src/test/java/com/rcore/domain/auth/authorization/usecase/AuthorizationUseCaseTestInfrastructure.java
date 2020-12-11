@@ -51,7 +51,7 @@ public class AuthorizationUseCaseTestInfrastructure {
     protected final ConfirmationCodeRepository confirmationCodeRepository = Mockito.mock(ConfirmationCodeRepository.class);
     protected final ConfirmationCodeIdGenerator confirmationCodeIdGenerator = Mockito.mock(ConfirmationCodeIdGenerator.class);
     protected final ConfirmationCodeGenerator confirmationCodeGenerator = Mockito.mock(ConfirmationCodeGenerator.class);
-    protected final SessionTokenRepository sessionTokenRepository = Mockito.mock(SessionTokenRepository.class);
+    protected final SessionTokenService sessionTokenService = Mockito.mock(SessionTokenService.class);
     protected final TokenConverter<AccessTokenData> accessTokenDataTokenConverter = Mockito.mock(TokenConverter.class);
     protected final TokenConverter<RefreshTokenData> refreshTokenDataTokenConverter = Mockito.mock(TokenConverter.class);
     protected final RoleRepository roleRepository = Mockito.mock(RoleRepository.class);
@@ -86,8 +86,8 @@ public class AuthorizationUseCaseTestInfrastructure {
                 new CreateConfirmationCodeUseCase(confirmationCodeRepository, confirmationCodeIdGenerator, confirmationCodeGenerator),
                 new FindCredentialByPhoneUseCase(credentialRepository),
                 new FindCredentialByEmailUseCase(credentialRepository),
-                sessionTokenRepository,
-                refreshTokenDataTokenConverter,
+                sessionTokenService,
+                accessTokenDataTokenConverter,
                 accessTokenRepository,
                 refreshTokenRepository,
                 credentialRepository,
@@ -150,7 +150,7 @@ public class AuthorizationUseCaseTestInfrastructure {
     }
 
     private void initSessionTokenMocks() {
-        Mockito.when(sessionTokenRepository.getSessionAccessToken())
+        Mockito.when(sessionTokenService.getSessionAccessToken())
                 .then(a -> Optional.of(UUID.randomUUID().toString()));
     }
 
@@ -165,7 +165,7 @@ public class AuthorizationUseCaseTestInfrastructure {
                 .then(a -> UUID.randomUUID().toString());
 
         Mockito.when(refreshTokenDataTokenConverter.parse(anyString()))
-                .then(a -> new RefreshTokenData(UUID.randomUUID().toString(), UUID.randomUUID().toString(), authorizedCredential.getId(), LocalDateTime.now().plusDays(1)));
+                .then(a -> new RefreshTokenData(UUID.randomUUID().toString(), authorizedCredential.getId(), LocalDateTime.now(), LocalDateTime.now().plusDays(1)));
     }
 
     private void initRoleMocks() {

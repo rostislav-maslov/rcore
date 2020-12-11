@@ -54,7 +54,7 @@ public class ConfirmTwoFactorAuthorizationUseCase extends UseCase<ConfirmTwoFact
         //создаем токены авторизации для учетных данных
         RefreshTokenEntity refreshTokenEntity = createRefreshTokenUseCase.execute(new CreateRefreshTokenUseCase.InputValues(credentialEntity))
                 .getRefreshTokenEntity();
-        AccessTokenEntity accessTokenEntity = createAccessTokenUseCase.execute(new CreateAccessTokenUseCase.InputValues(credentialEntity, refreshTokenEntity))
+        AccessTokenEntity accessTokenEntity = createAccessTokenUseCase.execute(CreateAccessTokenUseCase.InputValues.of(credentialEntity, refreshTokenEntity))
                 .getAccessTokenEntity();
 
         successfulConfirmation(confirmationCodeEntity, authorizationEntity, accessTokenEntity, refreshTokenEntity);

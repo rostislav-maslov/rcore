@@ -1,6 +1,7 @@
 package com.rcore.domain.auth.token.entity;
 
 import com.rcore.domain.commons.entity.BaseEntity;
+import com.rcore.domain.security.model.AccessTokenData;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -62,6 +63,7 @@ public class AccessTokenEntity extends BaseEntity {
     }
 
     public Boolean isActive() {
+        if (this.status != RefreshTokenEntity.Status.ACTIVE) return false;
         if (LocalDateTime.now().isAfter(expireAt)) return false;
 
         return true;
@@ -69,5 +71,13 @@ public class AccessTokenEntity extends BaseEntity {
 
     public void expire() {
         this.status = RefreshTokenEntity.Status.EXPIRED;
+    }
+
+    public void deactivate() {
+        this.status = RefreshTokenEntity.Status.INACTIVE;
+    }
+
+    public AccessTokenData toAccessTokenData() {
+        return new AccessTokenData(this.getId(), this.getCredentialId(), this.getCreatedAt(), this.getExpireAt());
     }
 }

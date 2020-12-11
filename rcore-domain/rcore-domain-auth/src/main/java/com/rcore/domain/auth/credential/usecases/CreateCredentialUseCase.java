@@ -13,8 +13,7 @@ import com.rcore.domain.auth.role.usecases.FindRoleByNameUseCase;
 import com.rcore.domain.commons.usecase.AbstractCreateUseCase;
 import com.rcore.domain.commons.usecase.AbstractFindByIdUseCase;
 import com.rcore.domain.commons.usecase.UseCase;
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,16 +41,36 @@ public class CreateCredentialUseCase extends AbstractCreateUseCase<CredentialEnt
 
     @Override
     public OutputValues<CredentialEntity> execute(InputValues inputValues) {
-        validate(inputValues);
+
+        List<RoleEntity> roles = new ArrayList<>();
+
+        //Проверка ролей
+
+        if (inputValues.getRoles() != null)
+            for (InputValues.Role role : inputValues.getRoles()) {
+                if (role.getRoleId() != null)
+                    roles.add(findRoleByIdUseCase.execute(AbstractFindByIdUseCase.InputValues.of(role.getRoleId()))
+                            .getResult()
+                            .orElseThrow(() -> new RoleNotFoundException(role.getRoleId())));
+                else if (role.getName() != null)
+                    roles.add(findRoleByNameUseCase.execute(FindRoleByNameUseCase.InputValues.of(role.getRoleId()))
+                            .getResult()
+                            .orElseThrow(() -> new RoleNotFoundException(role.getRoleId())));
+            }
+
+        validate(inputValues, roles);
 
         CredentialEntity credentialEntity = new CredentialEntity();
         credentialEntity.setId(idGenerator.generate());
         credentialEntity.setEmail(inputValues.getEmail());
         credentialEntity.setPassword(passwordCryptographer.encrypt(inputValues.getPassword(), credentialEntity.getId()));
         credentialEntity.setPhone(inputValues.getPhone());
-        credentialEntity.setRoles(inputValues.getRoles());
+        credentialEntity.setRoles(inputValues.getRoles()
+                .stream()
+                .map(role -> new CredentialEntity.Role(role.getRoleId(), role.getIsBlocked()))
+                .collect(Collectors.toList()));
         credentialEntity.setStatus(inputValues.getStatus());
-        credentialEntity.setUsername(credentialEntity.getUsername());
+        credentialEntity.setUsername(inputValues.getUsername());
 
         return AbstractCreateUseCase.OutputValues.of(repository.save(credentialEntity));
     }
@@ -63,26 +82,21 @@ public class CreateCredentialUseCase extends AbstractCreateUseCase<CredentialEnt
         protected String password;
         protected String phone;
         protected String email;
-        protected List<CredentialEntity.Role> roles;
+        protected List<Role> roles;
         protected CredentialEntity.Status status;
+
+        @AllArgsConstructor
+        @NoArgsConstructor
+        @Builder
+        @Data
+        public static class Role {
+            private String roleId;
+            private String name;
+            private Boolean isBlocked;
+        }
     }
 
-    private void validate(InputValues inputValues) {
-        List<RoleEntity> roles = new ArrayList<>();
-
-        //Проверка ролей
-
-        if (inputValues.getRoles() != null)
-            for (CredentialEntity.Role role : inputValues.getRoles()) {
-                if (role.getRoleId() != null)
-                    roles.add(findRoleByIdUseCase.execute(AbstractFindByIdUseCase.InputValues.of(role.getRoleId()))
-                            .getResult()
-                            .orElseThrow(() -> new RoleNotFoundException(role.getRoleId())));
-                else if (role.getName() != null)
-                    roles.add(findRoleByNameUseCase.execute(FindRoleByNameUseCase.InputValues.of(role.getRoleId()))
-                            .getResult()
-                            .orElseThrow(() -> new RoleNotFoundException(role.getRoleId())));
-            }
+    private void validate(InputValues inputValues, List<RoleEntity> roles) {
 
         if (roles.isEmpty())
             throw new CredentialRoleIsRequiredException();
@@ -107,7 +121,7 @@ public class CreateCredentialUseCase extends AbstractCreateUseCase<CredentialEnt
         if (authTypes.contains(RoleEntity.AuthType.PASSWORD)) {
             if (!StringUtils.hasText(inputValues.getUsername()))
                 throw new CredentialEmailIsRequiredException();
-            Optional<CredentialEntity> credentialWithUsername = findCredentialByUsernameUseCase.execute(FindCredentialByUsernameUseCase.InputValues.of(inputValues.getEmail()))
+            Optional<CredentialEntity> credentialWithUsername = findCredentialByUsernameUseCase.execute(FindCredentialByUsernameUseCase.InputValues.of(inputValues.getUsername()))
                     .getResult();
             if (credentialWithUsername.isPresent())
                 throw new CredentialWithUsernameAlreadyExistException(inputValues.getUsername());

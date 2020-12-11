@@ -1,6 +1,7 @@
 package com.rcore.domain.auth.token.entity;
 
 import com.rcore.domain.commons.entity.BaseEntity;
+import com.rcore.domain.security.model.RefreshTokenData;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -51,5 +52,9 @@ public class RefreshTokenEntity extends BaseEntity {
 
     public void expire() {
         this.status = Status.EXPIRED;
+    }
+
+    public RefreshTokenData toRefreshTokenData() {
+        return new RefreshTokenData(this.getId(), this.getCredentialId(), this.getCreatedAt(), this.getExpireAt());
     }
 }

@@ -11,7 +11,7 @@ import lombok.Value;
 public class ExpireRefreshTokenUseCase extends UseCase<ExpireRefreshTokenUseCase.InputValues, ExpireRefreshTokenUseCase.OutputValues> {
 
     private final RefreshTokenRepository refreshTokenRepository;
-    private final ExpireAccessTokensByRefreshTokenUseCase expireAccessTokensByRefreshTokenUseCase;
+    private final DeactivateAccessTokensByRefreshToken deactivateAccessTokensByRefreshToken;
 
     @Override
     public OutputValues execute(InputValues inputValues) {
@@ -20,13 +20,12 @@ public class ExpireRefreshTokenUseCase extends UseCase<ExpireRefreshTokenUseCase
                 .orElseThrow(() -> new RefreshTokenNotFoundException(inputValues.getId()));
 
         refreshTokenEntity.expire();
-
-        expireAccessTokensByRefreshTokenUseCase.execute(new ExpireAccessTokensByRefreshTokenUseCase.InputValues(refreshTokenEntity));
+        deactivateAccessTokensByRefreshToken.execute(DeactivateAccessTokensByRefreshToken.InputValues.of(refreshTokenEntity));
 
         return new OutputValues(refreshTokenRepository.save(refreshTokenEntity));
     }
 
-    @Value
+    @Value(staticConstructor = "of")
     public static class InputValues implements UseCase.InputValues {
         private final String id;
     }

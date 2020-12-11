@@ -12,9 +12,10 @@ import com.rcore.domain.auth.credential.usecases.FindCredentialByIdUseCase;
 import com.rcore.domain.auth.credential.usecases.FindCredentialByPhoneUseCase;
 import com.rcore.domain.auth.token.port.AccessTokenRepository;
 import com.rcore.domain.auth.token.port.RefreshTokenRepository;
-import com.rcore.domain.auth.token.port.SessionTokenRepository;
+import com.rcore.domain.auth.token.port.SessionTokenService;
 import com.rcore.domain.auth.token.usecases.CreateAccessTokenUseCase;
 import com.rcore.domain.auth.token.usecases.CreateRefreshTokenUseCase;
+import com.rcore.domain.security.model.AccessTokenData;
 import com.rcore.domain.security.model.RefreshTokenData;
 import com.rcore.domain.security.port.TokenConverter;
 import lombok.RequiredArgsConstructor;
@@ -31,8 +32,8 @@ public class AuthorizationConfig {
     private final CreateConfirmationCodeUseCase createConfirmationCodeUseCase;
     private final FindCredentialByPhoneUseCase findCredentialByPhoneUseCase;
     private final FindCredentialByEmailUseCase findCredentialByEmailUseCase;
-    private final SessionTokenRepository sessionTokenRepository;
-    private final TokenConverter<RefreshTokenData> tokenConverter;
+    private final SessionTokenService sessionTokenService;
+    private final TokenConverter<AccessTokenData> tokenConverter;
     private final AccessTokenRepository accessTokenRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final CredentialRepository credentialRepository;
@@ -68,7 +69,6 @@ public class AuthorizationConfig {
 
     public LogoutUseCase logoutUseCase() {
         return new LogoutUseCase(
-                sessionTokenRepository,
                 tokenConverter,
                 refreshTokenRepository,
                 accessTokenRepository
