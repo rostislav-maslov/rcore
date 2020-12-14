@@ -13,7 +13,7 @@
 
     <groupId>com.github.rostislav-maslov.rcore</groupId>
     <artifactId>rcore-rest-api</artifactId>
-    <version>${rcore.version}</version>
+    <version>1.0.0</version>
     <packaging>pom</packaging>
 
     <modules>
