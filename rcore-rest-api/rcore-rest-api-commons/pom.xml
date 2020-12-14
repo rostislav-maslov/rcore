@@ -8,6 +8,7 @@
         <groupId>com.github.rostislav-maslov.rcore</groupId>
         <artifactId>rcore-rest-api</artifactId>
         <version>1.0.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>com.github.rostislav-maslov.rcore</groupId>
