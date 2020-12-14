@@ -17,14 +17,14 @@
     <packaging>pom</packaging>
 
     <properties>
-        <rcore.version>1.0.0</rcore.version>
+        <rcore.version>1.0.0-SNAPSHOT</rcore.version>
     </properties>
 
     <distributionManagement>
-        <snapshotRepository>
-            <id>maven-nexus-repo</id>
-            <url>http://45.139.184.103:8081/nexus/content/repositories/maven-nexus-repo</url>
-        </snapshotRepository>
+        <repository>
+            <id>rcore</id>
+            <url>http://nexus.foodtech-lab.ru/repository/rcore/</url>
+        </repository>
     </distributionManagement>
 
     <build>
@@ -40,19 +40,6 @@
                 <version>2.10</version>
             </plugin>
             <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.1</version>
-                <executions>
-                    <execution>
-                        <id>default-deploy</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>2.8.1</version>
@@ -63,7 +50,7 @@
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.8</version>
+                <version>1.5.1</version>
                 <executions>
                     <execution>
                         <id>default-deploy</id>
@@ -74,8 +61,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <serverId>maven-nexus-repo</serverId>
-                    <nexusUrl>http://45.139.184.103:8081/nexus/maven-nexus-repo</nexusUrl>
+                    <serverId>rcore</serverId>
+                    <nexusUrl>http://nexus.foodtech-lab.ru/repository/rcore/</nexusUrl>
                     <skipStaging>true</skipStaging>
                 </configuration>
             </plugin>

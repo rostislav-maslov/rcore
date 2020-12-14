@@ -14,6 +14,7 @@
     <version>${rcore.version}</version>
 
     <build>
+        <finalName>rcore-domain-commons</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

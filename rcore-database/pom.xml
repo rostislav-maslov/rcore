@@ -20,4 +20,8 @@
         <module>rcore-database-mongo</module>
     </modules>
 
+    <build>
+        <finalName>rcore-database</finalName>
+    </build>
+
 </project>

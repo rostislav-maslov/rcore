@@ -27,6 +27,8 @@
     </dependencies>
 
     <build>
+
+        <finalName>rcore-domain-auth</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

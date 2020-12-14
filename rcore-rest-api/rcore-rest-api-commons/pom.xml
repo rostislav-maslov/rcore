@@ -28,6 +28,8 @@
     </dependencies>
 
     <build>
+
+        <finalName>rcore-rest-api-commons</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
