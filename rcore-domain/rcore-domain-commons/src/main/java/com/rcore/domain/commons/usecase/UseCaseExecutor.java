@@ -18,7 +18,7 @@ public interface UseCaseExecutor {
      * @param <Output> - исходящие данные use case
      * @return
      */
-    <ResultModel, Input extends UseCase.InputValues, Output extends UseCase.OutputValues> CompletableFuture<ResultModel> execute(
+    <ResultModel, Input extends UseCase.InputValues, Output extends UseCase.OutputValues> ResultModel execute(
             UseCase<Input, Output> useCase,
             Input input,
             Function<Output, ResultModel> outputMapper

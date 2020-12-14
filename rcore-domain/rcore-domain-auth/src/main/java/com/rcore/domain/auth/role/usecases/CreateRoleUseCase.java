@@ -5,6 +5,7 @@ import com.rcore.domain.auth.role.port.RoleIdGenerator;
 import com.rcore.domain.auth.role.port.RoleRepository;
 import com.rcore.domain.commons.usecase.AbstractCreateUseCase;
 import com.rcore.domain.commons.usecase.UseCase;
+import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,7 @@ public class CreateRoleUseCase extends AbstractCreateUseCase<RoleEntity, RoleIdG
     }
 
     @Override
-    public OutputValues<RoleEntity> execute(InputValues inputValues) {
+    public SingletonEntityOutputValues<RoleEntity> execute(InputValues inputValues) {
         validate(inputValues);
 
         RoleEntity roleEntity = new RoleEntity();
@@ -29,7 +30,7 @@ public class CreateRoleUseCase extends AbstractCreateUseCase<RoleEntity, RoleIdG
         roleEntity.setAvailableAuthTypes(inputValues.getAvailableAuthTypes());
         roleEntity.setAccesses(inputValues.getAccesses());
 
-        return OutputValues.of(repository.save(roleEntity));
+        return SingletonEntityOutputValues.of(repository.save(roleEntity));
     }
 
     @NoArgsConstructor

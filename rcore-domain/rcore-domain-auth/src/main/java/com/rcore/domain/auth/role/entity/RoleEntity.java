@@ -14,9 +14,7 @@ import java.util.*;
 @SuperBuilder
 @Data
 public class RoleEntity extends BaseEntity {
-    /**
-     * Идентификатор
-     */
+
     protected String id;
 
     /**

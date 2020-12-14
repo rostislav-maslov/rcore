@@ -15,9 +15,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 public class AuthorizationEntity extends BaseEntity {
-    /**
-     * Идентификатор
-     */
+
     protected String id;
 
     /**

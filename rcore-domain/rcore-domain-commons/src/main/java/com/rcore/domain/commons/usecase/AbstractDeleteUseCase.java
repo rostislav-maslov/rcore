@@ -1,6 +1,7 @@
 package com.rcore.domain.commons.usecase;
 
 import com.rcore.domain.commons.port.DeleteRepository;
+import com.rcore.domain.commons.usecase.model.IdInputValues;
 import lombok.Value;
 
 /**
@@ -8,7 +9,7 @@ import lombok.Value;
  * @param <Id> - Тип идентификатора сущности
  * @param <Repository> - удаляющий репозиторий
  */
-public abstract class AbstractDeleteUseCase<Id, Repository extends DeleteRepository<Id>> extends UseCase<AbstractDeleteUseCase.InputValues<Id>, AbstractDeleteUseCase.OutputValues> {
+public abstract class AbstractDeleteUseCase<Id, Repository extends DeleteRepository<Id>> extends UseCase<IdInputValues<Id>, AbstractDeleteUseCase.OutputValues> {
 
     protected final Repository repository;
 
@@ -17,13 +18,8 @@ public abstract class AbstractDeleteUseCase<Id, Repository extends DeleteReposit
     }
 
     @Override
-    public OutputValues execute(InputValues<Id> idInputValues) {
+    public OutputValues execute(IdInputValues<Id> idInputValues) {
         return OutputValues.of(repository.delete(idInputValues.getId()));
-    }
-
-    @Value(staticConstructor = "of")
-    public static class InputValues<Id> implements UseCase.InputValues {
-        private final Id id;
     }
 
     @Value(staticConstructor = "of")

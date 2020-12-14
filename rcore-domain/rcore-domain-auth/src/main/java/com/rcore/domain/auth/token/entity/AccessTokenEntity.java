@@ -20,13 +20,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @SuperBuilder
 public class AccessTokenEntity extends BaseEntity {
-    private String id;
-    private String credentialId;
-    private LocalDateTime expireAt = LocalDateTime.now();
-    private RefreshTokenEntity.Status status = RefreshTokenEntity.Status.ACTIVE;
-    private String createByRefreshTokenId;
+    protected String id;
+    protected String credentialId;
+    protected LocalDateTime expireAt = LocalDateTime.now();
+    protected RefreshTokenEntity.Status status = RefreshTokenEntity.Status.ACTIVE;
+    protected String createByRefreshTokenId;
 
-    private String sign;
+    protected String sign;
 
     private static String hash(String st) {
         MessageDigest messageDigest = null;

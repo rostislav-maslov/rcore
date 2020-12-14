@@ -4,33 +4,25 @@ import com.rcore.domain.auth.token.entity.AccessTokenEntity;
 import com.rcore.domain.auth.token.exception.AccessTokenNotFoundException;
 import com.rcore.domain.auth.token.port.AccessTokenRepository;
 import com.rcore.domain.commons.usecase.UseCase;
+import com.rcore.domain.commons.usecase.model.IdInputValues;
+import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 @RequiredArgsConstructor
-public class ExpireAccessTokenUseCase extends UseCase<ExpireAccessTokenUseCase.InputValues, ExpireAccessTokenUseCase.OutputValues> {
+public class ExpireAccessTokenUseCase extends UseCase<IdInputValues<String>, SingletonEntityOutputValues<AccessTokenEntity>> {
 
     private final AccessTokenRepository accessTokenRepository;
 
     @Override
-    public OutputValues execute(InputValues inputValues) {
+    public SingletonEntityOutputValues<AccessTokenEntity> execute(IdInputValues<String> inputValues) {
 
         AccessTokenEntity accessTokenEntity = accessTokenRepository.findById(inputValues.getId())
                 .orElseThrow(() -> new AccessTokenNotFoundException(inputValues.getId()));
 
         accessTokenEntity.expire();
 
-        return new OutputValues(accessTokenRepository.save(accessTokenEntity));
-    }
-
-    @Value
-    public static class InputValues implements UseCase.InputValues {
-        private final String id;
-    }
-
-    @Value
-    public static class OutputValues implements UseCase.OutputValues {
-        private final AccessTokenEntity accessTokenEntity;
+        return SingletonEntityOutputValues.of(accessTokenRepository.save(accessTokenEntity));
     }
 
 }

@@ -10,6 +10,7 @@ import com.rcore.domain.auth.token.exception.RefreshTokenIsExpiredException;
 import com.rcore.domain.auth.token.exception.RefreshTokenNotFoundException;
 import com.rcore.domain.auth.token.port.RefreshTokenRepository;
 import com.rcore.domain.commons.usecase.UseCase;
+import com.rcore.domain.commons.usecase.model.IdInputValues;
 import com.rcore.domain.security.model.CredentialDetails;
 import com.rcore.domain.security.model.RefreshTokenData;
 import com.rcore.domain.security.port.TokenConverter;
@@ -37,12 +38,12 @@ public class RefreshAccessTokenUseCase extends UseCase<RefreshAccessTokenUseCase
                 .orElseThrow(() -> new CredentialNotFoundException(refreshTokenEntity.getCredentialId()));
 
         if (!refreshTokenEntity.isActive()) {
-            expireRefreshTokenUseCase.execute(ExpireRefreshTokenUseCase.InputValues.of(refreshTokenEntity.getId()));
+            expireRefreshTokenUseCase.execute(IdInputValues.of(refreshTokenEntity.getId()));
             throw new RefreshTokenIsExpiredException(refreshTokenEntity.getId());
         }
 
         AccessTokenEntity accessTokenEntity = createAccessTokenUseCase.execute(CreateAccessTokenUseCase.InputValues.of(credentialEntity, refreshTokenEntity))
-                .getAccessTokenEntity();
+                .getEntity();
 
         return OutputValues.of(TokenPair.builder()
                 .accessToken(accessTokenEntity)

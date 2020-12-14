@@ -16,6 +16,7 @@ import com.rcore.domain.auth.token.usecases.CreateAccessTokenUseCase;
 import com.rcore.domain.auth.token.usecases.CreateRefreshTokenUseCase;
 import com.rcore.domain.commons.usecase.AbstractFindByIdUseCase;
 import com.rcore.domain.commons.usecase.UseCase;
+import com.rcore.domain.commons.usecase.model.IdInputValues;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
@@ -36,12 +37,12 @@ public class ConfirmTwoFactorAuthorizationUseCase extends UseCase<ConfirmTwoFact
         ConfirmationCodeEntity confirmationCodeEntity = confirmationCodeRepository.findNotConfirmedByAddressAndSendingTypeAndCode(inputValues.getAddress(), inputValues.getSendingType(), inputValues.getCode())
                 .orElseThrow(BadCredentialsException::new);
 
-        AuthorizationEntity authorizationEntity = findAuthorizationByIdUseCase.execute(AbstractFindByIdUseCase.InputValues.of(confirmationCodeEntity.getAuthorizationId()))
-                .getResult()
+        AuthorizationEntity authorizationEntity = findAuthorizationByIdUseCase.execute(IdInputValues.of(confirmationCodeEntity.getAuthorizationId()))
+                .getEntity()
                 .orElseThrow(() -> new AuthorizationNotFoundException(confirmationCodeEntity.getAuthorizationId()));
 
-        CredentialEntity credentialEntity = findCredentialByIdUseCase.execute(AbstractFindByIdUseCase.InputValues.of(authorizationEntity.getCredentialId()))
-                .getResult()
+        CredentialEntity credentialEntity = findCredentialByIdUseCase.execute(IdInputValues.of(authorizationEntity.getCredentialId()))
+                .getEntity()
                 .orElseThrow(() -> new CredentialNotFoundException(authorizationEntity.getCredentialId()));
 
         if (confirmationCodeEntity.isExpired())
@@ -53,9 +54,9 @@ public class ConfirmTwoFactorAuthorizationUseCase extends UseCase<ConfirmTwoFact
 
         //создаем токены авторизации для учетных данных
         RefreshTokenEntity refreshTokenEntity = createRefreshTokenUseCase.execute(new CreateRefreshTokenUseCase.InputValues(credentialEntity))
-                .getRefreshTokenEntity();
+                .getEntity();
         AccessTokenEntity accessTokenEntity = createAccessTokenUseCase.execute(CreateAccessTokenUseCase.InputValues.of(credentialEntity, refreshTokenEntity))
-                .getAccessTokenEntity();
+                .getEntity();
 
         successfulConfirmation(confirmationCodeEntity, authorizationEntity, accessTokenEntity, refreshTokenEntity);
 
@@ -80,7 +81,7 @@ public class ConfirmTwoFactorAuthorizationUseCase extends UseCase<ConfirmTwoFact
     }
 
     private void successfulConfirmation(ConfirmationCodeEntity confirmationCodeEntity, AuthorizationEntity authorizationEntity, AccessTokenEntity accessTokenEntity, RefreshTokenEntity refreshTokenEntity) throws AuthorizationNotFoundException {
-        confirmationCodeEntity.setConfirmed();
+        confirmationCodeEntity.confirmed();
         confirmationCodeRepository.save(confirmationCodeEntity);
 
         transferAuthorizationToSuccessStatusUseCase.execute(TransferAuthorizationToSuccessStatusUseCase.InputValues.of(

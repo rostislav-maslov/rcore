@@ -3,6 +3,7 @@ package com.rcore.domain.picture.usecases;
 import com.rcore.domain.commons.port.FileStorage;
 import com.rcore.domain.commons.usecase.AbstractCreateUseCase;
 import com.rcore.domain.commons.usecase.UseCase;
+import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 import com.rcore.domain.picture.entity.PictureEntity;
 import com.rcore.domain.picture.exceptions.InvalidPictureDataException;
 import com.rcore.domain.picture.port.PictureIdGenerator;
@@ -21,7 +22,7 @@ public class CreatePictureUseCase extends AbstractCreateUseCase<PictureEntity, P
     }
 
     @Override
-    public OutputValues<PictureEntity> execute(InputValues inputValues) {
+    public SingletonEntityOutputValues<PictureEntity> execute(InputValues inputValues) {
         PictureEntity pictureEntity = new PictureEntity();
         pictureEntity.setId(idGenerator.generate());
         pictureEntity.setIsPrivate(inputValues.getIsPrivate());
@@ -29,7 +30,7 @@ public class CreatePictureUseCase extends AbstractCreateUseCase<PictureEntity, P
         pictureEntity.setFileName(inputValues.getFileName());
         pictureEntity.setDataFormat(inputValues.getDataFormat());
         pictureEntity.setFilePath(fileStorage.store(inputValues.getInputStream(), inputValues.getFileName(), inputValues.getDataFormat()));
-        return OutputValues.of(repository.save(pictureEntity));
+        return SingletonEntityOutputValues.of(repository.save(pictureEntity));
     }
 
     @Value(staticConstructor = "of")

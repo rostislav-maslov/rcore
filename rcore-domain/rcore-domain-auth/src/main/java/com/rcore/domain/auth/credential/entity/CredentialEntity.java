@@ -22,9 +22,6 @@ import java.util.List;
 @SuperBuilder
 public class CredentialEntity extends BaseEntity {
 
-    /**
-     * Идентификатор
-     */
     protected String id;
 
     /**

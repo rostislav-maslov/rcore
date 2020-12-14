@@ -7,29 +7,25 @@ import com.rcore.domain.auth.token.port.RefreshTokenIdGenerator;
 import com.rcore.domain.auth.token.port.RefreshTokenRepository;
 import com.rcore.domain.auth.token.port.TokenSaltGenerator;
 import com.rcore.domain.commons.usecase.UseCase;
+import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 @RequiredArgsConstructor
-public class CreateRefreshTokenUseCase extends UseCase<CreateRefreshTokenUseCase.InputValues, CreateRefreshTokenUseCase.OutputValues> {
+public class CreateRefreshTokenUseCase extends UseCase<CreateRefreshTokenUseCase.InputValues, SingletonEntityOutputValues<RefreshTokenEntity>> {
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final RefreshTokenIdGenerator refreshTokenIdGenerator;
     private final TokenSaltGenerator tokenSaltGenerator;
 
     @Override
-    public OutputValues execute(InputValues inputValues) {
-        return new OutputValues(refreshTokenRepository.save(create(inputValues.getCredentialEntity().getId(), RefreshTokenEntity.CreateFrom.LOGIN, null)));
+    public SingletonEntityOutputValues<RefreshTokenEntity> execute(InputValues inputValues) {
+        return SingletonEntityOutputValues.of(refreshTokenRepository.save(create(inputValues.getCredentialEntity().getId(), RefreshTokenEntity.CreateFrom.LOGIN, null)));
     }
 
     @Value
     public static class InputValues implements UseCase.InputValues {
         private final CredentialEntity credentialEntity;
-    }
-
-    @Value
-    public static class OutputValues implements UseCase.OutputValues {
-        private final RefreshTokenEntity refreshTokenEntity;
     }
 
     private RefreshTokenEntity create(String credentialId, RefreshTokenEntity.CreateFrom createFrom, String refreshTokenId){

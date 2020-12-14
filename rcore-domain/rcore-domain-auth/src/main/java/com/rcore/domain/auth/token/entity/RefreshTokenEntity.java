@@ -26,18 +26,18 @@ public class RefreshTokenEntity extends BaseEntity {
         ACTIVE, INACTIVE, EXPIRED
     }
 
-    private String id;
-    private String credentialId;
-    private Long expireTimeRefreshToken = 365 * 24 * 60 * 60 * 1000l;
-    private Long expireTimeAccessToken = 1 * 24 * 60 * 60 * 1000l;
+    protected String id;
+    protected String credentialId;
+    protected Long expireTimeRefreshToken = 365 * 24 * 60 * 60 * 1000l;
+    protected Long expireTimeAccessToken = 1 * 24 * 60 * 60 * 1000l;
 
-    private LocalDateTime expireAt = LocalDateTime.now();
-    private Status status = Status.ACTIVE;
+    protected LocalDateTime expireAt = LocalDateTime.now();
+    protected Status status = Status.ACTIVE;
 
-    private String createFromTokenId;
-    private CreateFrom createFromType;
+    protected String createFromTokenId;
+    protected CreateFrom createFromType;
 
-    private String salt;
+    protected String salt;
 
     public Boolean isActive() {
         if (status.equals(Status.ACTIVE) == false) return false;

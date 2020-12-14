@@ -4,17 +4,19 @@ import com.rcore.domain.auth.token.entity.RefreshTokenEntity;
 import com.rcore.domain.auth.token.exception.RefreshTokenNotFoundException;
 import com.rcore.domain.auth.token.port.RefreshTokenRepository;
 import com.rcore.domain.commons.usecase.UseCase;
+import com.rcore.domain.commons.usecase.model.IdInputValues;
+import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 @RequiredArgsConstructor
-public class ExpireRefreshTokenUseCase extends UseCase<ExpireRefreshTokenUseCase.InputValues, ExpireRefreshTokenUseCase.OutputValues> {
+public class ExpireRefreshTokenUseCase extends UseCase<IdInputValues<String>, SingletonEntityOutputValues<RefreshTokenEntity>> {
 
     private final RefreshTokenRepository refreshTokenRepository;
     private final DeactivateAccessTokensByRefreshToken deactivateAccessTokensByRefreshToken;
 
     @Override
-    public OutputValues execute(InputValues inputValues) {
+    public SingletonEntityOutputValues<RefreshTokenEntity> execute(IdInputValues<String> inputValues) {
 
         RefreshTokenEntity refreshTokenEntity = refreshTokenRepository.findById(inputValues.getId())
                 .orElseThrow(() -> new RefreshTokenNotFoundException(inputValues.getId()));
@@ -22,17 +24,7 @@ public class ExpireRefreshTokenUseCase extends UseCase<ExpireRefreshTokenUseCase
         refreshTokenEntity.expire();
         deactivateAccessTokensByRefreshToken.execute(DeactivateAccessTokensByRefreshToken.InputValues.of(refreshTokenEntity));
 
-        return new OutputValues(refreshTokenRepository.save(refreshTokenEntity));
-    }
-
-    @Value(staticConstructor = "of")
-    public static class InputValues implements UseCase.InputValues {
-        private final String id;
-    }
-
-    @Value
-    public static class OutputValues implements UseCase.OutputValues {
-        private final RefreshTokenEntity refreshTokenEntity;
+        return SingletonEntityOutputValues.of(refreshTokenRepository.save(refreshTokenEntity));
     }
 
 }

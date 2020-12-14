@@ -13,6 +13,8 @@ import com.rcore.domain.auth.role.usecases.FindRoleByNameUseCase;
 import com.rcore.domain.commons.usecase.AbstractCreateUseCase;
 import com.rcore.domain.commons.usecase.AbstractFindByIdUseCase;
 import com.rcore.domain.commons.usecase.UseCase;
+import com.rcore.domain.commons.usecase.model.IdInputValues;
+import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -40,7 +42,7 @@ public class CreateCredentialUseCase extends AbstractCreateUseCase<CredentialEnt
     }
 
     @Override
-    public OutputValues<CredentialEntity> execute(InputValues inputValues) {
+    public SingletonEntityOutputValues<CredentialEntity> execute(InputValues inputValues) {
 
         List<RoleEntity> roles = new ArrayList<>();
 
@@ -49,12 +51,12 @@ public class CreateCredentialUseCase extends AbstractCreateUseCase<CredentialEnt
         if (inputValues.getRoles() != null)
             for (InputValues.Role role : inputValues.getRoles()) {
                 if (role.getRoleId() != null)
-                    roles.add(findRoleByIdUseCase.execute(AbstractFindByIdUseCase.InputValues.of(role.getRoleId()))
-                            .getResult()
+                    roles.add(findRoleByIdUseCase.execute(IdInputValues.of(role.getRoleId()))
+                            .getEntity()
                             .orElseThrow(() -> new RoleNotFoundException(role.getRoleId())));
                 else if (role.getName() != null)
                     roles.add(findRoleByNameUseCase.execute(FindRoleByNameUseCase.InputValues.of(role.getRoleId()))
-                            .getResult()
+                            .getEntity()
                             .orElseThrow(() -> new RoleNotFoundException(role.getRoleId())));
             }
 
@@ -72,7 +74,7 @@ public class CreateCredentialUseCase extends AbstractCreateUseCase<CredentialEnt
         credentialEntity.setStatus(inputValues.getStatus());
         credentialEntity.setUsername(inputValues.getUsername());
 
-        return AbstractCreateUseCase.OutputValues.of(repository.save(credentialEntity));
+        return SingletonEntityOutputValues.of(repository.save(credentialEntity));
     }
 
     @Value
@@ -122,7 +124,7 @@ public class CreateCredentialUseCase extends AbstractCreateUseCase<CredentialEnt
             if (!StringUtils.hasText(inputValues.getUsername()))
                 throw new CredentialEmailIsRequiredException();
             Optional<CredentialEntity> credentialWithUsername = findCredentialByUsernameUseCase.execute(FindCredentialByUsernameUseCase.InputValues.of(inputValues.getUsername()))
-                    .getResult();
+                    .getEntity();
             if (credentialWithUsername.isPresent())
                 throw new CredentialWithUsernameAlreadyExistException(inputValues.getUsername());
         }

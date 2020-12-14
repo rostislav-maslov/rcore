@@ -50,8 +50,8 @@ public class PasswordAuthorizationUseCase extends UseCase<PasswordAuthorizationU
         }
 
         //создаем токены авторизации для учетных данных
-        RefreshTokenEntity refreshTokenEntity = createRefreshTokenUseCase.execute(new CreateRefreshTokenUseCase.InputValues(credentialEntity)).getRefreshTokenEntity();
-        AccessTokenEntity accessTokenEntity = createAccessTokenUseCase.execute(CreateAccessTokenUseCase.InputValues.of(credentialEntity, refreshTokenEntity)).getAccessTokenEntity();
+        RefreshTokenEntity refreshTokenEntity = createRefreshTokenUseCase.execute(new CreateRefreshTokenUseCase.InputValues(credentialEntity)).getEntity();
+        AccessTokenEntity accessTokenEntity = createAccessTokenUseCase.execute(CreateAccessTokenUseCase.InputValues.of(credentialEntity, refreshTokenEntity)).getEntity();
 
         //Успешная авторизация
         successAuthentication(credentialEntity, accessTokenEntity, refreshTokenEntity);

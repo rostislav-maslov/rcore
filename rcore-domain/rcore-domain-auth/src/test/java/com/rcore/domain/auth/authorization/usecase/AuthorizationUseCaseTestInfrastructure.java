@@ -55,6 +55,11 @@ public class AuthorizationUseCaseTestInfrastructure {
     protected final TokenConverter<AccessTokenData> accessTokenDataTokenConverter = Mockito.mock(TokenConverter.class);
     protected final TokenConverter<RefreshTokenData> refreshTokenDataTokenConverter = Mockito.mock(TokenConverter.class);
     protected final RoleRepository roleRepository = Mockito.mock(RoleRepository.class);
+    protected final FindCredentialByIdUseCase findCredentialByIdUseCase = new FindCredentialByIdUseCase(credentialRepository);
+    protected final CreateAccessTokenUseCase createAccessTokenUseCase = new CreateAccessTokenUseCase(accessTokenRepository, accessTokenIdGenerator);
+    protected final CreateConfirmationCodeUseCase createConfirmationCodeUseCase = new CreateConfirmationCodeUseCase(confirmationCodeRepository, confirmationCodeIdGenerator, confirmationCodeGenerator);
+    protected final FindCredentialByPhoneUseCase findCredentialByPhoneUseCase = new FindCredentialByPhoneUseCase(credentialRepository);
+    protected final FindCredentialByEmailUseCase findCredentialByEmailUseCase = new FindCredentialByEmailUseCase(credentialRepository);
 
     protected AuthorizationConfig authorizationConfig;
 
@@ -80,13 +85,12 @@ public class AuthorizationUseCaseTestInfrastructure {
                 authorizationRepository,
                 authorizationIdGenerator,
                 confirmationCodeRepository,
-                new FindCredentialByIdUseCase(credentialRepository),
-                new CreateAccessTokenUseCase(accessTokenRepository, accessTokenIdGenerator),
+                findCredentialByIdUseCase,
+                createAccessTokenUseCase,
                 createRefreshTokenUseCase,
-                new CreateConfirmationCodeUseCase(confirmationCodeRepository, confirmationCodeIdGenerator, confirmationCodeGenerator),
-                new FindCredentialByPhoneUseCase(credentialRepository),
-                new FindCredentialByEmailUseCase(credentialRepository),
-                sessionTokenService,
+                createConfirmationCodeUseCase,
+                findCredentialByPhoneUseCase,
+                findCredentialByEmailUseCase,
                 accessTokenDataTokenConverter,
                 accessTokenRepository,
                 refreshTokenRepository,

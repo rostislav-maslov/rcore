@@ -13,9 +13,11 @@ import java.time.LocalDateTime;
 @Getter
 public abstract class BaseEntity {
     protected LocalDateTime createdAt = LocalDateTime.now();
-    protected LocalDateTime updatedAt  = LocalDateTime.now();
+    protected LocalDateTime updatedAt = LocalDateTime.now();
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+
 }

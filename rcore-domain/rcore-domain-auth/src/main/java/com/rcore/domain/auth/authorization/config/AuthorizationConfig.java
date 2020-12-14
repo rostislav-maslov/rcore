@@ -32,7 +32,6 @@ public class AuthorizationConfig {
     private final CreateConfirmationCodeUseCase createConfirmationCodeUseCase;
     private final FindCredentialByPhoneUseCase findCredentialByPhoneUseCase;
     private final FindCredentialByEmailUseCase findCredentialByEmailUseCase;
-    private final SessionTokenService sessionTokenService;
     private final TokenConverter<AccessTokenData> tokenConverter;
     private final AccessTokenRepository accessTokenRepository;
     private final RefreshTokenRepository refreshTokenRepository;

@@ -38,7 +38,7 @@ public class InitTwoFactorAuthorizationUseCase extends UseCase<InitTwoFactorAuth
                     });
         else
             credentialEntity = findCredentialByEmailUseCase.execute(FindCredentialByEmailUseCase.InputValues.of(inputValues.getAddress()))
-                    .getCredentialEntity()
+                    .getEntity()
                     .orElseThrow(() -> {
                         createFailedAuthorization(inputValues);
                         return new BadCredentialsException(inputValues.getAddress());
@@ -78,7 +78,7 @@ public class InitTwoFactorAuthorizationUseCase extends UseCase<InitTwoFactorAuth
 
     private AuthorizationEntity createSuccessfulAuthorization(CredentialEntity credentialEntity, InputValues inputValues) {
         return createAuthorizationUseCase.execute(CreateAuthorizationUseCase.InputValues
-                .successfulInit2FAuthorization(credentialEntity, ConfirmationCodeEntity.Recipient.of(credentialEntity.getId(), inputValues.getAddress(), inputValues.getSendingType())))
+                .successfulInit2FAuthorization(ConfirmationCodeEntity.Recipient.of(credentialEntity.getId(), inputValues.getAddress(), inputValues.getSendingType())))
                 .getEntity();
     }
 

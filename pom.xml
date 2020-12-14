@@ -11,7 +11,7 @@
         <module>rcore-domain</module>
         <module>rcore-database</module>
         <module>rcore-commons</module>
-        <module>rcore-rest-api-commons</module>
+        <module>rcore-rest-api</module>
     </modules>
 
     <packaging>pom</packaging>
@@ -19,4 +19,97 @@
     <properties>
         <rcore.version>1.0.0</rcore.version>
     </properties>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>maven-nexus-repo</id>
+            <url>http://45.139.184.103:8081/nexus/content/repositories/maven-nexus-repo</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <build>
+        <finalName>rcore</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/*Tests.java</include>
+                    </includes>
+                </configuration>
+                <version>2.10</version>
+            </plugin>
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.1</version>
+                <executions>
+                    <execution>
+                        <id>default-deploy</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.1</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.8</version>
+                <executions>
+                    <execution>
+                        <id>default-deploy</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <serverId>maven-nexus-repo</serverId>
+                    <nexusUrl>http://45.139.184.103:8081/nexus/maven-nexus-repo</nexusUrl>
+                    <skipStaging>true</skipStaging>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Rostislav Maslov</name>
+            <email>maslov.rostislav@gmail.com</email>
+            <organization>com.github.rostislav-maslov</organization>
+            <organizationUrl>https://github.com/rostislav-maslov</organizationUrl>
+        </developer>
+        <developer>
+            <name>Kozlov Vladimir</name>
+            <email>kozlovvladimir6@gmail.com</email>
+            <organization>com.github.kozlovva</organization>
+            <organizationUrl>https://github.com/kozlovva</organizationUrl>
+        </developer>
+    </developers>
 </project>

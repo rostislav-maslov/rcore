@@ -29,11 +29,11 @@ public class ConfirmationCodeBroadcasterImpl implements ConfirmationCodeBroadcas
                         else
                             emailConfirmationCodeSender.send(confirmationCodeEntity);
 
-                        confirmationCodeEntity.setSent();
+                        confirmationCodeEntity.sent();
                         confirmationCodeRepository.save(confirmationCodeEntity);
                     } catch (Exception e) {
                         log.error("Broadcast confirmed code error: ID - {id} TYPE - {type}", confirmationCodeEntity.getId(), confirmationCodeEntity.getRecipient().getSendingType());
-                        confirmationCodeEntity.setError();
+                        confirmationCodeEntity.error();
                         confirmationCodeRepository.save(confirmationCodeEntity);
                     }
                 });

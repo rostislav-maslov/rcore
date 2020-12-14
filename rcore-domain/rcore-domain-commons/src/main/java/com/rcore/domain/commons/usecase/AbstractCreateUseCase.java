@@ -3,6 +3,7 @@ package com.rcore.domain.commons.usecase;
 import com.rcore.domain.commons.entity.BaseEntity;
 import com.rcore.domain.commons.port.BaseIdGenerator;
 import com.rcore.domain.commons.port.CreateUpdateRepository;
+import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 import lombok.Value;
 
 /**
@@ -13,7 +14,7 @@ import lombok.Value;
  * @param <InputValues> - Входящие знаачения
  */
 public abstract class AbstractCreateUseCase<Entity extends BaseEntity, IdGenerator extends BaseIdGenerator, Repository extends CreateUpdateRepository<Entity>, InputValues extends UseCase.InputValues>
-        extends UseCase<InputValues, AbstractCreateUseCase.OutputValues<Entity>> {
+        extends UseCase<InputValues, SingletonEntityOutputValues<Entity>> {
 
     protected final Repository repository;
     protected final IdGenerator idGenerator;
@@ -21,11 +22,6 @@ public abstract class AbstractCreateUseCase<Entity extends BaseEntity, IdGenerat
     public AbstractCreateUseCase(Repository repository, IdGenerator idGenerator) {
         this.repository = repository;
         this.idGenerator = idGenerator;
-    }
-
-    @Value(staticConstructor = "of")
-    public static class OutputValues<Entity extends BaseEntity> implements UseCase.OutputValues {
-        private final Entity entity;
     }
 
 }

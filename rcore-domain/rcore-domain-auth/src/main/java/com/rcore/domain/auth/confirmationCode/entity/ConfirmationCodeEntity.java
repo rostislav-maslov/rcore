@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @Data
 public class ConfirmationCodeEntity extends BaseEntity {
+
     protected String id;
 
     /**
@@ -108,7 +109,7 @@ public class ConfirmationCodeEntity extends BaseEntity {
      * Methods
      */
 
-    public void setConfirmed() {
+    public void confirmed() {
         this.confirmationStatus = ConfirmationStatus.CONFIRMED;
         this.confirmationDate = LocalDateTime.now();
     }
@@ -117,12 +118,12 @@ public class ConfirmationCodeEntity extends BaseEntity {
         this.sendingStatus = SendingStatus.IN_PROGRESS;
     }
 
-    public void setSent() {
+    public void sent() {
         this.sendingStatus = SendingStatus.SENT;
         this.sendingDate = LocalDateTime.now();
     }
 
-    public void setError() {
+    public void error() {
         this.sendingStatus = SendingStatus.ERROR;
         this.sendingDate = LocalDateTime.now();
     }

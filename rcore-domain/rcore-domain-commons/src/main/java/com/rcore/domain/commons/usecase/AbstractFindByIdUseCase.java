@@ -2,6 +2,8 @@ package com.rcore.domain.commons.usecase;
 
 import com.rcore.domain.commons.entity.BaseEntity;
 import com.rcore.domain.commons.port.ReadRepository;
+import com.rcore.domain.commons.usecase.model.IdInputValues;
+import com.rcore.domain.commons.usecase.model.SingletonOptionalEntityOutputValues;
 import lombok.Value;
 
 import java.util.Optional;
@@ -13,7 +15,7 @@ import java.util.Optional;
  * @param <Repository> - репозиторий, осуществляющий поиск
  */
 public abstract class AbstractFindByIdUseCase<Id, Entity extends BaseEntity, Repository extends ReadRepository>
-        extends UseCase<AbstractFindByIdUseCase.InputValues<Id>, AbstractFindByIdUseCase.OutputValues<Entity>>  {
+        extends UseCase<IdInputValues<Id>, SingletonOptionalEntityOutputValues<Entity>>  {
 
     protected final Repository repository;
 
@@ -22,23 +24,10 @@ public abstract class AbstractFindByIdUseCase<Id, Entity extends BaseEntity, Rep
     }
 
     @Override
-    public OutputValues<Entity> execute(InputValues<Id> idInputValues) {
+    public SingletonOptionalEntityOutputValues<Entity> execute(IdInputValues<Id> idInputValues) {
         if (idInputValues.getId() == null)
-            return OutputValues.empty();
-        return new OutputValues<>(repository.findById(idInputValues.getId()));
-    }
+            return SingletonOptionalEntityOutputValues.empty();
 
-    @Value(staticConstructor = "of")
-    public static class InputValues<Id> implements UseCase.InputValues {
-        private final Id id;
-    }
-
-    @Value(staticConstructor = "of")
-    public static class OutputValues<Entity extends BaseEntity> implements UseCase.OutputValues {
-        private final Optional<Entity> result;
-
-        public static OutputValues empty() {
-            return new OutputValues(Optional.empty());
-        }
+        return SingletonOptionalEntityOutputValues.of(repository.findById(idInputValues.getId()));
     }
 }

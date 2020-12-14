@@ -7,6 +7,7 @@ import com.rcore.domain.auth.confirmationCode.entity.ConfirmationCodeEntity;
 import com.rcore.domain.auth.credential.entity.CredentialEntity;
 import com.rcore.domain.commons.usecase.AbstractCreateUseCase;
 import com.rcore.domain.commons.usecase.UseCase;
+import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 import lombok.*;
 
 public class CreateAuthorizationUseCase
@@ -17,16 +18,17 @@ public class CreateAuthorizationUseCase
     }
 
     @Override
-    public OutputValues<AuthorizationEntity> execute(InputValues inputValues) {
+    public SingletonEntityOutputValues<AuthorizationEntity> execute(InputValues inputValues) {
         AuthorizationEntity authorizationEntity = new AuthorizationEntity();
         authorizationEntity.setId(idGenerator.generate());
+        authorizationEntity.setCredentialId(inputValues.getCredentialId());
         authorizationEntity.setAuthorizationData(inputValues.getAuthorizationData());
         authorizationEntity.setType(inputValues.getType());
         authorizationEntity.setStatus(inputValues.getStatus());
         authorizationEntity.setRejectionCause(inputValues.getRejectionCause());
         authorizationEntity.setAccessTokenId(inputValues.getAccessTokenId());
         authorizationEntity.setRefreshTokenId(inputValues.getRefreshTokenId());
-        return OutputValues.of(repository.save(authorizationEntity));
+        return SingletonEntityOutputValues.of(repository.save(authorizationEntity));
     }
 
     @AllArgsConstructor
@@ -52,6 +54,7 @@ public class CreateAuthorizationUseCase
          */
         public static InputValues successfulPasswordAuthorization(CredentialEntity credentialEntity, String accessTokenId, String refreshTokenId) {
             return InputValues.builder()
+                    .credentialId(credentialEntity.getId())
                     .type(AuthorizationEntity.Type.PASSWORD)
                     .status(AuthorizationEntity.Status.SUCCESS)
                     .accessTokenId(accessTokenId)
@@ -70,8 +73,9 @@ public class CreateAuthorizationUseCase
                     .build();
         }
 
-        public static InputValues successfulInit2FAuthorization(CredentialEntity credentialEntity, ConfirmationCodeEntity.Recipient recipient) {
+        public static InputValues successfulInit2FAuthorization(ConfirmationCodeEntity.Recipient recipient) {
             return InputValues.builder()
+                    .credentialId(recipient.getCredentialId())
                     .type(recipient.getSendingType().equals(ConfirmationCodeEntity.Recipient.SendingType.SMS)
                             ? AuthorizationEntity.Type.SMS_2FA
                             : AuthorizationEntity.Type.EMAIL_2FA)
@@ -84,6 +88,7 @@ public class CreateAuthorizationUseCase
 
         public static InputValues failedInit2FAuthorization(ConfirmationCodeEntity.Recipient recipient) {
             return InputValues.builder()
+                    .credentialId(recipient.getCredentialId())
                     .type(recipient.getSendingType().equals(ConfirmationCodeEntity.Recipient.SendingType.SMS)
                             ? AuthorizationEntity.Type.SMS_2FA
                             : AuthorizationEntity.Type.EMAIL_2FA)
