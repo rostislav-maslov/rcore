@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.github.rostislav-maslov.rcore</groupId>
+        <artifactId>rcore-database-mongo</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <groupId>com.github.rostislav-maslov.rcore</groupId>
+    <artifactId>rcore-database-mongo-file</artifactId>
+    <version>${rcore.version}</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.github.rostislav-maslov.rcore</groupId>
+            <artifactId>rcore-database-mongo-commons</artifactId>
+            <version>${rcore.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.rostislav-maslov.rcore</groupId>
+            <artifactId>rcore-domain-file</artifactId>
+            <version>${rcore.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>rcore-database-mongo-file</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

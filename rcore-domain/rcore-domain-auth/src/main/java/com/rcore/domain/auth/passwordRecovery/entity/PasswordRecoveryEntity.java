@@ -15,7 +15,16 @@ import lombok.experimental.SuperBuilder;
 @Data
 public class PasswordRecoveryEntity extends BaseEntity {
     protected String id;
+
+    /**
+     * Идентификатор учетной запси
+     */
     protected String credentialId;
+
+    /**
+     * Email для восстановления пароля
+     */
+    protected String email;
 
     protected Status status = Status.IN_PROGRESS;
 

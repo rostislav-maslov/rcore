@@ -4,7 +4,7 @@
 
     <groupId>com.github.rostislav-maslov.rcore</groupId>
     <artifactId>rcore</artifactId>
-    <version>1.0.0</version>
+    <version>${revision}</version>
     <name>rcore</name>
 
     <modules>
@@ -18,13 +18,20 @@
 
     <properties>
         <rcore.version>1.0.0-SNAPSHOT</rcore.version>
+        <revision>1.0.0-SNAPSHOT</revision>
     </properties>
 
     <distributionManagement>
         <repository>
-            <id>rcore</id>
-            <url>http://nexus.foodtech-lab.ru/repository/rcore/</url>
+            <id>rcore-releases</id>
+            <name>rcore-releases</name>
+            <url>http://nexus.foodtech-lab.ru/repository/rcore-releases/</url>
         </repository>
+        <snapshotRepository>
+            <id>rcore-snapshots</id>
+            <name>rcore-snapshots</name>
+            <url>http://nexus.foodtech-lab.ru/repository/rcore-snapshots/</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <build>
@@ -61,8 +68,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <serverId>rcore</serverId>
-                    <nexusUrl>http://nexus.foodtech-lab.ru/repository/rcore/</nexusUrl>
+                    <serverId>rcore-snapshots</serverId>
+                    <nexusUrl>http://nexus.foodtech-lab.ru/repository/rcore-snapshots/</nexusUrl>
                     <skipStaging>true</skipStaging>
                 </configuration>
             </plugin>

@@ -1,6 +1,6 @@
 package com.rcore.domain.auth.passwordRecovery.usecases;
 
-import com.rcore.domain.auth.credential.usecases.SetNewCredentialPasswordUseCase;
+import com.rcore.domain.auth.credential.usecases.ChangeCredentialPasswordUseCase;
 import com.rcore.domain.auth.passwordRecovery.entity.PasswordRecoveryEntity;
 import com.rcore.domain.auth.passwordRecovery.exceptions.PasswordRecoveryNotFoundException;
 import com.rcore.domain.auth.passwordRecovery.port.PasswordRecoveryRepository;
@@ -13,14 +13,14 @@ import lombok.Value;
 public class CompletePasswordRecoveryUseCase extends UseCase<CompletePasswordRecoveryUseCase.InputValues, SingletonEntityOutputValues<PasswordRecoveryEntity>> {
 
     private final PasswordRecoveryRepository passwordRecoveryRepository;
-    private final SetNewCredentialPasswordUseCase setNewCredentialPasswordUseCase;
+    private final ChangeCredentialPasswordUseCase changeCredentialPasswordUseCase;
 
     @Override
     public SingletonEntityOutputValues<PasswordRecoveryEntity> execute(InputValues inputValues) {
         PasswordRecoveryEntity passwordRecoveryEntity = passwordRecoveryRepository.findById(inputValues.getId())
                 .orElseThrow(() -> new PasswordRecoveryNotFoundException(inputValues.getId()));
 
-        setNewCredentialPasswordUseCase.execute(SetNewCredentialPasswordUseCase.InputValues.of(passwordRecoveryEntity.getCredentialId(), inputValues.getNewPassword()));
+        changeCredentialPasswordUseCase.execute(ChangeCredentialPasswordUseCase.InputValues.of(passwordRecoveryEntity.getCredentialId(), inputValues.getNewPassword()));
         passwordRecoveryEntity.setCompleted();
         return SingletonEntityOutputValues.of(passwordRecoveryRepository.save(passwordRecoveryEntity));
     }

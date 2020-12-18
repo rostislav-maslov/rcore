@@ -3,7 +3,7 @@ package com.rcore.domain.auth.credential.port.impl;
 import com.rcore.commons.utils.StringUtils;
 import com.rcore.domain.auth.credential.entity.CredentialEntity;
 import com.rcore.domain.auth.credential.port.CredentialRepository;
-import com.rcore.domain.auth.role.port.RoleRepository;
+import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.auth.token.entity.AccessTokenEntity;
 import com.rcore.domain.auth.token.port.AccessTokenRepository;
 import com.rcore.domain.security.exceptions.AuthenticatedCredentialIsBlockedException;
@@ -65,7 +65,7 @@ public class CredentialServiceImpl implements CredentialService {
                 .map(role -> roleRepository.findById(role.getRoleId()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .map(role -> new CredentialDetails.Role(role.getId(), role.getName(), role.getHasBoundlessAccess(), role.getAccesses()))
+                .map(role -> new CredentialDetails.Role(role.getId(), role.getName(), role.getHasBoundlessAccess(), role.getAvailableUseCases()))
                 .collect(Collectors.toList());
 
         return new CredentialDetails(credentialEntity.getId(), roles);

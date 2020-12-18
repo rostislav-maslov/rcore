@@ -5,13 +5,13 @@
     <parent>
         <groupId>com.github.rostislav-maslov.rcore</groupId>
         <artifactId>rcore</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>com.github.rostislav-maslov.rcore</groupId>
     <artifactId>rcore-domain</artifactId>
-    <version>1.0.0</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -28,6 +28,8 @@
         <module>rcore-domain-security</module>
         <module>rcore-domain-file</module>
         <module>rcore-domain-picture</module>
+        <module>rcore-domain-device</module>
+        <module>rcore-domain-role</module>
     </modules>
 
     <dependencyManagement>

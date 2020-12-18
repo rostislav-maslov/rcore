@@ -8,12 +8,12 @@
     <parent>
         <groupId>com.github.rostislav-maslov.rcore</groupId>
         <artifactId>rcore-database</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
     </parent>
 
     <groupId>com.github.rostislav-maslov.rcore</groupId>
     <artifactId>rcore-database-mongo</artifactId>
-    <version>1.0.0</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -23,6 +23,9 @@
     <modules>
         <module>rcore-database-mongo-auth</module>
         <module>rcore-database-mongo-commons</module>
+        <module>rcore-database-mongo-file</module>
+        <module>rcore-database-mongo-picture</module>
+        <module>rcore-database-mongo-role</module>
     </modules>
 
     <properties>

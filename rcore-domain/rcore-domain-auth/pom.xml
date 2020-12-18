@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.github.rostislav-maslov.rcore</groupId>
         <artifactId>rcore-domain</artifactId>
-        <version>1.0.0</version>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -21,13 +21,17 @@
         </dependency>
         <dependency>
             <groupId>com.github.rostislav-maslov.rcore</groupId>
+            <artifactId>rcore-domain-role</artifactId>
+            <version>${rcore.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.rostislav-maslov.rcore</groupId>
             <artifactId>rcore-commons</artifactId>
             <version>${rcore.version}</version>
         </dependency>
     </dependencies>
 
     <build>
-
         <finalName>rcore-domain-auth</finalName>
         <plugins>
             <plugin>
