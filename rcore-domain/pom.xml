@@ -14,7 +14,6 @@
     <version>${revision}</version>
     <packaging>pom</packaging>
 
-    <name>${project.groupId}:${project.artifactId}</name>
     <description>Domain component for Clean Arch apps</description>
     <url>https://github.com/rostislav-maslov/rcore</url>
 

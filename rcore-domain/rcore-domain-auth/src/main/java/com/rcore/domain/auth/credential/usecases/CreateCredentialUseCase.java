@@ -56,7 +56,7 @@ public class CreateCredentialUseCase extends AbstractCreateUseCase<CredentialEnt
                             .getEntity()
                             .orElseThrow(() -> new RoleNotFoundException(role.getRoleId())));
                 else if (role.getName() != null)
-                    roles.add(findRoleByNameUseCase.execute(FindRoleByNameUseCase.InputValues.of(role.getRoleId()))
+                    roles.add(findRoleByNameUseCase.execute(FindRoleByNameUseCase.InputValues.of(role.getName()))
                             .getEntity()
                             .orElseThrow(() -> new RoleNotFoundException(role.getRoleId())));
             }
