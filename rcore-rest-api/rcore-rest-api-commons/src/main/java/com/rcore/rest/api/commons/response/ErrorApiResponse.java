@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class ErrorApiResponse<Error> {
 
-    protected Error error;
+    protected Error errors;
 
     public static <Error> ErrorApiResponse<Error> of(Error error) {
         return new ErrorApiResponse<>(error);
