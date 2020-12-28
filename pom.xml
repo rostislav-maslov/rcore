@@ -24,8 +24,8 @@
 
     <distributionManagement>
         <repository>
-            <id>rcore</id>
-            <url>http://nexus.foodtech-lab.ru/repository/rcore/</url>
+            <id>rcore-releases</id>
+            <url>http://nexus.foodtech-lab.ru/repository/rcore-releases/</url>
         </repository>
     </distributionManagement>
 
@@ -62,8 +62,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <serverId>rcore</serverId>
-                    <nexusUrl>http://nexus.foodtech-lab.ru/repository/rcore/</nexusUrl>
+                    <serverId>rcore-releases</serverId>
+                    <nexusUrl>http://nexus.foodtech-lab.ru/repository/rcore-releases/</nexusUrl>
                     <skipStaging>true</skipStaging>
                 </configuration>
             </plugin>
