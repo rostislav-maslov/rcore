@@ -1,7 +1,6 @@
 package com.rcore.domain.auth.authorization.usecase.all;
 
 import com.rcore.domain.auth.authorization.exceptions.BadCredentialsException;
-import com.rcore.domain.auth.authorization.exceptions.InvalidUsernameException;
 import com.rcore.domain.auth.authorization.exceptions.PasswordIsRequiredException;
 import com.rcore.domain.auth.authorization.exceptions.UsernameIsRequiredException;
 import com.rcore.domain.auth.authorization.usecases.PasswordAuthorizationUseCase;
@@ -15,14 +14,14 @@ class PasswordAuthenticationUseCaseTest extends PasswordAuthenticationUseCaseTes
     /**
      * Тестирование удачной авторизации
      *
-     * @throws InvalidUsernameException
+     *
      * @throws UsernameIsRequiredException
      * @throws BadCredentialsException
      * @throws CredentialIsBlockedException
      * @throws PasswordIsRequiredException
      */
     @Test
-    void testSuccessfulLogin() throws InvalidUsernameException, UsernameIsRequiredException, BadCredentialsException, CredentialIsBlockedException, PasswordIsRequiredException {
+    void testSuccessfulLogin() throws UsernameIsRequiredException, BadCredentialsException, CredentialIsBlockedException, PasswordIsRequiredException {
         TokenPair tokenPair = authorizationConfig.passwordAuthorizationUseCase()
                 .execute(PasswordAuthorizationUseCase.InputValues
                         .of(username, password))

@@ -50,7 +50,7 @@ public class InitTwoFactorAuthorizationUseCase extends UseCase<InitTwoFactorAuth
         createConfirmationCodeUseCase.execute(new CreateConfirmationCodeUseCase.InputValues(
                 authorizationEntity.getId(),
                 ConfirmationCodeEntity.Recipient.of(credentialEntity.getId(), inputValues.getAddress(), inputValues.getSendingType()),
-                60l)
+                inputValues.getTtl())
         );
 
         return new OutputValues();

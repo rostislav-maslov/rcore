@@ -19,6 +19,7 @@
     <modules>
         <module>rcore-rest-api-commons</module>
         <module>rcore-rest-api-spring-commons</module>
+        <module>rcore-rest-api-spring-security</module>
     </modules>
 
     <dependencies>
