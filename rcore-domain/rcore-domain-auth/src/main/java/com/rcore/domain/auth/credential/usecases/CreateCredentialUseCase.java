@@ -68,9 +68,14 @@ public class CreateCredentialUseCase extends AbstractCreateUseCase<CredentialEnt
         credentialEntity.setEmail(inputValues.getEmail());
         credentialEntity.setPassword(passwordCryptographer.encrypt(inputValues.getPassword(), credentialEntity.getId()));
         credentialEntity.setPhone(inputValues.getPhone());
-        credentialEntity.setRoles(inputValues.getRoles()
+        credentialEntity.setRoles(roles
                 .stream()
-                .map(role -> new CredentialEntity.Role(role.getRoleId(), role.getIsBlocked()))
+                .map(role -> new CredentialEntity.Role(
+                        role.getId(),
+                        //находим роль среди переданных, чтобы узнать флаг isBlocked
+                        findInputRole(inputValues.getRoles(), role)
+                                .map(InputValues.Role::getIsBlocked)
+                                .orElse(false)))
                 .collect(Collectors.toList()));
         credentialEntity.setStatus(inputValues.getStatus());
         credentialEntity.setUsername(inputValues.getUsername());
@@ -134,5 +139,12 @@ public class CreateCredentialUseCase extends AbstractCreateUseCase<CredentialEnt
 
         if (inputValues.getStatus() == null)
             throw new CredentialStatusIsRequiredException();
+    }
+
+    private Optional<InputValues.Role> findInputRole(List<InputValues.Role> inputRoles, RoleEntity roleEntity) {
+        return inputRoles
+                .stream()
+                .filter(inputRole -> inputRole.getName() == roleEntity.getName() || inputRole.getRoleId() == roleEntity.getId())
+                .findFirst();
     }
 }
