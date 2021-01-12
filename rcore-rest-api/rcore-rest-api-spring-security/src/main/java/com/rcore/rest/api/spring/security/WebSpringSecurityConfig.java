@@ -30,7 +30,7 @@ public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                    .antMatchers(BaseRoutes.NOT_SECURE + "/**").permitAll()
+                    .antMatchers(BaseRoutes.NOT_SECURE + "/**", "/actuator/**").permitAll()
                 .and()
                     .authorizeRequests()
                     .anyRequest().authenticated()
