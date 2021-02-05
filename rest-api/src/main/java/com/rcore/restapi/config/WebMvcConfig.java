@@ -1,5 +1,7 @@
 package com.rcore.restapi.config;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,7 +9,6 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.format.datetime.standard.DateTimeFormatterRegistrar;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -27,8 +28,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        Jackson2ObjectMapperBuilder builder = objectMapperBuilder();
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter(builder.build());
+        ObjectMapper objectMapper = objectMapper();
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter(objectMapper);
         converters.add(converter);
         StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter(StandardCharsets.UTF_8);
         converters.add(stringHttpMessageConverter);
@@ -54,8 +55,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     //Инициируем кастомный ObjectMapper
     @Bean
-    public Jackson2ObjectMapperBuilder objectMapperBuilder() {
-        return customObjectMapperBuilder.getJackson2ObjectMapperBuilder();
+    public ObjectMapper objectMapper() {
+        ObjectMapper objectMapper = customObjectMapperBuilder.getJackson2ObjectMapperBuilder().build();
+        objectMapper.configure(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL, true);
+        return objectMapper;
     }
 
     @Override

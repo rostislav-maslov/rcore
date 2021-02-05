@@ -1,7 +1,6 @@
 package com.rcore.restapi.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.rcore.restapi.config.jackson.LocalDateTimeDeserializer;
 import com.rcore.restapi.config.jackson.LocalDateTimeSerializer;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
