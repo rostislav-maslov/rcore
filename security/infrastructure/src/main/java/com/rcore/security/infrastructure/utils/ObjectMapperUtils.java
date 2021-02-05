@@ -1,5 +1,6 @@
 package com.rcore.security.infrastructure.utils;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.Version;
@@ -26,6 +27,7 @@ public class ObjectMapperUtils {
         simpleModule.addSerializer(LocalDateTime.class, new ToStringSerializer());
         simpleModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer());
         objectMapper.registerModule(simpleModule);
+        objectMapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
         return objectMapper;
     }
 

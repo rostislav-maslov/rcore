@@ -5,8 +5,14 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.rostislav-maslov.rcore</groupId>
-    <version>${rcore.version}</version>
+    <parent>
+        <groupId>com.github.rostislav-maslov.rcore</groupId>
+        <artifactId>RCore</artifactId>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <version>${revision}</version>
     <artifactId>commons</artifactId>
 
     <dependencies>
@@ -25,54 +31,10 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <rcore.version>0.10.7</rcore.version>
     </properties>
-
-    <distributionManagement>
-        <repository>
-            <id>rcore</id>
-            <url>http://nexus.foodtech-lab.ru/repository/rcore/</url>
-        </repository>
-    </distributionManagement>
 
     <build>
         <plugins>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <includes>
-                        <include>**/*Tests.java</include>
-                    </includes>
-                </configuration>
-                <version>2.10</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.1</version>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.5.1</version>
-                <executions>
-                    <execution>
-                        <id>default-deploy</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <serverId>rcore</serverId>
-                    <nexusUrl>http://nexus.foodtech-lab.ru/repository/rcore/</nexusUrl>
-                    <skipStaging>true</skipStaging>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

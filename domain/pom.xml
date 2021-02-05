@@ -1,9 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.github.rostislav-maslov.rcore</groupId>
+
+    <parent>
+        <groupId>com.github.rostislav-maslov.rcore</groupId>
+        <artifactId>RCore</artifactId>
+        <version>${revision}</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
     <artifactId>domain</artifactId>
-    <version>${rcore.version}</version>
+    <version>${revision}</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -12,7 +19,6 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <rcore.version>0.10.7</rcore.version>
     </properties>
 
     <dependencies>
@@ -20,7 +26,7 @@
         <dependency>
             <groupId>com.github.rostislav-maslov.rcore</groupId>
             <artifactId>commons</artifactId>
-            <version>${rcore.version}</version>
+            <version>${revision}</version>
         </dependency>
         
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
@@ -56,51 +62,8 @@
 
     </dependencies>
 
-    <distributionManagement>
-        <repository>
-            <id>rcore</id>
-            <url>http://nexus.foodtech-lab.ru/repository/rcore/</url>
-        </repository>
-    </distributionManagement>
-
     <build>
         <plugins>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <includes>
-                        <include>**/*Tests.java</include>
-                    </includes>
-                </configuration>
-                <version>2.10</version>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.1</version>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.5.1</version>
-                <executions>
-                    <execution>
-                        <id>default-deploy</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <serverId>rcore</serverId>
-                    <nexusUrl>http://nexus.foodtech-lab.ru/repository/rcore/</nexusUrl>
-                    <skipStaging>true</skipStaging>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

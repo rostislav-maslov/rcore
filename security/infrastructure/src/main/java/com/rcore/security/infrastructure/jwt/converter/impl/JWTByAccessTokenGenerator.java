@@ -19,6 +19,7 @@ public class JWTByAccessTokenGenerator implements AuthTokenGenerator<AccessToken
     @Override
     public String generate(AccessTokenDTO accessTokenDTO, String secret) throws TokenGenerateException {
         try {
+            accessTokenDTO.setAccesses(null);
             JWSObject jwsObject = new JWSObject(new JWSHeader(JWSAlgorithm.HS256), new Payload(objectMapper.writeValueAsString(accessTokenDTO)));
             jwsObject.sign(new MACSigner(secret));
             return jwsObject.serialize();
