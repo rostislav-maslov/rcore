@@ -64,7 +64,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<UserEntity> findById(String id) {
-        UserEntity userEntity = Optional.ofNullable(mongoTemplate.findById(id, UserDoc.class))
+        Optional<UserEntity> optionalUserEntity = Optional.ofNullable(mongoTemplate.findById(id, UserDoc.class))
                 .map(userDoc -> {
                     //Синхронизуем роли из бд
                     userDoc.setRoles(userDoc.getRoles()
@@ -73,9 +73,8 @@ public class UserRepositoryImpl implements UserRepository {
                             .filter(Objects::nonNull)
                             .collect(Collectors.toSet()));
                     return userDoc;
-                })
-                .orElse(null);
-        return Optional.of(userEntity);
+                });
+        return optionalUserEntity;
     }
 
     @Override
