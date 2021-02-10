@@ -27,8 +27,7 @@ public class ChangeCurrentUserPasswordUseCase extends AdminBaseUseCase {
     public UserEntity changePassword(ChangeCurrentUserPasswordCommand changeCurrentUserPasswordCommand) throws UserNotExistException, InvalidOldPasswordException, InvalidNewPasswordException, AuthorizationException, TokenExpiredException, AuthenticationException {
         UserEntity userEntity = checkAccess();
 
-        String protectedOldPassword = passwordGenerator.generate(userEntity.getId(), changeCurrentUserPasswordCommand.getOldPassword());
-        if (!protectedOldPassword.equals(userEntity.getPassword()))
+        if (!passwordGenerator.check(userEntity.getId(), changeCurrentUserPasswordCommand.getOldPassword(), userEntity.getPassword()))
             throw new InvalidOldPasswordException();
 
         if (changeCurrentUserPasswordCommand.getNewPassword() == null || changeCurrentUserPasswordCommand.getNewPassword().length() == 0)
