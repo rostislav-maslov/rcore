@@ -1,9 +1,7 @@
 package com.rcore.restapi.exceptions.handler;
 
 import com.rcore.commons.exceptions.InvalidPhoneNumberFormatException;
-import com.rcore.domain.user.exception.InvalidEmailException;
-import com.rcore.domain.user.exception.PhoneIsRequiredException;
-import com.rcore.domain.user.exception.RoleIsRequiredException;
+import com.rcore.domain.user.exception.*;
 import com.rcore.restapi.exceptions.*;
 import com.rcore.restapi.web.api.response.ErrorApiResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -105,5 +103,18 @@ public class ApiExceptionHandler {
                 .details(e.getMessage())
                 .build()));
     }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {InvalidOldPasswordException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidOldPasswordException(InvalidOldPasswordException e) {
+        return ErrorApiResponse.of(new InvalidOldPasswordApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {InvalidNewPasswordException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidNewPasswordException(InvalidNewPasswordException e) {
+        return ErrorApiResponse.of(new InvalidNewPasswordApiException().getErrors());
+    }
+
 
 }
