@@ -2,6 +2,7 @@ package com.rcore.rest.api.spring.security;
 
 import com.rcore.domain.security.model.CredentialDetails;
 import com.rcore.domain.security.port.CredentialService;
+import com.rcore.rest.api.spring.security.exceptions.AuthenticationApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
