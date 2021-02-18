@@ -1,6 +1,5 @@
 package com.rcore.domain.commons.usecase;
 
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 /**
@@ -9,6 +8,7 @@ import java.util.function.Function;
 public interface UseCaseExecutor {
 
     /**
+     * UseCase executor with result
      *
      * @param useCase - use case
      * @param input - входящие данные
@@ -22,6 +22,19 @@ public interface UseCaseExecutor {
             UseCase<Input, Output> useCase,
             Input input,
             Function<Output, ResultModel> outputMapper
+    );
+
+    /**
+     * UseCase executor without result
+     *
+     * @param useCase
+     * @param input
+     * @param <Input>
+     * @param <Output>
+     */
+    <Input extends UseCase.InputValues, Output extends UseCase.OutputValues> void execute(
+            UseCase<Input, Output> useCase,
+            Input input
     );
 
 }
