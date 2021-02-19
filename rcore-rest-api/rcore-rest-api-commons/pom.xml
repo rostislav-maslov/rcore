@@ -13,7 +13,7 @@
 
 
     <artifactId>rcore-rest-api-commons</artifactId>
-    <version>${rcore.version}</version>
+    <version>${revision}</version>
     <packaging>jar</packaging>
 
     <name>${project.groupId}:${project.artifactId}</name>
@@ -23,7 +23,7 @@
         <dependency>
             <groupId>com.github.rostislav-maslov.rcore</groupId>
             <artifactId>rcore-domain-commons</artifactId>
-            <version>${rcore.version}</version>
+            <version>${revision}</version>
         </dependency>
 
     </dependencies>

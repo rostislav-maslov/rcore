@@ -13,9 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @SuperBuilder
 @Data
-public class ConfirmationCodeEntity extends BaseEntity {
-
-    protected String id;
+public class ConfirmationCodeEntity extends BaseEntity<String> {
 
     /**
      * Проверочный код

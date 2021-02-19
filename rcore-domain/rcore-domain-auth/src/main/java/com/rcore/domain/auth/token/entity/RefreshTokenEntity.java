@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class RefreshTokenEntity extends BaseEntity {
+public class RefreshTokenEntity extends BaseEntity<String> {
 
     public enum CreateFrom {
         LOGIN, REFRESH;
@@ -26,7 +26,6 @@ public class RefreshTokenEntity extends BaseEntity {
         ACTIVE, INACTIVE, EXPIRED
     }
 
-    protected String id;
     protected String credentialId;
     protected Long expireTimeRefreshToken = 365 * 24 * 60 * 60 * 1000l;
     protected Long expireTimeAccessToken = 1 * 24 * 60 * 60 * 1000l;

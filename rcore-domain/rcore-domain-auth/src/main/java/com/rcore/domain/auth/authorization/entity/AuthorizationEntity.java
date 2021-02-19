@@ -14,9 +14,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @Data
 @SuperBuilder
-public class AuthorizationEntity extends BaseEntity {
-
-    protected String id;
+public class AuthorizationEntity extends BaseEntity<String> {
 
     /**
      * Тип авторизации

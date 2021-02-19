@@ -1,6 +1,5 @@
 package com.rcore.domain.auth.credential.entity;
 
-import com.rcore.commons.utils.StringUtils;
 import com.rcore.domain.commons.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @SuperBuilder
-public class CredentialEntity extends BaseEntity {
-
-    protected String id;
+public class CredentialEntity extends BaseEntity<String> {
 
     /**
      * Имя пользователя для авторизации (login/email)

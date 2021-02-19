@@ -15,9 +15,7 @@ import java.util.HashMap;
 @NoArgsConstructor
 @SuperBuilder
 @Data
-public class DeviceEntity extends BaseEntity {
-
-    protected String id;
+public class DeviceEntity extends BaseEntity<String> {
 
     /**
      * Уникальный токен устройства

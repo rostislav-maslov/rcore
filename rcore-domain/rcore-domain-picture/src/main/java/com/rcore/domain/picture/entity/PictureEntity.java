@@ -11,9 +11,7 @@ import java.util.Map;
 @NoArgsConstructor
 @SuperBuilder
 @Data
-public class PictureEntity extends BaseEntity {
-
-    protected String id;
+public class PictureEntity extends BaseEntity<String> {
 
     /**
      * Имя файла

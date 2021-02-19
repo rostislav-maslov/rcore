@@ -12,8 +12,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.rostislav-maslov.rcore</groupId>
-    <version>${rcore.version}</version>
+    <version>${revision}</version>
     <artifactId>rcore-commons</artifactId>
 
     <dependencies>

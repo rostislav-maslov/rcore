@@ -12,7 +12,6 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.github.rostislav-maslov.rcore</groupId>
     <artifactId>rcore-database-mongo</artifactId>
     <version>${revision}</version>
     <packaging>pom</packaging>

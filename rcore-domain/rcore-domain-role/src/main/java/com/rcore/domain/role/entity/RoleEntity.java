@@ -14,9 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @SuperBuilder
 @Data
-public class RoleEntity extends BaseEntity {
-
-    protected String id;
+public class RoleEntity extends BaseEntity<String> {
 
     /**
      * Наименование роли

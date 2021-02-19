@@ -10,9 +10,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.rostislav-maslov.rcore</groupId>
     <artifactId>rcore-domain-commons</artifactId>
-    <version>${rcore.version}</version>
+    <version>${revision}</version>
 
     <build>
         <finalName>rcore-domain-commons</finalName>

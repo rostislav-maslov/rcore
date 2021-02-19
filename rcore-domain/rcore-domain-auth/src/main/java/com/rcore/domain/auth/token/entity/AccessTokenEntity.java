@@ -19,8 +19,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
-public class AccessTokenEntity extends BaseEntity {
-    protected String id;
+public class AccessTokenEntity extends BaseEntity<String> {
     protected String credentialId;
     protected LocalDateTime expireAt = LocalDateTime.now();
     protected RefreshTokenEntity.Status status = RefreshTokenEntity.Status.ACTIVE;

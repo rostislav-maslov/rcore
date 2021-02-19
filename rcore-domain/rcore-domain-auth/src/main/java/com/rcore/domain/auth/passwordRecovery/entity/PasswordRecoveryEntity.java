@@ -13,8 +13,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 @Data
-public class PasswordRecoveryEntity extends BaseEntity {
-    protected String id;
+public class PasswordRecoveryEntity extends BaseEntity<String> {
 
     /**
      * Идентификатор учетной запси

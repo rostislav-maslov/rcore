@@ -10,9 +10,7 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 @Data
-public class FileEntity extends BaseEntity {
-
-    protected String id;
+public class FileEntity extends BaseEntity<String> {
 
     /**
      * Имя файла

@@ -11,7 +11,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @SuperBuilder
 @Getter
-public abstract class BaseEntity {
+public abstract class BaseEntity<EntityId> {
+    protected EntityId id;
     protected LocalDateTime createdAt = LocalDateTime.now();
     protected LocalDateTime updatedAt = LocalDateTime.now();
 
@@ -19,5 +20,7 @@ public abstract class BaseEntity {
         this.updatedAt = updatedAt;
     }
 
-
+    public void setId(EntityId id) {
+        this.id = id;
+    }
 }

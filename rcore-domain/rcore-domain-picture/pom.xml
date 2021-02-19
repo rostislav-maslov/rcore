@@ -11,15 +11,14 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.github.rostislav-maslov.rcore</groupId>
     <artifactId>rcore-domain-picture</artifactId>
-    <version>${rcore.version}</version>
+    <version>${revision}</version>
 
     <dependencies>
         <dependency>
             <groupId>com.github.rostislav-maslov.rcore</groupId>
             <artifactId>rcore-domain-commons</artifactId>
-            <version>${rcore.version}</version>
+            <version>${revision}</version>
         </dependency>
     </dependencies>
 
