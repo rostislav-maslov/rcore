@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+cd commons
+mvn clean package
+cd ..
+
+cd domain
+mvn clean package
+cd ..
+
+cd adapter
+mvn clean package
+cd ..
+
+cd security/infrastructure
+mvn clean package
+cd ../..
+
+cd database/memory
+mvn clean package
+cd ../..
+
+cd database/mongo
+mvn clean package
+cd ../..
+
+cd rest-api
+mvn clean package
+cd ..
+
+cd admin-core
+mvn clean package
+cd ..
