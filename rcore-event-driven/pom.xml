@@ -2,7 +2,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -12,30 +11,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <artifactId>rcore-event-driven</artifactId>
     <version>${revision}</version>
-    <artifactId>rcore-commons</artifactId>
-
-    <name>rcore-commons</name>
-    <description>Commons component for Clean Arch apps</description>
-
-    <developers>
-        <developer>
-            <name>Rostislav Maslov</name>
-            <email>maslov.rostislav@gmail.com</email>
-            <organization>com.github.rostislav-maslov</organization>
-            <organizationUrl>https://github.com/rostislav-maslov</organizationUrl>
-        </developer>
-        <developer>
-            <name>Kozlov Vladimir</name>
-            <email>kozlovvladimir6@gmail.com</email>
-            <organization>com.github.kozlovva</organization>
-            <organizationUrl>https://github.com/kozlovva</organizationUrl>
-        </developer>
-    </developers>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <build>
         <plugins>
@@ -60,12 +37,5 @@
         </plugins>
     </build>
 
-    <url>https://github.com/rostislav-maslov/rcore</url>
-    <licenses>
-        <license>
-            <name>MIT License</name>
-            <url>http://www.opensource.org/licenses/mit-license.php</url>
-        </license>
-    </licenses>
 
 </project>
