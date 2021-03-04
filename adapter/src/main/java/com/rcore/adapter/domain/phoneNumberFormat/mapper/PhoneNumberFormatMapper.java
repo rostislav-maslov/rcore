@@ -17,4 +17,14 @@ public class PhoneNumberFormatMapper implements ExampleDataMapper<PhoneNumberUti
                 .allowedFirstDigits(phoneNumberFormat.getAllowedFirstDigits())
                 .build();
     }
+
+    @Override
+    public PhoneNumberUtils.PhoneNumberFormat inverseMap(PhoneNumberFormatDTO phoneNumberFormatDTO) {
+        return PhoneNumberUtils.PhoneNumberFormat.builder()
+                .code(phoneNumberFormatDTO.getCode())
+                .digitsQuantity(phoneNumberFormatDTO.getDigitsQuantity())
+                .digitsQuantityWithCode(phoneNumberFormatDTO.getDigitsQuantityWithCode())
+                .allowedFirstDigits(phoneNumberFormatDTO.getAllowedFirstDigits())
+                .build();
+    }
 }
