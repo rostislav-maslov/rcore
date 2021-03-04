@@ -1,7 +1,5 @@
 package com.rcore.domain.user.validators;
 
-import com.rcore.commons.exceptions.InvalidPhoneNumberFormatException;
-import com.rcore.domain.role.entity.RoleEntity;
 import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.entity.UserStatus;
@@ -17,7 +15,6 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.*;
 
 public class ChangeUserUseCaseValidatorTest {

@@ -9,7 +9,6 @@ import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.usecase.admin.commands.CreateUserCommand;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,14 +21,15 @@ public class ChangeUserUseCaseValidator {
 
     public void validate(UserEntity userEntity, CreateUserCommand createUserCommand) throws InvalidFirstNameException, InvalidLastNameException, InvalidRoleException, RoleIsRequiredException, PhoneIsRequiredException, UserWithPhoneAlreadyExistException, InvalidEmailException, UserAlreadyExistException, UserWithEmailAlreadyExistException, InvalidAccountStatusException {
         //Проверка firstName
-        if (!StringUtils.hasText(createUserCommand.getFirstName()) && !StringUtils.hasText(userEntity.getFirstName()))
+        if (!StringUtils.hasText(createUserCommand.getFirstName()))
             throw new InvalidFirstNameException();
 
         //Проверка lastName
-        if (!StringUtils.hasText(createUserCommand.getLastName()) && !StringUtils.hasText(userEntity.getLastName()))
+        if (!StringUtils.hasText(createUserCommand.getLastName()))
             throw new InvalidLastNameException();
 
-        if (createUserCommand.getStatus() == null && userEntity.getStatus() == null)
+        //Проверка activeStatus
+        if (!StringUtils.hasText(createUserCommand.getStatus().name()))
             throw new InvalidAccountStatusException();
 
         List<RoleEntity> roles = userEntity.getRoles().stream().collect(Collectors.toList());
@@ -66,7 +66,7 @@ public class ChangeUserUseCaseValidator {
         }
         //Если тип EMAIL, то email и password - обязательные поля
         if (authTypes.contains(RoleEntity.AuthType.EMAIL)) {
-            if (!StringUtils.hasText(createUserCommand.getEmail()) && userEntity.getEmail() == null)
+            if (!StringUtils.hasText(createUserCommand.getEmail()))
                 throw new InvalidEmailException();
             Optional<UserEntity> userWithTransferredEmail = userRepository.findByEmail(createUserCommand.getEmail());
             if (createUserCommand.getEmail() != null && userWithTransferredEmail.isPresent() && !userWithTransferredEmail.get().getId().equals(userEntity.getId()))

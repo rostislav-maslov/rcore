@@ -1,5 +1,6 @@
 package com.rcore.domain.user.usecase.admin;
 
+import com.rcore.commons.utils.StringUtils;
 import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
@@ -12,7 +13,7 @@ import com.rcore.domain.user.usecase.admin.commands.CreateUserCommand;
 import com.rcore.domain.user.validators.ChangeUserUseCaseValidator;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.Objects;
 
 public class UpdateCurrentUserUseCase extends AdminBaseUseCase {
 
@@ -28,34 +29,43 @@ public class UpdateCurrentUserUseCase extends AdminBaseUseCase {
 
         changeUserUseCaseValidator.validate(userEntity, createUserCommand);
 
-        userEntity.setLogin(Optional.ofNullable(createUserCommand.getLogin())
-                .orElse(userEntity.getLogin()));
+        userEntity.setLogin(StringUtils.hasText(createUserCommand.getLogin())
+                ? createUserCommand.getLogin()
+                : userEntity.getLogin());
 
-        userEntity.setPhoneNumber(Optional.ofNullable(createUserCommand.getPhone())
-                .orElse(userEntity.getPhoneNumber()));
+        userEntity.setPhoneNumber(StringUtils.hasText(createUserCommand.getPhone().toString())
+                ? createUserCommand.getPhone()
+                : userEntity.getPhoneNumber());
 
-        userEntity.setEmail(Optional.ofNullable(createUserCommand.getEmail())
-                .orElse(userEntity.getEmail()));
+        userEntity.setEmail(StringUtils.hasText(createUserCommand.getEmail())
+                ? createUserCommand.getEmail()
+                : userEntity.getEmail());
 
-        userEntity.setFirstName(Optional.ofNullable(createUserCommand.getFirstName())
-                .orElse(userEntity.getFirstName()));
+        userEntity.setFirstName(StringUtils.hasText(createUserCommand.getFirstName())
+                ? createUserCommand.getFirstName()
+                : userEntity.getFirstName());
 
-        userEntity.setLastName(Optional.ofNullable(createUserCommand.getLastName())
-                .orElse(userEntity.getLastName()));
+        userEntity.setLastName(StringUtils.hasText(createUserCommand.getLastName())
+                ? createUserCommand.getLastName()
+                : userEntity.getLastName());
 
-        userEntity.setSecondName(Optional.ofNullable(createUserCommand.getSecondName())
-                .orElse(userEntity.getSecondName()));
+        userEntity.setSecondName(StringUtils.hasText(createUserCommand.getSecondName())
+                ? createUserCommand.getSecondName()
+                : userEntity.getSecondName());
 
         userEntity.setFullName(userEntity.getFullName());
 
-        userEntity.setProfileImageId(Optional.ofNullable(createUserCommand.getProfileImageId())
-                .orElse(userEntity.getProfileImageId()));
+        userEntity.setProfileImageId(StringUtils.hasText(createUserCommand.getProfileImageId())
+                ? createUserCommand.getProfileImageId()
+                : userEntity.getProfileImageId());
 
-        userEntity.setStatus(Optional.ofNullable(createUserCommand.getStatus())
-                .orElse(userEntity.getStatus()));
+        userEntity.setStatus(Objects.nonNull(createUserCommand.getStatus())
+                ? createUserCommand.getStatus()
+                : userEntity.getStatus());
 
-        userEntity.setCountryId(Optional.ofNullable(createUserCommand.getCountryId())
-                .orElse(userEntity.getCountryId()));
+        userEntity.setCountryId(StringUtils.hasText(createUserCommand.getCountryId())
+                ? createUserCommand.getCountryId()
+                : userEntity.getCountryId());
 
         userEntity.setUpdatedAt(LocalDateTime.now());
         userEntity = userRepository.save(userEntity);
