@@ -18,7 +18,7 @@
 
     <properties>
         <rcore.version>1.0.0</rcore.version>
-        <revision>1.0.0-SNAPSHOT</revision>
+        <revision>1.0.0</revision>
     </properties>
 
     <distributionManagement>
