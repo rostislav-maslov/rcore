@@ -17,7 +17,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <rcore.version>1.0.0-SNAPSHOT</rcore.version>
+        <rcore.version>1.0.0</rcore.version>
         <revision>1.0.0-SNAPSHOT</revision>
     </properties>
 
