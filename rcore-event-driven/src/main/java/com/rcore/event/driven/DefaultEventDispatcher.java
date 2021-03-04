@@ -37,7 +37,9 @@ public class DefaultEventDispatcher extends EventDispatcher {
         if (getEventStorage() != null)
             getEventStorage().put(event);
 
-        handlers.get(event.getClass())
+        List<EventHandler<? extends Event>> targetEventHandlers = Objects.requireNonNullElse(handlers.get(event.getClass()), new ArrayList<>());
+
+        targetEventHandlers
                 .forEach(handler ->
                         ((EventHandler<E>) handler).onEvent(event));
     }

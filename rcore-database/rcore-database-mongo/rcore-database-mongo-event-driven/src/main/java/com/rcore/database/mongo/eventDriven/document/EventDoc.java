@@ -16,10 +16,12 @@ import java.time.LocalDateTime;
 public class EventDoc {
     private String id = new ObjectId().toString();
     private LocalDateTime createdAt = LocalDateTime.now();
-    private Event event;
+    private Event payload;
+    private String type;
 
     public EventDoc(Event event) {
-        this.event = event;
+        this.payload = event;
+        this.type = event.getType();
     }
 
     public static EventDoc by(Event event) {
