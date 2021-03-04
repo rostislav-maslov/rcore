@@ -2,20 +2,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>com.github.rostislav-maslov.rcore</groupId>
         <artifactId>rcore-database-mongo</artifactId>
         <version>${revision}</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>rcore-database-mongo-auth</artifactId>
+    <artifactId>rcore-database-mongo-event-driven</artifactId>
     <version>${revision}</version>
 
     <dependencies>
-
         <dependency>
             <groupId>com.github.rostislav-maslov.rcore</groupId>
             <artifactId>rcore-database-mongo-commons</artifactId>
@@ -24,13 +22,12 @@
 
         <dependency>
             <groupId>com.github.rostislav-maslov.rcore</groupId>
-            <artifactId>rcore-domain-auth</artifactId>
+            <artifactId>rcore-event-driven</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>
 
     <build>
-        <finalName>rcore-database-mongo-auth</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

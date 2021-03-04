@@ -20,7 +20,7 @@ class DefaultEventDispatcherTests {
     @Test
     void DefaultEventDispatcher_DispatchEventWithStoreInDB_Successful() {
         InMemoryEventStorage inMemoryEventStorage = new InMemoryEventStorage();
-        EventDispatcher eventDispatcher = new DefaultEventDispatcher(inMemoryEventStorage);
+        EventDispatcher eventDispatcher = DefaultEventDispatcher.withStorage(inMemoryEventStorage);
         eventDispatcher.registerHandler(TestEvent.class, new TestEventHandler());
 
         eventDispatcher.dispatch(new TestEvent());

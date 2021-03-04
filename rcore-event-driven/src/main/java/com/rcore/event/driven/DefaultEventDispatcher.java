@@ -11,8 +11,12 @@ import java.util.*;
 public class DefaultEventDispatcher extends EventDispatcher {
     private final Map<Class<? extends Event>, List<EventHandler<? extends Event>>> handlers = new HashMap<>();
 
-    public DefaultEventDispatcher(EventStorage eventStorage) {
+    private DefaultEventDispatcher(EventStorage eventStorage) {
         super(eventStorage);
+    }
+
+    public static DefaultEventDispatcher withStorage(EventStorage eventStorage) {
+        return new DefaultEventDispatcher(eventStorage);
     }
 
     @Override
