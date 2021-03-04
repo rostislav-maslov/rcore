@@ -1,6 +1,9 @@
 package com.rcore.domain.user.usecase.admin;
 
 import com.rcore.commons.utils.StringUtils;
+import com.rcore.domain.phoneNumberFormat.exception.InvalidPhoneFormatForCreateException;
+import com.rcore.domain.phoneNumberFormat.exception.InvalidPhoneFormatForUpdateException;
+import com.rcore.domain.phoneNumberFormat.validators.PhoneNumberValidator;
 import com.rcore.domain.role.entity.RoleEntity;
 import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.token.exception.AuthenticationException;
@@ -24,6 +27,7 @@ public class CreateUserUseCase extends AdminBaseUseCase {
     private final UserIdGenerator userIdGenerator;
     private final RoleRepository roleRepository;
     private final ChangeUserUseCaseValidator changeUserUseCaseValidator;
+    private final PhoneNumberValidator phoneNumberValidator = new PhoneNumberValidator();
 
     public CreateUserUseCase(UserRepository userRepository, PasswordGenerator passwordGenerator, UserIdGenerator userIdGenerator, AuthorizationByTokenUseCase authorizationByTokenUseCase, RoleRepository roleRepository) {
         super(userRepository, new AdminUserCreateAccess(), authorizationByTokenUseCase);
@@ -62,7 +66,7 @@ public class CreateUserUseCase extends AdminBaseUseCase {
         return userEntity;
     }
 
-    public UserEntity create(CreateUserCommand createUserCommand) throws AuthorizationException, TokenExpiredException, AuthenticationException, RoleIsRequiredException, PhoneIsRequiredException, InvalidEmailException, UserAlreadyExistException, UserWithPhoneAlreadyExistException, InvalidFirstNameException, InvalidLastNameException, InvalidRoleException, UserWithEmailAlreadyExistException, InvalidAccountStatusException {
+    public UserEntity create(CreateUserCommand createUserCommand) throws AuthorizationException, TokenExpiredException, AuthenticationException, RoleIsRequiredException, PhoneIsRequiredException, InvalidEmailException, UserAlreadyExistException, UserWithPhoneAlreadyExistException, InvalidFirstNameException, InvalidLastNameException, InvalidRoleException, UserWithEmailAlreadyExistException, InvalidAccountStatusException, InvalidPhoneFormatForCreateException {
         checkAccess();
 
         Set<RoleEntity> roles = createUserCommand.getRoles()
@@ -102,7 +106,11 @@ public class CreateUserUseCase extends AdminBaseUseCase {
         return userEntity;
     }
 
-    private void validate(CreateUserCommand createUserCommand) throws InvalidFirstNameException, InvalidLastNameException, InvalidAccountStatusException, InvalidRoleException, RoleIsRequiredException, PhoneIsRequiredException, UserWithPhoneAlreadyExistException, UserWithEmailAlreadyExistException, InvalidEmailException {
+    private void validate(CreateUserCommand createUserCommand) throws InvalidFirstNameException, InvalidLastNameException, InvalidAccountStatusException, InvalidRoleException, RoleIsRequiredException, PhoneIsRequiredException, UserWithPhoneAlreadyExistException, UserWithEmailAlreadyExistException, InvalidEmailException, InvalidPhoneFormatForCreateException {
+        if (createUserCommand.getPhone() != null && createUserCommand.getPhoneNumberFormat() != null)
+            if (phoneNumberValidator.validatePhone(createUserCommand.getPhone(), createUserCommand.getPhoneNumberFormat()))
+                throw new InvalidPhoneFormatForCreateException();
+
         //Проверка firstName
         if (!StringUtils.hasText(createUserCommand.getFirstName()))
             throw new InvalidFirstNameException();
