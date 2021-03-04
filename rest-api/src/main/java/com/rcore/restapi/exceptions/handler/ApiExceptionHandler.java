@@ -66,6 +66,30 @@ public class ApiExceptionHandler {
         return ErrorApiResponse.of(new RoleIsRequiredApiException().getErrors());
     }
 
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler({InvalidRoleException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleRoleNotFoundException(InvalidRoleException e) {
+        return ErrorApiResponse.of(new RoleNotFoundApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({InvalidFirstNameException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidFirstNameException(InvalidFirstNameException e) {
+        return ErrorApiResponse.of(new InvalidFirstNameApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({InvalidLastNameException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidLastNameException(InvalidLastNameException e) {
+        return ErrorApiResponse.of(new InvalidLastNameApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({InvalidAccountStatusException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidAccountStatusException(InvalidAccountStatusException e) {
+        return ErrorApiResponse.of(new InvalidAccountStatusApiException().getErrors());
+    }
+
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler({PhoneIsRequiredException.class})
     public ErrorApiResponse<List<ExceptionDTO>> handlePhoneIsRequiredException(PhoneIsRequiredException e) {
