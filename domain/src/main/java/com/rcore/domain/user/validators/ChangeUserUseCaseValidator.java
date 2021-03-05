@@ -35,10 +35,6 @@ public class ChangeUserUseCaseValidator {
         if (!StringUtils.hasText(createUserCommand.getLastName()))
             throw new InvalidLastNameException();
 
-        //Проверка activeStatus
-        if (!StringUtils.hasText(createUserCommand.getStatus().name()))
-            throw new InvalidAccountStatusException();
-
         List<RoleEntity> roles = userEntity.getRoles().stream().collect(Collectors.toList());
 
         //Проверка ролей
