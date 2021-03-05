@@ -1,5 +1,6 @@
 package com.rcore.domain.user.validators;
 
+import com.rcore.domain.phoneNumberFormat.exception.InvalidPhoneFormatForUpdateException;
 import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.entity.UserStatus;
@@ -142,7 +143,7 @@ public class ChangeUserUseCaseValidatorTest {
      * Ожидаем соответствующую ошибку
      */
     @Test
-    public void testSuccessfulValidateForNewAdminUser() throws PhoneIsRequiredException, UserWithEmailAlreadyExistException, InvalidEmailException, UserAlreadyExistException, InvalidLastNameException, InvalidRoleException, UserWithPhoneAlreadyExistException, InvalidAccountStatusException, InvalidFirstNameException, RoleIsRequiredException {
+    public void testSuccessfulValidateForNewAdminUser() throws PhoneIsRequiredException, UserWithEmailAlreadyExistException, InvalidEmailException, UserAlreadyExistException, InvalidLastNameException, InvalidRoleException, UserWithPhoneAlreadyExistException, InvalidAccountStatusException, InvalidFirstNameException, RoleIsRequiredException, InvalidPhoneFormatForUpdateException {
         CreateUserCommand createUserCommand = CreateUserCommand.builder()
                 .firstName("Борис")
                 .lastName("Конфетович")
@@ -163,7 +164,7 @@ public class ChangeUserUseCaseValidatorTest {
      * Ожидаем соответствующую ошибку
      */
     @Test
-    public void testSuccessfulValidateForCreatedAdminUser() throws PhoneIsRequiredException, UserWithEmailAlreadyExistException, InvalidEmailException, UserAlreadyExistException, InvalidLastNameException, InvalidRoleException, UserWithPhoneAlreadyExistException, InvalidAccountStatusException, InvalidFirstNameException, RoleIsRequiredException {
+    public void testSuccessfulValidateForCreatedAdminUser() throws PhoneIsRequiredException, UserWithEmailAlreadyExistException, InvalidEmailException, UserAlreadyExistException, InvalidLastNameException, InvalidRoleException, UserWithPhoneAlreadyExistException, InvalidAccountStatusException, InvalidFirstNameException, RoleIsRequiredException, InvalidPhoneFormatForUpdateException {
         CreateUserCommand createUserCommand = CreateUserCommand.builder()
                 .firstName("Борис 1")
                 .lastName("Конфетович 1")

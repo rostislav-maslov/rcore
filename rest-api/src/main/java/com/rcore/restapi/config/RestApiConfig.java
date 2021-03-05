@@ -1,6 +1,7 @@
 package com.rcore.restapi.config;
 
 import com.rcore.adapter.domain.file.FileAdapter;
+import com.rcore.adapter.domain.phoneNumberFormat.PhoneNumberFormatAllAdapter;
 import com.rcore.adapter.domain.picture.PictureAdapter;
 import com.rcore.adapter.domain.role.RoleAdapter;
 import com.rcore.adapter.domain.token.TokenAdapter;
@@ -9,6 +10,8 @@ import com.rcore.domain.file.config.FileConfig;
 import com.rcore.domain.file.port.FileIdGenerator;
 import com.rcore.domain.file.port.FileRepository;
 import com.rcore.domain.file.port.FileStorage;
+import com.rcore.domain.phoneNumberFormat.config.PhoneNumberFormatConfig;
+import com.rcore.domain.phoneNumberFormat.port.PhoneNumberFormatRepository;
 import com.rcore.domain.picture.config.PictureConfig;
 import com.rcore.domain.picture.port.*;
 import com.rcore.domain.picture.port.impl.PictureCleanerImpl;
@@ -65,6 +68,8 @@ public class RestApiConfig {
     private final RefreshTokenIdGenerator refreshTokenIdGenerator;
     private final TokenSaltGeneratorImpl tokenSaltGenerator = new TokenSaltGeneratorImpl();
 
+    private final PhoneNumberFormatRepository phoneNumberFormatRepository;
+
     @Bean
     public PictureAdapter pictureAdapter() {
         return new PictureAdapter(new PictureConfig(pictureRepository, pictureIdGenerator, pictureStorage, pictureCompressor, new AuthorizationByTokenUseCase(accessTokenStorage, refreshTokenStorage, userRepository)));
@@ -94,6 +99,11 @@ public class RestApiConfig {
                 refreshTokenStorage,
                 accessTokenStorage)
         );
+    }
+
+    @Bean
+    public PhoneNumberFormatAllAdapter phoneNumberFormatAllAdapter() {
+        return new PhoneNumberFormatAllAdapter(new PhoneNumberFormatConfig(phoneNumberFormatRepository));
     }
 
     @Bean

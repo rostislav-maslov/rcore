@@ -1,5 +1,6 @@
 package com.rcore.domain.user.usecase.admin.commands;
 
+import com.rcore.commons.utils.PhoneNumberUtils;
 import com.rcore.domain.user.entity.UserStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,6 +26,7 @@ public class CreateUserCommand {
     private Long phone;
     private String password;
     private List<Role> roles;
+    private PhoneNumberUtils.PhoneNumberFormat phoneNumberFormat;
 
     @AllArgsConstructor
     @NoArgsConstructor

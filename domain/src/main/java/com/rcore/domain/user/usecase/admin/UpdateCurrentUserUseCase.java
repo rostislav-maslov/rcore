@@ -1,6 +1,7 @@
 package com.rcore.domain.user.usecase.admin;
 
 import com.rcore.commons.utils.StringUtils;
+import com.rcore.domain.phoneNumberFormat.exception.InvalidPhoneFormatForUpdateException;
 import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.AuthorizationException;
@@ -24,7 +25,7 @@ public class UpdateCurrentUserUseCase extends AdminBaseUseCase {
         changeUserUseCaseValidator = new ChangeUserUseCaseValidator(roleRepository, userRepository);
     }
 
-    public UserEntity update(CreateUserCommand createUserCommand) throws AuthorizationException, TokenExpiredException, AuthenticationException, UserNotFoundException, InvalidLastNameException, PhoneIsRequiredException, UserAlreadyExistException, InvalidFirstNameException, InvalidRoleException, UserWithPhoneAlreadyExistException, RoleIsRequiredException, InvalidEmailException, UserWithEmailAlreadyExistException, InvalidAccountStatusException {
+    public UserEntity update(CreateUserCommand createUserCommand) throws AuthorizationException, TokenExpiredException, AuthenticationException, UserNotFoundException, InvalidLastNameException, PhoneIsRequiredException, UserAlreadyExistException, InvalidFirstNameException, InvalidRoleException, UserWithPhoneAlreadyExistException, RoleIsRequiredException, InvalidEmailException, UserWithEmailAlreadyExistException, InvalidAccountStatusException, InvalidPhoneFormatForUpdateException {
         UserEntity userEntity = checkAccess();
 
         changeUserUseCaseValidator.validate(userEntity, createUserCommand);

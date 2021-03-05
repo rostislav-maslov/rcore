@@ -1,6 +1,8 @@
 package com.rcore.domain.user.usecase.admin;
 
 import com.rcore.commons.utils.StringUtils;
+import com.rcore.domain.phoneNumberFormat.exception.InvalidPhoneFormatForUpdateException;
+import com.rcore.domain.phoneNumberFormat.validators.PhoneNumberValidator;
 import com.rcore.domain.role.entity.RoleEntity;
 import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.token.exception.AuthenticationException;
@@ -23,6 +25,7 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
 
     private final RoleRepository roleRepository;
     private final ChangeUserUseCaseValidator changeUserUseCaseValidator;
+    private final PhoneNumberValidator phoneNumberValidator = new PhoneNumberValidator();
 
     public UpdateUserUseCase(UserRepository userRepository, AuthorizationByTokenUseCase authorizationByTokenUseCase, RoleRepository roleRepository) {
         super(userRepository, new AdminUserUpdateAccess(), authorizationByTokenUseCase);
@@ -84,7 +87,7 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
 //        return old;
 //    }
 
-    public UserEntity update(UpdateUserCommand updateUserCommand) throws UserNotFoundException, AuthorizationException, TokenExpiredException, AuthenticationException, PhoneIsRequiredException, InvalidEmailException, UserAlreadyExistException, UserWithPhoneAlreadyExistException, InvalidLastNameException, InvalidRoleException, RoleIsRequiredException, InvalidFirstNameException, UserWithEmailAlreadyExistException, InvalidAccountStatusException {
+    public UserEntity update(UpdateUserCommand updateUserCommand) throws UserNotFoundException, AuthorizationException, TokenExpiredException, AuthenticationException, PhoneIsRequiredException, InvalidEmailException, UserAlreadyExistException, UserWithPhoneAlreadyExistException, InvalidLastNameException, InvalidRoleException, RoleIsRequiredException, InvalidFirstNameException, UserWithEmailAlreadyExistException, InvalidAccountStatusException, InvalidPhoneFormatForUpdateException {
         checkAccess();
 
         UserEntity userEntity = userRepository.findById(updateUserCommand.getId())
@@ -148,7 +151,11 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         return userEntity;
     }
 
-    private void validate(UpdateUserCommand updateUserCommand, UserEntity userEntity) throws InvalidFirstNameException, InvalidLastNameException, InvalidAccountStatusException, InvalidRoleException, RoleIsRequiredException, PhoneIsRequiredException, UserWithPhoneAlreadyExistException, UserWithEmailAlreadyExistException, InvalidEmailException {
+    private void validate(UpdateUserCommand updateUserCommand, UserEntity userEntity) throws InvalidFirstNameException, InvalidLastNameException, InvalidAccountStatusException, InvalidRoleException, RoleIsRequiredException, PhoneIsRequiredException, UserWithPhoneAlreadyExistException, UserWithEmailAlreadyExistException, InvalidEmailException, InvalidPhoneFormatForUpdateException {
+        if (updateUserCommand.getPhone() != null && updateUserCommand.getPhoneNumberFormat() != null)
+            if (phoneNumberValidator.validatePhone(updateUserCommand.getPhone(), updateUserCommand.getPhoneNumberFormat()))
+                throw new InvalidPhoneFormatForUpdateException();
+
         //Проверка firstName
         if (!StringUtils.hasText(updateUserCommand.getFirstName()))
             throw new InvalidFirstNameException();

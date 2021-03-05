@@ -1,6 +1,7 @@
 package com.rcore.restapi.exceptions.handler;
 
-import com.rcore.commons.exceptions.InvalidPhoneNumberFormatException;
+import com.rcore.domain.phoneNumberFormat.exception.InvalidPhoneFormatForCreateException;
+import com.rcore.domain.phoneNumberFormat.exception.InvalidPhoneFormatForUpdateException;
 import com.rcore.domain.user.exception.*;
 import com.rcore.restapi.exceptions.*;
 import com.rcore.restapi.web.api.response.ErrorApiResponse;
@@ -55,7 +56,7 @@ public class ApiExceptionHandler {
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({InvalidPhoneNumberFormatException.class})
+    @ExceptionHandler({com.rcore.commons.exceptions.InvalidPhoneNumberFormatException.class})
     public ErrorApiResponse<List<ExceptionDTO>> handleBadRequestApiException(Exception e) {
         return ErrorApiResponse.of(new InvalidPhoneNumberFormatApiException().getErrors());
     }
@@ -94,6 +95,18 @@ public class ApiExceptionHandler {
     @ExceptionHandler({PhoneIsRequiredException.class})
     public ErrorApiResponse<List<ExceptionDTO>> handlePhoneIsRequiredException(PhoneIsRequiredException e) {
         return ErrorApiResponse.of(new PhoneIsRequiredApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({InvalidPhoneFormatForUpdateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidPhoneNumberFormatException(InvalidPhoneFormatForUpdateException e) {
+        return ErrorApiResponse.of(new InvalidPhoneFormatForUpdateApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({InvalidPhoneFormatForCreateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidPhoneFormatForCreateException(InvalidPhoneFormatForCreateException e) {
+        return ErrorApiResponse.of(new InvalidPhoneFormatForCreateApiException().getErrors());
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
