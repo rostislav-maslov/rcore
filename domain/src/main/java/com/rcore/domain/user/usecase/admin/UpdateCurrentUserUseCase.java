@@ -34,7 +34,7 @@ public class UpdateCurrentUserUseCase extends AdminBaseUseCase {
                 ? createUserCommand.getLogin()
                 : userEntity.getLogin());
 
-        userEntity.setPhoneNumber(StringUtils.hasText(createUserCommand.getPhone().toString())
+        userEntity.setPhoneNumber(createUserCommand.getPhone() != null
                 ? createUserCommand.getPhone()
                 : userEntity.getPhoneNumber());
 
