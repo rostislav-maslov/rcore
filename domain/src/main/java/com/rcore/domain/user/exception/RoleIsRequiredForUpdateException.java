@@ -2,5 +2,5 @@ package com.rcore.domain.user.exception;
 
 import com.rcore.domain.base.exception.CoreException;
 
-public class RoleIsRequiredException extends CoreException {
+public class RoleIsRequiredForUpdateException extends CoreException {
 }

@@ -2,17 +2,16 @@ package com.rcore.restapi.exceptions;
 
 import java.util.Arrays;
 
-public class InvalidLastNameApiException extends BadRequestApiException {
+public class UserWithPhoneAlreadyExistForUpdateApiException extends BadRequestApiException {
 
-    public InvalidLastNameApiException() {
+    public UserWithPhoneAlreadyExistForUpdateApiException() {
         super(Arrays.asList(ExceptionDTO.builder()
                 .presentationData(ExceptionDTO.PresentationData.builder()
                         .title("Не удалось изменить параметры")
-                        .message("Необходимо указать фамилию пользователя")
+                        .message("Пользователь с данным номером уже существует")
                         .build())
                 .domain("USER")
-                .details("INVALID_LAST_NAME")
+                .details("PHONENUMBER_ALREADY_EXIST")
                 .build()));
     }
-
 }

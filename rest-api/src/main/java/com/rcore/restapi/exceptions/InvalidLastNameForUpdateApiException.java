@@ -2,16 +2,16 @@ package com.rcore.restapi.exceptions;
 
 import java.util.Arrays;
 
-public class InvalidAccountStatusApiException extends BadRequestApiException {
+public class InvalidLastNameForUpdateApiException extends BadRequestApiException {
 
-    public InvalidAccountStatusApiException() {
+    public InvalidLastNameForUpdateApiException() {
         super(Arrays.asList(ExceptionDTO.builder()
                 .presentationData(ExceptionDTO.PresentationData.builder()
                         .title("Не удалось изменить параметры")
-                        .message("Необходимо указать тип активности")
+                        .message("Необходимо указать фамилию пользователя")
                         .build())
                 .domain("USER")
-                .details("INVALID_ACCOUNT_STATUS")
+                .details("INVALID_LAST_NAME")
                 .build()));
     }
 

@@ -2,13 +2,13 @@ package com.rcore.restapi.exceptions;
 
 import java.util.Arrays;
 
-public class RoleNotFoundApiException extends NotFoundApiException {
+public class RoleNotFoundForUpdateApiException extends NotFoundApiException {
 
-    public RoleNotFoundApiException() {
+    public RoleNotFoundForUpdateApiException() {
         super(Arrays.asList(ExceptionDTO.builder()
                 .presentationData(ExceptionDTO.PresentationData.builder()
                         .title("Не удалось изменить параметры")
-                        .message("Запись не найдена")
+                        .message("Передан некорректный идентификатор роли")
                         .build())
                 .domain("USER")
                 .details("INVALID_ROLE_ID")

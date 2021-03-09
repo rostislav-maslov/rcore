@@ -1,14 +1,13 @@
 package com.rcore.restapi.exceptions;
 
 import java.util.Arrays;
-import java.util.List;
 
-public class PhoneIsRequiredApiException extends BadRequestApiException {
+public class PhoneIsRequiredForCreateApiException extends BadRequestApiException {
 
-    public PhoneIsRequiredApiException() {
+    public PhoneIsRequiredForCreateApiException() {
         super(Arrays.asList(ExceptionDTO.builder()
                 .presentationData(ExceptionDTO.PresentationData.builder()
-                        .title("Не удалось изменить параметры")
+                        .title("Не удалось сохранить данные")
                         .message("Необходимо указать номер телефона")
                         .build())
                 .domain("USER")

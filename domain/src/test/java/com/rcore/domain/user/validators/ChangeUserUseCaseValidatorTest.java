@@ -69,7 +69,7 @@ public class ChangeUserUseCaseValidatorTest {
     @Test
     public void testValidateForNewUserWithInvalidFirstNameException() {
         CreateUserCommand createUserCommand = CreateUserCommand.builder().build();
-        Assert.assertThrows(InvalidFirstNameException.class, () -> changeUserUseCaseValidator.validate(new UserEntity(), createUserCommand));
+        Assert.assertThrows(InvalidFirstNameForUpdateException.class, () -> changeUserUseCaseValidator.validate(new UserEntity(), createUserCommand));
         return;
     }
 
@@ -82,7 +82,7 @@ public class ChangeUserUseCaseValidatorTest {
         CreateUserCommand createUserCommand = CreateUserCommand.builder()
                 .firstName("Борис")
                 .build();
-        Assert.assertThrows(InvalidLastNameException.class, () -> changeUserUseCaseValidator.validate(new UserEntity(), createUserCommand));
+        Assert.assertThrows(InvalidLastNameForUpdateException.class, () -> changeUserUseCaseValidator.validate(new UserEntity(), createUserCommand));
         return;
     }
 
@@ -96,7 +96,7 @@ public class ChangeUserUseCaseValidatorTest {
                 .firstName("Борис")
                 .lastName("Конфетович")
                 .build();
-        Assert.assertThrows(RoleIsRequiredException.class, () -> changeUserUseCaseValidator.validate(new UserEntity(), createUserCommand));
+        Assert.assertThrows(RoleIsRequiredForUpdateException.class, () -> changeUserUseCaseValidator.validate(new UserEntity(), createUserCommand));
         return;
     }
 
@@ -114,7 +114,7 @@ public class ChangeUserUseCaseValidatorTest {
                         .id(ChangeUserUseCaseValidatorTestInfrastructure.courierRole.getId())
                         .build()))
                 .build();
-        Assert.assertThrows(PhoneIsRequiredException.class, () -> changeUserUseCaseValidator.validate(new UserEntity(), createUserCommand));
+        Assert.assertThrows(PhoneIsRequiredForUpdateException.class, () -> changeUserUseCaseValidator.validate(new UserEntity(), createUserCommand));
         return;
     }
 
@@ -132,7 +132,7 @@ public class ChangeUserUseCaseValidatorTest {
                         .id(ChangeUserUseCaseValidatorTestInfrastructure.adminRole.getId())
                         .build()))
                 .build();
-        Assert.assertThrows(InvalidEmailException.class, () -> changeUserUseCaseValidator.validate(new UserEntity(), createUserCommand));
+        Assert.assertThrows(InvalidEmailForUpdateException.class, () -> changeUserUseCaseValidator.validate(new UserEntity(), createUserCommand));
         return;
     }
 
@@ -143,7 +143,7 @@ public class ChangeUserUseCaseValidatorTest {
      * Ожидаем соответствующую ошибку
      */
     @Test
-    public void testSuccessfulValidateForNewAdminUser() throws PhoneIsRequiredException, UserWithEmailAlreadyExistException, InvalidEmailException, UserAlreadyExistException, InvalidLastNameException, InvalidRoleException, UserWithPhoneAlreadyExistException, InvalidAccountStatusException, InvalidFirstNameException, RoleIsRequiredException, InvalidPhoneFormatForUpdateException {
+    public void testSuccessfulValidateForNewAdminUser() throws PhoneIsRequiredForUpdateException, UserWithEmailAlreadyExistForUpdateException, InvalidEmailForUpdateException, UserAlreadyExistException, InvalidLastNameForUpdateException, InvalidRoleForUpdateException, UserWithPhoneAlreadyExistForUpdateException, InvalidAccountStatusForUpdateException, InvalidFirstNameForUpdateException, RoleIsRequiredForUpdateException, InvalidPhoneFormatForUpdateException {
         CreateUserCommand createUserCommand = CreateUserCommand.builder()
                 .firstName("Борис")
                 .lastName("Конфетович")
@@ -164,7 +164,7 @@ public class ChangeUserUseCaseValidatorTest {
      * Ожидаем соответствующую ошибку
      */
     @Test
-    public void testSuccessfulValidateForCreatedAdminUser() throws PhoneIsRequiredException, UserWithEmailAlreadyExistException, InvalidEmailException, UserAlreadyExistException, InvalidLastNameException, InvalidRoleException, UserWithPhoneAlreadyExistException, InvalidAccountStatusException, InvalidFirstNameException, RoleIsRequiredException, InvalidPhoneFormatForUpdateException {
+    public void testSuccessfulValidateForCreatedAdminUser() throws PhoneIsRequiredForUpdateException, UserWithEmailAlreadyExistForUpdateException, InvalidEmailForUpdateException, UserAlreadyExistException, InvalidLastNameForUpdateException, InvalidRoleForUpdateException, UserWithPhoneAlreadyExistForUpdateException, InvalidAccountStatusForUpdateException, InvalidFirstNameForUpdateException, RoleIsRequiredForUpdateException, InvalidPhoneFormatForUpdateException {
         CreateUserCommand createUserCommand = CreateUserCommand.builder()
                 .firstName("Борис 1")
                 .lastName("Конфетович 1")

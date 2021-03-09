@@ -25,7 +25,7 @@ public class UpdateCurrentUserUseCase extends AdminBaseUseCase {
         changeUserUseCaseValidator = new ChangeUserUseCaseValidator(roleRepository, userRepository);
     }
 
-    public UserEntity update(CreateUserCommand createUserCommand) throws AuthorizationException, TokenExpiredException, AuthenticationException, UserNotFoundException, InvalidLastNameException, PhoneIsRequiredException, UserAlreadyExistException, InvalidFirstNameException, InvalidRoleException, UserWithPhoneAlreadyExistException, RoleIsRequiredException, InvalidEmailException, UserWithEmailAlreadyExistException, InvalidAccountStatusException, InvalidPhoneFormatForUpdateException {
+    public UserEntity update(CreateUserCommand createUserCommand) throws AuthorizationException, TokenExpiredException, AuthenticationException, UserNotFoundException, InvalidLastNameForUpdateException, PhoneIsRequiredForUpdateException, UserAlreadyExistException, InvalidFirstNameForUpdateException, InvalidRoleForUpdateException, UserWithPhoneAlreadyExistForUpdateException, RoleIsRequiredForUpdateException, InvalidEmailForUpdateException, UserWithEmailAlreadyExistForUpdateException, InvalidAccountStatusForUpdateException, InvalidPhoneFormatForUpdateException {
         UserEntity userEntity = checkAccess();
 
         changeUserUseCaseValidator.validate(userEntity, createUserCommand);

@@ -87,14 +87,14 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
 //        return old;
 //    }
 
-    public UserEntity update(UpdateUserCommand updateUserCommand) throws UserNotFoundException, AuthorizationException, TokenExpiredException, AuthenticationException, PhoneIsRequiredException, InvalidEmailException, UserAlreadyExistException, UserWithPhoneAlreadyExistException, InvalidLastNameException, InvalidRoleException, RoleIsRequiredException, InvalidFirstNameException, UserWithEmailAlreadyExistException, InvalidAccountStatusException, InvalidPhoneFormatForUpdateException {
+    public UserEntity update(UpdateUserCommand updateUserCommand) throws UserNotFoundException, AuthorizationException, TokenExpiredException, AuthenticationException, PhoneIsRequiredForUpdateException, InvalidEmailForUpdateException, UserAlreadyExistException, UserWithPhoneAlreadyExistForUpdateException, InvalidLastNameForUpdateException, InvalidRoleForUpdateException, RoleIsRequiredForUpdateException, InvalidFirstNameForUpdateException, UserWithEmailAlreadyExistForUpdateException, InvalidAccountStatusForUpdateException, InvalidPhoneFormatForUpdateException {
         checkAccess();
 
         UserEntity userEntity = userRepository.findById(updateUserCommand.getId())
                 .orElseThrow(UserNotFoundException::new);
 
         if (updateUserCommand.getRoles().isEmpty()) {
-            throw new RoleIsRequiredException();
+            throw new RoleIsRequiredForUpdateException();
         }
 
         Set<RoleEntity> newRoles = updateUserCommand.getRoles()
@@ -150,21 +150,21 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         return userEntity;
     }
 
-    private void validate(UpdateUserCommand updateUserCommand, UserEntity userEntity) throws InvalidFirstNameException, InvalidLastNameException, InvalidAccountStatusException, InvalidRoleException, RoleIsRequiredException, PhoneIsRequiredException, UserWithPhoneAlreadyExistException, UserWithEmailAlreadyExistException, InvalidEmailException, InvalidPhoneFormatForUpdateException {
+    private void validate(UpdateUserCommand updateUserCommand, UserEntity userEntity) throws InvalidFirstNameForUpdateException, InvalidLastNameForUpdateException, InvalidAccountStatusForUpdateException, InvalidRoleForUpdateException, RoleIsRequiredForUpdateException, PhoneIsRequiredForUpdateException, UserWithPhoneAlreadyExistForUpdateException, UserWithEmailAlreadyExistForUpdateException, InvalidEmailForUpdateException, InvalidPhoneFormatForUpdateException {
         if (updateUserCommand.getPhone() != null && updateUserCommand.getPhoneNumberFormat() != null)
             if (phoneNumberValidator.validatePhone(updateUserCommand.getPhone(), updateUserCommand.getPhoneNumberFormat()))
                 throw new InvalidPhoneFormatForUpdateException();
 
         //Проверка firstName
         if (!StringUtils.hasText(updateUserCommand.getFirstName()))
-            throw new InvalidFirstNameException();
+            throw new InvalidFirstNameForUpdateException();
 
         //Проверка lastName
         if (!StringUtils.hasText(updateUserCommand.getLastName()))
-            throw new InvalidLastNameException();
+            throw new InvalidLastNameForUpdateException();
 
         if (updateUserCommand.getStatus() == null)
-            throw new InvalidAccountStatusException();
+            throw new InvalidAccountStatusForUpdateException();
 
         List<RoleEntity> roles = new ArrayList<>();
 
@@ -173,15 +173,15 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
             for (CreateUserCommand.Role role : updateUserCommand.getRoles()) {
                 if (role.getId() != null)
                     roles.add(roleRepository.findById(role.getId())
-                            .orElseThrow(InvalidRoleException::new));
+                            .orElseThrow(InvalidRoleForUpdateException::new));
                 else if (role.getName() != null)
                     roles.add(roleRepository.findByName(role.getName())
-                            .orElseThrow(InvalidRoleException::new));
+                            .orElseThrow(InvalidRoleForUpdateException::new));
             }
         }
 
         if (roles.isEmpty())
-            throw new RoleIsRequiredException();
+            throw new RoleIsRequiredForUpdateException();
 
         //Достаем типы авторизации из ролей
         List<RoleEntity.AuthType> authTypes = roles
@@ -193,24 +193,24 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         //Если тип SMS, то phone - обязателен
         if (authTypes.contains(RoleEntity.AuthType.SMS)) {
             if (updateUserCommand.getPhone() == null)
-                throw new PhoneIsRequiredException();
+                throw new PhoneIsRequiredForUpdateException();
         }
         //Если тип EMAIL, то email и password - обязательные поля
         if (authTypes.contains(RoleEntity.AuthType.EMAIL)) {
             if (!StringUtils.hasText(updateUserCommand.getEmail()))
-                throw new InvalidEmailException();
+                throw new InvalidEmailForUpdateException();
         }
 
         if (updateUserCommand.getPhone() != null) {
             Optional<UserEntity> userWithTransferredNumber = userRepository.findByPhoneNumber(updateUserCommand.getPhone());
             if (updateUserCommand.getPhone() != null && userWithTransferredNumber.isPresent() && !userWithTransferredNumber.get().getId().equals(userEntity.getId()))
-                throw new UserWithPhoneAlreadyExistException();
+                throw new UserWithPhoneAlreadyExistForUpdateException();
         }
 
         if (updateUserCommand.getEmail() != null) {
             Optional<UserEntity> userWithTransferredEmail = userRepository.findByEmail(updateUserCommand.getEmail());
             if (updateUserCommand.getEmail() != null && userWithTransferredEmail.isPresent() && !userWithTransferredEmail.get().getId().equals(userEntity.getId()))
-                throw new UserWithEmailAlreadyExistException();
+                throw new UserWithEmailAlreadyExistForUpdateException();
         }
 
     }

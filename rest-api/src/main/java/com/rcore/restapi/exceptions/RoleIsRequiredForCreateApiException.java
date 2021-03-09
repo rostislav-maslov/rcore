@@ -2,12 +2,12 @@ package com.rcore.restapi.exceptions;
 
 import java.util.Arrays;
 
-public class RoleIsRequiredApiException extends BadRequestApiException {
+public class RoleIsRequiredForCreateApiException extends BadRequestApiException {
 
-    public RoleIsRequiredApiException() {
+    public RoleIsRequiredForCreateApiException() {
         super(Arrays.asList(ExceptionDTO.builder()
                 .presentationData(ExceptionDTO.PresentationData.builder()
-                        .title("Не удалось изменить параметры")
+                        .title("Не удалось сохранить данные")
                         .message("Необходимо выбрать хотя бы одну роль для пользователя")
                         .build())
                 .domain("USER")
