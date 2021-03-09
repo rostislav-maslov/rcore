@@ -2,17 +2,16 @@ package com.rcore.restapi.exceptions;
 
 import java.util.Arrays;
 
-public class InvalidFirstNameApiException extends BadRequestApiException {
+public class InvalidFirstNameForCreateApiException extends BadRequestApiException {
 
-    public InvalidFirstNameApiException() {
+    public InvalidFirstNameForCreateApiException() {
         super(Arrays.asList(ExceptionDTO.builder()
                 .presentationData(ExceptionDTO.PresentationData.builder()
-                        .title("Не удалось изменить параметры")
+                        .title("Не удалось сохранить данные")
                         .message("Необходимо указать имя пользователя")
                         .build())
                 .domain("USER")
                 .details("INVALID_FIRST_NAME")
                 .build()));
     }
-
 }

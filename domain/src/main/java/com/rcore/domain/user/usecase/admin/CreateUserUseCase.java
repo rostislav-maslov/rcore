@@ -2,7 +2,6 @@ package com.rcore.domain.user.usecase.admin;
 
 import com.rcore.commons.utils.StringUtils;
 import com.rcore.domain.phoneNumberFormat.exception.InvalidPhoneFormatForCreateException;
-import com.rcore.domain.phoneNumberFormat.exception.InvalidPhoneFormatForUpdateException;
 import com.rcore.domain.phoneNumberFormat.validators.PhoneNumberValidator;
 import com.rcore.domain.role.entity.RoleEntity;
 import com.rcore.domain.role.port.RoleRepository;
@@ -66,7 +65,7 @@ public class CreateUserUseCase extends AdminBaseUseCase {
         return userEntity;
     }
 
-    public UserEntity create(CreateUserCommand createUserCommand) throws AuthorizationException, TokenExpiredException, AuthenticationException, RoleIsRequiredException, PhoneIsRequiredException, InvalidEmailException, UserAlreadyExistException, UserWithPhoneAlreadyExistException, InvalidFirstNameException, InvalidLastNameException, InvalidRoleException, UserWithEmailAlreadyExistException, InvalidAccountStatusException, InvalidPhoneFormatForCreateException {
+    public UserEntity create(CreateUserCommand createUserCommand) throws AuthorizationException, TokenExpiredException, AuthenticationException, RoleIsRequiredForUpdateException, PhoneIsRequiredForUpdateException, InvalidEmailForUpdateException, UserAlreadyExistException, UserWithPhoneAlreadyExistForUpdateException, InvalidFirstNameForUpdateException, InvalidLastNameForUpdateException, InvalidRoleForUpdateException, UserWithEmailAlreadyExistForUpdateException, InvalidAccountStatusForUpdateException, InvalidPhoneFormatForCreateException, InvalidFirstNameForCreateException, PhoneIsRequiredForCreateException, InvalidLastNameForCreateException, InvalidRoleForCreateException, InvalidEmailForCreateException, RoleIsRequiredForCreateException, InvalidAccountStatusForCreateException, UserWithEmailAlreadyExistForCreateException, UserWithPhoneAlreadyExistForCreateException {
         checkAccess();
 
         Set<RoleEntity> roles = createUserCommand.getRoles()
@@ -106,21 +105,21 @@ public class CreateUserUseCase extends AdminBaseUseCase {
         return userEntity;
     }
 
-    private void validate(CreateUserCommand createUserCommand) throws InvalidFirstNameException, InvalidLastNameException, InvalidAccountStatusException, InvalidRoleException, RoleIsRequiredException, PhoneIsRequiredException, UserWithPhoneAlreadyExistException, UserWithEmailAlreadyExistException, InvalidEmailException, InvalidPhoneFormatForCreateException {
+    private void validate(CreateUserCommand createUserCommand) throws InvalidFirstNameForUpdateException, InvalidLastNameForUpdateException, InvalidAccountStatusForUpdateException, InvalidRoleForUpdateException, RoleIsRequiredForUpdateException, PhoneIsRequiredForUpdateException, UserWithPhoneAlreadyExistForUpdateException, UserWithEmailAlreadyExistForUpdateException, InvalidEmailForUpdateException, InvalidPhoneFormatForCreateException, InvalidFirstNameForCreateException, InvalidLastNameForCreateException, InvalidAccountStatusForCreateException, InvalidRoleForCreateException, RoleIsRequiredForCreateException, PhoneIsRequiredForCreateException, InvalidEmailForCreateException, UserWithPhoneAlreadyExistForCreateException, UserWithEmailAlreadyExistForCreateException {
         if (createUserCommand.getPhone() != null && createUserCommand.getPhoneNumberFormat() != null)
             if (phoneNumberValidator.validatePhone(createUserCommand.getPhone(), createUserCommand.getPhoneNumberFormat()))
                 throw new InvalidPhoneFormatForCreateException();
 
         //Проверка firstName
         if (!StringUtils.hasText(createUserCommand.getFirstName()))
-            throw new InvalidFirstNameException();
+            throw new InvalidFirstNameForCreateException();
 
         //Проверка lastName
         if (!StringUtils.hasText(createUserCommand.getLastName()))
-            throw new InvalidLastNameException();
+            throw new InvalidLastNameForCreateException();
 
         if (createUserCommand.getStatus() == null)
-            throw new InvalidAccountStatusException();
+            throw new InvalidAccountStatusForCreateException();
 
         List<RoleEntity> roles = new ArrayList<>();
 
@@ -129,15 +128,15 @@ public class CreateUserUseCase extends AdminBaseUseCase {
             for (CreateUserCommand.Role role : createUserCommand.getRoles()) {
                 if (role.getId() != null)
                     roles.add(roleRepository.findById(role.getId())
-                            .orElseThrow(InvalidRoleException::new));
+                            .orElseThrow(InvalidRoleForCreateException::new));
                 else if (role.getName() != null)
                     roles.add(roleRepository.findByName(role.getName())
-                            .orElseThrow(InvalidRoleException::new));
+                            .orElseThrow(InvalidRoleForCreateException::new));
             }
         }
 
         if (roles.isEmpty())
-            throw new RoleIsRequiredException();
+            throw new RoleIsRequiredForCreateException();
 
         //Достаем типы авторизации из ролей
         List<RoleEntity.AuthType> authTypes = roles
@@ -151,22 +150,22 @@ public class CreateUserUseCase extends AdminBaseUseCase {
         //Если тип SMS, то phone - обязателен
         if (authTypes.contains(RoleEntity.AuthType.SMS)) {
             if (createUserCommand.getPhone() == null)
-                throw new PhoneIsRequiredException();
+                throw new PhoneIsRequiredForCreateException();
         }
         //Если тип EMAIL, то email и password - обязательные поля
         if (authTypes.contains(RoleEntity.AuthType.EMAIL)) {
             if (!StringUtils.hasText(createUserCommand.getEmail()))
-                throw new InvalidEmailException();
+                throw new InvalidEmailForCreateException();
         }
 
         if (createUserCommand.getPhone() != null) {
             if (userRepository.findByPhoneNumber(createUserCommand.getPhone()).isPresent())
-                throw new UserWithPhoneAlreadyExistException();
+                throw new UserWithPhoneAlreadyExistForCreateException();
         }
 
         if (createUserCommand.getEmail() != null) {
             if (userRepository.findByEmail(createUserCommand.getEmail()).isPresent())
-                throw new UserWithEmailAlreadyExistException();
+                throw new UserWithEmailAlreadyExistForCreateException();
         }
     }
 

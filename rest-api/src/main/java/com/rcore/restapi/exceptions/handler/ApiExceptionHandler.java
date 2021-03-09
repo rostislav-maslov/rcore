@@ -62,42 +62,6 @@ public class ApiExceptionHandler {
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({RoleIsRequiredException.class})
-    public ErrorApiResponse<List<ExceptionDTO>> handleRoleIsRequiredException(RoleIsRequiredException e) {
-        return ErrorApiResponse.of(new RoleIsRequiredApiException().getErrors());
-    }
-
-    @ResponseStatus(value = HttpStatus.NOT_FOUND)
-    @ExceptionHandler({InvalidRoleException.class})
-    public ErrorApiResponse<List<ExceptionDTO>> handleRoleNotFoundException(InvalidRoleException e) {
-        return ErrorApiResponse.of(new RoleNotFoundApiException().getErrors());
-    }
-
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({InvalidFirstNameException.class})
-    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidFirstNameException(InvalidFirstNameException e) {
-        return ErrorApiResponse.of(new InvalidFirstNameApiException().getErrors());
-    }
-
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({InvalidLastNameException.class})
-    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidLastNameException(InvalidLastNameException e) {
-        return ErrorApiResponse.of(new InvalidLastNameApiException().getErrors());
-    }
-
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({InvalidAccountStatusException.class})
-    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidAccountStatusException(InvalidAccountStatusException e) {
-        return ErrorApiResponse.of(new InvalidAccountStatusApiException().getErrors());
-    }
-
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({PhoneIsRequiredException.class})
-    public ErrorApiResponse<List<ExceptionDTO>> handlePhoneIsRequiredException(PhoneIsRequiredException e) {
-        return ErrorApiResponse.of(new PhoneIsRequiredApiException().getErrors());
-    }
-
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler({InvalidPhoneFormatForUpdateException.class})
     public ErrorApiResponse<List<ExceptionDTO>> handleInvalidPhoneNumberFormatException(InvalidPhoneFormatForUpdateException e) {
         return ErrorApiResponse.of(new InvalidPhoneFormatForUpdateApiException().getErrors());
@@ -107,12 +71,6 @@ public class ApiExceptionHandler {
     @ExceptionHandler({InvalidPhoneFormatForCreateException.class})
     public ErrorApiResponse<List<ExceptionDTO>> handleInvalidPhoneFormatForCreateException(InvalidPhoneFormatForCreateException e) {
         return ErrorApiResponse.of(new InvalidPhoneFormatForCreateApiException().getErrors());
-    }
-
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({InvalidEmailException.class})
-    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidEmailException(InvalidEmailException e) {
-        return ErrorApiResponse.of(new EmailIsRequiredApiException().getErrors());
     }
 
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
@@ -153,5 +111,118 @@ public class ApiExceptionHandler {
         return ErrorApiResponse.of(new InvalidNewPasswordApiException().getErrors());
     }
 
+    /**
+     * User create exceptions
+     */
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {InvalidFirstNameForCreateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidFirstNameForCreateException(InvalidFirstNameForCreateException e) {
+        return ErrorApiResponse.of(new InvalidFirstNameForCreateApiException().getErrors());
+    }
 
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {InvalidLastNameForCreateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidLastNameForCreateException(InvalidLastNameForCreateException e) {
+        return ErrorApiResponse.of(new InvalidLastNameForCreateApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {InvalidAccountStatusForCreateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidAccountStatusForCreateException(InvalidAccountStatusForCreateException e) {
+        return ErrorApiResponse.of(new InvalidAccountStatusForCreateApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {InvalidRoleForCreateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidRoleForCreateExceptionException(InvalidRoleForCreateException e) {
+        return ErrorApiResponse.of(new RoleNotFoundForCreateApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {RoleIsRequiredForCreateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleRoleIsRequiredForCreateException(RoleIsRequiredForCreateException e) {
+        return ErrorApiResponse.of(new RoleIsRequiredForCreateApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {PhoneIsRequiredForCreateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handlePhoneIsRequiredForCreateException(PhoneIsRequiredForCreateException e) {
+        return ErrorApiResponse.of(new PhoneIsRequiredForCreateApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {InvalidEmailForCreateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidEmailForCreateException(InvalidEmailForCreateException e) {
+        return ErrorApiResponse.of(new InvalidEmailForCreateApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {UserWithPhoneAlreadyExistForCreateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleUserWithPhoneAlreadyExistForCreateException(UserWithPhoneAlreadyExistForCreateException e) {
+        return ErrorApiResponse.of(new UserWithPhoneAlreadyExistForCreateApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {UserWithEmailAlreadyExistForCreateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleUserWithEmailAlreadyExistForCreateException(UserWithEmailAlreadyExistForCreateException e) {
+        return ErrorApiResponse.of(new UserWithEmailAlreadyExistForCreateApiException().getErrors());
+    }
+
+    /**
+     * User update exceptions
+     */
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({InvalidFirstNameForUpdateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidFirstNameException(InvalidFirstNameForUpdateException e) {
+        return ErrorApiResponse.of(new InvalidFirstNameForUpdateApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({InvalidLastNameForUpdateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidLastNameException(InvalidLastNameForUpdateException e) {
+        return ErrorApiResponse.of(new InvalidLastNameForUpdateApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({InvalidAccountStatusForUpdateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidAccountStatusException(InvalidAccountStatusForUpdateException e) {
+        return ErrorApiResponse.of(new InvalidAccountStatusForUpdateApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
+    @ExceptionHandler({InvalidRoleForUpdateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleRoleNotFoundException(InvalidRoleForUpdateException e) {
+        return ErrorApiResponse.of(new RoleNotFoundForUpdateApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({RoleIsRequiredForUpdateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleRoleIsRequiredException(RoleIsRequiredForUpdateException e) {
+        return ErrorApiResponse.of(new RoleIsRequiredForUpdateApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({PhoneIsRequiredForUpdateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handlePhoneIsRequiredException(PhoneIsRequiredForUpdateException e) {
+        return ErrorApiResponse.of(new PhoneIsRequiredForUpdateApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({InvalidEmailForUpdateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidEmailException(InvalidEmailForUpdateException e) {
+        return ErrorApiResponse.of(new EmailIsRequiredApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {UserWithPhoneAlreadyExistForUpdateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleUserWithPhoneAlreadyExistForUpdateException(UserWithPhoneAlreadyExistForUpdateException e) {
+        return ErrorApiResponse.of(new UserWithPhoneAlreadyExistForUpdateApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {UserWithEmailAlreadyExistForUpdateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleUserWithEmailAlreadyExistForUpdateException(UserWithEmailAlreadyExistForUpdateException e) {
+        return ErrorApiResponse.of(new UserWithEmailAlreadyExistForUpdateApiException().getErrors());
+    }
 }

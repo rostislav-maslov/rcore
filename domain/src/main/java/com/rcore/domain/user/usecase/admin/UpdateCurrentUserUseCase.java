@@ -25,7 +25,7 @@ public class UpdateCurrentUserUseCase extends AdminBaseUseCase {
         changeUserUseCaseValidator = new ChangeUserUseCaseValidator(roleRepository, userRepository);
     }
 
-    public UserEntity update(CreateUserCommand createUserCommand) throws AuthorizationException, TokenExpiredException, AuthenticationException, UserNotFoundException, InvalidLastNameException, PhoneIsRequiredException, UserAlreadyExistException, InvalidFirstNameException, InvalidRoleException, UserWithPhoneAlreadyExistException, RoleIsRequiredException, InvalidEmailException, UserWithEmailAlreadyExistException, InvalidAccountStatusException, InvalidPhoneFormatForUpdateException {
+    public UserEntity update(CreateUserCommand createUserCommand) throws AuthorizationException, TokenExpiredException, AuthenticationException, UserNotFoundException, InvalidLastNameForUpdateException, PhoneIsRequiredForUpdateException, UserAlreadyExistException, InvalidFirstNameForUpdateException, InvalidRoleForUpdateException, UserWithPhoneAlreadyExistForUpdateException, RoleIsRequiredForUpdateException, InvalidEmailForUpdateException, UserWithEmailAlreadyExistForUpdateException, InvalidAccountStatusForUpdateException, InvalidPhoneFormatForUpdateException {
         UserEntity userEntity = checkAccess();
 
         changeUserUseCaseValidator.validate(userEntity, createUserCommand);
@@ -50,9 +50,7 @@ public class UpdateCurrentUserUseCase extends AdminBaseUseCase {
                 ? createUserCommand.getLastName()
                 : userEntity.getLastName());
 
-        userEntity.setSecondName(StringUtils.hasText(createUserCommand.getSecondName())
-                ? createUserCommand.getSecondName()
-                : userEntity.getSecondName());
+        userEntity.setSecondName(createUserCommand.getSecondName());
 
         userEntity.setFullName(userEntity.getFullName());
 

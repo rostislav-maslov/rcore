@@ -31,7 +31,7 @@ public class UserSecureAdapter {
                 .block(userMapper.inverseMap(userDTO)));
     }
 
-    public UserDTO create(CreateUserCommand createUserCommand) throws AuthorizationException, RoleIsRequiredException, PhoneIsRequiredException, TokenExpiredException, InvalidEmailException, UserWithPhoneAlreadyExistException, UserAlreadyExistException, AuthenticationException, InvalidFirstNameException, InvalidLastNameException, InvalidRoleException, UserWithEmailAlreadyExistException, InvalidAccountStatusException, InvalidPhoneFormatForCreateException {
+    public UserDTO create(CreateUserCommand createUserCommand) throws AuthorizationException, RoleIsRequiredForUpdateException, PhoneIsRequiredForUpdateException, TokenExpiredException, InvalidEmailForUpdateException, UserWithPhoneAlreadyExistForUpdateException, UserAlreadyExistException, AuthenticationException, InvalidFirstNameForUpdateException, InvalidLastNameForUpdateException, InvalidRoleForUpdateException, UserWithEmailAlreadyExistForUpdateException, InvalidAccountStatusForUpdateException, InvalidPhoneFormatForCreateException, InvalidLastNameForCreateException, InvalidRoleForCreateException, UserWithPhoneAlreadyExistForCreateException, RoleIsRequiredForCreateException, InvalidFirstNameForCreateException, UserWithEmailAlreadyExistForCreateException, PhoneIsRequiredForCreateException, InvalidAccountStatusForCreateException, InvalidEmailForCreateException {
         return userMapper.map(userConfig.admin.CreateUseCase()
                 .create(createUserCommand));
     }
@@ -41,12 +41,12 @@ public class UserSecureAdapter {
                 .deleteById(id);
     }
 
-    public UserDTO update(UpdateUserCommand updateUserCommand) throws AuthorizationException, PhoneIsRequiredException, TokenExpiredException, UserNotFoundException, UserWithPhoneAlreadyExistException, UserAlreadyExistException, AuthenticationException, InvalidEmailException, InvalidRoleException, InvalidFirstNameException, RoleIsRequiredException, InvalidLastNameException, UserWithEmailAlreadyExistException, InvalidAccountStatusException, InvalidPhoneFormatForUpdateException {
+    public UserDTO update(UpdateUserCommand updateUserCommand) throws AuthorizationException, PhoneIsRequiredForUpdateException, TokenExpiredException, UserNotFoundException, UserWithPhoneAlreadyExistForUpdateException, UserAlreadyExistException, AuthenticationException, InvalidEmailForUpdateException, InvalidRoleForUpdateException, InvalidFirstNameForUpdateException, RoleIsRequiredForUpdateException, InvalidLastNameForUpdateException, UserWithEmailAlreadyExistForUpdateException, InvalidAccountStatusForUpdateException, InvalidPhoneFormatForUpdateException {
         return userMapper.map(userConfig.admin.UpdateUserUseCase()
                 .update(updateUserCommand));
     }
 
-    public UserDTO updateCurrentUser(CreateUserCommand createUserCommand) throws UserNotFoundException, PhoneIsRequiredException, AuthenticationException, TokenExpiredException, InvalidLastNameException, InvalidRoleException, UserWithPhoneAlreadyExistException, AuthorizationException, InvalidEmailException, UserAlreadyExistException, InvalidFirstNameException, RoleIsRequiredException, UserWithEmailAlreadyExistException, InvalidAccountStatusException, InvalidPhoneFormatForUpdateException {
+    public UserDTO updateCurrentUser(CreateUserCommand createUserCommand) throws UserNotFoundException, PhoneIsRequiredForUpdateException, AuthenticationException, TokenExpiredException, InvalidLastNameForUpdateException, InvalidRoleForUpdateException, UserWithPhoneAlreadyExistForUpdateException, AuthorizationException, InvalidEmailForUpdateException, UserAlreadyExistException, InvalidFirstNameForUpdateException, RoleIsRequiredForUpdateException, UserWithEmailAlreadyExistForUpdateException, InvalidAccountStatusForUpdateException, InvalidPhoneFormatForUpdateException {
         return userMapper.map(userConfig.admin.updateCurrentUserUseCase()
                 .update(createUserCommand));
     }
