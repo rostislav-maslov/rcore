@@ -50,9 +50,7 @@ public class UpdateCurrentUserUseCase extends AdminBaseUseCase {
                 ? createUserCommand.getLastName()
                 : userEntity.getLastName());
 
-        userEntity.setSecondName(StringUtils.hasText(createUserCommand.getSecondName())
-                ? createUserCommand.getSecondName()
-                : userEntity.getSecondName());
+        userEntity.setSecondName(createUserCommand.getSecondName());
 
         userEntity.setFullName(userEntity.getFullName());
 
