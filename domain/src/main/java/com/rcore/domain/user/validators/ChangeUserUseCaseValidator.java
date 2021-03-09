@@ -61,19 +61,25 @@ public class ChangeUserUseCaseValidator {
         //В зависимости от типов авторизации проверяем обязательные поля
         //Если тип SMS, то phone - обязателен
         if (authTypes.contains(RoleEntity.AuthType.SMS)) {
-            if (createUserCommand.getPhone() == null && userEntity.getPhoneNumber() == null)
+            if (createUserCommand.getPhone() == null)
                 throw new PhoneIsRequiredForUpdateException();
-            Optional<UserEntity> userWithTransferredNumber = userRepository.findByPhoneNumber(createUserCommand.getPhone());
-            if (createUserCommand.getPhone() != null && userWithTransferredNumber.isPresent() && !userWithTransferredNumber.get().getId().equals(userEntity.getId()))
-                throw new UserWithPhoneAlreadyExistForUpdateException();
         }
         //Если тип EMAIL, то email и password - обязательные поля
         if (authTypes.contains(RoleEntity.AuthType.EMAIL)) {
             if (!StringUtils.hasText(createUserCommand.getEmail()))
                 throw new InvalidEmailForUpdateException();
+        }
+
+        if (StringUtils.hasText(createUserCommand.getEmail())) {
             Optional<UserEntity> userWithTransferredEmail = userRepository.findByEmail(createUserCommand.getEmail());
             if (createUserCommand.getEmail() != null && userWithTransferredEmail.isPresent() && !userWithTransferredEmail.get().getId().equals(userEntity.getId()))
                 throw new UserWithEmailAlreadyExistForUpdateException();
+        }
+
+        if (createUserCommand.getPhone() != null) {
+            Optional<UserEntity> userWithTransferredNumber = userRepository.findByPhoneNumber(createUserCommand.getPhone());
+            if (createUserCommand.getPhone() != null && userWithTransferredNumber.isPresent() && !userWithTransferredNumber.get().getId().equals(userEntity.getId()))
+                throw new UserWithPhoneAlreadyExistForUpdateException();
         }
     }
 
