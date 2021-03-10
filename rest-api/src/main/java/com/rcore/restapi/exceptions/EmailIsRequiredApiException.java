@@ -9,7 +9,7 @@ public class EmailIsRequiredApiException extends BadRequestApiException {
         super(Arrays.asList(ExceptionDTO.builder()
                 .presentationData(ExceptionDTO.PresentationData.builder()
                         .title("Не удалось изменить параметры")
-                        .message("Необходимо указать email")
+                        .message("Необходимо указать email пользователя")
                         .build())
                 .domain("USER")
                 .details("INVALID_EMAIL")
