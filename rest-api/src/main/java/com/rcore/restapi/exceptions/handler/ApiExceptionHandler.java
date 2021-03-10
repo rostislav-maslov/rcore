@@ -231,4 +231,10 @@ public class ApiExceptionHandler {
     public ErrorApiResponse<List<ExceptionDTO>> handleUserWithEmailAlreadyExistForUpdateException(UserWithEmailAlreadyExistForUpdateException e) {
         return ErrorApiResponse.of(new UserWithEmailAlreadyExistForUpdateApiException().getErrors());
     }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {UserNotFoundException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleUserNotFoundException(UserNotFoundException e) {
+        return ErrorApiResponse.of(new UserNotFoundApiException().getErrors());
+    }
 }
