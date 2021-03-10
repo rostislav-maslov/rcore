@@ -95,7 +95,7 @@ public class CreateUserUseCase extends AdminBaseUseCase {
         userEntity.setFirstName(createUserCommand.getFirstName());
         userEntity.setLastName(createUserCommand.getLastName());
         userEntity.setSecondName(createUserCommand.getSecondName());
-        userEntity.setFullName(userEntity.getFullName());
+        userEntity.setFullName(createUserCommand.getFullName());
         userEntity.setStatus(Optional.ofNullable(createUserCommand.getStatus())
                 .orElse(UserStatus.ACTIVE));
         userEntity.setCountryId(createUserCommand.getCountryId());

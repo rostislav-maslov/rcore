@@ -52,7 +52,7 @@ public class UpdateCurrentUserUseCase extends AdminBaseUseCase {
 
         userEntity.setSecondName(createUserCommand.getSecondName());
 
-        userEntity.setFullName(userEntity.getFullName());
+        userEntity.setFullName(createUserCommand.getFullName());
 
         userEntity.setProfileImageId(StringUtils.hasText(createUserCommand.getProfileImageId())
                 ? createUserCommand.getProfileImageId()
