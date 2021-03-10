@@ -127,6 +127,12 @@ public class ApiExceptionHandler {
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {InvalidPasswordForCreateException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidPasswordForCreateException(InvalidPasswordForCreateException e) {
+        return ErrorApiResponse.of(new InvalidPasswordForCreateApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {InvalidAccountStatusForCreateException.class})
     public ErrorApiResponse<List<ExceptionDTO>> handleInvalidAccountStatusForCreateException(InvalidAccountStatusForCreateException e) {
         return ErrorApiResponse.of(new InvalidAccountStatusForCreateApiException().getErrors());
@@ -224,5 +230,11 @@ public class ApiExceptionHandler {
     @ExceptionHandler(value = {UserWithEmailAlreadyExistForUpdateException.class})
     public ErrorApiResponse<List<ExceptionDTO>> handleUserWithEmailAlreadyExistForUpdateException(UserWithEmailAlreadyExistForUpdateException e) {
         return ErrorApiResponse.of(new UserWithEmailAlreadyExistForUpdateApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {UserNotFoundException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleUserNotFoundException(UserNotFoundException e) {
+        return ErrorApiResponse.of(new UserNotFoundApiException().getErrors());
     }
 }

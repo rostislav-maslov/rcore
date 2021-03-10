@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -37,4 +40,9 @@ public class CreateUserCommand {
         private String name;
     }
 
+    public String getFullName() {
+        return Stream.of(lastName, firstName, secondName)
+                .filter(Objects::nonNull)
+                .collect(Collectors.joining(" "));
+    }
 }

@@ -130,9 +130,7 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
 
         userEntity.setSecondName(updateUserCommand.getSecondName());
 
-        userEntity.setFullName(Stream.of(userEntity.getLastName(), userEntity.getFirstName(), userEntity.getSecondName())
-                .filter(Objects::nonNull)
-                .collect(Collectors.joining(" ")));
+        userEntity.setFullName(updateUserCommand.getFullName());
 
         userEntity.setProfileImageId(Optional.ofNullable(updateUserCommand.getProfileImageId())
                 .orElse(userEntity.getProfileImageId()));

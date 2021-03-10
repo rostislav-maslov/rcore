@@ -1,18 +1,17 @@
 package com.rcore.restapi.exceptions;
 
 import java.util.Arrays;
-import java.util.List;
 
-public class EmailIsRequiredApiException extends BadRequestApiException {
+public class UserNotFoundApiException extends NotFoundApiException {
 
-    public EmailIsRequiredApiException() {
+    public UserNotFoundApiException() {
         super(Arrays.asList(ExceptionDTO.builder()
                 .presentationData(ExceptionDTO.PresentationData.builder()
                         .title("Не удалось изменить параметры")
-                        .message("Необходимо указать email пользователя")
+                        .message("Запись не найдена")
                         .build())
                 .domain("USER")
-                .details("INVALID_EMAIL")
+                .details("INVALID_ID")
                 .build()));
     }
 }
