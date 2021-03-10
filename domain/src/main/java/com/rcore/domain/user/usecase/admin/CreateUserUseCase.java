@@ -65,7 +65,7 @@ public class CreateUserUseCase extends AdminBaseUseCase {
         return userEntity;
     }
 
-    public UserEntity create(CreateUserCommand createUserCommand) throws AuthorizationException, TokenExpiredException, AuthenticationException, RoleIsRequiredForUpdateException, PhoneIsRequiredForUpdateException, InvalidEmailForUpdateException, UserAlreadyExistException, UserWithPhoneAlreadyExistForUpdateException, InvalidFirstNameForUpdateException, InvalidLastNameForUpdateException, InvalidRoleForUpdateException, UserWithEmailAlreadyExistForUpdateException, InvalidAccountStatusForUpdateException, InvalidPhoneFormatForCreateException, InvalidFirstNameForCreateException, PhoneIsRequiredForCreateException, InvalidLastNameForCreateException, InvalidRoleForCreateException, InvalidEmailForCreateException, RoleIsRequiredForCreateException, InvalidAccountStatusForCreateException, UserWithEmailAlreadyExistForCreateException, UserWithPhoneAlreadyExistForCreateException {
+    public UserEntity create(CreateUserCommand createUserCommand) throws AuthorizationException, TokenExpiredException, AuthenticationException, RoleIsRequiredForUpdateException, PhoneIsRequiredForUpdateException, InvalidEmailForUpdateException, UserAlreadyExistException, UserWithPhoneAlreadyExistForUpdateException, InvalidFirstNameForUpdateException, InvalidLastNameForUpdateException, InvalidRoleForUpdateException, UserWithEmailAlreadyExistForUpdateException, InvalidAccountStatusForUpdateException, InvalidPhoneFormatForCreateException, InvalidFirstNameForCreateException, PhoneIsRequiredForCreateException, InvalidLastNameForCreateException, InvalidRoleForCreateException, InvalidEmailForCreateException, RoleIsRequiredForCreateException, InvalidAccountStatusForCreateException, UserWithEmailAlreadyExistForCreateException, UserWithPhoneAlreadyExistForCreateException, InvalidPasswordForCreateException {
         checkAccess();
 
         Set<RoleEntity> roles = createUserCommand.getRoles()
@@ -105,7 +105,7 @@ public class CreateUserUseCase extends AdminBaseUseCase {
         return userEntity;
     }
 
-    private void validate(CreateUserCommand createUserCommand) throws InvalidFirstNameForUpdateException, InvalidLastNameForUpdateException, InvalidAccountStatusForUpdateException, InvalidRoleForUpdateException, RoleIsRequiredForUpdateException, PhoneIsRequiredForUpdateException, UserWithPhoneAlreadyExistForUpdateException, UserWithEmailAlreadyExistForUpdateException, InvalidEmailForUpdateException, InvalidPhoneFormatForCreateException, InvalidFirstNameForCreateException, InvalidLastNameForCreateException, InvalidAccountStatusForCreateException, InvalidRoleForCreateException, RoleIsRequiredForCreateException, PhoneIsRequiredForCreateException, InvalidEmailForCreateException, UserWithPhoneAlreadyExistForCreateException, UserWithEmailAlreadyExistForCreateException {
+    private void validate(CreateUserCommand createUserCommand) throws InvalidFirstNameForUpdateException, InvalidLastNameForUpdateException, InvalidAccountStatusForUpdateException, InvalidRoleForUpdateException, RoleIsRequiredForUpdateException, PhoneIsRequiredForUpdateException, UserWithPhoneAlreadyExistForUpdateException, UserWithEmailAlreadyExistForUpdateException, InvalidEmailForUpdateException, InvalidPhoneFormatForCreateException, InvalidFirstNameForCreateException, InvalidLastNameForCreateException, InvalidAccountStatusForCreateException, InvalidRoleForCreateException, RoleIsRequiredForCreateException, PhoneIsRequiredForCreateException, InvalidEmailForCreateException, UserWithPhoneAlreadyExistForCreateException, UserWithEmailAlreadyExistForCreateException, InvalidPasswordForCreateException {
         if (createUserCommand.getPhone() != null && createUserCommand.getPhoneNumberFormat() != null)
             if (phoneNumberValidator.validatePhone(createUserCommand.getPhone(), createUserCommand.getPhoneNumberFormat()))
                 throw new InvalidPhoneFormatForCreateException();
@@ -120,6 +120,9 @@ public class CreateUserUseCase extends AdminBaseUseCase {
 
         if (createUserCommand.getStatus() == null)
             throw new InvalidAccountStatusForCreateException();
+
+        if (!StringUtils.hasText(createUserCommand.getPassword()))
+            throw new InvalidPasswordForCreateException();
 
         List<RoleEntity> roles = new ArrayList<>();
 
