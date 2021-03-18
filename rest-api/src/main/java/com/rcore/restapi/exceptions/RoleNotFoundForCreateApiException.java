@@ -11,7 +11,7 @@ public class RoleNotFoundForCreateApiException extends BadRequestApiException {
                         .message("Передан некорректный идентификатор роли")
                         .build())
                 .domain("USER")
-                .details("INVALID_ROLE_ID")
+                .details("INVALID_ROLE")
                 .build()));
     }
 }
