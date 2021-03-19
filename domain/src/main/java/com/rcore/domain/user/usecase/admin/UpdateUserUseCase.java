@@ -149,7 +149,7 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
     }
 
     private void validate(UpdateUserCommand updateUserCommand, UserEntity userEntity) throws InvalidFirstNameForUpdateException, InvalidLastNameForUpdateException, InvalidAccountStatusForUpdateException, InvalidRoleForUpdateException, RoleIsRequiredForUpdateException, PhoneIsRequiredForUpdateException, UserWithPhoneAlreadyExistForUpdateException, UserWithEmailAlreadyExistForUpdateException, InvalidEmailForUpdateException, InvalidPhoneFormatForUpdateException {
-        if (updateUserCommand.getPhone() != null && updateUserCommand.getPhoneNumberFormat() != null)
+        if (Objects.nonNull(updateUserCommand.getPhone()) && Objects.nonNull(updateUserCommand.getPhoneNumberFormat()))
             if (phoneNumberValidator.validatePhone(updateUserCommand.getPhone(), updateUserCommand.getPhoneNumberFormat()))
                 throw new InvalidPhoneFormatForUpdateException();
 
@@ -161,18 +161,18 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         if (!StringUtils.hasText(updateUserCommand.getLastName()))
             throw new InvalidLastNameForUpdateException();
 
-        if (updateUserCommand.getStatus() == null)
+        if (Objects.isNull(updateUserCommand.getStatus()))
             throw new InvalidAccountStatusForUpdateException();
 
         List<RoleEntity> roles = new ArrayList<>();
 
         //Проверка ролей
-        if (updateUserCommand.getRoles() != null) {
+        if (Objects.nonNull(updateUserCommand.getRoles())) {
             for (CreateUserCommand.Role role : updateUserCommand.getRoles()) {
-                if (role.getId() != null)
+                if (StringUtils.hasText(role.getId()))
                     roles.add(roleRepository.findById(role.getId())
                             .orElseThrow(InvalidRoleForUpdateException::new));
-                else if (role.getName() != null)
+                else if (StringUtils.hasText(role.getName()))
                     roles.add(roleRepository.findByName(role.getName())
                             .orElseThrow(InvalidRoleForUpdateException::new));
             }
@@ -190,7 +190,7 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
         //В зависимости от типов авторизации проверяем обязательные поля
         //Если тип SMS, то phone - обязателен
         if (authTypes.contains(RoleEntity.AuthType.SMS)) {
-            if (updateUserCommand.getPhone() == null)
+            if (Objects.isNull(updateUserCommand.getPhone()))
                 throw new PhoneIsRequiredForUpdateException();
         }
         //Если тип EMAIL, то email и password - обязательные поля
@@ -199,15 +199,15 @@ public class UpdateUserUseCase extends AdminBaseUseCase {
                 throw new InvalidEmailForUpdateException();
         }
 
-        if (updateUserCommand.getPhone() != null) {
+        if (Objects.nonNull(updateUserCommand.getPhone())) {
             Optional<UserEntity> userWithTransferredNumber = userRepository.findByPhoneNumber(updateUserCommand.getPhone());
-            if (updateUserCommand.getPhone() != null && userWithTransferredNumber.isPresent() && !userWithTransferredNumber.get().getId().equals(userEntity.getId()))
+            if (userWithTransferredNumber.isPresent() && !userWithTransferredNumber.get().getId().equals(userEntity.getId()))
                 throw new UserWithPhoneAlreadyExistForUpdateException();
         }
 
-        if (updateUserCommand.getEmail() != null) {
+        if (Objects.nonNull(updateUserCommand.getEmail())) {
             Optional<UserEntity> userWithTransferredEmail = userRepository.findByEmail(updateUserCommand.getEmail());
-            if (updateUserCommand.getEmail() != null && userWithTransferredEmail.isPresent() && !userWithTransferredEmail.get().getId().equals(userEntity.getId()))
+            if (userWithTransferredEmail.isPresent() && !userWithTransferredEmail.get().getId().equals(userEntity.getId()))
                 throw new UserWithEmailAlreadyExistForUpdateException();
         }
 
