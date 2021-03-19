@@ -9,7 +9,7 @@ import java.util.*;
  */
 @NoArgsConstructor
 public class DefaultEventDispatcher extends EventDispatcher {
-    private final Map<Class<? extends Event>, List<EventHandler<? extends Event>>> handlers = new HashMap<>();
+    protected final Map<Class<? extends Event>, List<EventHandler<? extends Event>>> handlers = new HashMap<>();
 
     private DefaultEventDispatcher(EventStorage eventStorage) {
         super(eventStorage);
