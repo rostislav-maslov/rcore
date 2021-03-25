@@ -62,10 +62,10 @@ public class CredentialServiceImpl implements CredentialService {
         List<CredentialDetails.Role> roles = credentialEntity.getRoles()
                 .stream()
                 .filter(role -> !role.isBlocked())
-                .map(role -> roleRepository.findById(role.getRoleId()))
+                .map(role -> roleRepository.findById(role.getRole().getId()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .map(role -> new CredentialDetails.Role(role.getId(), role.getName(), role.getHasBoundlessAccess(), role.getAvailableUseCases()))
+                .map(role -> new CredentialDetails.Role(role.getName()))
                 .collect(Collectors.toList());
 
         return new CredentialDetails(credentialEntity.getId(), roles);

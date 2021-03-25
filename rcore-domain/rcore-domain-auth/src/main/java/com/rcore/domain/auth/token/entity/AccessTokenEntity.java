@@ -1,9 +1,12 @@
 package com.rcore.domain.auth.token.entity;
 
+import com.rcore.domain.auth.credential.entity.CredentialEntity;
 import com.rcore.domain.commons.entity.BaseEntity;
 import com.rcore.domain.security.model.AccessTokenData;
+import com.rcore.domain.security.model.CredentialDetails;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -11,16 +14,17 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 /**
  * Токен авторизации
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@SuperBuilder
 public class AccessTokenEntity extends BaseEntity<String> {
-    protected String credentialId;
+    protected CredentialEntity credential;
     protected LocalDateTime expireAt = LocalDateTime.now();
     protected RefreshTokenEntity.Status status = RefreshTokenEntity.Status.ACTIVE;
     protected String createByRefreshTokenId;
@@ -52,7 +56,7 @@ public class AccessTokenEntity extends BaseEntity<String> {
 
     public static String sign(String accessTokenId, Long expireAt, RefreshTokenEntity refreshTokenEntity) {
         String signString = refreshTokenEntity.getId() +
-                refreshTokenEntity.getCredentialId() +
+                refreshTokenEntity.getCredential().getId() +
                 refreshTokenEntity.getExpireAt().toString() +
                 refreshTokenEntity.getSalt() +
                 expireAt.toString() +
@@ -77,6 +81,14 @@ public class AccessTokenEntity extends BaseEntity<String> {
     }
 
     public AccessTokenData toAccessTokenData() {
-        return new AccessTokenData(this.getId(), this.getCredentialId(), this.getCreatedAt(), this.getExpireAt());
+        return new AccessTokenData(
+                this.getId(),
+                this.getCredential().getId(),
+                this.getCredential().getRoles()
+                        .stream()
+                        .map(role -> new CredentialDetails.Role(role.getRole().getName()))
+                        .collect(Collectors.toList()),
+                this.getCreatedAt(),
+                this.getExpireAt());
     }
 }

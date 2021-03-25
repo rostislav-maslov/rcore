@@ -71,7 +71,7 @@ public class CreateCredentialUseCase extends AbstractCreateUseCase<CredentialEnt
         credentialEntity.setRoles(roles
                 .stream()
                 .map(role -> new CredentialEntity.Role(
-                        role.getId(),
+                        role,
                         //находим роль среди переданных, чтобы узнать флаг isBlocked
                         findInputRole(inputValues.getRoles(), role)
                                 .map(InputValues.Role::getIsBlocked)

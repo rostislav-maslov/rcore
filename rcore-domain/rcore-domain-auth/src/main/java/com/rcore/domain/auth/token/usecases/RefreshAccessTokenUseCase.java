@@ -11,7 +11,6 @@ import com.rcore.domain.auth.token.exception.RefreshTokenNotFoundException;
 import com.rcore.domain.auth.token.port.RefreshTokenRepository;
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.IdInputValues;
-import com.rcore.domain.security.model.CredentialDetails;
 import com.rcore.domain.security.model.RefreshTokenData;
 import com.rcore.domain.security.port.TokenConverter;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +33,8 @@ public class RefreshAccessTokenUseCase extends UseCase<RefreshAccessTokenUseCase
         RefreshTokenEntity refreshTokenEntity = refreshTokenRepository.findById(refreshTokenData.getId())
                 .orElseThrow(() -> new RefreshTokenNotFoundException(refreshTokenData.getId()));
 
-        CredentialEntity credentialEntity = credentialRepository.findById(refreshTokenEntity.getCredentialId())
-                .orElseThrow(() -> new CredentialNotFoundException(refreshTokenEntity.getCredentialId()));
+        CredentialEntity credentialEntity = credentialRepository.findById(refreshTokenEntity.getCredential().getId())
+                .orElseThrow(() -> new CredentialNotFoundException(refreshTokenEntity.getCredential().getId()));
 
         if (!refreshTokenEntity.isActive()) {
             expireRefreshTokenUseCase.execute(IdInputValues.of(refreshTokenEntity.getId()));

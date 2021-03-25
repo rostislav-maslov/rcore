@@ -22,13 +22,7 @@ public class ConfirmTwoFactorAuthorizationUseCeseTestInfrastructure extends Auth
     protected static final String phone = "79998887766";
     protected static final String code = UUID.randomUUID().toString();
 
-    protected final CredentialEntity credential =
-            CredentialEntity.builder()
-                    .id(credentialId)
-                    .status(CredentialEntity.Status.ACTIVE)
-                    .email(email)
-                    .phone(phone)
-                    .build();
+    protected final CredentialEntity credential;
 
     protected final AuthorizationEntity pendingAuthorization = AuthorizationEntity.builder()
             .id(authorizationId)
@@ -63,6 +57,12 @@ public class ConfirmTwoFactorAuthorizationUseCeseTestInfrastructure extends Auth
         initCredentialMocks();
         initConfirmedCodeMocks();
         initAuthorizationMocks();
+        CredentialEntity defaultCredential = new CredentialEntity();
+        defaultCredential.setId(credentialId);
+        defaultCredential.setEmail(email);
+        defaultCredential.setPhone(phone);
+        defaultCredential.setStatus(CredentialEntity.Status.ACTIVE);
+        this.credential = defaultCredential;
     }
 
     private void initCredentialMocks() {

@@ -16,17 +16,16 @@ class PasswordAuthenticationUseCaseTestInfrastructure extends AuthorizationUseCa
     protected static final String password = "password";
     protected final String encodedPassword = passwordCryptographer.encrypt(password, id);
 
-    protected final CredentialEntity credential =
-            CredentialEntity.builder()
-                .id(id)
-                .status(CredentialEntity.Status.ACTIVE)
-                .username(username)
-                .password(encodedPassword)
-                .build();
+    protected final CredentialEntity credential;
 
 
     public PasswordAuthenticationUseCaseTestInfrastructure() {
         initCredentialMocks();
+        CredentialEntity defaultCredential = new CredentialEntity();
+        defaultCredential.setId(id);
+        defaultCredential.setUsername(username);
+        defaultCredential.setPassword(encodedPassword);
+        this.credential = defaultCredential;
     }
 
     private void initCredentialMocks() {

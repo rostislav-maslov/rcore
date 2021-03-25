@@ -15,18 +15,17 @@ class InitTwoFactorAuthorizationUseCaseTestInfrastructure extends AuthorizationU
     protected static final String email = "mail@mail";
     protected static final String phone = "79998887766";
 
-    protected final CredentialEntity credential =
-            CredentialEntity.builder()
-                    .id(id)
-                    .status(CredentialEntity.Status.ACTIVE)
-                    .email(email)
-                    .phone(phone)
-                    .build();
+    protected final CredentialEntity credential;
 
 
     public InitTwoFactorAuthorizationUseCaseTestInfrastructure() {
         initCredentialMocks();
         initConfirmedCodeMocks();
+        CredentialEntity defaultCredential = new CredentialEntity();
+        defaultCredential.setId(id);
+        defaultCredential.setEmail(email);
+        defaultCredential.setPhone(phone);
+        this.credential = defaultCredential;
     }
 
     private void initCredentialMocks() {

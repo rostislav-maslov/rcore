@@ -25,12 +25,14 @@ import com.rcore.domain.auth.token.port.impl.TokenSaltGeneratorImpl;
 import com.rcore.domain.auth.token.usecases.CreateAccessTokenUseCase;
 import com.rcore.domain.auth.token.usecases.CreateRefreshTokenUseCase;
 import com.rcore.domain.security.model.AccessTokenData;
+import com.rcore.domain.security.model.CredentialDetails;
 import com.rcore.domain.security.model.RefreshTokenData;
 import com.rcore.domain.security.port.TokenConverter;
 import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -69,13 +71,7 @@ public class AuthorizationUseCaseTestInfrastructure {
             .hasBoundlessAccess(true)
             .build();
 
-    protected static final CredentialEntity authorizedCredential = CredentialEntity.builder()
-            .id(UUID.randomUUID().toString())
-            .roles(Arrays.asList(CredentialEntity.Role.builder()
-                    .isBlocked(false)
-                    .roleId(superUserRole.getId())
-                    .build()))
-            .build();
+    protected final CredentialEntity authorizedCredential;
 
     public AuthorizationUseCaseTestInfrastructure() {
 
@@ -105,6 +101,13 @@ public class AuthorizationUseCaseTestInfrastructure {
         initSessionTokenMocks();
         initTokenConverterMocks();
         initRoleMocks();
+        CredentialEntity defaultCredential = new CredentialEntity();
+        defaultCredential.setId(UUID.randomUUID().toString());
+        defaultCredential.setRoles(Collections.singletonList(CredentialEntity.Role.builder()
+                .isBlocked(false)
+                .role(superUserRole)
+                .build()));
+        this.authorizedCredential = defaultCredential;
     }
 
     private void initAuthorizationMocks() {
@@ -163,13 +166,13 @@ public class AuthorizationUseCaseTestInfrastructure {
                 .then(a -> UUID.randomUUID().toString());
 
         Mockito.when(accessTokenDataTokenConverter.parse(anyString()))
-                .then(a -> new AccessTokenData(UUID.randomUUID().toString(), authorizedCredential.getId(), LocalDateTime.now(), LocalDateTime.now().plusDays(1)));
+                .then(a -> new AccessTokenData(UUID.randomUUID().toString(), authorizedCredential.getId(), Arrays.asList(new CredentialDetails.Role("ADMIN")), LocalDateTime.now(), LocalDateTime.now().plusDays(1)));
 
         Mockito.when(refreshTokenDataTokenConverter.convert(any(RefreshTokenData.class)))
                 .then(a -> UUID.randomUUID().toString());
 
         Mockito.when(refreshTokenDataTokenConverter.parse(anyString()))
-                .then(a -> new RefreshTokenData(UUID.randomUUID().toString(), authorizedCredential.getId(), LocalDateTime.now(), LocalDateTime.now().plusDays(1)));
+                .then(a -> new RefreshTokenData(UUID.randomUUID().toString(), authorizedCredential.getId(), Arrays.asList(new CredentialDetails.Role("ADMIN")), LocalDateTime.now(), LocalDateTime.now().plusDays(1)));
     }
 
     private void initRoleMocks() {

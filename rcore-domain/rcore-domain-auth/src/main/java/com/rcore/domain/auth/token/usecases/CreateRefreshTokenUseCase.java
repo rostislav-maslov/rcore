@@ -20,7 +20,7 @@ public class CreateRefreshTokenUseCase extends UseCase<CreateRefreshTokenUseCase
 
     @Override
     public SingletonEntityOutputValues<RefreshTokenEntity> execute(InputValues inputValues) {
-        return SingletonEntityOutputValues.of(refreshTokenRepository.save(create(inputValues.getCredentialEntity().getId(), RefreshTokenEntity.CreateFrom.LOGIN, null)));
+        return SingletonEntityOutputValues.of(refreshTokenRepository.save(create(inputValues.getCredentialEntity(), RefreshTokenEntity.CreateFrom.LOGIN, null)));
     }
 
     @Value
@@ -28,11 +28,11 @@ public class CreateRefreshTokenUseCase extends UseCase<CreateRefreshTokenUseCase
         private final CredentialEntity credentialEntity;
     }
 
-    private RefreshTokenEntity create(String credentialId, RefreshTokenEntity.CreateFrom createFrom, String refreshTokenId){
+    private RefreshTokenEntity create(CredentialEntity credential, RefreshTokenEntity.CreateFrom createFrom, String refreshTokenId){
         RefreshTokenEntity refreshTokenEntity = new RefreshTokenEntity();
 
         refreshTokenEntity.setId(this.refreshTokenIdGenerator.generate());
-        refreshTokenEntity.setCredentialId(credentialId);
+        refreshTokenEntity.setCredential(credential);
         refreshTokenEntity.setExpireAt(DateTimeUtils.fromMillis(DateTimeUtils.getNowMillis() + refreshTokenEntity.getExpireTimeAccessToken()));
         refreshTokenEntity.setStatus(RefreshTokenEntity.Status.ACTIVE);
 

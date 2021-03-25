@@ -65,9 +65,13 @@ public class UpdateCredentialUseCase extends AbstractUpdateUseCase<CredentialEnt
 
         credentialEntity.setEmail(inputValues.getEmail());
         credentialEntity.setPhone(inputValues.getPhone());
-        credentialEntity.setRoles(inputValues.getRoles()
+        credentialEntity.setRoles(roles
                 .stream()
-                .map(role -> new CredentialEntity.Role(role.getRoleId(), role.getIsBlocked()))
+                .map(role -> new CredentialEntity.Role(
+                        role,
+                        findInputRole(inputValues.getRoles(), role)
+                                .map(CreateCredentialUseCase.InputValues.Role::getIsBlocked)
+                                .orElse(false)))
                 .collect(Collectors.toList()));
         credentialEntity.setStatus(inputValues.getStatus());
         credentialEntity.setUsername(inputValues.getUsername());
@@ -117,5 +121,12 @@ public class UpdateCredentialUseCase extends AbstractUpdateUseCase<CredentialEnt
 
         if (inputValues.getStatus() == null)
             throw new CredentialStatusIsRequiredException();
+    }
+
+    private Optional<CreateCredentialUseCase.InputValues.Role> findInputRole(List<CreateCredentialUseCase.InputValues.Role> inputRoles, RoleEntity roleEntity) {
+        return inputRoles
+                .stream()
+                .filter(inputRole -> inputRole.getName() == roleEntity.getName() || inputRole.getRoleId() == roleEntity.getId())
+                .findFirst();
     }
 }

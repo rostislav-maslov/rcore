@@ -27,23 +27,6 @@ public class CredentialDetails {
     @AllArgsConstructor
     @Getter
     public static class Role {
-        private String id;
         private String name;
-        private boolean hasBoundlessAccess;
-        private List<String> accesses;
-    }
-
-    public boolean hasAccess(String access) {
-        if (roles == null)
-            return false;
-
-        //Если есть роль с неограниченным доступом, то возврящаем true
-        if (roles.stream().filter(Role::isHasBoundlessAccess).findFirst().isPresent())
-            return true;
-
-        return roles.stream()
-                .flatMap(role -> role.getAccesses().stream())
-                .collect(Collectors.toList())
-                .contains(access);
     }
 }
