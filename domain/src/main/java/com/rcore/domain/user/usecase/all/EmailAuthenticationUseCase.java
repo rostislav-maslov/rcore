@@ -47,9 +47,9 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
     @Override
     public TokenPair authentication(String email, String password) throws UserNotFoundException, AuthenticationException, UserBlockedException {
         UserEntity userEntity = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundException());
+                .orElseThrow(UserNotFoundException::new);
 
-        if (passwordGenerator.check(userEntity.getId(), password, userEntity.getPassword()) == false) {
+        if (!passwordGenerator.check(userEntity.getId(), password, userEntity.getPassword())) {
 
             userEntity.setLastFailDate(LocalDateTime.now());
             userEntity.setFails(userEntity.getFails() + 1);
@@ -58,7 +58,7 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
             throw new AuthenticationException();
         }
 
-        if (userEntity.getStatus().equals(UserStatus.ACTIVE) == false) {
+        if (!userEntity.getStatus().equals(UserStatus.ACTIVE)) {
 
             userEntity.setLastFailDate(LocalDateTime.now());
             userEntity.setFails(userEntity.getFails() + 1);

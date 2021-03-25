@@ -12,6 +12,8 @@ import com.rcore.security.infrastructure.exceptions.InvalidTokenFormatException;
 import com.rcore.security.infrastructure.exceptions.TokenGenerateException;
 import com.rcore.security.infrastructure.utils.ObjectMapperUtils;
 
+import java.time.LocalDateTime;
+
 public class JWTByAccessTokenGenerator implements AuthTokenGenerator<AccessTokenDTO> {
 
     private final ObjectMapper objectMapper = ObjectMapperUtils.localDateTimeMapper();
@@ -20,6 +22,9 @@ public class JWTByAccessTokenGenerator implements AuthTokenGenerator<AccessToken
     public String generate(AccessTokenDTO accessTokenDTO, String secret) throws TokenGenerateException {
         try {
             accessTokenDTO.setAccesses(null);
+            accessTokenDTO.setCreatedAt(accessTokenDTO.getCreatedAt().withNano(0));
+            accessTokenDTO.setUpdatedAt(accessTokenDTO.getUpdatedAt().withNano(0));
+
             JWSObject jwsObject = new JWSObject(new JWSHeader(JWSAlgorithm.HS256), new Payload(objectMapper.writeValueAsString(accessTokenDTO)));
             jwsObject.sign(new MACSigner(secret));
             return jwsObject.serialize();
