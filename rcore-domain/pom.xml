@@ -28,7 +28,6 @@
         <module>rcore-domain-file</module>
         <module>rcore-domain-picture</module>
         <module>rcore-domain-device</module>
-        <module>rcore-domain-role</module>
     </modules>
 
     <build>

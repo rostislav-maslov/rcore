@@ -1,6 +1,7 @@
 package com.rcore.database.mongo.auth.token.mapper;
 
 import com.rcore.commons.mapper.ExampleDataMapper;
+import com.rcore.database.mongo.auth.credential.mapper.CredentialDocMapper;
 import com.rcore.database.mongo.auth.token.model.RefreshTokenDoc;
 import com.rcore.domain.auth.token.entity.RefreshTokenEntity;
 import com.rcore.domain.auth.token.port.RefreshTokenIdGenerator;
@@ -8,11 +9,14 @@ import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Component
 public class RefreshTokenDocMapper implements ExampleDataMapper<RefreshTokenEntity, RefreshTokenDoc> {
 
     private final RefreshTokenIdGenerator<ObjectId> idGenerator;
+    private final CredentialDocMapper credentialDocMapper;
 
     @Override
     public RefreshTokenDoc map(RefreshTokenEntity refreshTokenEntity) {
@@ -24,7 +28,9 @@ public class RefreshTokenDocMapper implements ExampleDataMapper<RefreshTokenEnti
                 .createdAt(refreshTokenEntity.getCreatedAt())
                 .createFromTokenId(refreshTokenEntity.getCreateFromTokenId())
                 .createFromType(refreshTokenEntity.getCreateFromType())
-                .credential(refreshTokenEntity.getCredential())
+                .credential(Optional.ofNullable(refreshTokenEntity.getCredential())
+                        .map(credentialDocMapper::map)
+                        .orElse(null))
                 .expireAt(refreshTokenEntity.getExpireAt())
                 .expireTimeAccessToken(refreshTokenEntity.getExpireTimeAccessToken())
                 .expireTimeRefreshToken(refreshTokenEntity.getExpireTimeRefreshToken())
@@ -41,7 +47,9 @@ public class RefreshTokenDocMapper implements ExampleDataMapper<RefreshTokenEnti
         entity.setCreatedAt(refreshTokenDoc.getCreatedAt());
         entity.setCreateFromTokenId(refreshTokenDoc.getCreateFromTokenId());
         entity.setCreateFromType(refreshTokenDoc.getCreateFromType());
-        entity.setCredential(refreshTokenDoc.getCredential());
+        entity.setCredential(Optional.ofNullable(refreshTokenDoc.getCredential())
+                .map(credentialDocMapper::inverseMap)
+                .orElse(null));
         entity.setExpireAt(refreshTokenDoc.getExpireAt());
         entity.setExpireTimeAccessToken(refreshTokenDoc.getExpireTimeAccessToken());
         entity.setExpireTimeRefreshToken(refreshTokenDoc.getExpireTimeRefreshToken());

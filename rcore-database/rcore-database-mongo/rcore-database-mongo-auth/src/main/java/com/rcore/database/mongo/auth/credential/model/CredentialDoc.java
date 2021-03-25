@@ -1,14 +1,13 @@
 package com.rcore.database.mongo.auth.credential.model;
 
+import com.rcore.database.mongo.auth.role.model.RoleDoc;
 import com.rcore.database.mongo.commons.document.BaseDocument;
 import com.rcore.domain.auth.credential.entity.CredentialEntity;
-import com.rcore.domain.role.entity.RoleEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -30,8 +29,9 @@ public class CredentialDoc extends BaseDocument {
     @Data
     @Builder
     public static class Role {
+
         @DBRef
-        private RoleEntity role;
+        private RoleDoc role;
         private boolean isBlocked;
     }
 

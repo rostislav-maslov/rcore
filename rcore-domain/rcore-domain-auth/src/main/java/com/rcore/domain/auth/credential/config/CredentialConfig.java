@@ -4,8 +4,8 @@ import com.rcore.domain.auth.credential.port.CredentialIdGenerator;
 import com.rcore.domain.auth.credential.port.CredentialRepository;
 import com.rcore.domain.auth.credential.port.PasswordCryptographer;
 import com.rcore.domain.auth.credential.usecases.*;
-import com.rcore.domain.role.usecases.FindRoleByIdUseCase;
-import com.rcore.domain.role.usecases.FindRoleByNameUseCase;
+import com.rcore.domain.auth.role.usecases.FindRoleByIdUseCase;
+import com.rcore.domain.auth.role.usecases.FindRoleByNameUseCase;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

@@ -21,11 +21,6 @@
         </dependency>
         <dependency>
             <groupId>com.github.rostislav-maslov.rcore</groupId>
-            <artifactId>rcore-domain-role</artifactId>
-            <version>${revision}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.rostislav-maslov.rcore</groupId>
             <artifactId>rcore-commons</artifactId>
             <version>${revision}</version>
         </dependency>

@@ -2,6 +2,7 @@ package com.rcore.database.mongo.auth.credential.mapper;
 
 import com.rcore.commons.mapper.ExampleDataMapper;
 import com.rcore.database.mongo.auth.credential.model.CredentialDoc;
+import com.rcore.database.mongo.auth.role.mapper.RoleDocMapper;
 import com.rcore.domain.auth.credential.entity.CredentialEntity;
 import com.rcore.domain.auth.credential.port.CredentialIdGenerator;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class CredentialDocMapper implements ExampleDataMapper<CredentialEntity, CredentialDoc> {
 
     private final CredentialIdGenerator<ObjectId> credentialIdGenerator;
+    private final RoleDocMapper roleDocMapper;
 
     @Override
     public CredentialDoc map(CredentialEntity credentialEntity) {
@@ -32,7 +34,7 @@ public class CredentialDocMapper implements ExampleDataMapper<CredentialEntity, 
                 .roles(Optional.ofNullable(credentialEntity.getRoles())
                         .map(roles -> roles
                                 .stream()
-                                .map(r -> new CredentialDoc.Role(r.getRole(), r.isBlocked()))
+                                .map(r -> new CredentialDoc.Role(roleDocMapper.map(r.getRole()), r.isBlocked()))
                                 .collect(Collectors.toList()))
                         .orElse(new ArrayList<>()))
                 .build();
@@ -52,7 +54,7 @@ public class CredentialDocMapper implements ExampleDataMapper<CredentialEntity, 
         entity.setRoles(Optional.ofNullable(credentialDoc.getRoles())
                 .map(roles -> roles
                         .stream()
-                        .map(r -> new CredentialEntity.Role(r.getRole(), r.isBlocked()))
+                        .map(r -> new CredentialEntity.Role(roleDocMapper.inverseMap(r.getRole()), r.isBlocked()))
                         .collect(Collectors.toList()))
                 .orElse(new ArrayList<>()));
         return entity;

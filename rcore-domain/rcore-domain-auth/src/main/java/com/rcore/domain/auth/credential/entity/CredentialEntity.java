@@ -1,12 +1,11 @@
 package com.rcore.domain.auth.credential.entity;
 
+import com.rcore.domain.auth.role.entity.RoleEntity;
 import com.rcore.domain.commons.entity.BaseEntity;
-import com.rcore.domain.role.entity.RoleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
