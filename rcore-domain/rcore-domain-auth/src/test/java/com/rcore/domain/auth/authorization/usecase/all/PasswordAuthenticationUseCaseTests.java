@@ -9,7 +9,7 @@ import com.rcore.domain.auth.token.entity.TokenPair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class PasswordAuthenticationUseCaseTest extends PasswordAuthenticationUseCaseTestInfrastructure {
+class PasswordAuthenticationUseCaseTests extends PasswordAuthenticationUseCaseTestInfrastructure {
 
     /**
      * Тестирование удачной авторизации

@@ -3,6 +3,7 @@ package com.rcore.domain.commons.entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
@@ -11,16 +12,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @SuperBuilder
 @Getter
+@Setter
 public abstract class BaseEntity<EntityId> {
     protected EntityId id;
     protected LocalDateTime createdAt = LocalDateTime.now();
     protected LocalDateTime updatedAt = LocalDateTime.now();
 
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
 
-    public void setId(EntityId id) {
-        this.id = id;
-    }
 }

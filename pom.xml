@@ -12,13 +12,40 @@
         <module>rcore-database</module>
         <module>rcore-commons</module>
         <module>rcore-rest-api</module>
+        <module>rcore-event-driven</module>
     </modules>
 
     <packaging>pom</packaging>
 
     <properties>
-        <revision>1.0.1</revision>
+        <revision>1.0.2</revision>
     </properties>
+
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.16</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.30</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>3.4.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.7.1</version>
+        </dependency>
+    </dependencies>
+
 
     <distributionManagement>
         <repository>

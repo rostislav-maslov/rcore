@@ -12,14 +12,14 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Data
-public class UserPrincipal implements UserDetails {
+public class CredentialPrincipal implements UserDetails {
 
     private String id;
     private Collection<? extends GrantedAuthority> authorities;
     private boolean isAnonymous;
 
-    public static UserPrincipal from(CredentialDetails credentialDetails) {
-        return new UserPrincipal(
+    public static CredentialPrincipal from(CredentialDetails credentialDetails) {
+        return new CredentialPrincipal(
                 credentialDetails.getId(),
                 credentialDetails.getRoles()
                         .stream()

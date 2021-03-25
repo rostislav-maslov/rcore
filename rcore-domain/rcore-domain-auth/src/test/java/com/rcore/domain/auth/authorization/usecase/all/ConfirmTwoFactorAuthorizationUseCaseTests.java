@@ -14,7 +14,7 @@ import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.anyString;
 
-class ConfirmTwoFactorAuthorizationUseCaseTest extends ConfirmTwoFactorAuthorizationUseCeseTestInfrastructure {
+class ConfirmTwoFactorAuthorizationUseCaseTests extends ConfirmTwoFactorAuthorizationUseCeseTestInfrastructure {
 
     /**
      * Успешное подтверждение кода

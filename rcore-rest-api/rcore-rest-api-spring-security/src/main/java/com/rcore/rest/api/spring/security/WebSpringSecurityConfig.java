@@ -14,6 +14,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 
 @EnableWebSecurity
@@ -26,6 +28,7 @@ public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         // @formatter:off
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
@@ -44,6 +47,7 @@ public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(abstractAuthenticationProcessingFilter, UsernamePasswordAuthenticationFilter.class)
                     .exceptionHandling()
                     .authenticationEntryPoint(authenticationEntryPoint);
+        http.addFilterBefore(characterEncodingFilter(), CsrfFilter.class);
     }
 
     @Override
@@ -61,6 +65,13 @@ public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     GrantedAuthorityDefaults grantedAuthorityDefaults() {
         return new GrantedAuthorityDefaults(""); // Remove the ROLE_ prefix
+    }
+
+    public CharacterEncodingFilter characterEncodingFilter() {
+        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+        characterEncodingFilter.setEncoding("UTF-8");
+        characterEncodingFilter.setForceEncoding(true);
+        return characterEncodingFilter;
     }
 
 }

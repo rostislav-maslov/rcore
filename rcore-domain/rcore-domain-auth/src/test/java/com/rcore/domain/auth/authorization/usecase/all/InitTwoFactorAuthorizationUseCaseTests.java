@@ -12,7 +12,7 @@ import org.mockito.Mockito;
 
 import static org.mockito.ArgumentMatchers.any;
 
-class InitTwoFactorAuthorizationUseCaseTest extends InitTwoFactorAuthorizationUseCaseTestInfrastructure {
+class InitTwoFactorAuthorizationUseCaseTests extends InitTwoFactorAuthorizationUseCaseTestInfrastructure {
 
     /**
      * Успешная инициализация двухвакторной авторизации через sms

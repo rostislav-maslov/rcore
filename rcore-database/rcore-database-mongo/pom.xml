@@ -26,6 +26,7 @@
         <module>rcore-database-mongo-file</module>
         <module>rcore-database-mongo-picture</module>
         <module>rcore-database-mongo-role</module>
+        <module>rcore-database-mongo-event-driven</module>
     </modules>
 
     <properties>

@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-class FindCredentialsWithFiltersUseCaseTest extends FindCredentialsWithFiltersUseCaseTestInfrastructure {
+class FindCredentialsWithFiltersUseCaseTests extends FindCredentialsWithFiltersUseCaseTestInfrastructure {
 
     @Test
     public void test() {

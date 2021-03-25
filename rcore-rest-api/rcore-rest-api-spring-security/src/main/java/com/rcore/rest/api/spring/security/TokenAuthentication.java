@@ -15,7 +15,7 @@ public class TokenAuthentication implements Authentication {
     private String token;
     private Collection<? extends GrantedAuthority> authorities = new ArrayList<>();
     private boolean isAuthenticated;
-    private UserPrincipal principal;
+    private CredentialPrincipal principal;
 
     public TokenAuthentication(String token) {
         this.token = token;
