@@ -63,8 +63,8 @@ public class SecurityExceptionHandler {
 //    }
 
     @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
-    @ExceptionHandler({AccessDeniedException.class, AuthorizationException.class})
-    public ErrorApiResponse<List<ExceptionDTO>> handleAccessDenied(Exception e) {
+    @ExceptionHandler(AuthorizationException.class)
+    public ErrorApiResponse<List<ExceptionDTO>> handleAuthorizationException(Exception e) {
         return ErrorApiResponse.of(Arrays.asList(ExceptionDTO.builder()
                 .presentationData(ExceptionDTO.PresentationData.builder()
                         .title("Ошибка аутентификации")
@@ -75,7 +75,20 @@ public class SecurityExceptionHandler {
                 .build()));
     }
 
-    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    @ExceptionHandler(AccessDeniedException.class)
+    public ErrorApiResponse<List<ExceptionDTO>> handleAccessDeniedException(Exception e) {
+        return ErrorApiResponse.of(Arrays.asList(ExceptionDTO.builder()
+                .presentationData(ExceptionDTO.PresentationData.builder()
+                        .title("Доступ запрещён")
+                        .message("Недостаточно прав для доступа. Обратитесь к администратору сервиса или вернитесь в предыдущий раздел")
+                        .build())
+                .domain("AUTH")
+                .details("ACCESS_DENIED")
+                .build()));
+    }
+
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
     @ExceptionHandler({com.rcore.domain.token.exception.AuthenticationException.class})
     public ErrorApiResponse<List<ExceptionDTO>> handleAuthenticationException(Exception e) {
         return ErrorApiResponse.of(new UserNotExistApiException().getErrors());

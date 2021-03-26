@@ -25,7 +25,8 @@ public class TokenAuthenticationFailureHandler implements AuthenticationFailureH
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        if (exception instanceof UserBlockedApiException)
+        if (exception instanceof UserBlockedApiException
+                || exception instanceof UnauthorizedApiException)
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         else
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
