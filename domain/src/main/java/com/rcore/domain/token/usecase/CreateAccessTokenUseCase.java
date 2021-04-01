@@ -29,6 +29,7 @@ public class CreateAccessTokenUseCase {
     public AccessTokenEntity create(UserEntity userEntity, RefreshTokenEntity refreshTokenEntity) {
         AccessTokenEntity accessTokenEntity = new AccessTokenEntity();
         accessTokenEntity.setId(idGenerator.generate());
+        accessTokenEntity.setStatus(RefreshTokenEntity.Status.ACTIVE);
         accessTokenEntity.setUserId(refreshTokenEntity.getUserId());
         accessTokenEntity.setAccesses(userEntity.getAccesses());
         accessTokenEntity.setExpireAt(DateTimeUtils.fromMillis(DateTimeUtils.getNowMillis() + refreshTokenEntity.getExpireTimeAccessToken()));

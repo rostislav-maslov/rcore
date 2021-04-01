@@ -13,7 +13,7 @@ import com.rcore.domain.user.port.PasswordGenerator;
 import com.rcore.domain.user.port.UserRepository;
 import com.rcore.domain.user.usecase.admin.*;
 import com.rcore.domain.user.usecase.all.CreateUserByPhoneNumberUseCase;
-import com.rcore.domain.user.usecase.all.EmailAuthenticationUseCase;
+import com.rcore.domain.user.usecase.all.AuthenticationUseCase;
 import com.rcore.domain.user.usecase.all.ViewUserUserCase;
 import lombok.RequiredArgsConstructor;
 
@@ -95,8 +95,8 @@ public class UserConfig {
         private final RefreshTokenStorage refreshTokenStorage;
         private final AccessTokenStorage accessTokenStorage;
 
-        public EmailAuthenticationUseCase emailAuthenticationUseCase() {
-            return new EmailAuthenticationUseCase(userRepository, passwordGenerator, createRefreshTokenUseCase, createAccessTokenUseCase, refreshTokenStorage, accessTokenStorage);
+        public AuthenticationUseCase authenticationUseCase() {
+            return new AuthenticationUseCase(userRepository, passwordGenerator, createRefreshTokenUseCase, createAccessTokenUseCase, refreshTokenStorage, accessTokenStorage);
         }
 
         public ViewUserUserCase viewUserUserCase() {

@@ -1,13 +1,13 @@
 package com.rcore.domain.database.memory.token.port;
 
+import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.port.AccessTokenStorage;
+import com.rcore.domain.token.port.filters.AccessTokenFilters;
 
 import java.util.Optional;
 
 public class AccessTokenStorageImpl implements AccessTokenStorage {
-
-
 
     @Override
     public Optional<AccessTokenEntity> current() {
@@ -38,5 +38,25 @@ public class AccessTokenStorageImpl implements AccessTokenStorage {
     @Override
     public void deactivateAllAccessTokenByRefreshTokenId(String refreshTokenId) {
 
+    }
+
+    @Override
+    public SearchResult<AccessTokenEntity> findWithFilters(AccessTokenFilters filters) {
+        return null;
+    }
+
+    @Override
+    public Optional<AccessTokenEntity> findTokenById(String id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public String findJWTById(String id) {
+        return null;
+    }
+
+    @Override
+    public Optional<AccessTokenEntity> findTokenByJWT(String jwtToken) {
+        return Optional.empty();
     }
 }

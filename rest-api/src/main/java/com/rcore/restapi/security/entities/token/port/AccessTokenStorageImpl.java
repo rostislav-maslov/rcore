@@ -2,9 +2,11 @@ package com.rcore.restapi.security.entities.token.port;
 
 import com.rcore.adapter.domain.token.dto.AccessTokenDTO;
 import com.rcore.adapter.domain.token.mapper.AccessTokenMapper;
+import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.port.AccessTokenRepository;
 import com.rcore.domain.token.port.AccessTokenStorage;
+import com.rcore.domain.token.port.filters.AccessTokenFilters;
 import com.rcore.restapi.security.support.UserAuthenticationMediator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -47,5 +49,25 @@ public class AccessTokenStorageImpl implements AccessTokenStorage {
     @Override
     public void expireAccessToken(AccessTokenEntity accessTokenEntity) {
         accessTokenRepository.expireAccessToken(accessTokenEntity.getId());
+    }
+
+    @Override
+    public SearchResult<AccessTokenEntity> findWithFilters(AccessTokenFilters filters) {
+        return accessTokenRepository.findWithFilters(filters);
+    }
+
+    @Override
+    public Optional<AccessTokenEntity> findTokenById(String id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public String findJWTById(String id) {
+        return null;
+    }
+
+    @Override
+    public Optional<AccessTokenEntity> findTokenByJWT(String jwtToken) {
+        return Optional.empty();
     }
 }

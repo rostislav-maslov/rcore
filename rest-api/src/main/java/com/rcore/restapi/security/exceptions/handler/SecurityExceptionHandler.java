@@ -100,7 +100,7 @@ public class SecurityExceptionHandler {
         return ErrorApiResponse.of(AdminUserIsExistApiException.of().getErrors());
     }
 
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
     @ExceptionHandler({InvalidTokenFormatException.class})
     public ErrorApiResponse<List<ExceptionDTO>> handleInvalidToken(Exception e) {
         return ErrorApiResponse.of(new InvalidTokenFormatApiException().getErrors());

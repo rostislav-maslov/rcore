@@ -23,7 +23,7 @@ public class EmailAuthenticationTestCase {
 
     @Test
     public void authentication() throws UserNotFoundException, UserBlockedException, AuthenticationException, RefreshTokenCreationException {
-        TokenPair tokenPair = userConfig.getUserConfig().all.emailAuthenticationUseCase().authentication("user1", "123");
+        TokenPair tokenPair = userConfig.getUserConfig().all.authenticationUseCase().authentication("user1", "123");
 
         Assert.assertEquals(tokenPair.getAccessToken().getUserId(), "user1");
 

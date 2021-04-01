@@ -5,14 +5,12 @@ import com.mongodb.client.model.IndexOptions;
 import com.mongodb.client.model.Indexes;
 import com.rcore.database.mongo.common.utils.CollectionNameUtils;
 import com.rcore.database.mongo.domain.token.model.AccessTokenDoc;
-import com.rcore.database.mongo.domain.token.query.DeactivateAllAccessTokenByRefreshTokenId;
-import com.rcore.database.mongo.domain.token.query.ExpireAccessToken;
-import com.rcore.database.mongo.domain.token.query.ExpireAllAccessTokenByRefreshTokenId;
-import com.rcore.database.mongo.domain.token.query.FindAllWithSearch;
+import com.rcore.database.mongo.domain.token.query.*;
 import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.port.AccessTokenRepository;
+import com.rcore.domain.token.port.filters.AccessTokenFilters;
 import org.bson.Document;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -84,6 +82,17 @@ public class AccessTokenRepositoryImpl implements AccessTokenRepository {
     public void deactivateAllAccessTokenByRefreshTokenId(String refreshTokenId) {
         DeactivateAllAccessTokenByRefreshTokenId query = DeactivateAllAccessTokenByRefreshTokenId.of(refreshTokenId);
         mongoTemplate.findAndModify(query.getQuery(), query.getUpdate(), query.getModifyOptions(), AccessTokenDoc.class);
+    }
+
+    @Override
+    public SearchResult<AccessTokenEntity> findWithFilters(AccessTokenFilters filters) {
+        Query query = new FindAccessTokensWithFilters(filters).getQuery();
+        return SearchResult.withItemsAndCount(
+                mongoTemplate.find(query, AccessTokenDoc.class)
+                        .stream()
+                        .collect(Collectors.toList()),
+                mongoTemplate.count(query.limit(0).skip(0), AccessTokenDoc.class)
+        );
     }
 
     @Override

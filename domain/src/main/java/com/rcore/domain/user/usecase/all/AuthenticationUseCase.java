@@ -20,7 +20,7 @@ import com.rcore.domain.user.port.UserRepository;
 
 import java.time.LocalDateTime;
 
-public class EmailAuthenticationUseCase implements AuthenticationPort {
+public class AuthenticationUseCase implements AuthenticationPort {
     private final UserRepository userRepository;
     private final PasswordGenerator passwordGenerator;
     private final CreateRefreshTokenUseCase createRefreshTokenUseCase;
@@ -28,7 +28,7 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
     private final RefreshTokenStorage refreshTokenStorage;
     private final AccessTokenStorage accessTokenStorage;
 
-    public EmailAuthenticationUseCase(
+    public AuthenticationUseCase(
             UserRepository userRepository,
             PasswordGenerator passwordGenerator,
             CreateRefreshTokenUseCase createRefreshTokenUseCase,
@@ -82,9 +82,9 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
     @Override
     public TokenPair getNewTokenPairByRefreshToken(RefreshTokenEntity refreshTokenEntity) throws UserNotFoundException, UserBlockedException, AuthenticationException, RefreshTokenIsExpiredException {
         UserEntity userEntity = userRepository.findById(refreshTokenEntity.getUserId())
-                .orElseThrow(() -> new UserNotFoundException());
+                .orElseThrow(UserNotFoundException::new);
 
-        if (userEntity.getStatus().equals(UserStatus.ACTIVE) == false)
+        if (!userEntity.getStatus().equals(UserStatus.ACTIVE))
             throw new UserBlockedException();
 
 
@@ -102,6 +102,45 @@ public class EmailAuthenticationUseCase implements AuthenticationPort {
 
         return TokenPair.builder()
                 .accessToken(accessTokenEntity)
+                .refreshToken(refreshTokenEntity)
+                .build();
+    }
+
+    @Override
+    public TokenPair getNewTokenPair(TokenPair tokenPair) throws UserNotFoundException, UserBlockedException, AuthenticationException, RefreshTokenIsExpiredException {
+        UserEntity userEntity = userRepository.findById(tokenPair.getRefreshToken().getUserId())
+                .orElseThrow(UserNotFoundException::new);
+        if (!userEntity.getStatus().equals(UserStatus.ACTIVE))
+            throw new UserBlockedException();
+
+        //Проверка существование accessToken
+        AccessTokenEntity accessTokenEntity = accessTokenStorage.findById(tokenPair.getAccessToken().getId())
+                .orElseThrow(AuthenticationException::new);
+        //Проверка существования рефреш токена
+        RefreshTokenEntity refreshTokenEntity = refreshTokenStorage.findById(tokenPair.getRefreshToken().getId())
+                .orElseThrow(AuthenticationException::new);
+
+        //Проверка рефреш токена на его принадлежность к аксессу
+        if (!refreshTokenEntity.getId().equals(accessTokenEntity.getCreateFromRefreshTokenId()))
+            throw new RefreshTokenIsExpiredException();
+
+        //Проверка статуса аксесса, если не ACTIVE выводим исключение
+        if (!accessTokenEntity.getStatus().equals(RefreshTokenEntity.Status.ACTIVE))
+            throw new RefreshTokenIsExpiredException();
+        //Проверка статуса рефреша
+        if (!refreshTokenEntity.isActive()) {
+            refreshTokenStorage.expireRefreshToken(refreshTokenEntity);
+            accessTokenStorage.deactivateAllAccessTokenByRefreshTokenId(refreshTokenEntity.getId());
+            throw new RefreshTokenIsExpiredException();
+        }
+
+        //Деактивируем старый access
+        accessTokenStorage.expireAccessToken(accessTokenEntity);
+        //Создаём новый access
+        AccessTokenEntity access = createAccessTokenUseCase.create(userEntity, refreshTokenEntity);
+
+        return TokenPair.builder()
+                .accessToken(access)
                 .refreshToken(refreshTokenEntity)
                 .build();
     }

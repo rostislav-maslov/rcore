@@ -15,7 +15,7 @@ public class ExpireRefreshTokenQuery extends AbstractModifyQuery<RefreshTokenDoc
 
     @Override
     public Update getUpdate() {
-        return Update.update("status", RefreshTokenEntity.Status.INACTIVE);
+        return Update.update("status", RefreshTokenEntity.Status.EXPIRED);
     }
 
     @Override

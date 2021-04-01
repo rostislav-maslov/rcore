@@ -4,6 +4,7 @@ import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.entity.TokenPair;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.RefreshTokenCreationException;
+import com.rcore.domain.token.exception.RefreshTokenIsExpiredException;
 import com.rcore.domain.user.exception.UserBlockedException;
 import com.rcore.domain.user.exception.UserNotFoundException;
 
@@ -14,5 +15,6 @@ public interface AuthenticationPort {
 
     TokenPair authentication(String key, String token) throws UserNotFoundException, AuthenticationException, UserBlockedException, RefreshTokenCreationException;
     TokenPair getNewTokenPairByRefreshToken(RefreshTokenEntity refreshTokenEntity) throws Throwable;
+    TokenPair getNewTokenPair(TokenPair tokenPair) throws UserNotFoundException, UserBlockedException, AuthenticationException, RefreshTokenIsExpiredException;
 
 }
