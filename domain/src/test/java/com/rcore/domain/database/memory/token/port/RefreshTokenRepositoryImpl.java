@@ -4,6 +4,7 @@ import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.port.RefreshTokenRepository;
+import com.rcore.domain.token.port.filters.RefreshTokenFilters;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -71,5 +72,10 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
             }
         }
         return result;
+    }
+
+    @Override
+    public SearchResult<RefreshTokenEntity> findWithFilters(RefreshTokenFilters filters) {
+        return null;
     }
 }
