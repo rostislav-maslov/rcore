@@ -58,7 +58,7 @@ public class AccessTokenStorageImpl implements AccessTokenStorage {
 
     @Override
     public Optional<AccessTokenEntity> findTokenById(String id) {
-        return Optional.empty();
+        return accessTokenRepository.findById(id);
     }
 
     @Override

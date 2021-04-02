@@ -11,16 +11,19 @@ import com.rcore.domain.access.entity.Access;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.config.TokenConfig;
 import com.rcore.domain.token.entity.AccessTokenEntity;
+import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.RefreshTokenCreationException;
 import com.rcore.domain.token.exception.RefreshTokenIsExpiredException;
 import com.rcore.domain.token.port.filters.AccessTokenFilters;
+import com.rcore.domain.token.port.filters.RefreshTokenFilters;
 import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.domain.user.exception.UserBlockedException;
 import com.rcore.domain.user.exception.UserNotExistException;
 import com.rcore.domain.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -88,7 +91,7 @@ public class TokenAdapter {
                 .logout(accessTokenMapper.inverseMap(accessToken));
     }
 
-    public SearchResult<AccessTokenDTO> findWithFilters(AccessTokenFilters filters) {
+    public SearchResult<AccessTokenDTO> findAccessWithFilters(AccessTokenFilters filters) {
         SearchResult<AccessTokenEntity> result = tokenConfig.getAll().viewAccessTokenUseCase().findWithFilters(filters);
         return SearchResult.withItemsAndCount(
                 result.getItems().stream().map(accessTokenMapper::map).collect(Collectors.toList()),
@@ -96,22 +99,48 @@ public class TokenAdapter {
         );
     }
 
-    public AccessTokenDTO findTokenById(String id) {
+    public Optional<AccessTokenDTO> findAccessTokenById(String id) {
         return tokenConfig.getAll().viewAccessTokenUseCase()
                 .findTokenById(id)
-                .map(accessTokenMapper::map)
-                .get();
+                .map(accessTokenMapper::map);
     }
 
-    public AccessTokenDTO findTokenByJWT(String jwt) {
+    public Optional<AccessTokenDTO> findAccessTokenByJWT(String jwt) {
         return tokenConfig.getAll().viewAccessTokenUseCase()
                 .findTokenByJWT(jwt)
-                .map(accessTokenMapper::map)
-                .get();
+                .map(accessTokenMapper::map);
     }
 
-    public String findJWTById(String id) {
+    public String findJWTByAccessId(String id) {
         return tokenConfig.getAll().viewAccessTokenUseCase()
+                .findJWTById(id);
+    }
+
+    public SearchResult<RefreshTokenDTO> findRefreshWithFilters(RefreshTokenFilters filters) {
+        SearchResult<RefreshTokenEntity> result = tokenConfig.getAll().viewRefreshTokenUseCase().findWithFilters(filters);
+        return SearchResult.withItemsAndCount(
+                result.getItems().stream()
+                        .map(refreshTokenMapper::map)
+                        .collect(Collectors.toList()),
+                result.getCount()
+        );
+    }
+
+    public Optional<RefreshTokenDTO> findRefreshTokenById(String id) {
+        return tokenConfig.getAll().viewRefreshTokenUseCase()
+                .findTokenById(id)
+                .map(refreshTokenMapper::map);
+    }
+
+    public Optional<RefreshTokenDTO> findRefreshTokenByJWT(String jwtToken) {
+        return tokenConfig.getAll().viewRefreshTokenUseCase()
+                .findTokenByJWT(jwtToken)
+                .map(refreshTokenMapper::map);
+    }
+
+    public String findJWTByRefreshId(String id) {
+        return tokenConfig.getAll()
+                .viewRefreshTokenUseCase()
                 .findJWTById(id);
     }
 }

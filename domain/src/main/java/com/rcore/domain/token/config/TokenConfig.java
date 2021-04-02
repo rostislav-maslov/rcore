@@ -41,6 +41,9 @@ public class TokenConfig {
             return new ViewAccessTokenUseCase(userRepository, accessTokenStorage);
         }
 
+        public ViewRefreshTokenUseCase viewRefreshTokenUseCase() {
+            return new ViewRefreshTokenUseCase(refreshTokenStorage);
+        }
     }
 
     protected final All all;

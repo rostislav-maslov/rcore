@@ -14,6 +14,7 @@ import com.rcore.domain.token.port.AccessTokenStorage;
 import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.domain.token.port.RefreshTokenStorage;
 import com.rcore.domain.token.port.filters.AccessTokenFilters;
+import com.rcore.domain.token.port.filters.RefreshTokenFilters;
 import com.rcore.domain.token.port.impl.TokenSaltGeneratorImpl;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.token.usecase.CreateAccessTokenUseCase;
@@ -124,6 +125,26 @@ public class TestAppConfig {
 
             @Override
             public List<RefreshTokenEntity> findAllActiveByUserId(String userId) {
+                return null;
+            }
+
+            @Override
+            public SearchResult<RefreshTokenEntity> findWithFilters(RefreshTokenFilters filters) {
+                return null;
+            }
+
+            @Override
+            public Optional<RefreshTokenEntity> findTokenById(String id) {
+                return Optional.empty();
+            }
+
+            @Override
+            public Optional<RefreshTokenEntity> findTokenByJWT(String jwtToken) {
+                return Optional.empty();
+            }
+
+            @Override
+            public String findJWTById(String id) {
                 return null;
             }
         };

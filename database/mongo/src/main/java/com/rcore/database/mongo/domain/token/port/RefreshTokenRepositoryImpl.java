@@ -10,10 +10,12 @@ import com.rcore.database.mongo.domain.token.model.RefreshTokenDoc;
 import com.rcore.database.mongo.domain.token.query.ExpireRefreshTokenQuery;
 import com.rcore.database.mongo.domain.token.query.FindAllActiveByUserId;
 import com.rcore.database.mongo.domain.token.query.FindAllWithSearch;
+import com.rcore.database.mongo.domain.token.query.FindRefreshTokensWithFilters;
 import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.port.RefreshTokenRepository;
+import com.rcore.domain.token.port.filters.RefreshTokenFilters;
 import org.bson.Document;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -87,5 +89,16 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     @Override
     public Long count() {
         return mongoTemplate.count(new Query(), RefreshTokenDoc.class);
+    }
+
+    @Override
+    public SearchResult<RefreshTokenEntity> findWithFilters(RefreshTokenFilters filters) {
+        Query query = new FindRefreshTokensWithFilters(filters).getQuery();
+        return SearchResult.withItemsAndCount(
+                mongoTemplate.find(query, RefreshTokenDoc.class)
+                        .stream()
+                        .collect(Collectors.toList()),
+                mongoTemplate.count(query.limit(0).skip(0), RefreshTokenDoc.class)
+        );
     }
 }

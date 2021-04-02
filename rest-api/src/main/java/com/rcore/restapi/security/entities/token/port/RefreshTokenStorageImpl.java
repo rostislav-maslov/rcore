@@ -1,8 +1,10 @@
 package com.rcore.restapi.security.entities.token.port;
 
+import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.domain.token.port.RefreshTokenStorage;
+import com.rcore.domain.token.port.filters.RefreshTokenFilters;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -33,5 +35,25 @@ public class RefreshTokenStorageImpl implements RefreshTokenStorage {
     @Override
     public List<RefreshTokenEntity> findAllActiveByUserId(String userId) {
         return refreshTokenRepository.findAllActiveByUserId(userId);
+    }
+
+    @Override
+    public SearchResult<RefreshTokenEntity> findWithFilters(RefreshTokenFilters filters) {
+        return refreshTokenRepository.findWithFilters(filters);
+    }
+
+    @Override
+    public Optional<RefreshTokenEntity> findTokenById(String id) {
+        return refreshTokenRepository.findById(id);
+    }
+
+    @Override
+    public Optional<RefreshTokenEntity> findTokenByJWT(String jwtToken) {
+        return Optional.empty();
+    }
+
+    @Override
+    public String findJWTById(String id) {
+        return null;
     }
 }
