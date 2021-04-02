@@ -79,4 +79,12 @@ public class CredentialEntity extends BaseEntity<String> {
         return this.status.equals(Status.BLOCK);
     }
 
+    public void changeStatus(){
+        if (this.status.equals(Status.BLOCK)) {
+            this.status = Status.ACTIVE;
+        } else {
+            this.status = Status.BLOCK;
+        }
+    }
+
 }
