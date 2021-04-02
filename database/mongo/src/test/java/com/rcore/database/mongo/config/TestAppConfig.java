@@ -6,12 +6,14 @@ import com.rcore.database.mongo.domain.token.port.RefreshTokenIdGeneratorImpl;
 import com.rcore.database.mongo.domain.token.port.RefreshTokenRepositoryImpl;
 import com.rcore.database.mongo.domain.user.port.UserIdGeneratorImpl;
 import com.rcore.database.mongo.domain.user.port.UserRepositoryImpl;
+import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.role.port.RoleRepository;
 import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.port.AccessTokenStorage;
 import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.domain.token.port.RefreshTokenStorage;
+import com.rcore.domain.token.port.filters.AccessTokenFilters;
 import com.rcore.domain.token.port.impl.TokenSaltGeneratorImpl;
 import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
 import com.rcore.domain.token.usecase.CreateAccessTokenUseCase;
@@ -53,6 +55,22 @@ public class TestAppConfig {
         this.passwordGenerator = new PasswordGeneratorImpl();
         this.refreshTokenRepository = new RefreshTokenRepositoryImpl(databaseConfig.getMongoTemplate());
         this.accessTokenStorage = new AccessTokenStorage() {
+
+            @Override
+            public Optional<AccessTokenEntity> findTokenById(String id) {
+                return Optional.empty();
+            }
+
+            @Override
+            public String findJWTById(String id) {
+                return null;
+            }
+
+            @Override
+            public Optional<AccessTokenEntity> findTokenByJWT(String jwtToken) {
+                return Optional.empty();
+            }
+
             @Override
             public Optional<AccessTokenEntity> current() {
                 return Optional.empty();
@@ -82,6 +100,11 @@ public class TestAppConfig {
             public void deactivateAllAccessTokenByRefreshTokenId(String refreshTokenId) {
 
             }
+
+            @Override
+            public SearchResult<AccessTokenEntity> findWithFilters(AccessTokenFilters filters) {
+                return null;
+            }
         };
         this.refreshTokenStorage = new RefreshTokenStorage() {
             @Override
@@ -104,7 +127,7 @@ public class TestAppConfig {
                 return null;
             }
         };
-        this.expireTokenUseCase = new ExpireTokenUseCase(refreshTokenStorage, accessTokenStorage);
+        this.expireTokenUseCase = new ExpireTokenUseCase(userRepository, refreshTokenStorage, accessTokenStorage);
 
         this.authorizationByTokenUseCase = new AuthorizationByTokenUseCase(this.accessTokenStorage,this.refreshTokenStorage, this.userRepository);
         this.createRefreshTokenUseCase = new CreateRefreshTokenUseCase(new RefreshTokenIdGeneratorImpl(), this.refreshTokenStorage, new TokenSaltGeneratorImpl());

@@ -13,6 +13,7 @@ import com.rcore.restapi.security.exceptions.UserNotExistApiException;
 import com.rcore.restapi.security.factory.AuthenticationTokenFactory;
 import com.rcore.security.infrastructure.AuthTokenGenerator;
 import com.rcore.security.infrastructure.exceptions.InvalidTokenFormatException;
+import com.rcore.security.infrastructure.exceptions.TokenGenerateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
@@ -66,8 +67,10 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
             Optional<AccessTokenEntity> accessTokenEntity = null;
             try {
                 accessTokenEntity = accessTokenStorage.findById(authTokenGenerator.parseToken(token, secret).getId());
-            } catch (InvalidTokenFormatException e) {
+            } catch (InvalidTokenFormatException | TokenGenerateException e) {
                 throw new InvalidTokenFormatApiException();
+            } catch (com.rcore.domain.token.exception.AuthenticationException e) {
+                throw new UserNotExistApiException();
             }
             if (!accessTokenEntity.isPresent())
                 throw new UserNotExistApiException();

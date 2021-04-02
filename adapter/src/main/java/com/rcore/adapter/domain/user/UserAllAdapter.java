@@ -48,12 +48,17 @@ public class UserAllAdapter {
     }
 
     public TokenPairDTO authentication(String email, String password) throws UserNotFoundException, UserBlockedException, AuthenticationException {
-        return tokenPairMapper.map(userConfig.all.emailAuthenticationUseCase()
+        return tokenPairMapper.map(userConfig.all.authenticationUseCase()
                 .authentication(email, password));
     }
 
+    public TokenPairDTO getNewTokenPair(TokenPairDTO tokenPair) throws UserNotFoundException, RefreshTokenIsExpiredException, AuthenticationException, UserBlockedException {
+        return tokenPairMapper.map(userConfig.all.authenticationUseCase()
+                .getNewTokenPair(tokenPairMapper.inverseMap(tokenPair)));
+    }
+
     public TokenPairDTO getNewTokenPairByRefreshToken(RefreshTokenDTO refreshToken) throws UserNotFoundException, UserBlockedException, AuthenticationException, RefreshTokenIsExpiredException {
-        return tokenPairMapper.map(userConfig.all.emailAuthenticationUseCase()
+        return tokenPairMapper.map(userConfig.all.authenticationUseCase()
                 .getNewTokenPairByRefreshToken(refreshTokenMapper.inverseMap(refreshToken)));
     }
 

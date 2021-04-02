@@ -42,7 +42,7 @@ public class UserAppConfig {
         this.userIdGenerator = new UserIdGeneratorImpl();
         this.passwordGenerator = new PasswordGeneratorImpl();
         this.refreshTokenRepository = new RefreshTokenRepositoryImpl();
-        this.expireTokenUseCase = new ExpireTokenUseCase(refreshTokenStorage, accessTokenStorage);
+        this.expireTokenUseCase = new ExpireTokenUseCase(userRepository, refreshTokenStorage, accessTokenStorage);
         this.createRefreshTokenUseCase = new CreateRefreshTokenUseCase(new RefreshTokenIdGeneratorImpl(), refreshTokenStorage, new TokenSaltGeneratorImpl());
         this.createAccessTokenUseCase = new CreateAccessTokenUseCase(new AccessTokenIdGeneratorImpl(), accessTokenStorage, createRefreshTokenUseCase);
         this.roleRepository = new RoleRepositoryImpl();

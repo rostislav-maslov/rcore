@@ -1,10 +1,7 @@
 package com.rcore.domain.token.config;
 
 import com.rcore.domain.token.port.*;
-import com.rcore.domain.token.usecase.AuthorizationByTokenUseCase;
-import com.rcore.domain.token.usecase.CreateAccessTokenUseCase;
-import com.rcore.domain.token.usecase.CreateRefreshTokenUseCase;
-import com.rcore.domain.token.usecase.ExpireTokenUseCase;
+import com.rcore.domain.token.usecase.*;
 import com.rcore.domain.user.port.UserRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +34,11 @@ public class TokenConfig {
         }
 
         public ExpireTokenUseCase expireTokenUseCase() {
-            return new ExpireTokenUseCase(refreshTokenStorage, accessTokenStorage);
+            return new ExpireTokenUseCase(userRepository, refreshTokenStorage, accessTokenStorage);
+        }
+
+        public ViewAccessTokenUseCase viewAccessTokenUseCase() {
+            return new ViewAccessTokenUseCase(userRepository, accessTokenStorage);
         }
 
     }

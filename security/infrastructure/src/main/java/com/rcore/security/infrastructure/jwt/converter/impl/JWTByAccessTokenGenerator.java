@@ -7,6 +7,7 @@ import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.rcore.adapter.domain.token.dto.AccessTokenDTO;
+import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.security.infrastructure.AuthTokenGenerator;
 import com.rcore.security.infrastructure.exceptions.InvalidTokenFormatException;
 import com.rcore.security.infrastructure.exceptions.TokenGenerateException;
@@ -22,8 +23,6 @@ public class JWTByAccessTokenGenerator implements AuthTokenGenerator<AccessToken
     public String generate(AccessTokenDTO accessTokenDTO, String secret) throws TokenGenerateException {
         try {
             accessTokenDTO.setAccesses(null);
-            accessTokenDTO.setCreatedAt(accessTokenDTO.getCreatedAt().withNano(0));
-            accessTokenDTO.setUpdatedAt(accessTokenDTO.getUpdatedAt().withNano(0));
 
             JWSObject jwsObject = new JWSObject(new JWSHeader(JWSAlgorithm.HS256), new Payload(objectMapper.writeValueAsString(accessTokenDTO)));
             jwsObject.sign(new MACSigner(secret));
@@ -34,14 +33,19 @@ public class JWTByAccessTokenGenerator implements AuthTokenGenerator<AccessToken
     }
 
     @Override
-    public AccessTokenDTO parseToken(String token, String secret) throws InvalidTokenFormatException {
-
+    public AccessTokenDTO parseToken(String token, String secret) throws InvalidTokenFormatException, TokenGenerateException, AuthenticationException {
+        AccessTokenDTO accessTokenDTO = null;
         try {
             JWSObject jwsObject = JWSObject.parse(token);
-            return objectMapper.readValue(jwsObject.getPayload().toString(), AccessTokenDTO.class);
+            String s = jwsObject.getPayload().toString();
+            accessTokenDTO = objectMapper.readValue(jwsObject.getPayload().toString(), AccessTokenDTO.class);
         } catch (Exception e) {
             throw new InvalidTokenFormatException();
         }
+        //Проверяем подлинность переданного токена
+        if (!generate(accessTokenDTO, secret).equals(token))
+            throw new AuthenticationException();
+        return accessTokenDTO;
     }
 
 
