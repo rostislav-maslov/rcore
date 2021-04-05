@@ -14,4 +14,9 @@ public class PhoneNumberFormatAllAdapter {
         return config.all.phoneNumberFormatViewUseCase()
                 .findById(id);
     }
+
+    public Optional<PhoneNumberUtils.PhoneNumberFormat> findDefault() {
+        return config.all.phoneNumberFormatViewUseCase()
+                .findDefault();
+    }
 }

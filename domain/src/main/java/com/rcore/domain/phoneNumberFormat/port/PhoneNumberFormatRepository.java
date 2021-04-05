@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface PhoneNumberFormatRepository {
     Optional<PhoneNumberUtils.PhoneNumberFormat> findById(String id);
+
+    Optional<PhoneNumberUtils.PhoneNumberFormat> findDefault();
 }
