@@ -13,4 +13,8 @@ public class PhoneNumberFormatViewUseCase {
     public Optional<PhoneNumberUtils.PhoneNumberFormat> findById(String id) {
         return phoneNumberFormatRepository.findById(id);
     }
+
+    public Optional<PhoneNumberUtils.PhoneNumberFormat> findDefault() {
+        return phoneNumberFormatRepository.findDefault();
+    }
 }
