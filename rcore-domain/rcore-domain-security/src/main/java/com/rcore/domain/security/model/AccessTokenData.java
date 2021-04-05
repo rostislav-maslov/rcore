@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 public class AccessTokenData {
     private String id;
     private String credentialId;
+    private List<CredentialDetails.Role> roles;
     private LocalDateTime createdAt;
     private LocalDateTime expiredAt;
 }

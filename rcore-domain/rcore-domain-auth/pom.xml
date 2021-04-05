@@ -21,19 +21,22 @@
         </dependency>
         <dependency>
             <groupId>com.github.rostislav-maslov.rcore</groupId>
-            <artifactId>rcore-domain-role</artifactId>
-            <version>${revision}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.rostislav-maslov.rcore</groupId>
             <artifactId>rcore-commons</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>
 
     <build>
-        <finalName>rcore-domain-auth</finalName>
         <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/*Tests.java</include>
+                    </includes>
+                </configuration>
+                <version>3.0.0-M5</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>

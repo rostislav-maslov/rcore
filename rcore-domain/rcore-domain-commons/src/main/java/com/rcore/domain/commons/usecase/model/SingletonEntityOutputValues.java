@@ -1,9 +1,12 @@
 package com.rcore.domain.commons.usecase.model;
 
 import com.rcore.domain.commons.usecase.UseCase;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.Value;
 
-@Value(staticConstructor = "of")
+@AllArgsConstructor(staticName = "of")
+@Getter
 public class SingletonEntityOutputValues<Entity> implements UseCase.OutputValues {
     private final Entity entity;
 }

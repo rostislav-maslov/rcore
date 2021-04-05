@@ -1,6 +1,8 @@
 package com.rcore.domain.auth.token.entity;
 
+import com.rcore.domain.auth.credential.entity.CredentialEntity;
 import com.rcore.domain.commons.entity.BaseEntity;
+import com.rcore.domain.security.model.CredentialDetails;
 import com.rcore.domain.security.model.RefreshTokenData;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 /**
  * Токен для обновления токена авторизации
@@ -26,7 +29,7 @@ public class RefreshTokenEntity extends BaseEntity<String> {
         ACTIVE, INACTIVE, EXPIRED
     }
 
-    protected String credentialId;
+    protected CredentialEntity credential;
     protected Long expireTimeRefreshToken = 365 * 24 * 60 * 60 * 1000l;
     protected Long expireTimeAccessToken = 1 * 24 * 60 * 60 * 1000l;
 
@@ -54,6 +57,14 @@ public class RefreshTokenEntity extends BaseEntity<String> {
     }
 
     public RefreshTokenData toRefreshTokenData() {
-        return new RefreshTokenData(this.getId(), this.getCredentialId(), this.getCreatedAt(), this.getExpireAt());
+        return new RefreshTokenData(
+                this.getId(),
+                this.getCredential().getId(),
+                this.getCredential().getRoles()
+                        .stream()
+                        .map(role -> new CredentialDetails.Role(role.getRole().getName()))
+                        .collect(Collectors.toList()),
+                this.getCreatedAt(),
+                this.getExpireAt());
     }
 }
