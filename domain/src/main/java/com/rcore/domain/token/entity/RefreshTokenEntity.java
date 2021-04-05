@@ -19,7 +19,7 @@ public class RefreshTokenEntity extends BaseEntity {
     }
 
     public enum Status {
-        ACTIVE, INACTIVE, EXPIRED
+        ACTIVE, INACTIVE, EXPIRED, REFRESHED
     }
 
     private String id;

@@ -31,6 +31,11 @@ public class AccessTokenStorageImpl implements AccessTokenStorage {
     }
 
     @Override
+    public void assignedRefreshedStatusToAccessToken(AccessTokenEntity accessTokenEntity) {
+
+    }
+
+    @Override
     public void expireAllAccessTokenByRefreshTokenId(String refreshTokenId) {
 
     }

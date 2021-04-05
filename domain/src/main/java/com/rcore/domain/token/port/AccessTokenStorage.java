@@ -38,6 +38,8 @@ public interface AccessTokenStorage {
 
     void expireAccessToken(AccessTokenEntity accessTokenEntity);
 
+    void assignedRefreshedStatusToAccessToken(AccessTokenEntity accessTokenEntity);
+
     void expireAllAccessTokenByRefreshTokenId(String refreshTokenId);
 
     void deactivateAllAccessTokenByRefreshTokenId(String refreshTokenId);
