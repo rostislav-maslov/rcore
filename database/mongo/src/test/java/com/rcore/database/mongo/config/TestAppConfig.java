@@ -93,6 +93,11 @@ public class TestAppConfig {
             }
 
             @Override
+            public void assignedRefreshedStatusToAccessToken(AccessTokenEntity accessTokenEntity) {
+
+            }
+
+            @Override
             public void expireAllAccessTokenByRefreshTokenId(String refreshTokenId) {
 
             }

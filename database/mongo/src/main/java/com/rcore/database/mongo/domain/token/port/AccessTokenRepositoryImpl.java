@@ -100,4 +100,10 @@ public class AccessTokenRepositoryImpl implements AccessTokenRepository {
         ExpireAccessToken query = ExpireAccessToken.of(accessTokenId);
         mongoTemplate.findAndModify(query.getQuery(), query.getUpdate(), query.getModifyOptions(), AccessTokenDoc.class);
     }
+
+    @Override
+    public void refreshedAccessToken(String accessTokenId) {
+        RefreshAccessToken query = RefreshAccessToken.of(accessTokenId);
+        mongoTemplate.findAndModify(query.getQuery(), query.getUpdate(), query.getModifyOptions(), AccessTokenDoc.class);
+    }
 }

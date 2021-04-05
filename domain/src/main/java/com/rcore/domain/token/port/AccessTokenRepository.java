@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface AccessTokenRepository extends CRUDRepository<String, AccessTokenEntity> {
     void expireAccessToken(String accessTokenId);
+    void refreshedAccessToken(String accessTokenId);
     void expireAllAccessTokenByRefreshTokenId(String refreshTokenId);
     void deactivateAllAccessTokenByRefreshTokenId(String refreshTokenId);
     SearchResult<AccessTokenEntity> findWithFilters(AccessTokenFilters filters);

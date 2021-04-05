@@ -29,6 +29,14 @@ public class AccessTokenEntity extends BaseEntity {
 
     private String sign;
 
+    public Boolean readyForRefresh() {
+        if (status.equals(RefreshTokenEntity.Status.ACTIVE))
+            return true;
+        if (status.equals(RefreshTokenEntity.Status.EXPIRED))
+            return true;
+        return false;
+    }
+
     private static String hash(String st) {
         MessageDigest messageDigest = null;
         byte[] digest = new byte[0];

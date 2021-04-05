@@ -124,8 +124,8 @@ public class AuthenticationUseCase implements AuthenticationPort {
         if (!refreshTokenEntity.getId().equals(accessTokenEntity.getCreateFromRefreshTokenId()))
             throw new RefreshTokenIsExpiredException();
 
-        //Проверка статуса аксесса, если не ACTIVE выводим исключение
-        if (!accessTokenEntity.getStatus().equals(RefreshTokenEntity.Status.ACTIVE))
+        //Проверка статуса аксесса
+        if (!accessTokenEntity.readyForRefresh())
             throw new RefreshTokenIsExpiredException();
         //Проверка статуса рефреша
         if (!refreshTokenEntity.isActive()) {
@@ -135,7 +135,7 @@ public class AuthenticationUseCase implements AuthenticationPort {
         }
 
         //Деактивируем старый access
-        accessTokenStorage.expireAccessToken(accessTokenEntity);
+        accessTokenStorage.assignedRefreshedStatusToAccessToken(accessTokenEntity);
         //Создаём новый access
         AccessTokenEntity access = createAccessTokenUseCase.create(userEntity, refreshTokenEntity);
 
