@@ -1,11 +1,11 @@
 package com.rcore.domain.auth.credential.entity;
 
+import com.rcore.domain.auth.role.entity.RoleEntity;
 import com.rcore.domain.commons.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@SuperBuilder
 public class CredentialEntity extends BaseEntity<String> {
 
     /**
@@ -64,7 +63,7 @@ public class CredentialEntity extends BaseEntity<String> {
         /**
          * Идентификатор роли
          */
-        private String roleId;
+        private RoleEntity role;
 
         /**
          * Флаг - роль заблокированная для данной учетной записи
@@ -78,6 +77,14 @@ public class CredentialEntity extends BaseEntity<String> {
 
     public boolean isBlocked() {
         return this.status.equals(Status.BLOCK);
+    }
+
+    public void changeStatus(){
+        if (this.status.equals(Status.BLOCK)) {
+            this.status = Status.ACTIVE;
+        } else {
+            this.status = Status.BLOCK;
+        }
     }
 
 }

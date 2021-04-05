@@ -50,6 +50,7 @@ public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(abstractAuthenticationProcessingFilter, UsernamePasswordAuthenticationFilter.class)
                     .exceptionHandling()
                     .authenticationEntryPoint(authenticationEntryPoint);
+        http.addFilterBefore(characterEncodingFilter(), CsrfFilter.class);
     }
 
     @Override
@@ -67,6 +68,13 @@ public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     GrantedAuthorityDefaults grantedAuthorityDefaults() {
         return new GrantedAuthorityDefaults(""); // Remove the ROLE_ prefix
+    }
+
+    public CharacterEncodingFilter characterEncodingFilter() {
+        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+        characterEncodingFilter.setEncoding("UTF-8");
+        characterEncodingFilter.setForceEncoding(true);
+        return characterEncodingFilter;
     }
 
 }

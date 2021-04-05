@@ -21,7 +21,7 @@ public class CreateAccessTokenUseCase extends UseCase<CreateAccessTokenUseCase.I
     public SingletonEntityOutputValues<AccessTokenEntity> execute(InputValues inputValues) {
         AccessTokenEntity accessTokenEntity = new AccessTokenEntity();
         accessTokenEntity.setId(accessTokenIdGenerator.generate());
-        accessTokenEntity.setCredentialId(inputValues.getRefreshTokenEntity().getCredentialId());
+        accessTokenEntity.setCredential(inputValues.getRefreshTokenEntity().getCredential());
         accessTokenEntity.setExpireAt(DateTimeUtils.fromMillis(DateTimeUtils.getNowMillis() + inputValues.getRefreshTokenEntity().getExpireTimeAccessToken()));
         accessTokenEntity.setCreateByRefreshTokenId(inputValues.getRefreshTokenEntity().getId());
         accessTokenEntity.setSign(AccessTokenEntity.sign(accessTokenEntity.getId(), DateTimeUtils.getMillis(accessTokenEntity.getExpireAt()), inputValues.getRefreshTokenEntity()));

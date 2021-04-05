@@ -25,6 +25,11 @@
             <artifactId>rcore-domain-commons</artifactId>
             <version>${revision}</version>
         </dependency>
+        <dependency>
+            <groupId>com.github.rostislav-maslov.rcore</groupId>
+            <artifactId>rcore-commons</artifactId>
+            <version>${revision}</version>
+        </dependency>
 
     </dependencies>
 

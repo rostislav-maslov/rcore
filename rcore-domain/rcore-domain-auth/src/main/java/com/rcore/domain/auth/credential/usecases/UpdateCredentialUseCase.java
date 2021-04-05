@@ -4,10 +4,10 @@ import com.rcore.commons.utils.StringUtils;
 import com.rcore.domain.auth.credential.entity.CredentialEntity;
 import com.rcore.domain.auth.credential.exceptions.*;
 import com.rcore.domain.auth.credential.port.CredentialRepository;
-import com.rcore.domain.role.entity.RoleEntity;
-import com.rcore.domain.role.exception.RoleNotFoundException;
-import com.rcore.domain.role.usecases.FindRoleByIdUseCase;
-import com.rcore.domain.role.usecases.FindRoleByNameUseCase;
+import com.rcore.domain.auth.role.entity.RoleEntity;
+import com.rcore.domain.auth.role.exception.RoleNotFoundException;
+import com.rcore.domain.auth.role.usecases.FindRoleByIdUseCase;
+import com.rcore.domain.auth.role.usecases.FindRoleByNameUseCase;
 import com.rcore.domain.commons.usecase.AbstractUpdateUseCase;
 import com.rcore.domain.commons.usecase.model.IdInputValues;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
@@ -65,9 +65,13 @@ public class UpdateCredentialUseCase extends AbstractUpdateUseCase<CredentialEnt
 
         credentialEntity.setEmail(inputValues.getEmail());
         credentialEntity.setPhone(inputValues.getPhone());
-        credentialEntity.setRoles(inputValues.getRoles()
+        credentialEntity.setRoles(roles
                 .stream()
-                .map(role -> new CredentialEntity.Role(role.getRoleId(), role.getIsBlocked()))
+                .map(role -> new CredentialEntity.Role(
+                        role,
+                        findInputRole(inputValues.getRoles(), role)
+                                .map(CreateCredentialUseCase.InputValues.Role::getIsBlocked)
+                                .orElse(false)))
                 .collect(Collectors.toList()));
         credentialEntity.setStatus(inputValues.getStatus());
         credentialEntity.setUsername(inputValues.getUsername());
@@ -117,5 +121,12 @@ public class UpdateCredentialUseCase extends AbstractUpdateUseCase<CredentialEnt
 
         if (inputValues.getStatus() == null)
             throw new CredentialStatusIsRequiredException();
+    }
+
+    private Optional<CreateCredentialUseCase.InputValues.Role> findInputRole(List<CreateCredentialUseCase.InputValues.Role> inputRoles, RoleEntity roleEntity) {
+        return inputRoles
+                .stream()
+                .filter(inputRole -> inputRole.getName() == roleEntity.getName() || inputRole.getRoleId() == roleEntity.getId())
+                .findFirst();
     }
 }

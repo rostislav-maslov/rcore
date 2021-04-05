@@ -3,6 +3,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+    <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>com.github.rostislav-maslov.rcore</groupId>
         <artifactId>rcore</artifactId>
@@ -10,38 +12,11 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <modelVersion>4.0.0</modelVersion>
-
     <version>${revision}</version>
     <artifactId>rcore-commons</artifactId>
 
-    <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.12</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.9.12</version>
-            <scope>provided</scope>
-        </dependency>
-
-    </dependencies>
-
-    <name>${project.groupId}:${project.artifactId}</name>
+    <name>rcore-commons</name>
     <description>Commons component for Clean Arch apps</description>
-    <url>https://github.com/rostislav-maslov/rcore</url>
-    <licenses>
-        <license>
-            <name>MIT License</name>
-            <url>http://www.opensource.org/licenses/mit-license.php</url>
-        </license>
-    </licenses>
 
     <developers>
         <developer>
@@ -58,30 +33,11 @@
         </developer>
     </developers>
 
-    <scm>
-        <connection>scm:git:git://github.com/rostislav-maslov/rcore.git</connection>
-        <developerConnection>scm:git:ssh://github.com:rostislav-maslov/rcore.git</developerConnection>
-        <url>http://github.com/rostislav-maslov/rcore</url>
-    </scm>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <build>
-        <finalName>rcore-commons</finalName>
-
         <plugins>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -90,7 +46,7 @@
                         <include>**/*Tests.java</include>
                     </includes>
                 </configuration>
-                <version>2.10</version>
+                <version>3.0.0-M5</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -103,5 +59,13 @@
             </plugin>
         </plugins>
     </build>
+
+    <url>https://github.com/rostislav-maslov/rcore</url>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
 
 </project>

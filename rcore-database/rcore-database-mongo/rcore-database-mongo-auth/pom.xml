@@ -15,6 +15,7 @@
     <version>${revision}</version>
 
     <dependencies>
+
         <dependency>
             <groupId>com.github.rostislav-maslov.rcore</groupId>
             <artifactId>rcore-database-mongo-commons</artifactId>

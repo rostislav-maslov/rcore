@@ -6,16 +6,18 @@ import com.rcore.domain.auth.credential.exceptions.*;
 import com.rcore.domain.auth.credential.port.CredentialIdGenerator;
 import com.rcore.domain.auth.credential.port.CredentialRepository;
 import com.rcore.domain.auth.credential.port.PasswordCryptographer;
-import com.rcore.domain.role.entity.RoleEntity;
-import com.rcore.domain.role.exception.RoleNotFoundException;
-import com.rcore.domain.role.usecases.FindRoleByIdUseCase;
-import com.rcore.domain.role.usecases.FindRoleByNameUseCase;
+import com.rcore.domain.auth.role.entity.RoleEntity;
+import com.rcore.domain.auth.role.exception.RoleNotFoundException;
+import com.rcore.domain.auth.role.usecases.FindRoleByIdUseCase;
+import com.rcore.domain.auth.role.usecases.FindRoleByNameUseCase;
 import com.rcore.domain.commons.usecase.AbstractCreateUseCase;
-import com.rcore.domain.commons.usecase.AbstractFindByIdUseCase;
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.IdInputValues;
 import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
@@ -71,7 +73,7 @@ public class CreateCredentialUseCase extends AbstractCreateUseCase<CredentialEnt
         credentialEntity.setRoles(roles
                 .stream()
                 .map(role -> new CredentialEntity.Role(
-                        role.getId(),
+                        role,
                         //находим роль среди переданных, чтобы узнать флаг isBlocked
                         findInputRole(inputValues.getRoles(), role)
                                 .map(InputValues.Role::getIsBlocked)
