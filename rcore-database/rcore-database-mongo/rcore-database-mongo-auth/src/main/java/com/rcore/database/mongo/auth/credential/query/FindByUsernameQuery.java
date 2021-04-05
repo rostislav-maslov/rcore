@@ -11,6 +11,6 @@ public class FindByUsernameQuery implements ExampleQuery {
 
     @Override
     public Criteria getCriteria() {
-        return Criteria.where("username").regex(username, "i");
+        return Criteria.where("username").is(username);
     }
 }
