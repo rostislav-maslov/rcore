@@ -2,6 +2,7 @@ package com.rcore.domain.commons.usecase;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 /**
  * UseCase - это определенный тип. Он содержит в себе информацию о модели входящих и исходящих данных. Он имеет один метод - выполнить useCase
@@ -10,7 +11,13 @@ import javax.validation.Validator;
  */
 public abstract class UseCase<Input extends UseCase.InputValues, Output extends UseCase.OutputValues> {
 
-    protected final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+    protected static Validator validator;
+
+    public UseCase() {
+        ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+        validator = validatorFactory.getValidator();
+        validatorFactory.close();
+    }
 
     /**
      * Выполнение useCase
@@ -22,7 +29,10 @@ public abstract class UseCase<Input extends UseCase.InputValues, Output extends 
     /**
      * Описание входящих данных
      */
-    public interface InputValues {
+    public  interface InputValues {
+
+        default void validate() {
+        }
 
     }
 
