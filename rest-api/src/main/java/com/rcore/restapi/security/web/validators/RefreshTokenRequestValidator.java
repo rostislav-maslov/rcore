@@ -11,7 +11,7 @@ import org.springframework.util.StringUtils;
 public class RefreshTokenRequestValidator {
 
     public final UserNotExistApiException invalidToken = new UserNotExistApiException();
-    public final UnauthorizedRequestApiException expiredToken = new UnauthorizedRequestApiException("Ошибка доступа", "Пожалуйста, выполните вход повторно", "AUTH", "UNSUCCESSFUL_REFRESH");
+    public final UnauthorizedRequestApiException expiredToken = new UnauthorizedRequestApiException("Доступ запрещён", "Пожалуйста, выполните вход повторно", "AUTH", "UNSUCCESSFUL_REFRESH");
 
     public void validate(RefreshTokenRequest request) {
         if (!StringUtils.hasText(request.getRefreshToken()))

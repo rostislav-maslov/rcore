@@ -12,10 +12,7 @@ import com.rcore.adapter.domain.user.mapper.UserMapper;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.RefreshTokenIsExpiredException;
 import com.rcore.domain.user.config.UserConfig;
-import com.rcore.domain.user.exception.AdminUserIsExistException;
-import com.rcore.domain.user.exception.UserBlockedException;
-import com.rcore.domain.user.exception.UserWithPhoneAlreadyExistForUpdateException;
-import com.rcore.domain.user.exception.UserNotFoundException;
+import com.rcore.domain.user.exception.*;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
@@ -47,7 +44,7 @@ public class UserAllAdapter {
                 .map(userMapper::map);
     }
 
-    public TokenPairDTO authentication(String email, String password) throws UserNotFoundException, UserBlockedException, AuthenticationException {
+    public TokenPairDTO authentication(String email, String password) throws UserBlockedException, InvalidPasswordException, InvalidEmailException {
         return tokenPairMapper.map(userConfig.all.authenticationUseCase()
                 .authentication(email, password));
     }

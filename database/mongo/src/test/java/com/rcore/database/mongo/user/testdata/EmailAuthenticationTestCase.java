@@ -7,6 +7,8 @@ import com.rcore.database.mongo.user.usecase.AuthenticationTestData;
 import com.rcore.domain.token.entity.TokenPair;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.RefreshTokenCreationException;
+import com.rcore.domain.user.exception.InvalidEmailException;
+import com.rcore.domain.user.exception.InvalidPasswordException;
 import com.rcore.domain.user.exception.UserBlockedException;
 import com.rcore.domain.user.exception.UserNotFoundException;
 import org.junit.After;
@@ -31,7 +33,7 @@ public class EmailAuthenticationTestCase {
     }
 
     @Test
-    public void authentication() throws UserNotFoundException, UserBlockedException, AuthenticationException, RefreshTokenCreationException {
+    public void authentication() throws UserNotFoundException, UserBlockedException, InvalidPasswordException, InvalidEmailException {
         TokenPair tokenPair = testAppConfig.getUserConfig().all.authenticationUseCase().authentication("user1", "123");
 
         Assert.assertEquals(tokenPair.getAccessToken().getUserId(), "user1");

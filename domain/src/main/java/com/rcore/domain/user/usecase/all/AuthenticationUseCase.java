@@ -13,6 +13,8 @@ import com.rcore.domain.token.usecase.CreateAccessTokenUseCase;
 import com.rcore.domain.token.usecase.CreateRefreshTokenUseCase;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.entity.UserStatus;
+import com.rcore.domain.user.exception.InvalidEmailException;
+import com.rcore.domain.user.exception.InvalidPasswordException;
 import com.rcore.domain.user.exception.UserBlockedException;
 import com.rcore.domain.user.exception.UserNotFoundException;
 import com.rcore.domain.user.port.PasswordGenerator;
@@ -45,9 +47,9 @@ public class AuthenticationUseCase implements AuthenticationPort {
 
 
     @Override
-    public TokenPair authentication(String email, String password) throws UserNotFoundException, AuthenticationException, UserBlockedException {
+    public TokenPair authentication(String email, String password) throws UserBlockedException, InvalidPasswordException, InvalidEmailException {
         UserEntity userEntity = userRepository.findByEmail(email)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(InvalidEmailException::new);
 
         if (!passwordGenerator.check(userEntity.getId(), password, userEntity.getPassword())) {
 
@@ -55,7 +57,7 @@ public class AuthenticationUseCase implements AuthenticationPort {
             userEntity.setFails(userEntity.getFails() + 1);
             userRepository.save(userEntity);
 
-            throw new AuthenticationException();
+            throw new InvalidPasswordException();
         }
 
         if (!userEntity.getStatus().equals(UserStatus.ACTIVE)) {
