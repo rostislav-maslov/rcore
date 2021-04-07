@@ -32,6 +32,7 @@ public class AuthorizationByTokenUseCase implements AuthorizationPort {
         this.userRepository = userRepository;
     }
 
+    //TODO вырезать checkAccess из всех юзкейсов
     @Override
     public Boolean checkAccess(AccessTokenEntity accessToken, Set<Access> userAccesses) throws TokenExpiredException {
         if (LocalDateTime.now().isAfter(accessToken.getExpireAt()))
@@ -42,8 +43,8 @@ public class AuthorizationByTokenUseCase implements AuthorizationPort {
 
         if (!refreshTokenEntity.get().isActive()) return false;
 
-        if (!AccessTokenEntity.sign(accessToken.getId(), DateTimeUtils.getMillis(accessToken.getExpireAt()), refreshTokenEntity.get()).equals(accessToken.getSign()))
-            return false;
+//        if (!AccessTokenEntity.sign(accessToken.getId(), DateTimeUtils.getMillis(accessToken.getExpireAt()), refreshTokenEntity.get()).equals(accessToken.getSign()))
+//            return false;
 
         return true;
     }
