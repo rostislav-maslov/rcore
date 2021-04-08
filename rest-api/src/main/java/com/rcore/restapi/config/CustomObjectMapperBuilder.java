@@ -1,6 +1,7 @@
 package com.rcore.restapi.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.rcore.restapi.config.jackson.BooleanDeserializer;
 import com.rcore.restapi.config.jackson.LocalDateTimeDeserializer;
 import com.rcore.restapi.config.jackson.LocalDateTimeSerializer;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
@@ -16,6 +17,7 @@ public class CustomObjectMapperBuilder {
         builder.serializerByType(LocalDateTime.class, new LocalDateTimeSerializer());
         builder.serializationInclusion(JsonInclude.Include.NON_NULL);
         builder.deserializerByType(LocalDateTime.class, new LocalDateTimeDeserializer());
+        builder.deserializerByType(Boolean.class, new BooleanDeserializer());
         return builder;
     }
 }
