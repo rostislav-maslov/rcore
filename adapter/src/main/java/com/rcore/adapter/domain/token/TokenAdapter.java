@@ -2,6 +2,7 @@ package com.rcore.adapter.domain.token;
 
 import com.rcore.adapter.domain.role.mapper.RoleMapper;
 import com.rcore.adapter.domain.token.dto.AccessTokenDTO;
+import com.rcore.adapter.domain.token.dto.JWTDTO;
 import com.rcore.adapter.domain.token.dto.RefreshTokenDTO;
 import com.rcore.adapter.domain.token.mapper.AccessTokenMapper;
 import com.rcore.adapter.domain.token.mapper.RefreshTokenMapper;
@@ -14,7 +15,6 @@ import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.RefreshTokenCreationException;
-import com.rcore.domain.token.exception.RefreshTokenIsExpiredException;
 import com.rcore.domain.token.port.filters.AccessTokenFilters;
 import com.rcore.domain.token.port.filters.RefreshTokenFilters;
 import com.rcore.domain.user.exception.TokenExpiredException;
@@ -111,9 +111,11 @@ public class TokenAdapter {
                 .map(accessTokenMapper::map);
     }
 
-    public String findJWTByAccessId(String id) {
-        return tokenConfig.getAll().viewAccessTokenUseCase()
-                .findJWTById(id);
+    public JWTDTO findJWTByAccessId(String id) {
+        return JWTDTO.builder()
+                .jwtToken(tokenConfig.getAll().viewAccessTokenUseCase()
+                        .findJWTById(id))
+                .build();
     }
 
     public SearchResult<RefreshTokenDTO> findRefreshWithFilters(RefreshTokenFilters filters) {
@@ -138,9 +140,10 @@ public class TokenAdapter {
                 .map(refreshTokenMapper::map);
     }
 
-    public String findJWTByRefreshId(String id) {
-        return tokenConfig.getAll()
-                .viewRefreshTokenUseCase()
-                .findJWTById(id);
+    public JWTDTO findJWTByRefreshId(String id) {
+        return JWTDTO.builder()
+                .jwtToken(tokenConfig.getAll().viewRefreshTokenUseCase()
+                        .findJWTById(id))
+                .build();
     }
 }

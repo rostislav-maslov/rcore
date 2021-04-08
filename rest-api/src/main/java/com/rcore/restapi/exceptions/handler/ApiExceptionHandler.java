@@ -106,6 +106,12 @@ public class ApiExceptionHandler {
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {InvalidPasswordException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidPasswordException(InvalidPasswordException e) {
+        return ErrorApiResponse.of(new InvalidPasswordApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = {InvalidNewPasswordException.class})
     public ErrorApiResponse<List<ExceptionDTO>> handleInvalidNewPasswordException(InvalidNewPasswordException e) {
         return ErrorApiResponse.of(new InvalidNewPasswordApiException().getErrors());
@@ -160,6 +166,12 @@ public class ApiExceptionHandler {
     @ExceptionHandler(value = {InvalidEmailForCreateException.class})
     public ErrorApiResponse<List<ExceptionDTO>> handleInvalidEmailForCreateException(InvalidEmailForCreateException e) {
         return ErrorApiResponse.of(new InvalidEmailForCreateApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = {InvalidEmailException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleInvalidEmailException(InvalidEmailException e) {
+        return ErrorApiResponse.of(new InvalidEmailApiException().getErrors());
     }
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
