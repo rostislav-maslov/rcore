@@ -2,6 +2,7 @@ package com.rcore.domain.token.usecase;
 
 import com.rcore.commons.utils.DateTimeUtils;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
+import com.rcore.domain.token.entity.TokensLifeCycle;
 import com.rcore.domain.token.port.RefreshTokenIdGenerator;
 import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.domain.token.port.RefreshTokenStorage;
@@ -23,10 +24,11 @@ public class CreateRefreshTokenUseCase {
 
     private RefreshTokenEntity create(String userId, RefreshTokenEntity.CreateFrom createFrom, String refreshTokenId){
         RefreshTokenEntity refreshTokenEntity = new RefreshTokenEntity();
+        TokensLifeCycle tokensLifeCycle = TokensLifeCycle.getInstance(null, null);
 
         refreshTokenEntity.setId(this.idGenerator.generate());
         refreshTokenEntity.setUserId(userId);
-        refreshTokenEntity.setExpireAt(DateTimeUtils.fromMillis(DateTimeUtils.getNowMillis() + refreshTokenEntity.getExpireTimeRefreshToken()));
+        refreshTokenEntity.setExpireAt(DateTimeUtils.fromMillis(DateTimeUtils.getNowMillis() + tokensLifeCycle.getRefreshTokenLifeCycle()));
         refreshTokenEntity.setStatus(RefreshTokenEntity.Status.ACTIVE);
 
         refreshTokenEntity.setCreateFromTokenId(refreshTokenId);

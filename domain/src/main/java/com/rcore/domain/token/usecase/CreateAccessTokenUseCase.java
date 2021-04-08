@@ -3,6 +3,7 @@ package com.rcore.domain.token.usecase;
 import com.rcore.commons.utils.DateTimeUtils;
 import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
+import com.rcore.domain.token.entity.TokensLifeCycle;
 import com.rcore.domain.token.exception.RefreshTokenCreationException;
 import com.rcore.domain.token.port.AccessTokenIdGenerator;
 import com.rcore.domain.token.port.AccessTokenStorage;
@@ -27,12 +28,13 @@ public class CreateAccessTokenUseCase {
     }
 
     public AccessTokenEntity create(UserEntity userEntity, RefreshTokenEntity refreshTokenEntity) {
+        TokensLifeCycle tokensLifeCycle = TokensLifeCycle.getInstance(null, null);
         AccessTokenEntity accessTokenEntity = new AccessTokenEntity();
         accessTokenEntity.setId(idGenerator.generate());
         accessTokenEntity.setStatus(RefreshTokenEntity.Status.ACTIVE);
         accessTokenEntity.setUserId(refreshTokenEntity.getUserId());
         accessTokenEntity.setAccesses(userEntity.getAccesses());
-        accessTokenEntity.setExpireAt(DateTimeUtils.fromMillis(DateTimeUtils.getNowMillis() + refreshTokenEntity.getExpireTimeAccessToken()));
+        accessTokenEntity.setExpireAt(DateTimeUtils.fromMillis(DateTimeUtils.getNowMillis() + tokensLifeCycle.getAccessTokenLifeCycle()));
         accessTokenEntity.setCreateFromRefreshTokenId(refreshTokenEntity.getId());
 
         accessTokenEntity.setSign(AccessTokenEntity.sign(accessTokenEntity.getId(), DateTimeUtils.getMillis(accessTokenEntity.getExpireAt()), refreshTokenEntity));
