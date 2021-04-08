@@ -19,6 +19,9 @@ public class FindRefreshTokensWithFilters extends AbstractExampleQuery<RefreshTo
     @Override
     public Criteria getCriteria() {
         return new Criteria().andOperator(
+                StringUtils.hasText(query)
+                        ? Criteria.where("id").regex(this.query, "i")
+                        : new Criteria(),
                 StringUtils.hasText(filters.getUserId())
                         ? Criteria.where("userId").is(filters.getUserId())
                         : new Criteria(),
