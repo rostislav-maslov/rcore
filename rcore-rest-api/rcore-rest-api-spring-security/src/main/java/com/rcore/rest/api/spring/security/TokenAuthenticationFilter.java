@@ -1,5 +1,7 @@
 package com.rcore.rest.api.spring.security;
 
+import com.rcore.domain.security.model.AccessTokenData;
+import com.rcore.domain.security.port.TokenConverter;
 import com.rcore.rest.api.commons.header.WebHeaders;
 import com.rcore.rest.api.commons.routes.BaseRoutes;
 import com.rcore.rest.api.spring.security.exceptions.AuthenticationApiException;
@@ -22,7 +24,7 @@ import java.io.IOException;
 @Component
 public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    public TokenAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationFailureHandler authenticationFailureHandler) {
+    public TokenAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationFailureHandler authenticationFailureHandler, TokenConverter<AccessTokenData> accessTokenDataTokenConverter) {
         super(BaseRoutes.API + "/**");
         setAuthenticationManager(authenticationManager);
         setAuthenticationFailureHandler(authenticationFailureHandler);

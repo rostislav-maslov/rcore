@@ -36,13 +36,13 @@ public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
                         localDateTime.set(LocalDateTime.parse(str, dateTimeFormatter));
                         return;
                     } catch (Exception e) {
-                        log.error("Local date time serialize", e);
+                        log.debug("Local date time deserialize exception", e);
                     }
                 });
 
         if (localDateTime.get() != null)
             return localDateTime.get();
 
-        throw new IOException("Local date time serialize exception");
+        throw new IOException("Local date time deserialize exception");
     }
 }

@@ -1,11 +1,11 @@
 package com.rcore.domain.security.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class RefreshTokenData {
     private String id;
     private String credentialId;
+    private List<CredentialDetails.Role> roles;
     private LocalDateTime createdAt;
     private LocalDateTime expiredAt;
 }

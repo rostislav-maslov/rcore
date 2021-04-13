@@ -6,6 +6,7 @@ import com.rcore.domain.commons.port.dto.SearchResult;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,9 +15,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 
 public class FindCredentialsWithFiltersUseCaseTestInfrastructure {
 
-    protected static CredentialEntity credential = CredentialEntity.builder()
-            .id(UUID.randomUUID().toString())
-            .build();
+    protected final CredentialEntity credential;
 
     protected final CredentialRepository credentialRepository = Mockito.mock(CredentialRepository.class);
     protected final FindCredentialsWithFiltersUseCase findCredentialsWithFiltersUseCase = new FindCredentialsWithFiltersUseCase(credentialRepository);
@@ -24,6 +23,9 @@ public class FindCredentialsWithFiltersUseCaseTestInfrastructure {
 
     public FindCredentialsWithFiltersUseCaseTestInfrastructure() {
         initMocks();
+        CredentialEntity defaultCredential = new CredentialEntity();
+        defaultCredential.setId(UUID.randomUUID().toString());
+        this.credential = defaultCredential;
     }
 
     protected void initMocks() {

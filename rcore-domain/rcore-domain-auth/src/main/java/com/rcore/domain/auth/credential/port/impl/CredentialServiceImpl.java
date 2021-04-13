@@ -3,7 +3,7 @@ package com.rcore.domain.auth.credential.port.impl;
 import com.rcore.commons.utils.StringUtils;
 import com.rcore.domain.auth.credential.entity.CredentialEntity;
 import com.rcore.domain.auth.credential.port.CredentialRepository;
-import com.rcore.domain.role.port.RoleRepository;
+import com.rcore.domain.auth.role.port.RoleRepository;
 import com.rcore.domain.auth.token.entity.AccessTokenEntity;
 import com.rcore.domain.auth.token.port.AccessTokenRepository;
 import com.rcore.domain.security.exceptions.AuthenticatedCredentialIsBlockedException;
@@ -46,7 +46,7 @@ public class CredentialServiceImpl implements CredentialService {
             AccessTokenData tokenData = tokenConverter.parse(token);
 
             AccessTokenEntity accessTokenEntity = accessTokenRepository.findById(tokenData.getId())
-                    .orElseThrow(() -> new AuthenticationException());
+                    .orElseThrow(AuthenticationException::new);
 
             if (!accessTokenEntity.isActive())
                 throw new TokenIsExpiredException(accessTokenEntity.getId());
@@ -62,10 +62,10 @@ public class CredentialServiceImpl implements CredentialService {
         List<CredentialDetails.Role> roles = credentialEntity.getRoles()
                 .stream()
                 .filter(role -> !role.isBlocked())
-                .map(role -> roleRepository.findById(role.getRoleId()))
+                .map(role -> roleRepository.findById(role.getRole().getId()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .map(role -> new CredentialDetails.Role(role.getId(), role.getName(), role.getHasBoundlessAccess(), role.getAvailableUseCases()))
+                .map(role -> new CredentialDetails.Role(role.getName()))
                 .collect(Collectors.toList());
 
         return new CredentialDetails(credentialEntity.getId(), roles);

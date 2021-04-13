@@ -25,7 +25,6 @@
         <module>rcore-database-mongo-commons</module>
         <module>rcore-database-mongo-file</module>
         <module>rcore-database-mongo-picture</module>
-        <module>rcore-database-mongo-role</module>
         <module>rcore-database-mongo-event-driven</module>
     </modules>
 
@@ -59,6 +58,7 @@
             <groupId>de.flapdoodle.embed</groupId>
             <artifactId>de.flapdoodle.embed.mongo</artifactId>
             <version>2.2.0</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
