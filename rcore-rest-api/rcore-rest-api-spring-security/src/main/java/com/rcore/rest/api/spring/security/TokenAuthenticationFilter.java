@@ -1,7 +1,7 @@
 package com.rcore.rest.api.spring.security;
 
 import com.rcore.domain.security.model.AccessTokenData;
-import com.rcore.domain.security.port.TokenConverter;
+import com.rcore.domain.security.port.TokenGenerator;
 import com.rcore.rest.api.commons.header.WebHeaders;
 import com.rcore.rest.api.commons.routes.BaseRoutes;
 import com.rcore.rest.api.spring.security.exceptions.AuthenticationApiException;
@@ -24,7 +24,7 @@ import java.io.IOException;
 @Component
 public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    public TokenAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationFailureHandler authenticationFailureHandler, TokenConverter<AccessTokenData> accessTokenDataTokenConverter) {
+    public TokenAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationFailureHandler authenticationFailureHandler, TokenGenerator<AccessTokenData> accessTokenDataTokenGenerator) {
         super(BaseRoutes.API + "/**");
         setAuthenticationManager(authenticationManager);
         setAuthenticationFailureHandler(authenticationFailureHandler);
@@ -33,17 +33,16 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
     @Override
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
         try {
-            String token = httpServletRequest.getHeader(WebHeaders.X_AUTH_TOKEN);
+            var token = httpServletRequest.getHeader(WebHeaders.X_AUTH_TOKEN);
 
             if (token == null) {
-                TokenAuthentication authentication = new TokenAuthentication();
+                var authentication = new TokenAuthentication();
                 authentication.setAuthenticated(false);
                 return authentication;
             }
 
             TokenAuthentication tokenAuthentication = new TokenAuthentication(token);
-            Authentication authentication = getAuthenticationManager().authenticate(tokenAuthentication);
-            return authentication;
+            return getAuthenticationManager().authenticate(tokenAuthentication);
         } catch (Exception e) {
             log.error("Attempt authentication error", e);
             throw new AuthenticationApiException("Attempt authentication error", e);

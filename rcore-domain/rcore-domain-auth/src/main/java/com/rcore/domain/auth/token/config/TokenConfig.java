@@ -4,18 +4,18 @@ import com.rcore.domain.auth.credential.port.CredentialRepository;
 import com.rcore.domain.auth.token.port.*;
 import com.rcore.domain.auth.token.usecases.*;
 import com.rcore.domain.security.model.RefreshTokenData;
-import com.rcore.domain.security.port.TokenConverter;
+import com.rcore.domain.security.port.TokenParser;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class TokenConfig {
 
     private final AccessTokenRepository accessTokenRepository;
-    private final AccessTokenIdGenerator accessTokenIdGenerator;
+    private final AccessTokenIdGenerator<?> accessTokenIdGenerator;
     private final RefreshTokenRepository refreshTokenRepository;
-    private final RefreshTokenIdGenerator refreshTokenIdGenerator;
+    private final RefreshTokenIdGenerator<?> refreshTokenIdGenerator;
     private final TokenSaltGenerator tokenSaltGenerator;
-    private final TokenConverter<RefreshTokenData> tokenConverter;
+    private final TokenParser<RefreshTokenData> tokenParser;
     private final CredentialRepository credentialRepository;
 
     public CreateAccessTokenUseCase createAccessTokenUseCase() {
@@ -39,7 +39,7 @@ public class TokenConfig {
     }
 
     public RefreshAccessTokenUseCase refreshAccessTokenUseCase() {
-        return new RefreshAccessTokenUseCase(tokenConverter, credentialRepository, refreshTokenRepository, expireRefreshTokenUseCase(), createAccessTokenUseCase());
+        return new RefreshAccessTokenUseCase(tokenParser, credentialRepository, refreshTokenRepository, expireRefreshTokenUseCase(), createAccessTokenUseCase());
     }
 
 }

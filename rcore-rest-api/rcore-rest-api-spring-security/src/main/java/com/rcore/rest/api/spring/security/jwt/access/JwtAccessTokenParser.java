@@ -1,17 +1,15 @@
-package com.rcore.rest.api.spring.security.jwt;
+package com.rcore.rest.api.spring.security.jwt.access;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nimbusds.jose.*;
-import com.nimbusds.jose.crypto.MACSigner;
-import com.rcore.domain.security.exceptions.ConvertingTokenException;
+import com.nimbusds.jose.JWSObject;
 import com.rcore.domain.security.exceptions.InvalidTokenException;
 import com.rcore.domain.security.exceptions.ParsingTokenException;
 import com.rcore.domain.security.exceptions.TokenIsExpiredException;
 import com.rcore.domain.security.model.AccessTokenData;
-import com.rcore.domain.security.port.TokenConverter;
+import com.rcore.domain.security.port.TokenGenerator;
+import com.rcore.domain.security.port.TokenParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -21,27 +19,13 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @Component
 @Slf4j
-public class JwtAccessTokenConverter implements TokenConverter<AccessTokenData> {
-
-    @Value("${foodtechlab.security.jwt.secret}")
-    private String secret;
+public class JwtAccessTokenParser implements TokenParser<AccessTokenData> {
 
     private final ObjectMapper objectMapper;
+    private final TokenGenerator<AccessTokenData> accessTokenDataTokenGenerator;
 
     @Override
-    public String convert(AccessTokenData token) throws ConvertingTokenException {
-        try {
-            JWSObject jwsObject = new JWSObject(new JWSHeader(JWSAlgorithm.HS256), new Payload(objectMapper.writeValueAsString(token)));
-            jwsObject.sign(new MACSigner(secret));
-            return jwsObject.serialize();
-        } catch (Exception e) {
-            log.error("Access token data converting error", e);
-            throw new ConvertingTokenException();
-        }
-    }
-
-    @Override
-    public AccessTokenData parse(String token) throws ParsingTokenException {
+    public AccessTokenData parseWithValidating(String token) {
         try {
             validateStringToken(token);
 
@@ -53,12 +37,11 @@ public class JwtAccessTokenConverter implements TokenConverter<AccessTokenData> 
         }
     }
 
-    @Override
-    public void validateStringToken(String token) throws InvalidTokenException {
+    private void validateStringToken(String token) {
         try {
             JWSObject jwsObject = JWSObject.parse(token);
             AccessTokenData accessTokenData = objectMapper.readValue(jwsObject.getPayload().toString(), AccessTokenData.class);
-            String originalToken = convert(accessTokenData);
+            String originalToken = accessTokenDataTokenGenerator.generate(accessTokenData);
 
             if (!originalToken.equals(token))
                 throw new InvalidTokenException();
