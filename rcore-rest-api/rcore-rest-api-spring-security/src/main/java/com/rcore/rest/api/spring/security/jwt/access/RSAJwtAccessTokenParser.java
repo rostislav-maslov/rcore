@@ -53,6 +53,9 @@ public class RSAJwtAccessTokenParser implements TokenParser<AccessTokenData> {
                     .roles(objectMapper.readValue(signedJWT.getJWTClaimsSet().getClaim("roles").toString(), new TypeReference<List<CredentialDetails.Role>>() {}))
                     .build();
         } catch (Exception e) {
+            if (e instanceof TokenIsExpiredException)
+                throw (TokenIsExpiredException) e;
+
             log.error("Access token data parsing error", e);
             throw new ParsingTokenException();
         }

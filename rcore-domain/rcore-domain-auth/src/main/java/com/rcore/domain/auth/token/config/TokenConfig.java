@@ -17,13 +17,14 @@ public class TokenConfig {
     private final TokenSaltGenerator tokenSaltGenerator;
     private final TokenParser<RefreshTokenData> tokenParser;
     private final CredentialRepository credentialRepository;
+    private final TokenLifeCycleConfig tokenLifeCycleConfig;
 
     public CreateAccessTokenUseCase createAccessTokenUseCase() {
-        return new CreateAccessTokenUseCase(accessTokenRepository, accessTokenIdGenerator);
+        return new CreateAccessTokenUseCase(accessTokenRepository, accessTokenIdGenerator, tokenLifeCycleConfig);
     }
 
     public CreateRefreshTokenUseCase createRefreshTokenUseCase() {
-        return new CreateRefreshTokenUseCase(refreshTokenRepository, refreshTokenIdGenerator, tokenSaltGenerator);
+        return new CreateRefreshTokenUseCase(refreshTokenRepository, refreshTokenIdGenerator, tokenSaltGenerator, tokenLifeCycleConfig);
     }
 
     public DeactivateAccessTokensByRefreshToken deactivateAccessTokensByRefreshToken() {

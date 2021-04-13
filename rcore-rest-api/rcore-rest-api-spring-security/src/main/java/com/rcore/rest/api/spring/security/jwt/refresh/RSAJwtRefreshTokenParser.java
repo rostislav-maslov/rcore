@@ -52,6 +52,9 @@ public class RSAJwtRefreshTokenParser implements TokenParser<RefreshTokenData> {
                     .roles(objectMapper.readValue(signedJWT.getJWTClaimsSet().getClaim("roles").toString(), new TypeReference<List<CredentialDetails.Role>>() {}))
                     .build();
         } catch (Exception e) {
+            if (e instanceof TokenIsExpiredException)
+                throw (TokenIsExpiredException) e;
+
             log.error("Refresh token data parsing error", e);
             throw new ParsingTokenException();
         }

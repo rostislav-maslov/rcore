@@ -9,8 +9,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Getter
-@ToString
+@Data
 public class AccessTokenData {
     private String id;
     private String credentialId;

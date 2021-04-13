@@ -1,9 +1,6 @@
 package com.rcore.domain.security.model;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +27,7 @@ public class CredentialDetails {
     @EqualsAndHashCode
     @AllArgsConstructor
     @NoArgsConstructor
-    @Getter
+    @Data
     public static class Role {
         private String name;
     }

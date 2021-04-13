@@ -18,7 +18,7 @@ public class CredentialIdentityServiceWithoutStorage implements CredentialIdenti
 
     @Override
     public CredentialDetails getCredentialByToken(String token) throws AuthenticatedCredentialIsBlockedException, CredentialNotFoundException, ParsingTokenException, TokenIsExpiredException {
-        if (StringUtils.hasText(token))
+        if (!StringUtils.hasText(token))
             throw new AuthenticationException();
 
         AccessTokenData accessTokenData = tokenParser.parseWithValidating(token);

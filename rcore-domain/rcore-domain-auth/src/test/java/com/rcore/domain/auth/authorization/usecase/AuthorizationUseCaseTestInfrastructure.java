@@ -18,6 +18,7 @@ import com.rcore.domain.auth.credential.usecases.FindCredentialByIdUseCase;
 import com.rcore.domain.auth.credential.usecases.FindCredentialByPhoneUseCase;
 import com.rcore.domain.auth.role.entity.RoleEntity;
 import com.rcore.domain.auth.role.port.RoleRepository;
+import com.rcore.domain.auth.token.config.TokenLifeCycleConfig;
 import com.rcore.domain.auth.token.entity.AccessTokenEntity;
 import com.rcore.domain.auth.token.entity.RefreshTokenEntity;
 import com.rcore.domain.auth.token.port.*;
@@ -59,7 +60,7 @@ public class AuthorizationUseCaseTestInfrastructure {
     protected final TokenParser<RefreshTokenData> refreshTokenDataTokenGenerator = Mockito.mock(TokenParser.class);
     protected final RoleRepository roleRepository = Mockito.mock(RoleRepository.class);
     protected final FindCredentialByIdUseCase findCredentialByIdUseCase = new FindCredentialByIdUseCase(credentialRepository);
-    protected final CreateAccessTokenUseCase createAccessTokenUseCase = new CreateAccessTokenUseCase(accessTokenRepository, accessTokenIdGenerator);
+    protected final CreateAccessTokenUseCase createAccessTokenUseCase = new CreateAccessTokenUseCase(accessTokenRepository, accessTokenIdGenerator, new TokenLifeCycleConfig());
     protected final CreateConfirmationCodeUseCase createConfirmationCodeUseCase = new CreateConfirmationCodeUseCase(confirmationCodeRepository, confirmationCodeIdGenerator, confirmationCodeGenerator);
     protected final FindCredentialByPhoneUseCase findCredentialByPhoneUseCase = new FindCredentialByPhoneUseCase(credentialRepository);
     protected final FindCredentialByEmailUseCase findCredentialByEmailUseCase = new FindCredentialByEmailUseCase(credentialRepository);
@@ -72,7 +73,7 @@ public class AuthorizationUseCaseTestInfrastructure {
 
     public AuthorizationUseCaseTestInfrastructure() {
 
-        CreateRefreshTokenUseCase createRefreshTokenUseCase = new CreateRefreshTokenUseCase(refreshTokenRepository, refreshTokenIdGenerator, tokenSaltGenerator);
+        CreateRefreshTokenUseCase createRefreshTokenUseCase = new CreateRefreshTokenUseCase(refreshTokenRepository, refreshTokenIdGenerator, tokenSaltGenerator, new TokenLifeCycleConfig());
 
         this.authorizationConfig = new AuthorizationConfig(
                 authorizationRepository,

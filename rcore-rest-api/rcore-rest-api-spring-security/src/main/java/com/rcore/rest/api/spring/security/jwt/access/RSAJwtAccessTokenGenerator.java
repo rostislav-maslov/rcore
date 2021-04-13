@@ -10,11 +10,14 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.rcore.domain.security.exceptions.ConvertingTokenException;
 import com.rcore.domain.security.model.AccessTokenData;
+import com.rcore.domain.security.model.CredentialDetails;
 import com.rcore.domain.security.port.TokenGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Slf4j
