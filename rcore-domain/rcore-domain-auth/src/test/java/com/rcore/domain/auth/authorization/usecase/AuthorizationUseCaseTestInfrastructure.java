@@ -27,7 +27,7 @@ import com.rcore.domain.auth.token.usecases.CreateRefreshTokenUseCase;
 import com.rcore.domain.security.model.AccessTokenData;
 import com.rcore.domain.security.model.CredentialDetails;
 import com.rcore.domain.security.model.RefreshTokenData;
-import com.rcore.domain.security.port.TokenConverter;
+import com.rcore.domain.security.port.TokenGenerator;
 import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
@@ -54,8 +54,8 @@ public class AuthorizationUseCaseTestInfrastructure {
     protected final ConfirmationCodeIdGenerator confirmationCodeIdGenerator = Mockito.mock(ConfirmationCodeIdGenerator.class);
     protected final ConfirmationCodeGenerator confirmationCodeGenerator = Mockito.mock(ConfirmationCodeGenerator.class);
     protected final SessionTokenService sessionTokenService = Mockito.mock(SessionTokenService.class);
-    protected final TokenConverter<AccessTokenData> accessTokenDataTokenConverter = Mockito.mock(TokenConverter.class);
-    protected final TokenConverter<RefreshTokenData> refreshTokenDataTokenConverter = Mockito.mock(TokenConverter.class);
+    protected final TokenGenerator<AccessTokenData> accessTokenDataTokenGenerator = Mockito.mock(TokenGenerator.class);
+    protected final TokenGenerator<RefreshTokenData> refreshTokenDataTokenGenerator = Mockito.mock(TokenGenerator.class);
     protected final RoleRepository roleRepository = Mockito.mock(RoleRepository.class);
     protected final FindCredentialByIdUseCase findCredentialByIdUseCase = new FindCredentialByIdUseCase(credentialRepository);
     protected final CreateAccessTokenUseCase createAccessTokenUseCase = new CreateAccessTokenUseCase(accessTokenRepository, accessTokenIdGenerator);
@@ -83,7 +83,7 @@ public class AuthorizationUseCaseTestInfrastructure {
                 createConfirmationCodeUseCase,
                 findCredentialByPhoneUseCase,
                 findCredentialByEmailUseCase,
-                accessTokenDataTokenConverter,
+                accessTokenDataTokenGenerator,
                 accessTokenRepository,
                 refreshTokenRepository,
                 credentialRepository,
@@ -165,16 +165,16 @@ public class AuthorizationUseCaseTestInfrastructure {
     }
 
     private void initTokenConverterMocks() {
-        Mockito.when(accessTokenDataTokenConverter.convert(any(AccessTokenData.class)))
+        Mockito.when(accessTokenDataTokenGenerator.generate(any(AccessTokenData.class)))
                 .then(a -> UUID.randomUUID().toString());
 
-        Mockito.when(accessTokenDataTokenConverter.parse(anyString()))
+        Mockito.when(accessTokenDataTokenGenerator.parse(anyString()))
                 .then(a -> new AccessTokenData(UUID.randomUUID().toString(), authorizedCredential.getId(), Arrays.asList(new CredentialDetails.Role("ADMIN")), LocalDateTime.now(), LocalDateTime.now().plusDays(1)));
 
-        Mockito.when(refreshTokenDataTokenConverter.convert(any(RefreshTokenData.class)))
+        Mockito.when(refreshTokenDataTokenGenerator.generate(any(RefreshTokenData.class)))
                 .then(a -> UUID.randomUUID().toString());
 
-        Mockito.when(refreshTokenDataTokenConverter.parse(anyString()))
+        Mockito.when(refreshTokenDataTokenGenerator.parse(anyString()))
                 .then(a -> new RefreshTokenData(UUID.randomUUID().toString(), authorizedCredential.getId(), Arrays.asList(new CredentialDetails.Role("ADMIN")), LocalDateTime.now(), LocalDateTime.now().plusDays(1)));
     }
 

@@ -6,20 +6,20 @@ import com.rcore.domain.auth.token.port.AccessTokenRepository;
 import com.rcore.domain.auth.token.port.RefreshTokenRepository;
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.security.model.AccessTokenData;
-import com.rcore.domain.security.port.TokenConverter;
+import com.rcore.domain.security.port.TokenGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 @RequiredArgsConstructor
 public class LogoutUseCase extends UseCase<LogoutUseCase.InputValues, LogoutUseCase.OutputValues> {
 
-    private final TokenConverter<AccessTokenData> tokenConverter;
+    private final TokenGenerator<AccessTokenData> tokenGenerator;
     private final RefreshTokenRepository refreshTokenRepository;
     private final AccessTokenRepository accessTokenRepository;
 
     @Override
     public OutputValues execute(InputValues inputValues) {
-        AccessTokenData accessToken = tokenConverter.parse(inputValues.getAccessToken());
+        AccessTokenData accessToken = tokenGenerator.parse(inputValues.getAccessToken());
         AccessTokenEntity accessTokenEntity = accessTokenRepository.findById(accessToken.getId())
                 .orElseThrow(() -> new AccessTokenNotFoundException(accessToken.getId()));
 

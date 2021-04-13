@@ -12,14 +12,14 @@ import com.rcore.domain.auth.token.port.RefreshTokenRepository;
 import com.rcore.domain.commons.usecase.UseCase;
 import com.rcore.domain.commons.usecase.model.IdInputValues;
 import com.rcore.domain.security.model.RefreshTokenData;
-import com.rcore.domain.security.port.TokenConverter;
+import com.rcore.domain.security.port.TokenGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 @RequiredArgsConstructor
 public class RefreshAccessTokenUseCase extends UseCase<RefreshAccessTokenUseCase.InputValues, RefreshAccessTokenUseCase.OutputValues> {
 
-    private final TokenConverter<RefreshTokenData> tokenConverter;
+    private final TokenGenerator<RefreshTokenData> tokenGenerator;
     private final CredentialRepository credentialRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final ExpireRefreshTokenUseCase expireRefreshTokenUseCase;
@@ -28,7 +28,7 @@ public class RefreshAccessTokenUseCase extends UseCase<RefreshAccessTokenUseCase
     @Override
     public OutputValues execute(InputValues inputValues) {
 
-        RefreshTokenData refreshTokenData = tokenConverter.parse(inputValues.getRefreshToken());
+        RefreshTokenData refreshTokenData = tokenGenerator.parse(inputValues.getRefreshToken());
 
         RefreshTokenEntity refreshTokenEntity = refreshTokenRepository.findById(refreshTokenData.getId())
                 .orElseThrow(() -> new RefreshTokenNotFoundException(refreshTokenData.getId()));

@@ -13,7 +13,7 @@ import com.rcore.domain.security.exceptions.TokenIsExpiredException;
 import com.rcore.domain.security.model.CredentialDetails;
 import com.rcore.domain.security.model.AccessTokenData;
 import com.rcore.domain.security.port.CredentialService;
-import com.rcore.domain.security.port.TokenConverter;
+import com.rcore.domain.security.port.TokenGenerator;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public class CredentialServiceImpl implements CredentialService {
 
     private final CredentialRepository credentialRepository;
-    private final TokenConverter<AccessTokenData> tokenConverter;
+    private final TokenGenerator<AccessTokenData> tokenGenerator;
     private final RoleRepository roleRepository;
     private final AccessTokenRepository accessTokenRepository;
 
@@ -43,7 +43,7 @@ public class CredentialServiceImpl implements CredentialService {
     @Override
     public CredentialDetails getCredentialByToken(String token) throws CredentialNotFoundException {
         if (StringUtils.hasText(token)) {
-            AccessTokenData tokenData = tokenConverter.parse(token);
+            AccessTokenData tokenData = tokenGenerator.parse(token);
 
             AccessTokenEntity accessTokenEntity = accessTokenRepository.findById(tokenData.getId())
                     .orElseThrow(AuthenticationException::new);
