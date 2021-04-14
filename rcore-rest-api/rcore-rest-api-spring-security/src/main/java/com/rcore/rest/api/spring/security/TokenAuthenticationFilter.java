@@ -21,10 +21,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
-@Component
 public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    public TokenAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationFailureHandler authenticationFailureHandler, TokenGenerator<AccessTokenData> accessTokenDataTokenGenerator) {
+    public TokenAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationFailureHandler authenticationFailureHandler) {
         super(BaseRoutes.API + "/**");
         setAuthenticationManager(authenticationManager);
         setAuthenticationFailureHandler(authenticationFailureHandler);
