@@ -41,7 +41,7 @@ public class ExpireTokenUseCase {
         //Ищем переданный аксесс в бд
         AccessTokenEntity accessToken = accessTokenStorage.findById(accessTokenEntity.getId())
                 .orElseThrow(AuthenticationException::new);
-        if (!accessToken.getStatus().equals(RefreshTokenEntity.Status.ACTIVE))
+        if (!accessToken.getStatus().equals(RefreshTokenEntity.Status.ACTIVE) && !accessToken.isActive())
             throw new TokenExpiredException();
 
         refreshTokenStorage.findById(accessToken.getCreateFromRefreshTokenId())
