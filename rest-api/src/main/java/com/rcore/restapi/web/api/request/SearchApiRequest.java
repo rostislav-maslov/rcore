@@ -1,6 +1,7 @@
 package com.rcore.restapi.web.api.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.rcore.domain.base.port.DirectionEnum;
 import com.rcore.domain.base.port.SearchRequest;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -30,7 +31,7 @@ public class SearchApiRequest {
     private String sortName = "id";
 
     @ApiModelProperty("Направление сортировки")
-    protected String sortDirection = "DESC";
+    protected DirectionEnum sortDirection = DirectionEnum.DESC;
 
     public SearchApiRequest(String query) {
         this.query = query;
