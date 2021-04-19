@@ -14,5 +14,5 @@ public class SearchRequest {
     private Long limit;
     private Long offset;
     private String sortName;
-    private String sortDirection = "DESC";
+    private DirectionEnum sortDirection = DirectionEnum.DESC;
 }
