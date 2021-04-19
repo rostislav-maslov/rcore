@@ -28,7 +28,7 @@ public abstract class AbstractExampleQuery<Entity extends BaseEntity> implements
         this.limit = Optional.ofNullable(request.getLimit()).orElse(20l);
         this.offset = Optional.ofNullable(request.getOffset()).orElse(0l);
         this.sortName = Optional.ofNullable(request.getSortName()).orElse("_id");
-        this.sortDirection = Optional.ofNullable(request.getSortDirection()).map(Sort.Direction::fromString).orElse(Sort.Direction.DESC);
+        this.sortDirection = Optional.ofNullable(request.getSortDirection()).map(sort -> Sort.Direction.fromString(sort.name())).orElse(Sort.Direction.DESC);
         this.sort = Sort.by(sortDirection, sortName);
     }
 
