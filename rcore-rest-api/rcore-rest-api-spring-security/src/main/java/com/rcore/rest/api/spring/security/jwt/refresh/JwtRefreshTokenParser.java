@@ -1,21 +1,15 @@
-package com.rcore.rest.api.spring.security.jwt;
+package com.rcore.rest.api.spring.security.jwt.refresh;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nimbusds.jose.JWSAlgorithm;
-import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSObject;
-import com.nimbusds.jose.Payload;
-import com.nimbusds.jose.crypto.MACSigner;
-import com.rcore.domain.security.exceptions.ConvertingTokenException;
 import com.rcore.domain.security.exceptions.InvalidTokenException;
 import com.rcore.domain.security.exceptions.ParsingTokenException;
 import com.rcore.domain.security.exceptions.TokenIsExpiredException;
-import com.rcore.domain.security.model.AccessTokenData;
 import com.rcore.domain.security.model.RefreshTokenData;
-import com.rcore.domain.security.port.TokenConverter;
+import com.rcore.domain.security.port.TokenGenerator;
+import com.rcore.domain.security.port.TokenParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -23,29 +17,15 @@ import java.text.ParseException;
 import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
-@Slf4j
 @Component
-public class JwtRefreshTokenConverter implements TokenConverter<RefreshTokenData> {
-
-    @Value("${foodtechlab.security.jwt.secret}")
-    private String secret;
+@Slf4j
+public class JwtRefreshTokenParser implements TokenParser<RefreshTokenData> {
 
     private final ObjectMapper objectMapper;
+    private final TokenGenerator<RefreshTokenData> refreshTokenDataTokenGenerator;
 
     @Override
-    public String convert(RefreshTokenData token) throws ConvertingTokenException {
-        try {
-            JWSObject jwsObject = new JWSObject(new JWSHeader(JWSAlgorithm.HS256), new Payload(objectMapper.writeValueAsString(token)));
-            jwsObject.sign(new MACSigner(secret));
-            return jwsObject.serialize();
-        } catch (Exception e) {
-            log.error("Refresh token data converting error", e);
-            throw new ConvertingTokenException();
-        }
-    }
-
-    @Override
-    public RefreshTokenData parse(String token) throws ParsingTokenException {
+    public RefreshTokenData parseWithValidating(String token) {
         try {
             validateStringToken(token);
 
@@ -57,12 +37,11 @@ public class JwtRefreshTokenConverter implements TokenConverter<RefreshTokenData
         }
     }
 
-    @Override
-    public void validateStringToken(String token) throws InvalidTokenException {
+    private void validateStringToken(String token) {
         try {
             JWSObject jwsObject = JWSObject.parse(token);
             RefreshTokenData refreshTokenData = objectMapper.readValue(jwsObject.getPayload().toString(), RefreshTokenData.class);
-            String originalToken = convert(refreshTokenData);
+            String originalToken = refreshTokenDataTokenGenerator.generate(refreshTokenData);
 
             if (!originalToken.equals(token))
                 throw new InvalidTokenException();
@@ -73,5 +52,6 @@ public class JwtRefreshTokenConverter implements TokenConverter<RefreshTokenData
         } catch (Exception e) {
             throw new InvalidTokenException();
         }
+
     }
 }

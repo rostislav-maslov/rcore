@@ -30,8 +30,6 @@ public class RefreshTokenEntity extends BaseEntity<String> {
     }
 
     protected CredentialEntity credential;
-    protected Long expireTimeRefreshToken = 365 * 24 * 60 * 60 * 1000l;
-    protected Long expireTimeAccessToken = 1 * 24 * 60 * 60 * 1000l;
 
     protected LocalDateTime expireAt = LocalDateTime.now();
     protected Status status = Status.ACTIVE;
@@ -42,10 +40,8 @@ public class RefreshTokenEntity extends BaseEntity<String> {
     protected String salt;
 
     public Boolean isActive() {
-        if (status.equals(Status.ACTIVE) == false) return false;
-        if (LocalDateTime.now().isAfter(expireAt)) return false;
-
-        return true;
+        if (!status.equals(Status.ACTIVE)) return false;
+        return !LocalDateTime.now().isAfter(expireAt);
     }
 
     public void deactivate() {

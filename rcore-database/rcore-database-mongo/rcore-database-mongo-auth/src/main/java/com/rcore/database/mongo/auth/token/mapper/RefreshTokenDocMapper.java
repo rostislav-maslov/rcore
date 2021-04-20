@@ -32,8 +32,6 @@ public class RefreshTokenDocMapper implements ExampleDataMapper<RefreshTokenEnti
                         .map(credentialDocMapper::map)
                         .orElse(null))
                 .expireAt(refreshTokenEntity.getExpireAt())
-                .expireTimeAccessToken(refreshTokenEntity.getExpireTimeAccessToken())
-                .expireTimeRefreshToken(refreshTokenEntity.getExpireTimeRefreshToken())
                 .build();
     }
 
@@ -51,8 +49,6 @@ public class RefreshTokenDocMapper implements ExampleDataMapper<RefreshTokenEnti
                 .map(credentialDocMapper::inverseMap)
                 .orElse(null));
         entity.setExpireAt(refreshTokenDoc.getExpireAt());
-        entity.setExpireTimeAccessToken(refreshTokenDoc.getExpireTimeAccessToken());
-        entity.setExpireTimeRefreshToken(refreshTokenDoc.getExpireTimeRefreshToken());
         return entity;
     }
 }

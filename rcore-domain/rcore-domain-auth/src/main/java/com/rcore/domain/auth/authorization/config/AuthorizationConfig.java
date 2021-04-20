@@ -12,19 +12,17 @@ import com.rcore.domain.auth.credential.usecases.FindCredentialByIdUseCase;
 import com.rcore.domain.auth.credential.usecases.FindCredentialByPhoneUseCase;
 import com.rcore.domain.auth.token.port.AccessTokenRepository;
 import com.rcore.domain.auth.token.port.RefreshTokenRepository;
-import com.rcore.domain.auth.token.port.SessionTokenService;
 import com.rcore.domain.auth.token.usecases.CreateAccessTokenUseCase;
 import com.rcore.domain.auth.token.usecases.CreateRefreshTokenUseCase;
 import com.rcore.domain.security.model.AccessTokenData;
-import com.rcore.domain.security.model.RefreshTokenData;
-import com.rcore.domain.security.port.TokenConverter;
+import com.rcore.domain.security.port.TokenParser;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class AuthorizationConfig {
 
     private final AuthorizationRepository authorizationRepository;
-    private final AuthorizationIdGenerator authorizationIdGenerator;
+    private final AuthorizationIdGenerator<?> authorizationIdGenerator;
     private final ConfirmationCodeRepository confirmationCodeRepository;
     private final FindCredentialByIdUseCase findCredentialByIdUseCase;
     private final CreateAccessTokenUseCase createAccessTokenUseCase;
@@ -32,7 +30,7 @@ public class AuthorizationConfig {
     private final CreateConfirmationCodeUseCase createConfirmationCodeUseCase;
     private final FindCredentialByPhoneUseCase findCredentialByPhoneUseCase;
     private final FindCredentialByEmailUseCase findCredentialByEmailUseCase;
-    private final TokenConverter<AccessTokenData> tokenConverter;
+    private final TokenParser<AccessTokenData> tokenParser;
     private final AccessTokenRepository accessTokenRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final CredentialRepository credentialRepository;
@@ -68,7 +66,7 @@ public class AuthorizationConfig {
 
     public LogoutUseCase logoutUseCase() {
         return new LogoutUseCase(
-                tokenConverter,
+                tokenParser,
                 refreshTokenRepository,
                 accessTokenRepository
         );
