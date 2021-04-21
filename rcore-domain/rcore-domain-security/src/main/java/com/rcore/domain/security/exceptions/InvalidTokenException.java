@@ -1,4 +1,10 @@
 package com.rcore.domain.security.exceptions;
 
-public class InvalidTokenException extends RuntimeException {
+import com.rcore.domain.commons.exception.DomainException;
+
+public class InvalidTokenException extends DomainException {
+
+    public InvalidTokenException() {
+        super("Token has bean modified");
+    }
 }

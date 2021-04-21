@@ -1,4 +1,10 @@
 package com.rcore.domain.security.exceptions;
 
-public class ParsingTokenException extends RuntimeException {
+import com.rcore.domain.commons.exception.DomainException;
+
+public class ParsingTokenException extends DomainException {
+
+    public ParsingTokenException() {
+        super("Invalid token format");
+    }
 }

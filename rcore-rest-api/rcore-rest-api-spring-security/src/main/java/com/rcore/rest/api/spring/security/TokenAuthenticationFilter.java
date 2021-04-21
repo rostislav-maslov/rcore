@@ -1,7 +1,7 @@
 package com.rcore.rest.api.spring.security;
 
-import com.rcore.domain.security.model.AccessTokenData;
-import com.rcore.domain.security.port.TokenGenerator;
+import com.rcore.commons.utils.StringUtils;
+import com.rcore.domain.security.exceptions.TokenIsRequiredException;
 import com.rcore.rest.api.commons.header.WebHeaders;
 import com.rcore.rest.api.commons.routes.BaseRoutes;
 import com.rcore.rest.api.spring.security.exceptions.AuthenticationApiException;
@@ -12,7 +12,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -34,11 +33,8 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
         try {
             var token = httpServletRequest.getHeader(WebHeaders.X_AUTH_TOKEN);
 
-            if (token == null) {
-                var authentication = new TokenAuthentication();
-                authentication.setAuthenticated(false);
-                return authentication;
-            }
+            if (!StringUtils.hasText(token))
+                throw new TokenIsRequiredException();
 
             TokenAuthentication tokenAuthentication = new TokenAuthentication(token);
             return getAuthenticationManager().authenticate(tokenAuthentication);

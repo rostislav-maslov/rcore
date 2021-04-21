@@ -2,11 +2,14 @@ package com.rcore.rest.api.spring.security.jwt.access;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.shaded.json.parser.ParseException;
 import com.nimbusds.jwt.SignedJWT;
+import com.rcore.domain.commons.exception.DomainException;
 import com.rcore.domain.security.exceptions.InvalidTokenException;
 import com.rcore.domain.security.exceptions.ParsingTokenException;
 import com.rcore.domain.security.exceptions.TokenIsExpiredException;
@@ -50,12 +53,12 @@ public class RSAJwtAccessTokenParser implements TokenParser<AccessTokenData> {
                     .credentialId(signedJWT.getJWTClaimsSet().getClaim("credentialId").toString())
                     .expiredAt(expiredAt)
                     .createdAt(LocalDateTime.parse(signedJWT.getJWTClaimsSet().getClaim("createdAt").toString(), dateTimeFormatter))
-                    .roles(objectMapper.readValue(signedJWT.getJWTClaimsSet().getClaim("roles").toString(), new TypeReference<List<CredentialDetails.Role>>() {}))
+                    .roles(objectMapper.readValue(signedJWT.getJWTClaimsSet().getClaim("roles").toString(), new TypeReference<List<CredentialDetails.Role>>() {
+                    }))
                     .build();
+        } catch (DomainException domainException) {
+            throw domainException;
         } catch (Exception e) {
-            if (e instanceof TokenIsExpiredException)
-                throw (TokenIsExpiredException) e;
-
             log.error("Access token data parsing error", e);
             throw new ParsingTokenException();
         }

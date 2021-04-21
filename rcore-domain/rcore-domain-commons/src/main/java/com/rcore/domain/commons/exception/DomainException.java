@@ -2,10 +2,15 @@ package com.rcore.domain.commons.exception;
 
 import lombok.Getter;
 
+import java.util.UUID;
+
 public class DomainException extends RuntimeException {
 
     @Getter
     private String domain;
+
+    @Getter
+    private UUID traceId = UUID.randomUUID();
 
     public DomainException(String message) {
         super(message);

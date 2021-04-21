@@ -1,8 +1,6 @@
 package com.rcore.domain.auth.passwordRecovery.exceptions;
 
-import com.rcore.domain.commons.exception.DomainException;
-
-public class PasswordRecoveryNotFoundException extends DomainException {
+public class PasswordRecoveryNotFoundException extends PasswordRecoveryDomainException {
 
     public PasswordRecoveryNotFoundException() {
         super("Password recovery not found");

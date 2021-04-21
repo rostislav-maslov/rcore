@@ -1,12 +1,14 @@
 package com.rcore.event.driven;
 
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
 /**
  * Default event dispatcher
  */
+@Slf4j
 @NoArgsConstructor
 public class DefaultEventDispatcher extends EventDispatcher {
     protected final Map<Class<? extends Event>, List<EventHandler<? extends Event>>> handlers = new HashMap<>();
@@ -29,7 +31,7 @@ public class DefaultEventDispatcher extends EventDispatcher {
             if (handlerBeenRegistered)
                 registeredHandlersForEvent.add(handler);
         } else
-            handlers.put(eventType, new ArrayList<>(Arrays.asList(handler)));
+            handlers.put(eventType, new ArrayList<>(Collections.singletonList(handler)));
     }
 
     @Override
@@ -40,7 +42,10 @@ public class DefaultEventDispatcher extends EventDispatcher {
         List<EventHandler<? extends Event>> targetEventHandlers = Objects.requireNonNullElse(handlers.get(event.getClass()), new ArrayList<>());
 
         targetEventHandlers
-                .forEach(handler ->
-                        ((EventHandler<E>) handler).onEvent(event));
+                .forEach(handler -> {
+                    ((EventHandler<E>) handler).onEvent(event);
+                    log.debug("Event {} dispatched to handler {} ", event.getType(), handler.toString());
+                });
+
     }
 }

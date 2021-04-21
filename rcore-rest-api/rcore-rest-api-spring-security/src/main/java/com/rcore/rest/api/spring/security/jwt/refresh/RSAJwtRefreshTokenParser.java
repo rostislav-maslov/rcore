@@ -7,6 +7,7 @@ import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.SignedJWT;
+import com.rcore.domain.commons.exception.DomainException;
 import com.rcore.domain.security.exceptions.InvalidTokenException;
 import com.rcore.domain.security.exceptions.ParsingTokenException;
 import com.rcore.domain.security.exceptions.TokenIsExpiredException;
@@ -49,13 +50,13 @@ public class RSAJwtRefreshTokenParser implements TokenParser<RefreshTokenData> {
                     .credentialId(signedJWT.getJWTClaimsSet().getClaim("credentialId").toString())
                     .expiredAt(expiredAt)
                     .createdAt(LocalDateTime.parse(signedJWT.getJWTClaimsSet().getClaim("createdAt").toString(), dateTimeFormatter))
-                    .roles(objectMapper.readValue(signedJWT.getJWTClaimsSet().getClaim("roles").toString(), new TypeReference<List<CredentialDetails.Role>>() {}))
+                    .roles(objectMapper.readValue(signedJWT.getJWTClaimsSet().getClaim("roles").toString(), new TypeReference<List<CredentialDetails.Role>>() {
+                    }))
                     .build();
+        } catch (DomainException domainException) {
+            throw domainException;
         } catch (Exception e) {
-            if (e instanceof TokenIsExpiredException)
-                throw (TokenIsExpiredException) e;
-
-            log.error("Refresh token data parsing error", e);
+            log.error("Access token data parsing error", e);
             throw new ParsingTokenException();
         }
     }

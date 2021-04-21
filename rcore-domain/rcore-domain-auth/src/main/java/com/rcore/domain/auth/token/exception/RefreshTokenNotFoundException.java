@@ -1,8 +1,6 @@
 package com.rcore.domain.auth.token.exception;
 
-import com.rcore.domain.commons.exception.DomainException;
-
-public class RefreshTokenNotFoundException extends DomainException {
+public class RefreshTokenNotFoundException extends TokenDomainException {
 
     public RefreshTokenNotFoundException() {
         super("Refresh token not found");
