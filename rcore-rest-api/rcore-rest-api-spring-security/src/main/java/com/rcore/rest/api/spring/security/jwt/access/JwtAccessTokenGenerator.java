@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
-@Component
 @Slf4j
 public class JwtAccessTokenGenerator implements TokenGenerator<AccessTokenData> {
 

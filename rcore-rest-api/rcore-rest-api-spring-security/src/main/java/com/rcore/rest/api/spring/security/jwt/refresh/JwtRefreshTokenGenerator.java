@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Slf4j
-@Component
 public class JwtRefreshTokenGenerator implements TokenGenerator<RefreshTokenData> {
 
     @Value("${foodtechlab.security.jwt.secret}")

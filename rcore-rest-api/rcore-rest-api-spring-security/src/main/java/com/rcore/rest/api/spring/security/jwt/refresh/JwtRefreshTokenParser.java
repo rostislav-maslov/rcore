@@ -17,7 +17,6 @@ import java.text.ParseException;
 import java.time.LocalDateTime;
 
 @RequiredArgsConstructor
-@Component
 @Slf4j
 public class JwtRefreshTokenParser implements TokenParser<RefreshTokenData> {
 
