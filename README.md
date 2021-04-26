@@ -1,5 +1,7 @@
 ## Change Log
 
+###v.1.0.5-SNAPSHOT
+
 ###v.1.0.4
 - Разделен интерфейс _TokenConverter_ на **_TokenGenerator_** и **_TokenParser_**
 - Разделен интерфейс _CredentialService_ на **_CredentialService_** и **_CredentialIdentityService_**
