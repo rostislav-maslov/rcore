@@ -15,6 +15,7 @@ import com.rcore.domain.user.exception.UserNotFoundException;
 import com.rcore.domain.user.port.UserRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -35,14 +36,17 @@ public class ExpireTokenUseCase {
         //Ищем юзера по переданному токену
         UserEntity userEntity = userRepository.findById(accessTokenEntity.getUserId())
                 .orElseThrow(UserNotFoundException::new);
-        //Проверяем статус юзера
-        if (!userEntity.getStatus().equals(UserStatus.ACTIVE))
-            throw new UserBlockedException();
         //Ищем переданный аксесс в бд
         AccessTokenEntity accessToken = accessTokenStorage.findById(accessTokenEntity.getId())
                 .orElseThrow(AuthenticationException::new);
-        if (!accessToken.getStatus().equals(RefreshTokenEntity.Status.ACTIVE) && !accessToken.isActive())
+        //Проверяем статус юзера
+        if (!userEntity.getStatus().equals(UserStatus.ACTIVE))
+            throw new UserBlockedException();
+
+        if (!accessToken.getStatus().equals(RefreshTokenEntity.Status.ACTIVE) || !accessToken.isActive()) {
+            accessTokenStorage.expireAccessToken(accessTokenEntity);
             throw new TokenExpiredException();
+        }
 
         refreshTokenStorage.findById(accessToken.getCreateFromRefreshTokenId())
                 .map(refreshToken -> {

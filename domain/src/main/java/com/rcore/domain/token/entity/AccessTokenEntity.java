@@ -72,6 +72,6 @@ public class AccessTokenEntity extends BaseEntity {
     }
 
     public Boolean isActive() {
-        return !LocalDateTime.now().isAfter(expireAt);
+        return LocalDateTime.now().isBefore(expireAt);
     }
 }
