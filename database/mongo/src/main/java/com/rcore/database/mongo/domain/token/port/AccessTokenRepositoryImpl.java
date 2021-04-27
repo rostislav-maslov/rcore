@@ -9,6 +9,7 @@ import com.rcore.database.mongo.domain.token.query.*;
 import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.entity.AccessTokenEntity;
+import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.port.AccessTokenRepository;
 import com.rcore.domain.token.port.filters.AccessTokenFilters;
 import org.bson.Document;
@@ -80,8 +81,12 @@ public class AccessTokenRepositoryImpl implements AccessTokenRepository {
 
     @Override
     public void deactivateAllAccessTokenByRefreshTokenId(String refreshTokenId) {
-        DeactivateAllAccessTokenByRefreshTokenId query = DeactivateAllAccessTokenByRefreshTokenId.of(refreshTokenId);
-        mongoTemplate.findAndModify(query.getQuery(), query.getUpdate(), query.getModifyOptions(), AccessTokenDoc.class);
+        Query query = new DeactivateAllAccessTokenByRefreshTokenId(refreshTokenId).getQuery();
+
+        mongoTemplate.find(query, AccessTokenDoc.class).forEach(accessToken -> {
+            accessToken.setStatus(RefreshTokenEntity.Status.INACTIVE);
+            mongoTemplate.save(accessToken);
+        });
     }
 
     @Override
