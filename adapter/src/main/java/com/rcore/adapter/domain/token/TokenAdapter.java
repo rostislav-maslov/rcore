@@ -17,10 +17,7 @@ import com.rcore.domain.token.exception.AuthenticationException;
 import com.rcore.domain.token.exception.RefreshTokenCreationException;
 import com.rcore.domain.token.port.filters.AccessTokenFilters;
 import com.rcore.domain.token.port.filters.RefreshTokenFilters;
-import com.rcore.domain.user.exception.TokenExpiredException;
-import com.rcore.domain.user.exception.UserBlockedException;
-import com.rcore.domain.user.exception.UserNotExistException;
-import com.rcore.domain.user.exception.UserNotFoundException;
+import com.rcore.domain.user.exception.*;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
@@ -86,7 +83,7 @@ public class TokenAdapter {
                 .logout(refreshTokenMapper.inverseMap(refreshToken));
     }
 
-    public void logout(AccessTokenDTO accessToken) throws AuthenticationException, UserNotFoundException, UserBlockedException, TokenExpiredException {
+    public void logout(AccessTokenDTO accessToken) throws AuthenticationException, UserNotFoundException, UserBlockedException, TokenExpiredException, BlockedUserTriesToLogoutException {
         tokenConfig.getAll().expireTokenUseCase()
                 .logout(accessTokenMapper.inverseMap(accessToken));
     }

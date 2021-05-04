@@ -9,6 +9,7 @@ import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.domain.token.port.RefreshTokenStorage;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.entity.UserStatus;
+import com.rcore.domain.user.exception.BlockedUserTriesToLogoutException;
 import com.rcore.domain.user.exception.TokenExpiredException;
 import com.rcore.domain.user.exception.UserBlockedException;
 import com.rcore.domain.user.exception.UserNotFoundException;
@@ -32,7 +33,7 @@ public class ExpireTokenUseCase {
         }
     }
 
-    public void logout(AccessTokenEntity accessTokenEntity) throws AuthenticationException, UserNotFoundException, UserBlockedException, TokenExpiredException {
+    public void logout(AccessTokenEntity accessTokenEntity) throws AuthenticationException, UserNotFoundException, UserBlockedException, TokenExpiredException, BlockedUserTriesToLogoutException {
         //Ищем юзера по переданному токену
         UserEntity userEntity = userRepository.findById(accessTokenEntity.getUserId())
                 .orElseThrow(UserNotFoundException::new);
@@ -41,7 +42,7 @@ public class ExpireTokenUseCase {
                 .orElseThrow(AuthenticationException::new);
         //Проверяем статус юзера
         if (!userEntity.getStatus().equals(UserStatus.ACTIVE))
-            throw new UserBlockedException();
+            throw new BlockedUserTriesToLogoutException();
 
         if (!accessToken.getStatus().equals(RefreshTokenEntity.Status.ACTIVE) || !accessToken.isActive()) {
             accessTokenStorage.expireAccessToken(accessTokenEntity);

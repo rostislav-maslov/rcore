@@ -2,10 +2,7 @@ package com.rcore.restapi.security.exceptions.handler;
 
 import com.rcore.domain.token.exception.AuthorizationException;
 import com.rcore.domain.token.exception.RefreshTokenIsExpiredException;
-import com.rcore.domain.user.exception.AdminUserIsExistException;
-import com.rcore.domain.user.exception.TokenExpiredException;
-import com.rcore.domain.user.exception.UserBlockedException;
-import com.rcore.domain.user.exception.UserNotExistException;
+import com.rcore.domain.user.exception.*;
 import com.rcore.restapi.exceptions.ExceptionDTO;
 import com.rcore.restapi.exceptions.UnauthorizedRequestApiException;
 import com.rcore.restapi.security.exceptions.*;
@@ -54,6 +51,12 @@ public class SecurityExceptionHandler {
     @ExceptionHandler({UserBlockedApiException.class, UserBlockedException.class})
     public ErrorApiResponse<List<ExceptionDTO>> handleApiUnauthorized(Exception e) {
         return ErrorApiResponse.of(new UserBlockedApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    @ExceptionHandler(BlockedUserTriesToLogoutException.class)
+    public ErrorApiResponse<List<ExceptionDTO>> handleBlockedUserTriesToLogoutException(Exception e) {
+        return ErrorApiResponse.of(new BlockedUserTriesToLogoutApiException().getErrors());
     }
 
 //    @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
