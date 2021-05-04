@@ -6,6 +6,6 @@ import com.rcore.domain.commons.usecase.UseCase;
 import lombok.Value;
 
 @Value(staticConstructor = "of")
-public class SearchResultEntityOutputValues<Entity extends BaseEntity> implements UseCase.OutputValues {
+public class SearchResultEntityOutputValues<Entity> implements UseCase.OutputValues {
     private final SearchResult<Entity> result;
 }
