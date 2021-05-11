@@ -78,4 +78,9 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     public SearchResult<RefreshTokenEntity> findWithFilters(RefreshTokenFilters filters) {
         return null;
     }
+
+    @Override
+    public void deactivateRefreshToken(RefreshTokenEntity refreshTokenEntity) {
+
+    }
 }

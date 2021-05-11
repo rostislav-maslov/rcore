@@ -29,6 +29,8 @@ public interface RefreshTokenStorage {
      */
     void expireRefreshToken(RefreshTokenEntity refreshTokenEntity);
 
+    void deactivateRefreshToken(RefreshTokenEntity refreshTokenEntity);
+
     /**
      *
      * @param userId

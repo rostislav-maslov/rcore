@@ -12,4 +12,5 @@ public interface RefreshTokenRepository extends CRUDRepository<String, RefreshTo
     void expireRefreshToken(RefreshTokenEntity refreshTokenEntity);
     List<RefreshTokenEntity> findAllActiveByUserId(String userId);
     SearchResult<RefreshTokenEntity> findWithFilters(RefreshTokenFilters filters);
+    void deactivateRefreshToken(RefreshTokenEntity refreshTokenEntity);
 }

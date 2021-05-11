@@ -58,7 +58,7 @@ public class ExpireTokenUseCase {
     }
 
     public void logout(RefreshTokenEntity refreshTokenEntity) {
-        refreshTokenStorage.expireRefreshToken(refreshTokenEntity);
+        refreshTokenStorage.deactivateRefreshToken(refreshTokenEntity);
 
         if (refreshTokenEntity.getCreateFromType().equals(RefreshTokenEntity.CreateFrom.REFRESH)) {
             refreshTokenStorage.findById(refreshTokenEntity.getCreateFromTokenId())
