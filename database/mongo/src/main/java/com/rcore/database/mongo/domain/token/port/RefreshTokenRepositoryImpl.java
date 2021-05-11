@@ -7,10 +7,7 @@ import com.mongodb.client.model.Indexes;
 import com.rcore.database.mongo.common.query.AbstractModifyQuery;
 import com.rcore.database.mongo.common.utils.CollectionNameUtils;
 import com.rcore.database.mongo.domain.token.model.RefreshTokenDoc;
-import com.rcore.database.mongo.domain.token.query.ExpireRefreshTokenQuery;
-import com.rcore.database.mongo.domain.token.query.FindAllActiveByUserId;
-import com.rcore.database.mongo.domain.token.query.FindAllWithSearch;
-import com.rcore.database.mongo.domain.token.query.FindRefreshTokensWithFilters;
+import com.rcore.database.mongo.domain.token.query.*;
 import com.rcore.domain.base.port.SearchRequest;
 import com.rcore.domain.base.port.SearchResult;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
@@ -43,6 +40,12 @@ public class RefreshTokenRepositoryImpl implements RefreshTokenRepository {
     @Override
     public void expireRefreshToken(RefreshTokenEntity refreshTokenEntity) {
         AbstractModifyQuery modifyQuery = ExpireRefreshTokenQuery.of(refreshTokenEntity.getId());
+        mongoTemplate.findAndModify(modifyQuery.getQuery(), modifyQuery.getUpdate(), modifyQuery.getModifyOptions(), RefreshTokenDoc.class);
+    }
+
+    @Override
+    public void deactivateRefreshToken(RefreshTokenEntity refreshTokenEntity) {
+        AbstractModifyQuery modifyQuery = DeactivateRefreshTokenQuery.of(refreshTokenEntity.getId());
         mongoTemplate.findAndModify(modifyQuery.getQuery(), modifyQuery.getUpdate(), modifyQuery.getModifyOptions(), RefreshTokenDoc.class);
     }
 

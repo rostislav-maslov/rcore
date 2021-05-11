@@ -114,6 +114,11 @@ public class TestAppConfig {
         };
         this.refreshTokenStorage = new RefreshTokenStorage() {
             @Override
+            public void deactivateRefreshToken(RefreshTokenEntity refreshTokenEntity) {
+
+            }
+
+            @Override
             public void put(RefreshTokenEntity refreshTokenEntity) {
 
             }

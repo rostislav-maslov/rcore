@@ -49,4 +49,9 @@ public class RefreshTokenStorageImpl implements RefreshTokenStorage {
     public String findJWTById(String id) {
         return null;
     }
+
+    @Override
+    public void deactivateRefreshToken(RefreshTokenEntity refreshTokenEntity) {
+
+    }
 }

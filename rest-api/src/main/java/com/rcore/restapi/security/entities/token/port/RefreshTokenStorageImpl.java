@@ -33,6 +33,11 @@ public class RefreshTokenStorageImpl implements RefreshTokenStorage {
     }
 
     @Override
+    public void deactivateRefreshToken(RefreshTokenEntity refreshTokenEntity) {
+        refreshTokenRepository.deactivateRefreshToken(refreshTokenEntity);
+    }
+
+    @Override
     public List<RefreshTokenEntity> findAllActiveByUserId(String userId) {
         return refreshTokenRepository.findAllActiveByUserId(userId);
     }
