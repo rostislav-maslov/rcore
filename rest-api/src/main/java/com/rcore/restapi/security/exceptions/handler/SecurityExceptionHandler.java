@@ -9,6 +9,7 @@ import com.rcore.restapi.security.exceptions.*;
 import com.rcore.restapi.web.api.response.ErrorApiResponse;
 import com.rcore.security.infrastructure.exceptions.InvalidTokenFormatException;
 import com.rcore.security.infrastructure.exceptions.TokenGenerateException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -21,6 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Order(100)
+@Slf4j
 @RestControllerAdvice
 public class SecurityExceptionHandler {
 
@@ -37,7 +39,8 @@ public class SecurityExceptionHandler {
 
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
     @ExceptionHandler({UserNotExistException.class})
-    public ErrorApiResponse<List<ExceptionDTO>> handleForbidden(Exception e) {
+    public ErrorApiResponse<List<ExceptionDTO>> handleForbidden(UserNotExistException e) {
+        log.error("Token exception: ", e);
         return ErrorApiResponse.of(new UserNotExistApiException().getErrors());
     }
 
@@ -93,7 +96,8 @@ public class SecurityExceptionHandler {
 
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
     @ExceptionHandler({com.rcore.domain.token.exception.AuthenticationException.class})
-    public ErrorApiResponse<List<ExceptionDTO>> handleAuthenticationException(Exception e) {
+    public ErrorApiResponse<List<ExceptionDTO>> handleAuthenticationException(AuthenticationException e) {
+        log.error("Token exception: ", e);
         return ErrorApiResponse.of(new UserNotExistApiException().getErrors());
     }
 
