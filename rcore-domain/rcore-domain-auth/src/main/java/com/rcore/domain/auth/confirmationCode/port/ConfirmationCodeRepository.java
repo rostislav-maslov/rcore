@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ConfirmationCodeRepository extends CRUDRepository<String, ConfirmationCodeEntity, SearchFilters> {
+    Optional<ConfirmationCodeEntity> findWaitingConfirmCode(String authorizationId);
+
     Boolean existNotConfirmedCode(String authorizationId);
 
     Optional<ConfirmationCodeEntity> findNotConfirmedByAddressAndSendingTypeAndCode(String address, ConfirmationCodeEntity.Recipient.SendingType sendingType, String code);

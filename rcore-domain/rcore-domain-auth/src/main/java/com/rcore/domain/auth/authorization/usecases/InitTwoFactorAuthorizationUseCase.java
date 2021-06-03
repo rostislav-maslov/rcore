@@ -11,6 +11,7 @@ import com.rcore.domain.auth.credential.entity.CredentialEntity;
 import com.rcore.domain.auth.credential.usecases.FindCredentialByEmailUseCase;
 import com.rcore.domain.auth.credential.usecases.FindCredentialByPhoneUseCase;
 import com.rcore.domain.commons.usecase.UseCase;
+import com.rcore.domain.commons.usecase.model.SingleInput;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
@@ -21,6 +22,7 @@ public class InitTwoFactorAuthorizationUseCase extends UseCase<InitTwoFactorAuth
     private final CreateConfirmationCodeUseCase createConfirmationCodeUseCase;
     private final FindCredentialByEmailUseCase findCredentialByEmailUseCase;
     private final FindCredentialByPhoneUseCase findCredentialByPhoneUseCase;
+    private final FindPendingAuthorizationByAddressUseCase findPendingAuthorizationByAddressUseCase;
 
     @Override
     public OutputValues execute(InputValues inputValues) {
@@ -45,27 +47,29 @@ public class InitTwoFactorAuthorizationUseCase extends UseCase<InitTwoFactorAuth
                     });
 
         //Создачем авторизацию
-        AuthorizationEntity authorizationEntity = createSuccessfulAuthorization(credentialEntity, inputValues);
+        AuthorizationEntity authorizationEntity = findPendingAuthorizationByAddressUseCase.execute(SingleInput.of(inputValues.getAddress()))
+                .getValue()
+                .orElseGet(() -> createSuccessfulAuthorization(credentialEntity, inputValues));
         //Создаем код для подтверждения
-        createConfirmationCodeUseCase.execute(new CreateConfirmationCodeUseCase.InputValues(
+        var confirmationCode = createConfirmationCodeUseCase.execute(new CreateConfirmationCodeUseCase.InputValues(
                 authorizationEntity.getId(),
                 ConfirmationCodeEntity.Recipient.of(credentialEntity.getId(), inputValues.getAddress(), inputValues.getSendingType()),
                 inputValues.getTtl())
         );
 
-        return new OutputValues();
+        return new OutputValues(confirmationCode.getConfirmationCodeEntity());
     }
 
     @Value(staticConstructor = "of")
     public static class InputValues implements UseCase.InputValues {
-        private final String address;
-        private final ConfirmationCodeEntity.Recipient.SendingType sendingType;
-        private final Long ttl;
+        String address;
+        ConfirmationCodeEntity.Recipient.SendingType sendingType;
+        Long ttl;
     }
 
     @Value
     public static class OutputValues implements UseCase.OutputValues {
-
+        ConfirmationCodeEntity confirmationCode;
     }
 
     private void validate(InputValues inputValues) {

@@ -60,7 +60,8 @@ public class AuthorizationConfig {
                 createAuthorizationUseCase(),
                 createConfirmationCodeUseCase,
                 findCredentialByEmailUseCase,
-                findCredentialByPhoneUseCase
+                findCredentialByPhoneUseCase,
+                findPendingAuthorizationByAddressUseCase()
         );
     }
 
@@ -84,5 +85,9 @@ public class AuthorizationConfig {
 
     public TransferAuthorizationToSuccessStatusUseCase transferAuthorizationToSuccessStatusUseCase() {
         return new TransferAuthorizationToSuccessStatusUseCase(authorizationRepository);
+    }
+
+    public FindPendingAuthorizationByAddressUseCase findPendingAuthorizationByAddressUseCase() {
+        return new FindPendingAuthorizationByAddressUseCase(authorizationRepository);
     }
 }
