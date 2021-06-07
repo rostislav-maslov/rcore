@@ -19,9 +19,11 @@ import com.rcore.domain.user.exception.UserBlockedException;
 import com.rcore.domain.user.exception.UserNotFoundException;
 import com.rcore.domain.user.port.PasswordGenerator;
 import com.rcore.domain.user.port.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 
+@Slf4j
 public class AuthenticationUseCase implements AuthenticationPort {
     private final UserRepository userRepository;
     private final PasswordGenerator passwordGenerator;
@@ -122,6 +124,7 @@ public class AuthenticationUseCase implements AuthenticationPort {
         RefreshTokenEntity refreshTokenEntity = refreshTokenStorage.findById(tokenPair.getRefreshToken().getId())
                 .orElseThrow(AuthenticationException::new);
 
+        log.debug(accessTokenEntity.getStatus().name());
         //Проверка рефреш токена на его принадлежность к аксессу
         if (!refreshTokenEntity.getId().equals(accessTokenEntity.getCreateFromRefreshTokenId()))
             throw new RefreshTokenIsExpiredException();
