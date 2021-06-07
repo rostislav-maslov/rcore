@@ -24,6 +24,7 @@ public class RefreshAllActiveAccessTokenOwnedByThisRefreshToken extends Abstract
 
     @Override
     public Criteria getCriteria() {
-        return Criteria.where("createFromRefreshTokenId").is(refreshTokenId);
+        return Criteria.where("status").is(RefreshTokenEntity.Status.ACTIVE)
+                .and("createFromRefreshTokenId").is(refreshTokenId);
     }
 }
