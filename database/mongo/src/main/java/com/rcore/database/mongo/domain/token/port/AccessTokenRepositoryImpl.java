@@ -111,4 +111,10 @@ public class AccessTokenRepositoryImpl implements AccessTokenRepository {
         RefreshAccessToken query = RefreshAccessToken.of(accessTokenId);
         mongoTemplate.findAndModify(query.getQuery(), query.getUpdate(), query.getModifyOptions(), AccessTokenDoc.class);
     }
+
+    @Override
+    public void refreshedAllActiveAccessTokensByRefreshId(String createFromRefreshTokenId) {
+        RefreshAllActiveAccessTokenOwnedByThisRefreshToken query = RefreshAllActiveAccessTokenOwnedByThisRefreshToken.of(createFromRefreshTokenId);
+        mongoTemplate.findAndModify(query.getQuery(), query.getUpdate(), query.getModifyOptions(), AccessTokenDoc.class);
+    }
 }
