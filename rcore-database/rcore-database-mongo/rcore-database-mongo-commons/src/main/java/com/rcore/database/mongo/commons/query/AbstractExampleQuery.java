@@ -25,7 +25,9 @@ public abstract class AbstractExampleQuery implements ExampleQuery {
         this.limit = Optional.ofNullable(filters.getLimit()).orElse(20l);
         this.offset = Optional.ofNullable(filters.getOffset()).orElse(0l);
         this.sortName = Optional.ofNullable(filters.getSortName()).orElse("_id");
-        this.sortDirection = Optional.ofNullable(filters.getSortDirection()).map(Sort.Direction::fromString).orElse(Sort.Direction.DESC);
+        this.sortDirection = Optional.ofNullable(filters.getSortDirection())
+                .map(s -> Sort.Direction.fromString(s.name()))
+                .orElse(Sort.Direction.DESC);
         this.sort = Sort.by(sortDirection, sortName);
     }
 

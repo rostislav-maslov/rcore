@@ -5,11 +5,11 @@ import com.rcore.database.mongo.auth.token.model.AccessTokenDoc;
 import com.rcore.database.mongo.auth.token.query.DeactivateAllAccessTokenByRefreshTokenIdQuery;
 import com.rcore.database.mongo.auth.token.query.ExpireAccessTokenByRefreshTokenQuery;
 import com.rcore.database.mongo.auth.token.query.ExpireAccessTokenQuery;
-import com.rcore.database.mongo.auth.token.query.FindAccessTokenWithFiltersQuery;
+import com.rcore.database.mongo.auth.token.query.FindAccessTokensQuery;
 import com.rcore.database.mongo.commons.utils.CollectionNameUtils;
 import com.rcore.domain.auth.token.entity.AccessTokenEntity;
 import com.rcore.domain.auth.token.port.AccessTokenRepository;
-import com.rcore.domain.commons.port.dto.SearchFilters;
+import com.rcore.domain.auth.token.port.filter.AccessTokenFilters;
 import com.rcore.domain.commons.port.dto.SearchResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -64,8 +64,8 @@ public class MongoAccessTokenRepository implements AccessTokenRepository {
     }
 
     @Override
-    public SearchResult<AccessTokenEntity> find(SearchFilters filters) {
-        Query query = new FindAccessTokenWithFiltersQuery(filters).getQuery();
+    public SearchResult<AccessTokenEntity> find(AccessTokenFilters filters) {
+        Query query = new FindAccessTokensQuery(filters).getQuery();
         return SearchResult.withItemsAndCount(
                 mongoTemplate.find(query, AccessTokenDoc.class)
                         .stream()
