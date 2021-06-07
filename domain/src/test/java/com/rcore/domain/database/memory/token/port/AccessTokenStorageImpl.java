@@ -64,4 +64,9 @@ public class AccessTokenStorageImpl implements AccessTokenStorage {
     public Optional<AccessTokenEntity> findTokenByJWT(String jwtToken) {
         return Optional.empty();
     }
+
+    @Override
+    public void assignedRefreshedStatusToAllAccessTokensByRefreshId(AccessTokenEntity accessTokenEntity) {
+
+    }
 }

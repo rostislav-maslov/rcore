@@ -111,6 +111,11 @@ public class TestAppConfig {
             public SearchResult<AccessTokenEntity> findWithFilters(AccessTokenFilters filters) {
                 return null;
             }
+
+            @Override
+            public void assignedRefreshedStatusToAllAccessTokensByRefreshId(AccessTokenEntity accessTokenEntity) {
+
+            }
         };
         this.refreshTokenStorage = new RefreshTokenStorage() {
             @Override

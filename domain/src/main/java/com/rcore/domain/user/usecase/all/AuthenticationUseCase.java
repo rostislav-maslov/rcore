@@ -137,7 +137,7 @@ public class AuthenticationUseCase implements AuthenticationPort {
         }
 
         //Деактивируем старый access
-        accessTokenStorage.assignedRefreshedStatusToAccessToken(accessTokenEntity);
+        accessTokenStorage.assignedRefreshedStatusToAllAccessTokensByRefreshId(accessTokenEntity);
         //Создаём новый access
         AccessTokenEntity access = createAccessTokenUseCase.create(userEntity, refreshTokenEntity);
 

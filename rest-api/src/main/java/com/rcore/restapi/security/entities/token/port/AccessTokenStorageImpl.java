@@ -57,6 +57,11 @@ public class AccessTokenStorageImpl implements AccessTokenStorage {
     }
 
     @Override
+    public void assignedRefreshedStatusToAllAccessTokensByRefreshId(AccessTokenEntity accessTokenEntity) {
+        accessTokenRepository.refreshedAllActiveAccessTokensByRefreshId(accessTokenEntity.getCreateFromRefreshTokenId());
+    }
+
+    @Override
     public SearchResult<AccessTokenEntity> findWithFilters(AccessTokenFilters filters) {
         return accessTokenRepository.findWithFilters(filters);
     }
