@@ -1,10 +1,8 @@
 package com.rcore.restapi.security.exceptions.handler;
 
 import com.rcore.domain.token.exception.AuthorizationException;
-import com.rcore.domain.token.exception.RefreshTokenIsExpiredException;
 import com.rcore.domain.user.exception.*;
 import com.rcore.restapi.exceptions.ExceptionDTO;
-import com.rcore.restapi.exceptions.UnauthorizedRequestApiException;
 import com.rcore.restapi.security.exceptions.*;
 import com.rcore.restapi.web.api.response.ErrorApiResponse;
 import com.rcore.security.infrastructure.exceptions.InvalidTokenFormatException;
@@ -48,12 +46,6 @@ public class SecurityExceptionHandler {
     @ExceptionHandler({TokenExpiredException.class})
     public ErrorApiResponse<List<ExceptionDTO>> handleForbidden(TokenExpiredException e) {
         return ErrorApiResponse.of(new TokenExpiredApiException().getErrors());
-    }
-
-    @ResponseStatus(value = HttpStatus.FORBIDDEN)
-    @ExceptionHandler({IncorrectTokenStatusForThisActionException.class})
-    public ErrorApiResponse<List<ExceptionDTO>> handleIncorrectTokenStatusForThisActionException(IncorrectTokenStatusForThisActionException e) {
-        return ErrorApiResponse.of(new IncorrectTokenStatusForThisActionApiException().getErrors());
     }
 
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
