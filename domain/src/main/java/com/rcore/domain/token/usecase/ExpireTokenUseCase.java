@@ -3,17 +3,17 @@ package com.rcore.domain.token.usecase;
 import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.entity.RefreshTokenEntity;
 import com.rcore.domain.token.exception.AuthenticationException;
-import com.rcore.domain.token.exception.RefreshTokenIsExpiredException;
 import com.rcore.domain.token.port.AccessTokenStorage;
-import com.rcore.domain.token.port.RefreshTokenRepository;
 import com.rcore.domain.token.port.RefreshTokenStorage;
 import com.rcore.domain.user.entity.UserEntity;
 import com.rcore.domain.user.entity.UserStatus;
-import com.rcore.domain.user.exception.*;
+import com.rcore.domain.user.exception.BlockedUserTriesToLogoutException;
+import com.rcore.domain.user.exception.TokenExpiredException;
+import com.rcore.domain.user.exception.UserBlockedException;
+import com.rcore.domain.user.exception.UserNotFoundException;
 import com.rcore.domain.user.port.UserRepository;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -30,7 +30,7 @@ public class ExpireTokenUseCase {
         }
     }
 
-    public void logout(AccessTokenEntity accessTokenEntity) throws AuthenticationException, UserNotFoundException, UserBlockedException, TokenExpiredException, BlockedUserTriesToLogoutException, IncorrectTokenStatusForThisActionException {
+    public void logout(AccessTokenEntity accessTokenEntity) throws AuthenticationException, UserNotFoundException, UserBlockedException, TokenExpiredException, BlockedUserTriesToLogoutException {
         //Ищем юзера по переданному токену
         UserEntity userEntity = userRepository.findById(accessTokenEntity.getUserId())
                 .orElseThrow(UserNotFoundException::new);
@@ -41,13 +41,13 @@ public class ExpireTokenUseCase {
         if (!userEntity.getStatus().equals(UserStatus.ACTIVE))
             throw new BlockedUserTriesToLogoutException();
 
-        if (accessToken.getStatus().equals(RefreshTokenEntity.Status.EXPIRED) || !accessToken.isActive()) {
-            accessTokenStorage.expireAccessToken(accessTokenEntity);
+        if (!accessToken.getStatus().equals(RefreshTokenEntity.Status.ACTIVE)) {
             throw new TokenExpiredException();
         }
 
-        if (!accessToken.getStatus().equals(RefreshTokenEntity.Status.ACTIVE)) {
-            throw new IncorrectTokenStatusForThisActionException();
+        if (!accessToken.isActive()) {
+            accessTokenStorage.expireAccessToken(accessTokenEntity);
+            throw new TokenExpiredException();
         }
 
         refreshTokenStorage.findById(accessToken.getCreateFromRefreshTokenId())

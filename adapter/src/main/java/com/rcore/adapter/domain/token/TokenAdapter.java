@@ -83,7 +83,7 @@ public class TokenAdapter {
                 .logout(refreshTokenMapper.inverseMap(refreshToken));
     }
 
-    public void logout(AccessTokenDTO accessToken) throws AuthenticationException, UserNotFoundException, UserBlockedException, TokenExpiredException, BlockedUserTriesToLogoutException, IncorrectTokenStatusForThisActionException {
+    public void logout(AccessTokenDTO accessToken) throws AuthenticationException, UserNotFoundException, UserBlockedException, TokenExpiredException, BlockedUserTriesToLogoutException {
         tokenConfig.getAll().expireTokenUseCase()
                 .logout(accessTokenMapper.inverseMap(accessToken));
     }
