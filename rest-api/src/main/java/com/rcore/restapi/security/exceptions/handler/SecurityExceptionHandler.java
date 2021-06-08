@@ -51,6 +51,12 @@ public class SecurityExceptionHandler {
     }
 
     @ResponseStatus(value = HttpStatus.FORBIDDEN)
+    @ExceptionHandler({IncorrectTokenStatusForThisActionException.class})
+    public ErrorApiResponse<List<ExceptionDTO>> handleIncorrectTokenStatusForThisActionException(IncorrectTokenStatusForThisActionException e) {
+        return ErrorApiResponse.of(new IncorrectTokenStatusForThisActionApiException().getErrors());
+    }
+
+    @ResponseStatus(value = HttpStatus.FORBIDDEN)
     @ExceptionHandler({UserBlockedApiException.class, UserBlockedException.class})
     public ErrorApiResponse<List<ExceptionDTO>> handleApiUnauthorized(Exception e) {
         return ErrorApiResponse.of(new UserBlockedApiException().getErrors());
