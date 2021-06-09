@@ -5,6 +5,10 @@ import com.rcore.domain.commons.exception.DomainException;
 public class CredentialNotFoundException extends DomainException {
 
     public CredentialNotFoundException() {
-        super("Credential not found");
+        super(new Error(
+                "AUTH",
+                AuthorizationErrorReason.CREDENTIAL_NOT_FOUND.name(),
+                "Credential not found"
+        ));
     }
 }

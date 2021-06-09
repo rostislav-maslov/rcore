@@ -21,7 +21,7 @@
     <url>https://github.com/rostislav-maslov/rcore</url>
 
     <modules>
-        <module>rcore-database-mongo-auth</module>
+<!--        <module>rcore-database-mongo-auth</module>-->
         <module>rcore-database-mongo-commons</module>
         <module>rcore-database-mongo-file</module>
         <module>rcore-database-mongo-picture</module>

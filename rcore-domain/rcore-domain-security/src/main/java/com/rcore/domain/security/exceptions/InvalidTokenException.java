@@ -5,6 +5,10 @@ import com.rcore.domain.commons.exception.DomainException;
 public class InvalidTokenException extends DomainException {
 
     public InvalidTokenException() {
-        super("Token has bean modified");
+        super(new Error(
+                "AUTH",
+                AuthorizationErrorReason.INVALID_TOKEN.name(),
+                "Token has bean modified"
+        ));
     }
 }

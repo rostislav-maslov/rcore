@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Value;
 
+import javax.validation.Valid;
 
+@Valid
 @AllArgsConstructor(staticName = "of")
 @Getter
 public class IdInputValues<Id> implements UseCase.InputValues {

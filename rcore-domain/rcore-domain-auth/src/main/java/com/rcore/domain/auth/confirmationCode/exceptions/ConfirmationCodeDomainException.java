@@ -5,6 +5,6 @@ import com.rcore.domain.commons.exception.DomainException;
 public abstract class ConfirmationCodeDomainException extends DomainException {
 
     public ConfirmationCodeDomainException(String message) {
-        super(message, "Confirmation code");
+        super(message);
     }
 }

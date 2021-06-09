@@ -8,6 +8,10 @@ import com.rcore.domain.commons.exception.DomainException;
 public class AccessDeniedException extends DomainException {
 
     public AccessDeniedException() {
-        super("Access denied");
+        super(new Error(
+                "AUTH",
+                AuthorizationErrorReason.ACCESS_DENIED.name(),
+                "Access denied"
+        ));
     }
 }

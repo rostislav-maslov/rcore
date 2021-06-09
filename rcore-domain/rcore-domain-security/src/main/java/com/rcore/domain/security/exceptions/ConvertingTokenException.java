@@ -5,6 +5,10 @@ import com.rcore.domain.commons.exception.DomainException;
 public class ConvertingTokenException extends DomainException {
 
     public ConvertingTokenException() {
-        super("Failed converting token");
+        super(new Error(
+                "AUTH",
+                AuthorizationErrorReason.CONVERTING_TOKEN_ERROR.name(),
+                "Failed converting token"
+        ));
     }
 }

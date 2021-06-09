@@ -5,6 +5,10 @@ import com.rcore.domain.commons.exception.DomainException;
 public class ParsingTokenException extends DomainException {
 
     public ParsingTokenException() {
-        super("Invalid token format");
+        super(new Error(
+                "AUTH",
+                AuthorizationErrorReason.PARSING_TOKEN_ERROR.name(),
+                "Invalid token format"
+        ));
     }
 }
