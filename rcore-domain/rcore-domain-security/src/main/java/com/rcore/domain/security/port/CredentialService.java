@@ -1,7 +1,5 @@
 package com.rcore.domain.security.port;
 
-import com.rcore.domain.security.exceptions.AuthenticatedCredentialIsBlockedException;
-import com.rcore.domain.security.exceptions.CredentialNotFoundException;
 import com.rcore.domain.security.model.CredentialDetails;
 
 /**
@@ -9,5 +7,5 @@ import com.rcore.domain.security.model.CredentialDetails;
  */
 public interface CredentialService {
 
-    CredentialDetails getCredentialById(String id) throws AuthenticatedCredentialIsBlockedException, CredentialNotFoundException;
+    CredentialDetails getCredentialById(String id);
 }

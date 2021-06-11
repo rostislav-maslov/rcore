@@ -20,7 +20,7 @@ public class TokenAuthenticationEntryPoint implements AuthenticationEntryPoint {
         httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
         httpServletRequest.setCharacterEncoding("UTF-8");
 
-        ErrorApiResponse error = ErrorApiResponse.of(e);
+        var error = ErrorApiResponse.of(e);
         httpServletResponse.getWriter().write(new ObjectMapper().writeValueAsString(error));
     }
 }

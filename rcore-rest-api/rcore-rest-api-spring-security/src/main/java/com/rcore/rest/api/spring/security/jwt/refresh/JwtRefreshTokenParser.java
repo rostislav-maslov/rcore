@@ -1,56 +1,63 @@
 package com.rcore.rest.api.spring.security.jwt.refresh;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSObject;
-import com.rcore.domain.security.exceptions.InvalidTokenException;
-import com.rcore.domain.security.exceptions.ParsingTokenException;
-import com.rcore.domain.security.exceptions.TokenIsExpiredException;
+import com.nimbusds.jose.JWSVerifier;
+import com.nimbusds.jose.crypto.MACVerifier;
+import com.nimbusds.jwt.SignedJWT;
+import com.rcore.domain.security.exceptions.AccessTokenMalformedException;
+import com.rcore.domain.security.exceptions.AccessTokenModifiedException;
 import com.rcore.domain.security.model.RefreshTokenData;
 import com.rcore.domain.security.port.TokenGenerator;
 import com.rcore.domain.security.port.TokenParser;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
 
-import java.io.IOException;
 import java.text.ParseException;
-import java.time.LocalDateTime;
 
+
+//TODO Поменять ошибки связанные в ACCESS TOKEN на REFRESH TOKEN
 @RequiredArgsConstructor
 @Slf4j
 public class JwtRefreshTokenParser implements TokenParser<RefreshTokenData> {
 
+    @Value("${foodtechlab.security.jwt.secret}")
+    private String secret;
     private final ObjectMapper objectMapper;
-    private final TokenGenerator<RefreshTokenData> refreshTokenDataTokenGenerator;
+    private final TokenGenerator<RefreshTokenData> tokenGenerator;
 
     @Override
     public RefreshTokenData parseWithValidating(String token) {
         try {
             validateStringToken(token);
 
+            SignedJWT signedJWT = SignedJWT.parse(token);
+            JWSVerifier verifier = new MACVerifier(secret);
+
+            boolean isValid = signedJWT.verify(verifier);
+            if (!isValid)
+                throw new AccessTokenModifiedException();
+
             JWSObject jwsObject = JWSObject.parse(token);
             return objectMapper.readValue(jwsObject.getPayload().toString(), RefreshTokenData.class);
-        } catch (IOException | ParseException e) {
-            log.error("Refresh token data parsing error", e);
-            throw new ParsingTokenException();
+        } catch (JOSEException | JsonProcessingException | ParseException e) {
+            e.printStackTrace();
+            throw new AccessTokenMalformedException();
         }
     }
 
+    @SneakyThrows
     private void validateStringToken(String token) {
-        try {
-            JWSObject jwsObject = JWSObject.parse(token);
-            RefreshTokenData refreshTokenData = objectMapper.readValue(jwsObject.getPayload().toString(), RefreshTokenData.class);
-            String originalToken = refreshTokenDataTokenGenerator.generate(refreshTokenData);
+        var jwsObject = JWSObject.parse(token);
+        var refreshTokenData = objectMapper.readValue(jwsObject.getPayload().toString(), RefreshTokenData.class);
+        var originalToken = tokenGenerator.generate(refreshTokenData);
 
-            if (!originalToken.equals(token))
-                throw new InvalidTokenException();
-
-            if (refreshTokenData.getExpiredAt().isBefore(LocalDateTime.now()))
-                throw new TokenIsExpiredException();
-
-        } catch (Exception e) {
-            throw new InvalidTokenException();
-        }
+        if (!originalToken.equals(token))
+            throw new AccessTokenModifiedException();
 
     }
 }

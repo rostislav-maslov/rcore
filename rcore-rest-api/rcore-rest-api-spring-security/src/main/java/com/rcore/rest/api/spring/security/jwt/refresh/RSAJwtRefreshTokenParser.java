@@ -8,9 +8,9 @@ import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.SignedJWT;
 import com.rcore.domain.commons.exception.DomainException;
-import com.rcore.domain.security.exceptions.InvalidTokenException;
-import com.rcore.domain.security.exceptions.ParsingTokenException;
-import com.rcore.domain.security.exceptions.TokenIsExpiredException;
+import com.rcore.domain.security.exceptions.AccessTokenExpiredException;
+import com.rcore.domain.security.exceptions.AccessTokenMalformedException;
+import com.rcore.domain.security.exceptions.AccessTokenModifiedException;
 import com.rcore.domain.security.model.CredentialDetails;
 import com.rcore.domain.security.model.RefreshTokenData;
 import com.rcore.domain.security.port.TokenParser;
@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+//TODO Поменять ошибки связанные в ACCESS TOKEN на REFRESH TOKEN
 @RequiredArgsConstructor
 @Slf4j
 public class RSAJwtRefreshTokenParser implements TokenParser<RefreshTokenData> {
@@ -37,13 +38,13 @@ public class RSAJwtRefreshTokenParser implements TokenParser<RefreshTokenData> {
             boolean isValid = signedJWT.verify(verifier);
 
             if (!isValid)
-                throw new InvalidTokenException();
+                throw new AccessTokenModifiedException();
 
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME;
             LocalDateTime expiredAt = LocalDateTime.parse(signedJWT.getJWTClaimsSet().getClaim("expiredAt").toString(), dateTimeFormatter);
 
             if (expiredAt.isBefore(LocalDateTime.now()))
-                throw new TokenIsExpiredException();
+                throw new AccessTokenExpiredException();
 
             return RefreshTokenData.builder()
                     .id(signedJWT.getJWTClaimsSet().getClaim("tokenId").toString())
@@ -54,10 +55,12 @@ public class RSAJwtRefreshTokenParser implements TokenParser<RefreshTokenData> {
                     }))
                     .build();
         } catch (DomainException domainException) {
+            domainException.printStackTrace();
             throw domainException;
         } catch (Exception e) {
-            log.error("Access token data parsing error", e);
-            throw new ParsingTokenException();
+            e.printStackTrace();
+            log.error("Refresh token data parsing error", e);
+            throw new AccessTokenMalformedException();
         }
     }
 }

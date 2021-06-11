@@ -1,7 +1,7 @@
 package com.rcore.rest.api.spring.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rcore.domain.security.exceptions.ParsingTokenException;
+import com.rcore.domain.commons.exception.ForbiddenDomainException;
 import com.rcore.rest.api.commons.response.ErrorApiResponse;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
@@ -21,7 +21,7 @@ public class TokenAuthenticationFailureHandler implements AuthenticationFailureH
         httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
         httpServletRequest.setCharacterEncoding("UTF-8");
 
-        if (e.getCause()!= null && e.getCause() instanceof ParsingTokenException)
+        if (e.getCause()!= null && e.getCause() instanceof ForbiddenDomainException)
             httpServletResponse.setStatus(HttpServletResponse.SC_FORBIDDEN);
         else
             httpServletResponse.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

@@ -2,17 +2,15 @@ package com.rcore.rest.api.spring.security.jwt.access;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.shaded.json.parser.ParseException;
 import com.nimbusds.jwt.SignedJWT;
 import com.rcore.domain.commons.exception.DomainException;
-import com.rcore.domain.security.exceptions.InvalidTokenException;
-import com.rcore.domain.security.exceptions.ParsingTokenException;
-import com.rcore.domain.security.exceptions.TokenIsExpiredException;
+import com.rcore.domain.security.exceptions.AccessTokenExpiredException;
+import com.rcore.domain.security.exceptions.AccessTokenMalformedException;
+import com.rcore.domain.security.exceptions.AccessTokenModifiedException;
 import com.rcore.domain.security.model.AccessTokenData;
 import com.rcore.domain.security.model.CredentialDetails;
 import com.rcore.domain.security.port.TokenParser;
@@ -40,13 +38,13 @@ public class RSAJwtAccessTokenParser implements TokenParser<AccessTokenData> {
             boolean isValid = signedJWT.verify(verifier);
 
             if (!isValid)
-                throw new InvalidTokenException();
+                throw new AccessTokenModifiedException();
 
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME;
             LocalDateTime expiredAt = LocalDateTime.parse(signedJWT.getJWTClaimsSet().getClaim("expiredAt").toString(), dateTimeFormatter);
 
             if (expiredAt.isBefore(LocalDateTime.now()))
-                throw new TokenIsExpiredException();
+                throw new AccessTokenExpiredException();
 
             return AccessTokenData.builder()
                     .id(signedJWT.getJWTClaimsSet().getClaim("tokenId").toString())
@@ -57,10 +55,12 @@ public class RSAJwtAccessTokenParser implements TokenParser<AccessTokenData> {
                     }))
                     .build();
         } catch (DomainException domainException) {
+            domainException.printStackTrace();
             throw domainException;
         } catch (Exception e) {
+            e.printStackTrace();
             log.error("Access token data parsing error", e);
-            throw new ParsingTokenException();
+            throw new AccessTokenMalformedException();
         }
     }
 }

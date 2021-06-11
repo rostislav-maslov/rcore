@@ -1,9 +1,5 @@
 package com.rcore.domain.security.port;
 
-import com.rcore.domain.security.exceptions.AuthenticatedCredentialIsBlockedException;
-import com.rcore.domain.security.exceptions.CredentialNotFoundException;
-import com.rcore.domain.security.exceptions.ParsingTokenException;
-import com.rcore.domain.security.exceptions.TokenIsExpiredException;
 import com.rcore.domain.security.model.CredentialDetails;
 
 /**
@@ -11,5 +7,5 @@ import com.rcore.domain.security.model.CredentialDetails;
  */
 public interface CredentialIdentityService {
 
-    CredentialDetails getCredentialByToken(String token) throws AuthenticatedCredentialIsBlockedException, CredentialNotFoundException, ParsingTokenException, TokenIsExpiredException;
+    CredentialDetails getCredentialByToken(String token);
 }

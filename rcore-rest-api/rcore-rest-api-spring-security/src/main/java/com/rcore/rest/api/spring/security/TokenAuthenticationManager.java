@@ -16,17 +16,13 @@ public class TokenAuthenticationManager implements AuthenticationManager {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        try {
-            if (authentication instanceof TokenAuthentication && ((TokenAuthentication) authentication).getToken() != null && !authentication.isAuthenticated()) {
-                CredentialDetails credentialDetails = credentialIdentityService.getCredentialByToken(((TokenAuthentication) authentication).getToken());
-                CredentialPrincipal credentialPrincipal = CredentialPrincipal.from(credentialDetails);
-                return new TokenAuthentication(((TokenAuthentication) authentication).getToken(), credentialPrincipal.getAuthorities(), true, credentialPrincipal);
-            } else {
-                authentication.setAuthenticated(false);
-                return authentication;
-            }
-        } catch (Exception e) {
-            throw e;
+        if (authentication instanceof TokenAuthentication) {
+            CredentialDetails credentialDetails = credentialIdentityService.getCredentialByToken(((TokenAuthentication) authentication).getToken());
+            CredentialPrincipal credentialPrincipal = CredentialPrincipal.from(credentialDetails);
+            return new TokenAuthentication(((TokenAuthentication) authentication).getToken(), credentialPrincipal.getAuthorities(), true, credentialPrincipal);
+        } else {
+            authentication.setAuthenticated(false);
+            return authentication;
         }
     }
 }

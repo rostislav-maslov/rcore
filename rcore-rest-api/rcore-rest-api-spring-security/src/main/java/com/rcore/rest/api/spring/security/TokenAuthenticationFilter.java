@@ -1,7 +1,5 @@
 package com.rcore.rest.api.spring.security;
 
-import com.rcore.commons.utils.StringUtils;
-import com.rcore.domain.security.exceptions.TokenIsRequiredException;
 import com.rcore.rest.api.commons.header.WebHeaders;
 import com.rcore.rest.api.commons.routes.BaseRoutes;
 import com.rcore.rest.api.spring.security.exceptions.AuthenticationApiException;
@@ -32,9 +30,6 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
         try {
             var token = httpServletRequest.getHeader(WebHeaders.X_AUTH_TOKEN);
-
-            if (!StringUtils.hasText(token))
-                throw new TokenIsRequiredException();
 
             TokenAuthentication tokenAuthentication = new TokenAuthentication(token);
             return getAuthenticationManager().authenticate(tokenAuthentication);
