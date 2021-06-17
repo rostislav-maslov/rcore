@@ -7,8 +7,8 @@ import com.nimbusds.jose.JWSObject;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.SignedJWT;
-import com.rcore.domain.security.exceptions.AccessTokenMalformedException;
-import com.rcore.domain.security.exceptions.AccessTokenModifiedException;
+import com.rcore.domain.security.exceptions.RefreshTokenMalformedException;
+import com.rcore.domain.security.exceptions.RefreshTokenModifiedException;
 import com.rcore.domain.security.model.RefreshTokenData;
 import com.rcore.domain.security.port.TokenGenerator;
 import com.rcore.domain.security.port.TokenParser;
@@ -19,8 +19,6 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.text.ParseException;
 
-
-//TODO Поменять ошибки связанные в ACCESS TOKEN на REFRESH TOKEN
 @RequiredArgsConstructor
 @Slf4j
 public class JwtRefreshTokenParser implements TokenParser<RefreshTokenData> {
@@ -40,13 +38,13 @@ public class JwtRefreshTokenParser implements TokenParser<RefreshTokenData> {
 
             boolean isValid = signedJWT.verify(verifier);
             if (!isValid)
-                throw new AccessTokenModifiedException();
+                throw new RefreshTokenModifiedException();
 
             JWSObject jwsObject = JWSObject.parse(token);
             return objectMapper.readValue(jwsObject.getPayload().toString(), RefreshTokenData.class);
         } catch (JOSEException | JsonProcessingException | ParseException e) {
             e.printStackTrace();
-            throw new AccessTokenMalformedException();
+            throw new RefreshTokenMalformedException();
         }
     }
 
@@ -57,7 +55,7 @@ public class JwtRefreshTokenParser implements TokenParser<RefreshTokenData> {
         var originalToken = tokenGenerator.generate(refreshTokenData);
 
         if (!originalToken.equals(token))
-            throw new AccessTokenModifiedException();
+            throw new RefreshTokenModifiedException();
 
     }
 }
