@@ -22,7 +22,7 @@ public class DefaultEventDispatcher extends EventDispatcher {
     }
 
     @Override
-    public <E extends Event> void registerHandler(Class<E> eventType, EventHandler<E> handler) {
+    public <E extends Event> void registerHandler(Class<? extends E> eventType, EventHandler<? extends E> handler) {
         List<EventHandler<? extends Event>> registeredHandlersForEvent = handlers.get(eventType);
         if (registeredHandlersForEvent != null) {
             boolean handlerBeenRegistered = registeredHandlersForEvent
