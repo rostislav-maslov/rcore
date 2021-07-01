@@ -13,7 +13,7 @@ public abstract class EventDispatcher {
 
     private EventStorage eventStorage;
 
-    public abstract <E extends Event> void registerHandler(Class<E> eventType, EventHandler<E> handler);
+    public abstract <E extends Event> void registerHandler(Class<? extends E> eventType, EventHandler<? extends E> handler);
 
     public abstract <E extends Event> void dispatch(E event);
 

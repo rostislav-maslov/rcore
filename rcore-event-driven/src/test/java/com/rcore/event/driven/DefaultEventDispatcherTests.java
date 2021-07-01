@@ -6,26 +6,25 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class DefaultEventDispatcherTests {
 
     @Test
     void DefaultEventDispatcher_RegisterManyHandlerForOneEvent_Successful() {
         EventDispatcher eventDispatcher = new DefaultEventDispatcher();
-        eventDispatcher.registerHandler(TestEvent.class, new TestEventHandler());
-        eventDispatcher.registerHandler(TestEvent.class, new TestEventLoggingHandler());
+        eventDispatcher.registerHandler(SuperEvent.class, new TestEventHandler<>());
     }
 
     @Test
     void DefaultEventDispatcher_DispatchEventWithStoreInDB_Successful() {
         InMemoryEventStorage inMemoryEventStorage = new InMemoryEventStorage();
         EventDispatcher eventDispatcher = DefaultEventDispatcher.withStorage(inMemoryEventStorage);
-        eventDispatcher.registerHandler(TestEvent.class, new TestEventHandler());
+        eventDispatcher.registerHandler(Test1Event.class, new TestEventHandler<>());
+        eventDispatcher.registerHandler(Test2Event.class, new TestEventHandler<>());
 
-        eventDispatcher.dispatch(new TestEvent());
+        eventDispatcher.dispatch(new Test1Event());
+        eventDispatcher.dispatch(new Test2Event());
 
-        Assertions.assertEquals(inMemoryEventStorage.database.size(), 1);
+        Assertions.assertEquals(inMemoryEventStorage.database.size(), 2);
     }
 
     private static class InMemoryEventStorage implements EventStorage {
@@ -38,23 +37,33 @@ class DefaultEventDispatcherTests {
         }
     }
 
-    private static class TestEvent extends AbstractEvent {
+    private static class SuperEvent extends AbstractEvent {
 
     }
 
-    private static class TestEventHandler implements EventHandler<TestEvent> {
+    private static class Test1Event extends SuperEvent {
+
+    }
+
+    private static class Test2Event extends SuperEvent {
+
+    }
+
+    private static class TestEventHandler <T extends SuperEvent> implements EventHandler<T> {
 
         @Override
-        public void onEvent(TestEvent event) {
+        public void onEvent(T event) {
             System.out.println("TestEventHandler handle event");
         }
     }
 
-    private static class TestEventLoggingHandler implements EventHandler<TestEvent> {
+    private static class TestEventLoggingHandler <T extends SuperEvent> implements EventHandler<T> {
         @Override
-        public void onEvent(TestEvent event) {
+        public void onEvent(SuperEvent event) {
             System.out.println("TestEventLoggingHandler handle event");
         }
     }
+
+
 
 }
