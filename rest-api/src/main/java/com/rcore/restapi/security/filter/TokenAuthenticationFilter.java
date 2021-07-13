@@ -4,10 +4,11 @@ import com.rcore.adapter.domain.token.dto.AccessTokenDTO;
 import com.rcore.adapter.domain.token.mapper.AccessTokenMapper;
 import com.rcore.domain.token.entity.AccessTokenEntity;
 import com.rcore.domain.token.port.AccessTokenStorage;
+import com.rcore.domain.user.exception.UserNotExistException;
 import com.rcore.restapi.headers.WebHeaders;
 import com.rcore.restapi.routes.BaseRoutes;
 import com.rcore.restapi.security.exceptions.ApiAuthenticationException;
-import com.rcore.restapi.security.exceptions. InvalidTokenFormatApiException;
+import com.rcore.restapi.security.exceptions.InvalidTokenFormatApiException;
 import com.rcore.restapi.security.exceptions.UnauthorizedApiException;
 import com.rcore.restapi.security.exceptions.UserNotExistApiException;
 import com.rcore.restapi.security.factory.AuthenticationTokenFactory;
@@ -76,6 +77,15 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
                 throw new UserNotExistApiException();
 
             accessToken = new AccessTokenMapper().map(accessTokenEntity.get());
+
+            try {
+                if (!authTokenGenerator.generate(accessToken, secret).equals(token))
+                    throw new UserNotExistException();
+            } catch (TokenGenerateException e) {
+                throw new InvalidTokenFormatApiException();
+            } catch (UserNotExistException e) {
+                throw new UserNotExistApiException();
+            }
         }
 
         return getAuthenticationManager().authenticate(AuthenticationTokenFactory.ofRawToken(accessToken, token));
