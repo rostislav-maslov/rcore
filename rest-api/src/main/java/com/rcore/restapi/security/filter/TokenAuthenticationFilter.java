@@ -79,9 +79,12 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
             accessToken = new AccessTokenMapper().map(accessTokenEntity.get());
 
             try {
-                if (!authTokenGenerator.generate(accessToken, secret).equals(token))
+                AccessTokenDTO requestedToken = authTokenGenerator.parseToken(token, secret);
+                deleteNano(accessToken);
+                deleteNano(requestedToken);
+                if (!authTokenGenerator.generate(accessToken, secret).equals(authTokenGenerator.generate(requestedToken, secret)))
                     throw new UserNotExistException();
-            } catch (TokenGenerateException e) {
+            } catch (TokenGenerateException | InvalidTokenFormatException | com.rcore.domain.token.exception.AuthenticationException e) {
                 throw new InvalidTokenFormatApiException();
             } catch (UserNotExistException e) {
                 throw new UserNotExistApiException();
@@ -89,6 +92,11 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
         }
 
         return getAuthenticationManager().authenticate(AuthenticationTokenFactory.ofRawToken(accessToken, token));
+    }
+
+    private void deleteNano(AccessTokenDTO tokenDTO) {
+        tokenDTO.setCreatedAt(tokenDTO.getCreatedAt().withNano(0));
+        tokenDTO.setUpdatedAt(tokenDTO.getUpdatedAt().withNano(0));
     }
 
     @Override
