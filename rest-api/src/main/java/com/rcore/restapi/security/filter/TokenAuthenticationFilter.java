@@ -70,7 +70,7 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
                 accessTokenEntity = accessTokenStorage.findById(authTokenGenerator.parseToken(token, secret).getId());
             } catch (InvalidTokenFormatException | TokenGenerateException e) {
                 throw new InvalidTokenFormatApiException();
-            } catch (com.rcore.domain.token.exception.AuthenticationException e) {
+            } catch (com.rcore.domain.token.exception.AuthenticationException | UserNotExistException e) {
                 throw new UserNotExistApiException();
             }
             if (!accessTokenEntity.isPresent())
