@@ -60,27 +60,6 @@ public class AccessTokenEntity extends BaseEntity {
         return md5Hex;
     }
 
-
-    public boolean equalsRequestedToken(Object o) {
-        if (this == o)
-            return true;
-
-        if (o instanceof AccessTokenEntity) {
-            AccessTokenEntity other = (AccessTokenEntity) o;
-
-            return other.getId().equals(getId())
-                    && other.getUserId().equals(getUserId())
-                    && other.getExpireAt().equals(getExpireAt())
-                    && other.getStatus().name().equals(getStatus().name())
-                    && other.getCreateFromRefreshTokenId().equals(getCreateFromRefreshTokenId())
-                    && other.getSign().equals(getSign())
-                    && other.getCreatedAt().withNano(0).equals(getCreatedAt().withNano(0))
-                    && other.getUpdatedAt().withNano(0).equals(getUpdatedAt().withNano(0));
-        }
-
-        return false;
-    }
-
     public static String sign(String accessTokenId, Long expireAt, RefreshTokenEntity refreshTokenEntity) {
         String signString = refreshTokenEntity.getId() +
                 refreshTokenEntity.getUserId() +
