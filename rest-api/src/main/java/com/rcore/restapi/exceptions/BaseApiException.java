@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -13,7 +14,7 @@ import java.util.Objects;
 @ToString
 public class BaseApiException extends RuntimeException {
 
-    private List<ExceptionDTO> errors;
+    private List<ExceptionDTO> errors = new ArrayList<>();
 
     public BaseApiException(List<ExceptionDTO> errors) {
         this.errors = errors;

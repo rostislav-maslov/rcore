@@ -3,10 +3,7 @@ package com.rcore.restapi.exceptions;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Objects;
 
@@ -16,6 +13,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Builder
 @Getter
+@ToString
 public class ExceptionDTO {
 
     @ApiModelProperty("Данные для отображения")
@@ -33,6 +31,7 @@ public class ExceptionDTO {
     @NoArgsConstructor
     @Builder
     @Getter
+    @ToString
     public static class PresentationData {
 
         @ApiModelProperty("Заголовок ошибки")
