@@ -2,6 +2,7 @@ package com.rcore.restapi.exceptions;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.Objects;
 
 @NoArgsConstructor
 @Getter
+@ToString
 public class BaseApiException extends RuntimeException {
 
     private List<ExceptionDTO> errors;
