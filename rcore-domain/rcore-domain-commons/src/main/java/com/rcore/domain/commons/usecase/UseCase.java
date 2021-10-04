@@ -1,5 +1,7 @@
 package com.rcore.domain.commons.usecase;
 
+import com.rcore.domain.commons.exception.ValidatingDomainException;
+
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
@@ -32,6 +34,9 @@ public abstract class UseCase<Input extends UseCase.InputValues, Output extends 
     public  interface InputValues {
 
         default void validate() {
+            var s = validator.validate(this);
+            if (!s.isEmpty())
+                throw new ValidatingDomainException(s);
         }
 
     }

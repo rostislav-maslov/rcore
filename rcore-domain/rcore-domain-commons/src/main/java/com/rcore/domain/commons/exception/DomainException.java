@@ -1,9 +1,6 @@
 package com.rcore.domain.commons.exception;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.Value;
+import lombok.*;
 
 import javax.validation.Payload;
 import java.util.ArrayList;
@@ -11,6 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+@ToString
 @Getter
 public abstract class DomainException extends RuntimeException {
 
@@ -18,6 +16,7 @@ public abstract class DomainException extends RuntimeException {
     private List<Error> errors = new ArrayList<>();
     private UUID traceId = UUID.randomUUID();
 
+    @ToString
     @AllArgsConstructor
     @Getter
     public static class Error {
