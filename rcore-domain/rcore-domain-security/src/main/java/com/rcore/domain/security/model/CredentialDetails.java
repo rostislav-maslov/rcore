@@ -29,6 +29,7 @@ public class CredentialDetails {
     @NoArgsConstructor
     @Data
     public static class Role {
-        private String name;
+        private String id;
+        private String code;
     }
 }

@@ -23,7 +23,7 @@ public class CredentialPrincipal implements UserDetails {
                 credentialDetails.getId(),
                 credentialDetails.getRoles()
                         .stream()
-                        .map(role -> new SimpleGrantedAuthority(role.getName()))
+                        .map(role -> new SimpleGrantedAuthority(role.getCode()))
                         .collect(Collectors.toList()),
                 false
         );

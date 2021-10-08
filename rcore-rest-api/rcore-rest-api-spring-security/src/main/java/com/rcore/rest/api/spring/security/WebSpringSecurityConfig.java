@@ -1,6 +1,9 @@
 package com.rcore.rest.api.spring.security;
 
+import com.rcore.domain.security.port.AccessChecker;
+import com.rcore.domain.security.port.CredentialIdentityService;
 import com.rcore.rest.api.commons.routes.BaseRoutes;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,8 +23,13 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {
     private final TokenAuthenticationFilter tokenAuthenticationFilter;
 
-        public WebSpringSecurityConfig(AuthenticationManager authenticationManager, AuthenticationFailureHandler authenticationFailureHandler) {
-        this.tokenAuthenticationFilter = new TokenAuthenticationFilter(authenticationManager, authenticationFailureHandler);
+    public WebSpringSecurityConfig(
+            AuthenticationManager authenticationManager,
+            AuthenticationFailureHandler authenticationFailureHandler,
+            AccessChecker accessChecker,
+            @Value("${spring.application.name}") String serviceName
+    ) {
+        this.tokenAuthenticationFilter = new TokenAuthenticationFilter(authenticationManager, authenticationFailureHandler, accessChecker, serviceName);
     }
 
     @Override

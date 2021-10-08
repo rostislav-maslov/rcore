@@ -1,5 +1,8 @@
 package com.rcore.rest.api.spring.security;
 
+import com.rcore.domain.security.model.CredentialDetails;
+import com.rcore.domain.security.port.AccessChecker;
+import com.rcore.domain.security.port.CredentialIdentityService;
 import com.rcore.rest.api.commons.header.WebHeaders;
 import com.rcore.rest.api.commons.routes.BaseRoutes;
 import com.rcore.rest.api.spring.security.exceptions.AuthenticationApiException;
@@ -20,19 +23,30 @@ import java.io.IOException;
 @Slf4j
 public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    public TokenAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationFailureHandler authenticationFailureHandler) {
+    private final AccessChecker accessChecker;
+    private final String serviceName;
+
+    public TokenAuthenticationFilter(
+            AuthenticationManager authenticationManager,
+            AuthenticationFailureHandler authenticationFailureHandler,
+            AccessChecker accessChecker,
+            String serviceName
+    ) {
         super(BaseRoutes.API + "/**");
         setAuthenticationManager(authenticationManager);
         setAuthenticationFailureHandler(authenticationFailureHandler);
+        this.accessChecker = accessChecker;
+        this.serviceName = serviceName;
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
         try {
-            var token = httpServletRequest.getHeader(WebHeaders.X_AUTH_TOKEN);
-
-            TokenAuthentication tokenAuthentication = new TokenAuthentication(token);
-            return getAuthenticationManager().authenticate(tokenAuthentication);
+            var token = request.getHeader(WebHeaders.X_AUTH_TOKEN);
+            var credentialDetails = accessChecker.checkAccessByToken(token, request.getMethod(), request.getRequestURI(), serviceName);
+            CredentialPrincipal credentialPrincipal = CredentialPrincipal.from(credentialDetails);
+            var authentication = new TokenAuthentication(token, credentialPrincipal.getAuthorities(), true, credentialPrincipal);
+            return getAuthenticationManager().authenticate(authentication);
         } catch (Exception e) {
             log.error("Attempt authentication error", e);
             throw new AuthenticationApiException("Attempt authentication error", e);

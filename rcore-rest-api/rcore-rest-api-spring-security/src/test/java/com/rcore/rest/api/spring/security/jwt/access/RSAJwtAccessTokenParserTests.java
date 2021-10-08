@@ -51,7 +51,7 @@ class RSAJwtAccessTokenParserTests {
                                 .createdAt(LocalDateTime.now())
                                 .expiredAt(LocalDateTime.now().plusDays(1))
                                 .credentialId(UUID.randomUUID().toString())
-                                .roles(Collections.singletonList(new CredentialDetails.Role("ADMIN")))
+                                .roles(Collections.singletonList(new CredentialDetails.Role(UUID.randomUUID().toString(), "ADMIN")))
                                 .build())
                 );
             }
