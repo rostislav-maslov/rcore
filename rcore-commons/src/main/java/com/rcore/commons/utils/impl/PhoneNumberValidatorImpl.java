@@ -15,8 +15,8 @@ public class PhoneNumberValidatorImpl implements PhoneNumberValidator {
         var result = false;
 
         try {
-            phoneNumberUtil.parse(phone.getPhoneNumber(), phone.getIsoTwoLetterCountryCode());
-            result = true;
+            var p = phoneNumberUtil.parse(phone.getPhoneNumber(), phone.getIsoTwoLetterCountryCode());
+            return phoneNumberUtil.isValidNumber(p);
         } catch (NumberParseException e) {
             log.error("NumberParseException was thrown: " + e.toString());
         }
