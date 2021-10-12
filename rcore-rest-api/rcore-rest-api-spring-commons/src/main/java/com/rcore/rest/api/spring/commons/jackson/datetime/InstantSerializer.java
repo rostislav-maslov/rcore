@@ -6,13 +6,17 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 public class InstantSerializer extends JsonSerializer<Instant> {
 
     @Override
     public void serialize(Instant instant, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
-        String s = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").format(instant);
+        String s = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                .withZone(ZoneId.from(ZoneOffset.UTC))
+                .format(instant);
         jsonGenerator.writeString(s);
     }
 }

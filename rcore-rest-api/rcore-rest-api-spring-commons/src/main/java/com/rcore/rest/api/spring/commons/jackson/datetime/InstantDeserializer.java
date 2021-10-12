@@ -8,9 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
 public class InstantDeserializer extends JsonDeserializer<Instant> {
@@ -28,8 +31,19 @@ public class InstantDeserializer extends JsonDeserializer<Instant> {
                 DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS"),
                 DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         );
+        AtomicReference<Instant> localDateTime = new AtomicReference<>();
+        availableFormatters
+                .forEach(dateTimeFormatter -> {
+                    try {
+                        localDateTime.set(LocalDateTime.parse(str, dateTimeFormatter).toInstant(ZoneOffset.UTC));
+                        return;
+                    } catch (Exception e) {
+                        log.debug("Local date time deserialize exception", e);
+                    }
+                });
 
-        Instant dateTime = Instant.parse(str);
+        if (localDateTime.get() != null)
+            return localDateTime.get();
 
         throw new IOException("Local date time deserialize exception");
     }
