@@ -15,7 +15,7 @@ public class SuccessApiResponse<Result> {
         return new SuccessApiResponse<>(result);
     }
 
-    public static SuccessApiResponse of() {
+    public static SuccessApiResponse<?> of() {
         return new SuccessApiResponse<>();
     }
 

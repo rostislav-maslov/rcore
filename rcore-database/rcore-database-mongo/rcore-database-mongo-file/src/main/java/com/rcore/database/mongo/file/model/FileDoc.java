@@ -29,7 +29,6 @@ public class FileDoc extends FileEntity {
                 .filePath(entity.getFilePath())
                 .isPrivate(entity.getIsPrivate())
                 .createdAt(entity.getCreatedAt())
-                //.timeZone(entity.getTimeZone())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
     }

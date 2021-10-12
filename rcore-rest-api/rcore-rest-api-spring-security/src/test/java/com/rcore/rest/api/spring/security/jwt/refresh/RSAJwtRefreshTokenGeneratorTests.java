@@ -1,7 +1,6 @@
 package com.rcore.rest.api.spring.security.jwt.refresh;
 
 import com.nimbusds.jose.JOSEException;
-import com.rcore.domain.security.model.AccessTokenData;
 import com.rcore.domain.security.model.CredentialDetails;
 import com.rcore.domain.security.model.RefreshTokenData;
 import com.rcore.domain.security.port.TokenGenerator;
@@ -14,7 +13,8 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
 import java.security.NoSuchAlgorithmException;
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -39,8 +39,8 @@ class RSAJwtRefreshTokenGeneratorTests {
                 return Stream.of(
                         Arguments.of(RefreshTokenData.builder()
                                 .id(UUID.randomUUID().toString())
-                                .createdAt(LocalDateTime.now())
-                                .expiredAt(LocalDateTime.now().plusDays(1))
+                                .createdAt(Instant.now())
+                                .expiredAt(Instant.now().plus(1, ChronoUnit.DAYS))
                                 .credentialId(UUID.randomUUID().toString())
                                 .roles(Collections.singletonList(new CredentialDetails.Role(UUID.randomUUID().toString(), "ADMIN")))
                                 .build())

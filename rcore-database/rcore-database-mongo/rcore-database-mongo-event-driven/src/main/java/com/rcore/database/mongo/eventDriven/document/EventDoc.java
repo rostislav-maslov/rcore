@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Document
 @AllArgsConstructor
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Data
 public class EventDoc {
     private String id = new ObjectId().toString();
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private Instant createdAt = Instant.now();
     private Event payload;
     private String type;
 

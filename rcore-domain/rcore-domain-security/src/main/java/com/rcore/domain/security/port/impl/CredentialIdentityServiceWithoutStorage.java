@@ -9,7 +9,7 @@ import com.rcore.domain.security.port.CredentialIdentityService;
 import com.rcore.domain.security.port.TokenParser;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 /**
  * Получения CredentialDetails без обращния в БД. Все данные берутся из токена
@@ -26,7 +26,7 @@ public class CredentialIdentityServiceWithoutStorage implements CredentialIdenti
 
         AccessTokenData accessTokenData = tokenParser.parseWithValidating(token);
 
-        if (LocalDateTime.now().isAfter(accessTokenData.getExpiredAt()))
+        if (Instant.now().isAfter(accessTokenData.getExpiredAt()))
             throw new AccessTokenExpiredException();
 
         if (accessTokenData.getCredentialId() == null)

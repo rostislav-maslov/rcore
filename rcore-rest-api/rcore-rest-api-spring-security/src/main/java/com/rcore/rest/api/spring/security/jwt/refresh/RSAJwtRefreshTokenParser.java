@@ -17,7 +17,7 @@ import com.rcore.domain.security.port.TokenParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -40,16 +40,16 @@ public class RSAJwtRefreshTokenParser implements TokenParser<RefreshTokenData> {
                 throw new RefreshTokenModifiedException();
 
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME;
-            LocalDateTime expiredAt = LocalDateTime.parse(signedJWT.getJWTClaimsSet().getClaim("expiredAt").toString(), dateTimeFormatter);
+            Instant expiredAt = Instant.parse(signedJWT.getJWTClaimsSet().getClaim("expiredAt").toString());
 
-            if (expiredAt.isBefore(LocalDateTime.now()))
+            if (expiredAt.isBefore(Instant.now()))
                 throw new RefreshTokenExpiredException();
 
             return RefreshTokenData.builder()
                     .id(signedJWT.getJWTClaimsSet().getClaim("tokenId").toString())
                     .credentialId(signedJWT.getJWTClaimsSet().getClaim("credentialId").toString())
                     .expiredAt(expiredAt)
-                    .createdAt(LocalDateTime.parse(signedJWT.getJWTClaimsSet().getClaim("createdAt").toString(), dateTimeFormatter))
+                    .createdAt(Instant.parse(signedJWT.getJWTClaimsSet().getClaim("createdAt").toString()))
                     .roles(objectMapper.readValue(signedJWT.getJWTClaimsSet().getClaim("roles").toString(), new TypeReference<List<CredentialDetails.Role>>() {
                     }))
                     .build();

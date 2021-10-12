@@ -23,7 +23,6 @@ public class PictureDoc extends PictureEntity {
                 .isPrivate(entity.getIsPrivate())
                 .sizes(entity.getSizes())
                 .createdAt(entity.getCreatedAt())
-//                .timeZone(entity.getTimeZone())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
     }

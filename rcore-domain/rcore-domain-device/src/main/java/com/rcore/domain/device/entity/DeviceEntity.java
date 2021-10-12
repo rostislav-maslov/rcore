@@ -3,6 +3,7 @@ package com.rcore.domain.device.entity;
 import com.rcore.domain.commons.entity.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -15,6 +16,7 @@ import java.util.HashMap;
 @NoArgsConstructor
 @SuperBuilder
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class DeviceEntity extends BaseEntity<String> {
 
     /**

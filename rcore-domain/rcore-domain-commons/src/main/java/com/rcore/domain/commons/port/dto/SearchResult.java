@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 public class SearchResult<T> {
     private List<T> items = new ArrayList<>();
-    private Long count = 0l;
+    private Long count = 0L;
 
     public static <T> SearchResult<T> withItemsAndCount(List<T> items, Long count) {
         return new SearchResult<>(items, count);

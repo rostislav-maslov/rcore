@@ -7,17 +7,16 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Slf4j
-public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
+public class InstantDeserializer extends JsonDeserializer<Instant> {
 
     @Override
-    public LocalDateTime deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+    public Instant deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
         String str = p.getText();
         List<DateTimeFormatter> availableFormatters = Arrays.asList(
                 DateTimeFormatter.ISO_LOCAL_DATE_TIME,
@@ -29,19 +28,8 @@ public class LocalDateTimeDeserializer extends JsonDeserializer<LocalDateTime> {
                 DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS"),
                 DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         );
-        AtomicReference<LocalDateTime> localDateTime = new AtomicReference<>();
-        availableFormatters
-                .forEach(dateTimeFormatter -> {
-                    try {
-                        localDateTime.set(LocalDateTime.parse(str, dateTimeFormatter));
-                        return;
-                    } catch (Exception e) {
-                        log.debug("Local date time deserialize exception", e);
-                    }
-                });
 
-        if (localDateTime.get() != null)
-            return localDateTime.get();
+        Instant dateTime = Instant.parse(str);
 
         throw new IOException("Local date time deserialize exception");
     }

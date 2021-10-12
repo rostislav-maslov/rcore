@@ -13,9 +13,8 @@ import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
 
 import java.security.NoSuchAlgorithmException;
-import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -40,8 +39,8 @@ class RSAJwtAccessTokenGeneratorTests {
                 return Stream.of(
                         Arguments.of(AccessTokenData.builder()
                                 .id(UUID.randomUUID().toString())
-                                .createdAt(LocalDateTime.now())
-                                .expiredAt(LocalDateTime.now().plusDays(1))
+                                .createdAt(Instant.now())
+                                .expiredAt(Instant.now().plus(1, ChronoUnit.DAYS))
                                 .credentialId(UUID.randomUUID().toString())
                                 .roles(Collections.singletonList(new CredentialDetails.Role(UUID.randomUUID().toString(), "ADMIN")))
                                 .build())
