@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
  */
 @EqualsAndHashCode
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class CredentialDetails {
 
