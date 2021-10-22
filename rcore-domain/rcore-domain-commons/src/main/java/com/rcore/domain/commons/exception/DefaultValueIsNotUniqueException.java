@@ -10,7 +10,7 @@ public class DefaultValueIsNotUniqueException extends BadRequestDomainException 
     private final String invalidFieldName;
 
     public DefaultValueIsNotUniqueException(String domain, String invalidFieldName) {
-        super(domain, camelCaseToUnderscores(invalidFieldName) + GlobalReason.IS_NOT_UNIQUE_POSTFIX, "Value in field " + invalidFieldName + " is not unique. " + domain + "support only unique value");
+        super(domain, camelCaseToUnderscores(invalidFieldName) + GlobalReason.IS_NOT_UNIQUE_POSTFIX, "Value in field " + invalidFieldName + " is not unique. " + domain + " support only unique value");
         this.invalidFieldName = invalidFieldName;
     }
 
