@@ -17,16 +17,40 @@ public abstract class DomainException extends RuntimeException {
     private UUID traceId = UUID.randomUUID();
 
     @ToString
-    @AllArgsConstructor
+    @NoArgsConstructor
     @Getter
     public static class Error {
         protected String domain;
         protected String reason;
         protected String details;
+        protected String invalidFieldName;
+        protected String invalidValue;
+
+        public Error(String domain, String reason, String details) {
+            this.domain = domain;
+            this.reason = reason;
+            this.details = details;
+        }
+
+        public Error(String domain, String reason, String details, String invalidFieldName) {
+            this.domain = domain;
+            this.reason = reason;
+            this.details = details;
+            this.invalidFieldName = invalidFieldName;
+        }
+
+        public Error(String domain, String reason, String details, String invalidFieldName, String invalidValue) {
+            this.domain = domain;
+            this.reason = reason;
+            this.details = details;
+            this.invalidFieldName = invalidFieldName;
+            this.invalidValue = invalidValue;
+        }
     }
 
     public DomainException() {
     }
+
 
     public DomainException(String message) {
         super(message);
@@ -35,6 +59,16 @@ public abstract class DomainException extends RuntimeException {
     public DomainException(String domain, String reason, String details) {
         super(details);
         this.errors = Collections.singletonList(new Error(domain, reason, details));
+    }
+
+    public DomainException(String domain, String reason, String details, String invalidFieldName) {
+        super(details);
+        this.errors = Collections.singletonList(new Error(domain, reason, details, invalidFieldName));
+    }
+
+    public DomainException(String domain, String reason, String details, String invalidFieldName, String invalidValue) {
+        super(details);
+        this.errors = Collections.singletonList(new Error(domain, reason, details, invalidFieldName, invalidValue));
     }
 
     public DomainException(Error error) {
