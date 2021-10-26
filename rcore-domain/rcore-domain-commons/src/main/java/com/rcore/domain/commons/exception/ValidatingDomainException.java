@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 public class ValidatingDomainException extends BadRequestDomainException {
 
-
     public <T> ValidatingDomainException(Set<ConstraintViolation<T>> invalidFields) {
         setErrors(invalidFields
                 .stream()
