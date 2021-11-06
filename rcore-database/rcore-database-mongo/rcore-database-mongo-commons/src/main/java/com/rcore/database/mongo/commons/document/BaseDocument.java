@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import org.bson.types.ObjectId;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -14,6 +15,6 @@ import java.time.LocalDateTime;
 @Data
 public class BaseDocument {
     protected ObjectId id = new ObjectId();
-    protected LocalDateTime createdAt = LocalDateTime.now();
-    protected LocalDateTime updatedAt = LocalDateTime.now();
+    protected Instant createdAt = Instant.now();
+    protected Instant updatedAt = Instant.now();
 }

@@ -5,7 +5,11 @@ import com.rcore.domain.commons.port.dto.SearchResult;
 import com.rcore.domain.commons.usecase.UseCase;
 import lombok.Value;
 
+import javax.validation.Valid;
+
+@Valid
 @Value(staticConstructor = "of")
-public class SearchResultEntityOutputValues<Entity extends BaseEntity> implements UseCase.OutputValues {
-    private final SearchResult<Entity> result;
+public class SearchResultEntityOutputValues<Entity> implements UseCase.OutputValues {
+    @Valid
+    private final SearchResult<@Valid Entity> result;
 }

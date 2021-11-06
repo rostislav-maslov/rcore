@@ -1,8 +1,6 @@
 package com.rcore.domain.security.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +9,9 @@ import java.util.stream.Collectors;
 /**
  * Модель с доступами учетной записи
  */
+@EqualsAndHashCode
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 public class CredentialDetails {
 
@@ -25,10 +25,12 @@ public class CredentialDetails {
      */
     private List<Role> roles;
 
+    @EqualsAndHashCode
     @AllArgsConstructor
     @NoArgsConstructor
-    @Getter
+    @Data
     public static class Role {
-        private String name;
+        private String id;
+        private String code;
     }
 }

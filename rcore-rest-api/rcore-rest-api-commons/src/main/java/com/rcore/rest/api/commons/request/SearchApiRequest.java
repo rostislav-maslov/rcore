@@ -15,11 +15,7 @@ public class SearchApiRequest {
     private Long limit = 20l;
     private Long offset = 0l;
     private String sortName = "id";
-    private SortDirection sortDirection = SortDirection.DESC;
-
-    public enum SortDirection {
-        ASC, DESC
-    }
+    private SearchFilters.SortDirection sortDirection = SearchFilters.SortDirection.DESC;
 
     public SearchFilters toSearchFilters() {
         return SearchFilters.builder()
@@ -27,7 +23,7 @@ public class SearchApiRequest {
                 .limit(limit)
                 .offset(offset)
                 .sortName(sortName)
-                .sortDirection(sortDirection.name())
+                .sortDirection(sortDirection)
                 .build();
     }
 }

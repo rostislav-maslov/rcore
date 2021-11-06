@@ -14,5 +14,18 @@ public class SearchFilters {
     private Long limit;
     private Long offset;
     private String sortName;
-    private String sortDirection = "DESC";
+    private SortDirection sortDirection = SortDirection.DESC;
+
+    public enum SortDirection {
+        ASC, DESC;
+
+        public static SortDirection fromString(String sortDirection) {
+            if (sortDirection == null)
+                return DESC;
+
+            var s = sortDirection.toUpperCase();
+
+            return valueOf(s);
+        }
+    }
 }

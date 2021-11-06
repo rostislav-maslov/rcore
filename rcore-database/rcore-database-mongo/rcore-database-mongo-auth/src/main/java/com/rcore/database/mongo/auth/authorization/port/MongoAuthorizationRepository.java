@@ -1,6 +1,7 @@
 package com.rcore.database.mongo.auth.authorization.port;
 
 import com.rcore.database.mongo.auth.authorization.model.AuthorizationDoc;
+import com.rcore.database.mongo.auth.authorization.query.FindPendingConfirmationByAddressQuery;
 import com.rcore.database.mongo.auth.authorization.query.FindWithFiltersQuery;
 import com.rcore.database.mongo.commons.utils.CollectionNameUtils;
 import com.rcore.domain.auth.authorization.entity.AuthorizationEntity;
@@ -26,6 +27,11 @@ public class MongoAuthorizationRepository implements AuthorizationRepository {
     public AuthorizationEntity save(AuthorizationEntity entity) {
         mongoTemplate.save(entity, CollectionNameUtils.getCollectionName(AuthorizationDoc.class));
         return entity;
+    }
+
+    @Override
+    public Optional<AuthorizationEntity> findPendingConfirmationByAddress(String address) {
+        return Optional.ofNullable(mongoTemplate.findOne(new FindPendingConfirmationByAddressQuery(address).getQuery(), AuthorizationDoc.class));
     }
 
     @Override

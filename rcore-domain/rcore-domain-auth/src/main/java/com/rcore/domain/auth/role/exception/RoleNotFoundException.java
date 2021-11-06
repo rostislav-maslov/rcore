@@ -1,8 +1,6 @@
 package com.rcore.domain.auth.role.exception;
 
-import com.rcore.domain.commons.exception.DomainException;
-
-public class RoleNotFoundException extends DomainException {
+public class RoleNotFoundException extends RoleDomainException {
 
     public RoleNotFoundException() {
         super("Role not found");

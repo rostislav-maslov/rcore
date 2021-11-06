@@ -8,4 +8,5 @@ import java.util.Optional;
 
 public interface PictureRepository extends CRUDRepository<String, PictureEntity, SearchFilters> {
     Optional<PictureEntity> findByPath(String path);
+     void deleteUnused();
 }

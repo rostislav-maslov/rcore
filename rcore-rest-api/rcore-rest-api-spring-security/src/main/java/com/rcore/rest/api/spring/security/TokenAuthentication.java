@@ -42,7 +42,7 @@ public class TokenAuthentication implements Authentication {
     }
 
     @Override
-    public Object getPrincipal() {
+    public CredentialPrincipal getPrincipal() {
         return principal;
     }
 

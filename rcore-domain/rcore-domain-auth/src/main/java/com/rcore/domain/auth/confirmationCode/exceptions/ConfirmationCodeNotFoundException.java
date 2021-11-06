@@ -1,8 +1,6 @@
 package com.rcore.domain.auth.confirmationCode.exceptions;
 
-import com.rcore.domain.commons.exception.DomainException;
-
-public class ConfirmationCodeNotFoundException extends DomainException {
+public class ConfirmationCodeNotFoundException extends ConfirmationCodeDomainException {
 
     public ConfirmationCodeNotFoundException() {
         super("Confirmation code not found");

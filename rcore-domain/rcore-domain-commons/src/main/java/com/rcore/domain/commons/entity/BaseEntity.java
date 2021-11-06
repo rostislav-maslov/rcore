@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 @Setter
 public abstract class BaseEntity<EntityId> {
     protected EntityId id;
-    protected LocalDateTime createdAt = LocalDateTime.now();
-    protected LocalDateTime updatedAt = LocalDateTime.now();
+    protected Instant createdAt = Instant.now();
+    protected Instant updatedAt = Instant.now();
 
 
 }

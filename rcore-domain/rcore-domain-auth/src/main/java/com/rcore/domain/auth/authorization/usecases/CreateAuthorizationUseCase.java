@@ -11,9 +11,9 @@ import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 import lombok.*;
 
 public class CreateAuthorizationUseCase
-        extends AbstractCreateUseCase<AuthorizationEntity, AuthorizationIdGenerator, AuthorizationRepository, CreateAuthorizationUseCase.InputValues> {
+        extends AbstractCreateUseCase<AuthorizationEntity, AuthorizationIdGenerator<?>, AuthorizationRepository, CreateAuthorizationUseCase.InputValues> {
 
-    public CreateAuthorizationUseCase(AuthorizationRepository repository, AuthorizationIdGenerator<String> idGenerator) {
+    public CreateAuthorizationUseCase(AuthorizationRepository repository, AuthorizationIdGenerator<?> idGenerator) {
         super(repository, idGenerator);
     }
 

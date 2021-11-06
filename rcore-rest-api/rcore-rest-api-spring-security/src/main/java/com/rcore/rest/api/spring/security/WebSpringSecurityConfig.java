@@ -1,30 +1,36 @@
 package com.rcore.rest.api.spring.security;
 
+import com.rcore.domain.security.port.AccessChecker;
+import com.rcore.domain.security.port.CredentialIdentityService;
 import com.rcore.rest.api.commons.routes.BaseRoutes;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-
 @EnableWebSecurity
-@RequiredArgsConstructor
 @Configuration
 public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {
+    private final TokenAuthenticationFilter tokenAuthenticationFilter;
 
-    private final AbstractAuthenticationProcessingFilter abstractAuthenticationProcessingFilter;
-    private final AuthenticationEntryPoint authenticationEntryPoint;
+    public WebSpringSecurityConfig(
+            AuthenticationManager authenticationManager,
+            AuthenticationFailureHandler authenticationFailureHandler,
+            AccessChecker accessChecker,
+            @Value("${spring.application.name}") String serviceName
+    ) {
+        this.tokenAuthenticationFilter = new TokenAuthenticationFilter(authenticationManager, authenticationFailureHandler, accessChecker, serviceName);
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -35,22 +41,21 @@ public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {
         // @formatter:off
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                    .authorizeRequests()
-                    .antMatchers(BaseRoutes.NOT_SECURE + "/**", "/actuator/**").permitAll()
+                .authorizeRequests()
+                .antMatchers(BaseRoutes.NOT_SECURE + "/**", "/actuator/**").permitAll()
                 .and()
-                    .authorizeRequests()
-                    .anyRequest().authenticated()
+                .authorizeRequests()
+                .anyRequest().authenticated()
                 .and()
-                    .cors()
+                .cors()
                 .and()
-                    .csrf().disable()
-                    .formLogin().disable()
-                    .httpBasic().disable()
-                    .logout().disable()
-                .addFilterBefore(abstractAuthenticationProcessingFilter, UsernamePasswordAuthenticationFilter.class)
-                    .exceptionHandling()
-                    .authenticationEntryPoint(authenticationEntryPoint);
-        http.addFilterBefore(characterEncodingFilter(), CsrfFilter.class);
+                .csrf().disable()
+                .formLogin().disable()
+                .httpBasic().disable()
+                .logout().disable()
+                .addFilterBefore(tokenAuthenticationFilter, BasicAuthenticationFilter.class)
+                .exceptionHandling()
+                .authenticationEntryPoint(new TokenAuthenticationEntryPoint());
     }
 
     @Override
@@ -68,13 +73,6 @@ public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     GrantedAuthorityDefaults grantedAuthorityDefaults() {
         return new GrantedAuthorityDefaults(""); // Remove the ROLE_ prefix
-    }
-
-    public CharacterEncodingFilter characterEncodingFilter() {
-        CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-        characterEncodingFilter.setEncoding("UTF-8");
-        characterEncodingFilter.setForceEncoding(true);
-        return characterEncodingFilter;
     }
 
 }

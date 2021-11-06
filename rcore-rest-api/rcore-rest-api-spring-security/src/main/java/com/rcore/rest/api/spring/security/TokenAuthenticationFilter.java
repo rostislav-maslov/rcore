@@ -1,7 +1,8 @@
 package com.rcore.rest.api.spring.security;
 
-import com.rcore.domain.security.model.AccessTokenData;
-import com.rcore.domain.security.port.TokenConverter;
+import com.rcore.domain.security.model.CredentialDetails;
+import com.rcore.domain.security.port.AccessChecker;
+import com.rcore.domain.security.port.CredentialIdentityService;
 import com.rcore.rest.api.commons.header.WebHeaders;
 import com.rcore.rest.api.commons.routes.BaseRoutes;
 import com.rcore.rest.api.spring.security.exceptions.AuthenticationApiException;
@@ -12,7 +13,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -21,29 +21,32 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Slf4j
-@Component
 public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    public TokenAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationFailureHandler authenticationFailureHandler, TokenConverter<AccessTokenData> accessTokenDataTokenConverter) {
+    private final AccessChecker accessChecker;
+    private final String serviceName;
+
+    public TokenAuthenticationFilter(
+            AuthenticationManager authenticationManager,
+            AuthenticationFailureHandler authenticationFailureHandler,
+            AccessChecker accessChecker,
+            String serviceName
+    ) {
         super(BaseRoutes.API + "/**");
         setAuthenticationManager(authenticationManager);
         setAuthenticationFailureHandler(authenticationFailureHandler);
+        this.accessChecker = accessChecker;
+        this.serviceName = serviceName;
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws AuthenticationException, IOException, ServletException {
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
         try {
-            String token = httpServletRequest.getHeader(WebHeaders.X_AUTH_TOKEN);
-
-            if (token == null) {
-                TokenAuthentication authentication = new TokenAuthentication();
-                authentication.setAuthenticated(false);
-                return authentication;
-            }
-
-            TokenAuthentication tokenAuthentication = new TokenAuthentication(token);
-            Authentication authentication = getAuthenticationManager().authenticate(tokenAuthentication);
-            return authentication;
+            var token = request.getHeader(WebHeaders.X_AUTH_TOKEN);
+            var credentialDetails = accessChecker.checkAccessByToken(token, request.getMethod(), request.getRequestURI(), serviceName);
+            CredentialPrincipal credentialPrincipal = CredentialPrincipal.from(credentialDetails);
+            var authentication = new TokenAuthentication(token, credentialPrincipal.getAuthorities(), true, credentialPrincipal);
+            return getAuthenticationManager().authenticate(authentication);
         } catch (Exception e) {
             log.error("Attempt authentication error", e);
             throw new AuthenticationApiException("Attempt authentication error", e);

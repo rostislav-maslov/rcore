@@ -1,20 +1,24 @@
-###### Commons
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.rostislav-maslov.rcore/commons/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.rostislav-maslov.rcore/commons)
+## Change Log
 
-###### Domain
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.rostislav-maslov.rcore/domain/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.rostislav-maslov.rcore/domain)
+###v.1.0.7
 
-###### Adapter
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.rostislav-maslov.rcore/adapter/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.rostislav-maslov.rcore/adapter)
+- Переработаны исключения авторизации
+- Модуль с юзкейсами по авторизации перенесены в отдельную библиотеку
+- Добавлены файлы локализации исключений
 
-###### Memory
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.rostislav-maslov.rcore/memory/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.rostislav-maslov.rcore/memory)
+###v.1.0.4
+- Разделен интерфейс _TokenConverter_ на **_TokenGenerator_** и **_TokenParser_**
+- Разделен интерфейс _CredentialService_ на **_CredentialService_** и **_CredentialIdentityService_**
+- Добавлена реализация _CredentialIdentityService_, работащая без обращение в хранилище
+- Добавлена работа с JWT токенами, зашифрованными с помощью RSA ключа
+- Убрана аннотация @Component для реализаций _TokenGenerator_ и _TokenParser_
+- Добалвен интерфейс _DataMapper_
+- Исправлен повторный вызов методов при аутентификации в spring-security
+- Настройка времени жизни токенов вынесеноа в отделый класс _TokenLifeCycleConfig_ для возможности переопределения значений на уровне приложения
 
-###### Mongo
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.rostislav-maslov.rcore/mongo/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.rostislav-maslov.rcore/mongo)
-
-###### Security
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.rostislav-maslov.rcore/security/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.rostislav-maslov.rcore/security)
-
-###### REST API
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.rostislav-maslov.rcore/rest-api/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.rostislav-maslov.rcore/rest-api)
+###v.1.0.3
+- Добавлен класс _ApiUtils_ для последовательного получения всех ресурсов через API
+- Добавлено поле domain в DomainException
+- Модуль _rcore-domain-role_ переехал в _rcore-domain-auth_
+- Добавлены стандартные _TokenConverter_ для _JWT_
+- Fix по работе с учетными данными

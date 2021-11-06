@@ -1,19 +1,19 @@
 package com.rcore.domain.security.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 import java.util.List;
 
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Getter
 public class RefreshTokenData {
     private String id;
     private String credentialId;
     private List<CredentialDetails.Role> roles;
-    private LocalDateTime createdAt;
-    private LocalDateTime expiredAt;
+    private Instant createdAt;
+    private Instant expiredAt;
 }

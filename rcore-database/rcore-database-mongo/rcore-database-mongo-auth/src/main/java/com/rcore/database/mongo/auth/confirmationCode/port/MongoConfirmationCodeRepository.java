@@ -1,7 +1,7 @@
 package com.rcore.database.mongo.auth.confirmationCode.port;
 
 import com.rcore.database.mongo.auth.confirmationCode.model.ConfirmationCodeDoc;
-import com.rcore.database.mongo.auth.confirmationCode.query.ExistNotConfirmedCodeQuery;
+import com.rcore.database.mongo.auth.confirmationCode.query.FindNotConfirmedCodeByAuthorizationQuery;
 import com.rcore.database.mongo.auth.confirmationCode.query.FindNotConfirmedByAddressAndSendingTypeAndCodeQuery;
 import com.rcore.database.mongo.auth.confirmationCode.query.FindNotSentQuery;
 import com.rcore.database.mongo.auth.confirmationCode.query.FindWithFiltersQuery;
@@ -28,7 +28,12 @@ public class MongoConfirmationCodeRepository implements ConfirmationCodeReposito
 
     @Override
     public Boolean existNotConfirmedCode(String authorizationId) {
-        return mongoTemplate.exists(ExistNotConfirmedCodeQuery.of(authorizationId).getQuery(), ConfirmationCodeDoc.class);
+        return mongoTemplate.exists(FindNotConfirmedCodeByAuthorizationQuery.of(authorizationId).getQuery(), ConfirmationCodeDoc.class);
+    }
+
+    @Override
+    public Optional<ConfirmationCodeEntity> findWaitingConfirmCode(String authorizationId) {
+        return Optional.ofNullable(mongoTemplate.findOne(FindNotConfirmedCodeByAuthorizationQuery.of(authorizationId).getQuery(), ConfirmationCodeDoc.class));
     }
 
     @Override

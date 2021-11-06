@@ -35,7 +35,7 @@ public abstract class AbstractAggregationQuery<Input, Output> {
         List<AggregationOperation> operations = new ArrayList<>(getOperations());
         operations.add(Aggregation.skip(searchFilters.getOffset()));
         operations.add(Aggregation.limit(searchFilters.getLimit()));
-        operations.add(Aggregation.sort(Sort.by(Sort.Direction.fromString(searchFilters.getSortDirection()), searchFilters.getSortName())));
+        operations.add(Aggregation.sort(Sort.by(Sort.Direction.fromString(searchFilters.getSortDirection().name()), searchFilters.getSortName())));
         return Aggregation.newAggregation(operations);
     }
 

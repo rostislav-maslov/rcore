@@ -8,9 +8,13 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Вова - не удаляй, нужна обратная совместимость
+ */
 public class LocalDateTimeSerializer extends JsonSerializer<LocalDateTime> {
+    public LocalDateTimeSerializer() {
+    }
 
-    @Override
     public void serialize(LocalDateTime localDateTime, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         String s = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS").format(localDateTime);
         jsonGenerator.writeString(s);

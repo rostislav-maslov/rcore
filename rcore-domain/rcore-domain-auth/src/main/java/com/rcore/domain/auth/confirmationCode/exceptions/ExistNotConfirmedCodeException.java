@@ -1,9 +1,20 @@
 package com.rcore.domain.auth.confirmationCode.exceptions;
 
-import com.rcore.domain.commons.exception.DomainException;
+import lombok.Getter;
 
-public class ExistNotConfirmedCodeException extends DomainException {
+import java.time.LocalDateTime;
+
+public class ExistNotConfirmedCodeException extends ConfirmationCodeDomainException {
+
+    @Getter
+    private LocalDateTime expiredDate;
+
     public ExistNotConfirmedCodeException(String authorizationId) {
         super("Exist not confirmed code for authorization " + authorizationId);
+    }
+
+    public ExistNotConfirmedCodeException(String authorizationId, LocalDateTime expiredDate) {
+        super("Exist not confirmed code for authorization " + authorizationId);
+        this.expiredDate = expiredDate;
     }
 }

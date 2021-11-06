@@ -12,7 +12,7 @@ import com.rcore.domain.commons.usecase.model.SearchResultEntityOutputValues;
  * @param <Repository> - репозиторий чтения
  * @param <Filters> - фильтры
  */
-public abstract class AbstractFindWithFiltersUseCase<Entity extends BaseEntity, Filters extends SearchFilters, Repository extends ReadRepository>
+public abstract class AbstractFindWithFiltersUseCase<Entity extends BaseEntity<?>, Filters extends SearchFilters, Repository extends ReadRepository<?, Entity, Filters>>
         extends UseCase<FiltersInputValues<Filters>, SearchResultEntityOutputValues<Entity>> {
 
     protected final Repository repository;

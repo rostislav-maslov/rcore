@@ -1,8 +1,6 @@
 package com.rcore.domain.auth.credential.exceptions;
 
-import com.rcore.domain.commons.exception.DomainException;
-
-public class CredentialNotFoundException extends DomainException {
+public class CredentialNotFoundException extends CredentialDomainException {
 
     public CredentialNotFoundException() {
         super("Credential not found");

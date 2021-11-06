@@ -3,12 +3,12 @@ package com.rcore.database.mongo.auth.token.port;
 import com.rcore.database.mongo.auth.token.mapper.RefreshTokenDocMapper;
 import com.rcore.database.mongo.auth.token.model.RefreshTokenDoc;
 import com.rcore.database.mongo.auth.token.query.ExpireRefreshTokenQuery;
-import com.rcore.database.mongo.auth.token.query.FindAccessTokenWithFiltersQuery;
 import com.rcore.database.mongo.auth.token.query.FindAllActiveByUserIdQuery;
+import com.rcore.database.mongo.auth.token.query.FindRefreshTokensQuery;
 import com.rcore.database.mongo.commons.utils.CollectionNameUtils;
 import com.rcore.domain.auth.token.entity.RefreshTokenEntity;
 import com.rcore.domain.auth.token.port.RefreshTokenRepository;
-import com.rcore.domain.commons.port.dto.SearchFilters;
+import com.rcore.domain.auth.token.port.filter.RefreshTokenFilters;
 import com.rcore.domain.commons.port.dto.SearchResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -60,8 +60,8 @@ public class MongoRefreshTokenRepository implements RefreshTokenRepository {
     }
 
     @Override
-    public SearchResult<RefreshTokenEntity> find(SearchFilters filters) {
-        Query query = new FindAccessTokenWithFiltersQuery(filters).getQuery();
+    public SearchResult<RefreshTokenEntity> find(RefreshTokenFilters filters) {
+        Query query = new FindRefreshTokensQuery(filters).getQuery();
         return SearchResult.withItemsAndCount(
                 mongoTemplate.find(query, RefreshTokenDoc.class).stream().map(mapper::inverseMap).collect(Collectors.toList()),
                 mongoTemplate.count(query.limit(0).skip(0), RefreshTokenDoc.class)
