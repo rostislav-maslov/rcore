@@ -33,8 +33,8 @@ public class ValidationErrorFactory {
         put("javax.validation.constraints.PositiveOrZero", GlobalReason.IS_INCORRECT_POSTFIX);
         put("javax.validation.constraints.Size", GlobalReason.IS_INCORRECT_POSTFIX);
 
-        put("javax.validation.constraints.NotNull", GlobalReason.IS_INCORRECT_POSTFIX);
-        put("javax.validation.constraints.NotEmpty", GlobalReason.IS_INCORRECT_POSTFIX);
+        put("javax.validation.constraints.NotNull", GlobalReason.IS_REQUIRED_POSTFIX);
+        put("javax.validation.constraints.NotEmpty", GlobalReason.IS_REQUIRED_POSTFIX);
     }};
 
     public static void addSupportedAnnotation(Class<? extends Annotation> annotation, String reason) {
