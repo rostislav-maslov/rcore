@@ -8,7 +8,7 @@ import com.rcore.domain.commons.usecase.model.SingletonEntityOutputValues;
 
 import java.util.Optional;
 
-public abstract class AbstractFindByIdWithThrowExceptionUseCase<Id, Entity extends BaseEntity<?>, Repository extends ReadRepository<Id, Entity, ?>>
+public abstract class AbstractFindByIdWithThrowExceptionUseCase<Id, Entity extends BaseEntity<Id>, Repository extends ReadRepository<Id, Entity, ?>>
         extends UseCase<IdInputValues<Id>, SingletonEntityOutputValues<Entity>> {
 
     protected final Repository repository;
