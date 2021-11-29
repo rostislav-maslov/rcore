@@ -34,7 +34,12 @@ public class MongoFileRepository implements FileRepository {
         return mongoTemplate.save(object, CollectionNameUtils.getCollectionName(FileDoc.class));
     }
 
-//    @Override
+    @Override
+    public boolean exist(String s) {
+        return false;
+    }
+
+    //    @Override
 //    public Boolean delete(FileEntity object) {
 //        long deleteCount = mongoTemplate.remove(object, CollectionNameUtils.getCollectionName(FileDoc.class)).getDeletedCount();
 //        return deleteCount > 0;
