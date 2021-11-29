@@ -68,7 +68,10 @@ public class PictureRepositoryImpl implements PictureRepository {
         mongoTemplate.remove(new DeleteUnused(), CollectionNameUtils.getCollectionName(PictureDoc.class));
     }
 
-
+    @Override
+    public boolean exist(String s) {
+        return false;
+    }
 
     @Override
     public Optional<PictureEntity> findByPath(String path) {
