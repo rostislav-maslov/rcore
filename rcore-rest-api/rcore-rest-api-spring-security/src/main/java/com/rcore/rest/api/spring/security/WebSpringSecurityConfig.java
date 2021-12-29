@@ -61,8 +61,12 @@ public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring()
-                .antMatchers("/v2/api-docs")
+                .antMatchers("/v2/api-docs/**")
+                .antMatchers("/v3/api-docs/**")
+                .antMatchers("/swagger**")
+                .antMatchers("/swagger/**")
                 .antMatchers("/swagger-resources/**")
+                .antMatchers("/swagger-ui.html")
                 .antMatchers("/swagger-ui/index.html")
                 .antMatchers("/swagger-ui/**")
                 .antMatchers("/configuration/**")

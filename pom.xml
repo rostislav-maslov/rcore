@@ -18,8 +18,9 @@
     <packaging>pom</packaging>
 
     <properties>
-        <revision>1.0.22</revision>
+        <revision>1.0.23</revision>
         <delombok.output>delombok</delombok.output>
+        <spring-boot.version>2.4.3</spring-boot.version>
     </properties>
 
     <dependencies>
@@ -47,6 +48,17 @@
         </dependency>
     </dependencies>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <distributionManagement>
         <repository>
