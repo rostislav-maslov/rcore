@@ -18,7 +18,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <revision>1.0.23</revision>
+        <revision>1.0.24</revision>
         <delombok.output>delombok</delombok.output>
         <spring-boot.version>2.4.3</spring-boot.version>
     </properties>
