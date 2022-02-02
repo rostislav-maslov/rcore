@@ -32,7 +32,7 @@ public interface UseCaseExecutor {
      * @param <Input>
      * @param <Output>
      */
-    <Input extends UseCase.InputValues, Output extends UseCase.OutputValues> void execute(
+    <Input extends UseCase.InputValues, Output extends UseCase.OutputValues> Output execute(
             UseCase<Input, Output> useCase,
             Input input
     );

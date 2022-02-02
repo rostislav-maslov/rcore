@@ -4,7 +4,7 @@ import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
-public abstract class AbstractModifyQuery implements ExampleQuery {
+public abstract class AbstractModifyQuery implements ExampleQuery, UpdateQuery {
     protected Update update;
     protected FindAndModifyOptions modifyOptions;
 
