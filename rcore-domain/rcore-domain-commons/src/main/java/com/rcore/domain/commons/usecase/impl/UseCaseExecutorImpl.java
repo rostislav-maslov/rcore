@@ -13,7 +13,7 @@ public class UseCaseExecutorImpl implements UseCaseExecutor {
     }
 
     @Override
-    public <Input extends UseCase.InputValues, Output extends UseCase.OutputValues> void execute(UseCase<Input, Output> useCase, Input input) {
-        useCase.execute(input);
+    public <Input extends UseCase.InputValues, Output extends UseCase.OutputValues> Output execute(UseCase<Input, Output> useCase, Input input) {
+        return useCase.execute(input);
     }
 }

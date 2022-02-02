@@ -29,9 +29,9 @@ public class ValidatingUseCaseExecutor implements UseCaseExecutor {
     }
 
     @Override
-    public <Input extends UseCase.InputValues, Output extends UseCase.OutputValues> void execute(UseCase<Input, Output> useCase, Input input) {
+    public <Input extends UseCase.InputValues, Output extends UseCase.OutputValues> Output execute(UseCase<Input, Output> useCase, Input input) {
         validate(input);
-        useCase.execute(input);
+        return useCase.execute(input);
     }
 
     private <I> void validate(I i) {
