@@ -19,7 +19,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <revision>1.0.25-SNAPSHOT</revision>
+        <revision>1.0.25</revision>
         <delombok.output>delombok</delombok.output>
         <spring-boot.version>2.4.3</spring-boot.version>
 
