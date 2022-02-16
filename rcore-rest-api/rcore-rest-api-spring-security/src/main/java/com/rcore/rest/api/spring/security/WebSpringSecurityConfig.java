@@ -71,6 +71,7 @@ public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-ui/**")
                 .antMatchers("/configuration/**")
                 .antMatchers("/webjars/**")
+                .antMatchers("/springwolf/**")
                 .antMatchers("/public");
     }
 
