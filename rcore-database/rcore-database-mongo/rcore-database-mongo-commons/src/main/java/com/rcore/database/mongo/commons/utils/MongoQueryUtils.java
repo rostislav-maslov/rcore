@@ -31,7 +31,7 @@ public class MongoQueryUtils {
     public Criteria generateQueryRegEXCriteria(String query, String... fields) {
         return new Criteria().orOperator(
                 Arrays.stream(fields)
-                        .map(f -> Criteria.where(f).regex(shieldNotSupportedSymbols(query)))
+                        .map(f -> Criteria.where(f).regex(shieldNotSupportedSymbols(query), "i"))
                         .toArray(Criteria[]::new)
         );
     }
