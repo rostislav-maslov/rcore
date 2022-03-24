@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 public class EmailValidator implements ConstraintValidator<Email, String> {
 
-    private final List<Character> localPartAllowedSpecSymbols = Arrays.asList('+', '-', '_', ',', '.');
+    private final List<Character> localPartAllowedSpecSymbols = Arrays.asList('+', '-', '_', ',', '.', '\'');
     private final List<Character> domainPartAllowedSpecSymbols = Arrays.asList('-', '.');
 
     @Override
