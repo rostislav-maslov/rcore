@@ -11,7 +11,13 @@ public interface PhoneNumberFormatter {
     @Value(staticConstructor = "of")
     class FormattedPhoneNumber {
         Long number;
+        Integer countryCode;
         String formatted;
+
+        public Long getFullNumber() {
+            return Long.parseLong(countryCode.toString() + number.toString());
+        }
+
     }
 
 }

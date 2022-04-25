@@ -16,7 +16,7 @@ public class PhoneNumberFormatterImpl implements PhoneNumberFormatter {
     public FormattedPhoneNumber formatPhone(PhoneNumberValidator.PhoneNumber phone) {
         try {
             Phonenumber.PhoneNumber phoneNumber = phoneNumberUtil.parse(phone.getPhoneNumber(), phone.getIsoTwoLetterCountryCode().toUpperCase());
-            return FormattedPhoneNumber.of(phoneNumber.getNationalNumber(), phoneNumberUtil.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.NATIONAL));
+            return FormattedPhoneNumber.of(phoneNumber.getNationalNumber(), phoneNumber.getCountryCode(), phoneNumberUtil.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.NATIONAL));
         } catch (NumberParseException e) {
             log.error("NumberParseException was thrown: " + e.toString());
             throw new PhoneNumberFormattingException();

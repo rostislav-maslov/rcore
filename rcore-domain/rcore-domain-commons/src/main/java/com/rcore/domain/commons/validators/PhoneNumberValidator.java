@@ -1,6 +1,5 @@
 package com.rcore.domain.commons.validators;
 
-import com.rcore.commons.utils.impl.PhoneNumberValidatorImpl;
 import lombok.RequiredArgsConstructor;
 
 import javax.validation.ConstraintValidator;
