@@ -13,7 +13,7 @@ class PhoneNumberFormatterTest {
     @ParameterizedTest
     @ValueSource(strings = {"+79023334455", "+7 (902) 333 44 55", "+7-(902)-333-44-55", "89023334455"})
     void FormatRussianPhone_Successful_Test(String phone) {
-        PhoneNumberFormatter.FormattedPhoneNumber formatted = phoneNumberFormatter.formatPhone(new PhoneNumberValidator.PhoneNumber(phone, "ru"));
+        PhoneNumberFormatter.FormattedPhoneNumber formatted = phoneNumberFormatter.formatPhone(phone, "ru");
     }
 
 }

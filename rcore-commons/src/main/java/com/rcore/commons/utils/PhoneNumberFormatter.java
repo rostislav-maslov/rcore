@@ -4,7 +4,7 @@ import lombok.Value;
 
 public interface PhoneNumberFormatter {
 
-    FormattedPhoneNumber formatPhone(PhoneNumberValidator.PhoneNumber phone);
+    FormattedPhoneNumber formatPhone(String phone, String countryCode);
 
     class PhoneNumberFormattingException extends RuntimeException {}
 
