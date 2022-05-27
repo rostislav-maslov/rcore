@@ -13,18 +13,13 @@ import com.rcore.security.infrastructure.exceptions.InvalidTokenFormatException;
 import com.rcore.security.infrastructure.exceptions.TokenGenerateException;
 import com.rcore.security.infrastructure.utils.ObjectMapperUtils;
 
-import java.time.LocalDateTime;
-
-public class JWTByAccessTokenGenerator implements AuthTokenGenerator<AccessTokenDTO> {
+public class JWTByAccessTokenGeneratorWithAccesses implements AuthTokenGenerator<AccessTokenDTO> {
 
     private final ObjectMapper objectMapper = ObjectMapperUtils.localDateTimeMapper();
-    private final JWTByAccessTokenGeneratorWithAccesses accessTokenGeneratorWithAccesses = new JWTByAccessTokenGeneratorWithAccesses();
 
     @Override
     public String generate(AccessTokenDTO accessTokenDTO, String secret) throws TokenGenerateException {
         try {
-            accessTokenDTO.setAccesses(null);
-
             JWSObject jwsObject = new JWSObject(new JWSHeader(JWSAlgorithm.HS256), new Payload(objectMapper.writeValueAsString(accessTokenDTO)));
             jwsObject.sign(new MACSigner(secret));
             return jwsObject.serialize();
@@ -42,13 +37,8 @@ public class JWTByAccessTokenGenerator implements AuthTokenGenerator<AccessToken
         } catch (Exception e) {
             throw new InvalidTokenFormatException();
         }
-
-        var generatedToken = accessTokenDTO.getAccesses() != null && accessTokenDTO.getAccesses().size() > 0
-                ? accessTokenGeneratorWithAccesses.generate(accessTokenDTO, secret)
-                : generate(accessTokenDTO, secret);
-
         //Проверяем подлинность переданного токена
-        if (!generatedToken.equals(token))
+        if (!generate(accessTokenDTO, secret).equals(token))
             throw new AuthenticationException();
         return accessTokenDTO;
     }
