@@ -32,7 +32,7 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
             AccessChecker accessChecker,
             String serviceName
     ) {
-        super(BaseRoutes.API + "/**");
+        super("/**");
         setAuthenticationManager(authenticationManager);
         setAuthenticationFailureHandler(authenticationFailureHandler);
         this.accessChecker = accessChecker;
