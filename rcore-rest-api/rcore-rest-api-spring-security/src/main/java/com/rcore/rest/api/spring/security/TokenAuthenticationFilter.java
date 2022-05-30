@@ -1,10 +1,7 @@
 package com.rcore.rest.api.spring.security;
 
-import com.rcore.domain.security.model.CredentialDetails;
 import com.rcore.domain.security.port.AccessChecker;
-import com.rcore.domain.security.port.CredentialIdentityService;
 import com.rcore.rest.api.commons.header.WebHeaders;
-import com.rcore.rest.api.commons.routes.BaseRoutes;
 import com.rcore.rest.api.spring.security.exceptions.AuthenticationApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
