@@ -1,5 +1,6 @@
 package com.rcore.security.infrastructure.jwt.converter.impl;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
@@ -17,11 +18,26 @@ import com.rcore.security.infrastructure.utils.ObjectMapperUtils;
 public class JWTByRefreshTokenGenerator implements AuthTokenGenerator<RefreshTokenDTO> {
 
     private final ObjectMapper objectMapper = ObjectMapperUtils.localDateTimeMapper();
+    private final ObjectMapper withNullObjectMapper;
+    public JWTByRefreshTokenGenerator() {
+        withNullObjectMapper = ObjectMapperUtils.localDateTimeMapper();
+        withNullObjectMapper.setDefaultPropertyInclusion(JsonInclude.Include.ALWAYS);
+    }
 
     @Override
     public String generate(RefreshTokenDTO refreshTokenDTO, String secret) throws TokenGenerateException {
         try {
             JWSObject jwsObject = new JWSObject(new JWSHeader(JWSAlgorithm.HS256), new Payload(objectMapper.writeValueAsString(refreshTokenDTO)));
+            jwsObject.sign(new MACSigner(secret));
+            return jwsObject.serialize();
+        } catch (Exception e) {
+            throw new TokenGenerateException();
+        }
+    }
+
+    public String generateWithNullFields(RefreshTokenDTO refreshTokenDTO, String secret) throws TokenGenerateException {
+        try {
+            JWSObject jwsObject = new JWSObject(new JWSHeader(JWSAlgorithm.HS256), new Payload(withNullObjectMapper.writeValueAsString(refreshTokenDTO)));
             jwsObject.sign(new MACSigner(secret));
             return jwsObject.serialize();
         } catch (Exception e) {
@@ -39,7 +55,9 @@ public class JWTByRefreshTokenGenerator implements AuthTokenGenerator<RefreshTok
             throw new UserNotExistException();
         }
 
-        if (!generate(refreshTokenDTO, secret).equals(token))
+        var generatedToken = generate(refreshTokenDTO, secret);
+        var generatedTokenWithNullFields = generateWithNullFields(refreshTokenDTO, secret);
+        if (!generatedToken.equals(token) && !generatedTokenWithNullFields.equals(token))
             throw new AuthenticationException();
         return refreshTokenDTO;
     }
