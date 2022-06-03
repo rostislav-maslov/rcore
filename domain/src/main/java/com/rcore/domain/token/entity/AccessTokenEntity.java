@@ -30,6 +30,8 @@ public class AccessTokenEntity extends BaseEntity {
     private String sign;
 
     public Boolean readyForRefresh() {
+        if (status == null)
+            return true;
         if (status.equals(RefreshTokenEntity.Status.ACTIVE))
             return true;
         if (status.equals(RefreshTokenEntity.Status.EXPIRED))

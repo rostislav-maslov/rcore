@@ -36,9 +36,8 @@ public class RefreshTokenEntity extends BaseEntity {
     private String salt;
 
     public Boolean isActive() {
-        if (!status.equals(Status.ACTIVE)) return false;
+        if (status!= null && !status.equals(Status.ACTIVE)) return false;
         if (LocalDateTime.now().isAfter(expireAt)) return false;
-
         return true;
     }
 }

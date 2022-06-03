@@ -75,7 +75,7 @@ public class AuthorizationByTokenUseCase implements AuthorizationPort {
             accessTokenStorage.expireAccessToken(accessToken);
             throw new TokenExpiredException();
         }
-        
+
         return user;
     }
 
