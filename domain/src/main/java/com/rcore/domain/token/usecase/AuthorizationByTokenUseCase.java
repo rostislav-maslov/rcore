@@ -64,16 +64,18 @@ public class AuthorizationByTokenUseCase implements AuthorizationPort {
         return accessTokenEntity;
     }
 
-    public UserEntity getUserByAccessToken(AccessTokenEntity accessToken) throws  UserBlockedException, UserNotExistException, TokenExpiredException {
+    public UserEntity getUserByAccessToken(AccessTokenEntity accessToken) throws UserBlockedException, UserNotExistException, TokenExpiredException {
         UserEntity user = userRepository.findById(accessToken.getUserId())
                 .orElseThrow(UserNotExistException::new);
         if (user.getStatus().equals(UserStatus.BLOCK))
             throw new UserBlockedException();
-        else if (!accessToken.getStatus().equals(RefreshTokenEntity.Status.ACTIVE) || !accessToken.isActive()) {
+
+        if ((accessToken.getStatus()!= null && !accessToken.getStatus().equals(RefreshTokenEntity.Status.ACTIVE))
+                || !accessToken.isActive()) {
             accessTokenStorage.expireAccessToken(accessToken);
             throw new TokenExpiredException();
         }
-
+        
         return user;
     }
 
