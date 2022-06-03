@@ -41,7 +41,7 @@ public class ExpireTokenUseCase {
         if (!userEntity.getStatus().equals(UserStatus.ACTIVE))
             throw new BlockedUserTriesToLogoutException();
 
-        if (!accessToken.getStatus().equals(RefreshTokenEntity.Status.ACTIVE)) {
+        if (accessToken.getStatus() != null && !accessToken.getStatus().equals(RefreshTokenEntity.Status.ACTIVE)) {
             throw new TokenExpiredException();
         }
 
