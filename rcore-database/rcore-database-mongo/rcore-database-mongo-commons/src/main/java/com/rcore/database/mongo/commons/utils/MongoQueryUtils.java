@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 @UtilityClass
 public class MongoQueryUtils {
-    private final char[] notSupportedSymbols = "<([{\\^-=$!|]})?*+.>".toCharArray();
+    private final char[] notSupportedSymbols = "\\<([{^-=$!|]})?*+.>".toCharArray();
 
     public String removeNotSupportedSymbols(String string) {
         String result = string;
