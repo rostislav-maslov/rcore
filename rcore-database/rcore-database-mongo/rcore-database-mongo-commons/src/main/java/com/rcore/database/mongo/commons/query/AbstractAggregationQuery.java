@@ -1,7 +1,6 @@
 package com.rcore.database.mongo.commons.query;
 
 import com.rcore.domain.commons.port.dto.SearchFilters;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -13,10 +12,14 @@ import java.util.List;
 
 @Getter
 public abstract class AbstractAggregationQuery<Input, Output> extends AggregationQuery<Input, Output> {
-    private SearchFilters searchFilters;
+    private final SearchFilters searchFilters;
 
     public AbstractAggregationQuery(Class<Input> inputType, Class<Output> outputType, SearchFilters searchFilters) {
         super(inputType, outputType);
+        this.searchFilters = searchFilters;
+    }
+
+    public AbstractAggregationQuery(SearchFilters searchFilters) {
         this.searchFilters = searchFilters;
     }
 

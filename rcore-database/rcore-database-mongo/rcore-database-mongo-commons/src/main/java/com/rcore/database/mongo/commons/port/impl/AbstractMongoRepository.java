@@ -8,6 +8,7 @@ import com.rcore.domain.commons.entity.BaseEntity;
 import com.rcore.domain.commons.port.CRUDRepository;
 import com.rcore.domain.commons.port.dto.SearchFilters;
 import com.rcore.domain.commons.port.dto.SearchResult;
+import org.springframework.core.ResolvableType;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 
@@ -22,6 +23,13 @@ public abstract class AbstractMongoRepository<ID, E extends BaseEntity<ID>, D ex
 
     public AbstractMongoRepository(Class<D> documentClass, ExampleDataMapper<E, D> mapper, MongoTemplate mongoTemplate) {
         this.documentClass = documentClass;
+        this.mapper = mapper;
+        this.mongoTemplate = mongoTemplate;
+    }
+
+    @SuppressWarnings("unchecked")
+    public AbstractMongoRepository(ExampleDataMapper<E, D> mapper, MongoTemplate mongoTemplate) {
+        this.documentClass = (Class<D>) ResolvableType.forClass(AbstractMongoRepository.class, getClass()).getGeneric(2).getType();
         this.mapper = mapper;
         this.mongoTemplate = mongoTemplate;
     }
