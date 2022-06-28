@@ -10,6 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -24,12 +25,13 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
     private final String serviceName;
 
     public TokenAuthenticationFilter(
+            RequestMatcher matcher,
             AuthenticationManager authenticationManager,
             AuthenticationFailureHandler authenticationFailureHandler,
             AccessChecker accessChecker,
             String serviceName
     ) {
-        super("/**");
+        super(matcher);
         setAuthenticationManager(authenticationManager);
         setAuthenticationFailureHandler(authenticationFailureHandler);
         this.accessChecker = accessChecker;
