@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
@@ -36,14 +35,13 @@ public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {
             AccessChecker accessChecker,
             @Value("${spring.application.name}") String serviceName
     ) {
-        this.tokenAuthenticationFilter = new TokenAuthenticationFilter(authenticationManager, authenticationFailureHandler, accessChecker, serviceName);
+        this.tokenAuthenticationFilter = new TokenAuthenticationFilter(getSecuredUrlMatcher(), authenticationManager, authenticationFailureHandler, accessChecker, serviceName);
     }
 
     protected Collection<String> notSecureUrls() {
         return List.of(
                 BaseRoutes.NOT_SECURE + "/**",
                 "/actuator/**",
-
                 "/v2/api-docs/**",
                 "/v3/api-docs/**",
                 "/swagger**",
@@ -55,21 +53,26 @@ public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 "/springwolf/**",
                 "/configuration/**",
                 "/webjars/**",
-                "/public"
+                "/public",
+                "/error",
+                "/favicon.ico"
         );
     }
 
-    protected RequestMatcher getSecuredUrlMatcher(){
-        return new NegatedRequestMatcher(
-                new OrRequestMatcher(notSecureUrls()
-                        .stream()
-                        .map(AntPathRequestMatcher::new)
-                        .collect(Collectors.toList())));
+    protected RequestMatcher getNotSecureUrlMatcher() {
+        return new OrRequestMatcher(notSecureUrls()
+                .stream()
+                .map(AntPathRequestMatcher::new)
+                .collect(Collectors.toList()));
+    }
+
+    protected RequestMatcher getSecuredUrlMatcher() {
+        return new NegatedRequestMatcher(getNotSecureUrlMatcher());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        RequestMatcher secureMatcher = getSecuredUrlMatcher();
+        RequestMatcher notSecureMatcher = getNotSecureUrlMatcher();
 
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
         filter.setEncoding("UTF-8");
@@ -86,12 +89,12 @@ public class WebSpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .requestMatcher(secureMatcher)
                 .authorizeRequests()
+                .requestMatchers(notSecureMatcher)
+                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
-                .requestMatcher(secureMatcher)
                 .addFilterBefore(tokenAuthenticationFilter, BasicAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(new TokenAuthenticationEntryPoint());
