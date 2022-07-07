@@ -24,7 +24,6 @@ public class ValidationErrorFactory {
         put("javax.validation.constraints.Min", GlobalReason.IS_INCORRECT_POSTFIX);
         put("javax.validation.constraints.Negative", GlobalReason.IS_INCORRECT_POSTFIX);
         put("javax.validation.constraints.NegativeOrZero", GlobalReason.IS_INCORRECT_POSTFIX);
-        put("javax.validation.constraints.NotBlank", GlobalReason.IS_INCORRECT_POSTFIX);
         put("javax.validation.constraints.Null", GlobalReason.IS_INCORRECT_POSTFIX);
         put("javax.validation.constraints.Past", GlobalReason.IS_INCORRECT_POSTFIX);
         put("javax.validation.constraints.PastOrPresent", GlobalReason.IS_INCORRECT_POSTFIX);
@@ -35,6 +34,7 @@ public class ValidationErrorFactory {
 
         put("javax.validation.constraints.NotNull", GlobalReason.IS_REQUIRED_POSTFIX);
         put("javax.validation.constraints.NotEmpty", GlobalReason.IS_REQUIRED_POSTFIX);
+        put("javax.validation.constraints.NotBlank", GlobalReason.IS_REQUIRED_POSTFIX);
     }};
 
     public static void addSupportedAnnotation(Class<? extends Annotation> annotation, String reason) {
