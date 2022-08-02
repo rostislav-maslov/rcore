@@ -4,6 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.springframework.data.mongodb.core.query.Criteria;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 @UtilityClass
 public class MongoQueryUtils {
@@ -34,5 +35,12 @@ public class MongoQueryUtils {
                         .map(f -> Criteria.where(f).regex(shieldNotSupportedSymbols(query), "i"))
                         .toArray(Criteria[]::new)
         );
+    }
+
+    public Criteria and(Collection<Criteria> collection) {
+        if (collection.isEmpty())
+            return new Criteria();
+        else
+            return new Criteria().andOperator(collection.toArray(Criteria[]::new));
     }
 }

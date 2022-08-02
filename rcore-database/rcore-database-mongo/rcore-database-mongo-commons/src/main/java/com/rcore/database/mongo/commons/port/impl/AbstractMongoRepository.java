@@ -56,6 +56,10 @@ public abstract class AbstractMongoRepository<ID, E extends BaseEntity<ID>, D ex
     public SearchResult<E> find(F filters) {
         Query query = getSearchQuery(filters).getQuery();
 
+        return findSearch(query);
+    }
+
+    protected SearchResult<E> findSearch(Query query) {
         return SearchResult.withItemsAndCount(
                 mongoTemplate.find(query, documentClass)
                         .stream()
