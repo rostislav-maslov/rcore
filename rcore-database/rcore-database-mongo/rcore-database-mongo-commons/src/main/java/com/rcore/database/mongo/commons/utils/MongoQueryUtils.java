@@ -4,10 +4,11 @@ import lombok.experimental.UtilityClass;
 import org.springframework.data.mongodb.core.query.Criteria;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 @UtilityClass
 public class MongoQueryUtils {
-    private final char[] notSupportedSymbols = "<([{\\^-=$!|]})?*+.>".toCharArray();
+    private final char[] notSupportedSymbols = "\\<([{^-=$!|]})?*+.>".toCharArray();
 
     public String removeNotSupportedSymbols(String string) {
         String result = string;
@@ -31,8 +32,15 @@ public class MongoQueryUtils {
     public Criteria generateQueryRegEXCriteria(String query, String... fields) {
         return new Criteria().orOperator(
                 Arrays.stream(fields)
-                        .map(f -> Criteria.where(f).regex(shieldNotSupportedSymbols(query)))
+                        .map(f -> Criteria.where(f).regex(shieldNotSupportedSymbols(query), "i"))
                         .toArray(Criteria[]::new)
         );
+    }
+
+    public Criteria and(Collection<Criteria> collection) {
+        if (collection.isEmpty())
+            return new Criteria();
+        else
+            return new Criteria().andOperator(collection.toArray(Criteria[]::new));
     }
 }

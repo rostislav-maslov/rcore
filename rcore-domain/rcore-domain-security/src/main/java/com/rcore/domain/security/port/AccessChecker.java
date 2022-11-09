@@ -6,4 +6,6 @@ public interface AccessChecker {
 
     CredentialDetails checkAccessByToken(String token, String requestType, String requestPath, String serviceName);
 
+    boolean tokenIsValid(String token);
+
 }

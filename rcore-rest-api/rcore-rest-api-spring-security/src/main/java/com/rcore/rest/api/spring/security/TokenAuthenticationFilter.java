@@ -1,10 +1,7 @@
 package com.rcore.rest.api.spring.security;
 
-import com.rcore.domain.security.model.CredentialDetails;
 import com.rcore.domain.security.port.AccessChecker;
-import com.rcore.domain.security.port.CredentialIdentityService;
 import com.rcore.rest.api.commons.header.WebHeaders;
-import com.rcore.rest.api.commons.routes.BaseRoutes;
 import com.rcore.rest.api.spring.security.exceptions.AuthenticationApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -27,12 +25,13 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
     private final String serviceName;
 
     public TokenAuthenticationFilter(
+            RequestMatcher matcher,
             AuthenticationManager authenticationManager,
             AuthenticationFailureHandler authenticationFailureHandler,
             AccessChecker accessChecker,
             String serviceName
     ) {
-        super(BaseRoutes.API + "/**");
+        super(matcher);
         setAuthenticationManager(authenticationManager);
         setAuthenticationFailureHandler(authenticationFailureHandler);
         this.accessChecker = accessChecker;

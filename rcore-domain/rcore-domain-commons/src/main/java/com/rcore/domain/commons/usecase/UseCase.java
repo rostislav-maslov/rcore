@@ -1,6 +1,7 @@
 package com.rcore.domain.commons.usecase;
 
 import com.rcore.domain.commons.exception.ValidatingDomainException;
+import com.rcore.domain.commons.usecase.annotation.ExecutableUseCase;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -11,6 +12,7 @@ import javax.validation.ValidatorFactory;
  * @param <Input>
  * @param <Output>
  */
+@ExecutableUseCase
 public abstract class UseCase<Input extends UseCase.InputValues, Output extends UseCase.OutputValues> {
 
     protected static Validator validator;

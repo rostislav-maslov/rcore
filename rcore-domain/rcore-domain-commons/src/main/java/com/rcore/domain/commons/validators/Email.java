@@ -9,9 +9,9 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = PhoneNumberValidator.class)
-public @interface ValidatePhoneNumber {
-    String message() default "Address is required";
+@Constraint(validatedBy = EmailValidator.class)
+public @interface Email {
+    String message() default "Email is invalid";
 
     Class<?>[] groups() default {};
 

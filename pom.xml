@@ -19,7 +19,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <revision>1.0.25</revision>
+        <revision>1.0.26-SNAPSHOT</revision>
         <delombok.output>delombok</delombok.output>
         <spring-boot.version>2.4.3</spring-boot.version>
 
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.22</version>
+            <version>1.18.24</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

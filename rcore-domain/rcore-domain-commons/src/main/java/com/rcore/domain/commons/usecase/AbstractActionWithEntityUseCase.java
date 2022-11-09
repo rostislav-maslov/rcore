@@ -13,7 +13,7 @@ public abstract class AbstractActionWithEntityUseCase<ID, R extends ReadReposito
     protected final R repository;
 
     @Override
-    public final SingleOutput<Boolean> execute(IdInputValues<ID> input) {
+    public SingleOutput<Boolean> execute(IdInputValues<ID> input) {
         Optional<E> eOpt = getEntity(input.getId());
         if (eOpt.isEmpty())
             return SingleOutput.of(false);
