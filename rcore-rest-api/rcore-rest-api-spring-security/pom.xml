@@ -12,7 +12,7 @@
     </parent>
 
     <artifactId>rcore-rest-api-spring-security</artifactId>
-    <version>${revision}</version>
+    <name>${project.groupId}:${project.artifactId}</name>
 
     <dependencies>
 

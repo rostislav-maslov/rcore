@@ -15,7 +15,7 @@
     <version>${revision}</version>
     <artifactId>rcore-commons</artifactId>
 
-    <name>rcore-commons</name>
+    <name>${project.groupId}:${project.artifactId}</name>
     <description>Commons component for Clean Arch apps</description>
 
     <developers>
@@ -46,19 +46,7 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <includes>
-                        <include>**/*Tests.java</include>
-                    </includes>
-                </configuration>
-                <version>3.0.0-M5</version>
-            </plugin>
-        </plugins>
-    </build>
+
 
     <url>https://github.com/rostislav-maslov/rcore</url>
     <licenses>

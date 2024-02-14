@@ -29,10 +29,6 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <finalName>rcore-database-mongo-auth</finalName>
-        <plugins>
-        </plugins>
-    </build>
+
 
 </project>

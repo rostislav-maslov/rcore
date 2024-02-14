@@ -9,13 +9,10 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.github.rostislav-maslov.rcore</groupId>
+    <name>${project.groupId}:${project.artifactId}</name>
     <artifactId>rcore-domain</artifactId>
-    <version>${revision}</version>
     <packaging>pom</packaging>
 
-    <description>Domain component for Clean Arch apps</description>
-    <url>https://github.com/rostislav-maslov/rcore</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -30,9 +27,7 @@
         <module>rcore-domain-aspect</module>
     </modules>
 
-    <build>
-        <finalName>rcore-domain</finalName>
-    </build>
+
 
 
 </project>

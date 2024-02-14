@@ -11,17 +11,15 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.github.rostislav-maslov.rcore</groupId>
+
     <artifactId>rcore-database</artifactId>
     <packaging>pom</packaging>
-    <version>${revision}</version>
+    <name>${project.groupId}:${project.artifactId}</name>
 
     <modules>
         <module>rcore-database-mongo</module>
     </modules>
 
-    <build>
-        <finalName>rcore-database</finalName>
-    </build>
+
 
 </project>

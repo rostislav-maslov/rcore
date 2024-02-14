@@ -33,9 +33,5 @@
 
     </dependencies>
 
-    <build>
-
-        <finalName>rcore-rest-api-commons</finalName>
-    </build>
 
 </project>

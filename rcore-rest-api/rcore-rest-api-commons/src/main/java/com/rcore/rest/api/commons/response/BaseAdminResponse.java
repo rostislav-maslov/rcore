@@ -20,23 +20,23 @@ public class BaseAdminResponse {
     private Instant createdAt;
     private Instant updatedAt;
 
-    /**
-     * Заполнить ответ стандартными значениями
-     * <p>
-     * Пример
-     * <pre>
-     * {@code
-     * fill(CityResponse.builder(),cityEntity)
-     * .name(cityEntity.getName())
-     * .build()
-     * }
-     * </pre>
-     */
-    public static <T extends BaseAdminResponse.BaseAdminResponseBuilder<?, ?>> T fill(T builder, BaseEntity<?> entity) {
-        //noinspection unchecked
-        return (T) builder
-                .id(entity.getId().toString())
-                .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt());
-    }
+//    /**
+//     * Заполнить ответ стандартными значениями
+//     * <p>
+//     * Пример
+//     * <pre>
+//     * {@code
+//     * fill(CityResponse.builder(),cityEntity)
+//     * .name(cityEntity.getName())
+//     * .build()
+//     * }
+//     * </pre>
+//     */
+//    public static <T extends BaseAdminResponse.BaseAdminResponseBuilder<?, ?>> T fill(T builder, BaseEntity<?> entity) {
+//        //noinspection unchecked
+//        return (T) builder
+//                .id(entity.getId().toString())
+//                .createdAt(entity.getCreatedAt())
+//                .updatedAt(entity.getUpdatedAt());
+//    }
 }

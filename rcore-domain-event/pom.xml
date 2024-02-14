@@ -10,9 +10,7 @@
     </parent>
 
     <artifactId>rcore-domain-event</artifactId>
-    <version>${revision}</version>
-
-    <url>https://github.com/rostislav-maslov/rcore</url>
+    <name>${project.groupId}:${project.artifactId}</name>
 
     <dependencies>
         <dependency>

@@ -12,21 +12,9 @@
     </parent>
 
     <artifactId>rcore-event-driven</artifactId>
-    <version>${revision}</version>
+    <name>${project.groupId}:${project.artifactId}</name>
 
-    <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <includes>
-                        <include>**/*Tests.java</include>
-                    </includes>
-                </configuration>
-                <version>3.0.0-M5</version>
-            </plugin>
-        </plugins>
-    </build>
+
 
 
 </project>

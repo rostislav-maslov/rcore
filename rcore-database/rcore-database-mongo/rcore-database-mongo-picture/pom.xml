@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>rcore-database-mongo-picture</artifactId>
-    <version>${revision}</version>
+    <name>${project.groupId}:${project.artifactId}</name>
 
     <dependencies>
         <dependency>
@@ -27,8 +27,6 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <finalName>rcore-database-mongo-picture</finalName>
-    </build>
+
 
 </project>

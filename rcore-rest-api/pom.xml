@@ -11,9 +11,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.github.rostislav-maslov.rcore</groupId>
     <artifactId>rcore-rest-api</artifactId>
-    <version>${revision}</version>
+    <name>${project.groupId}:${project.artifactId}</name>
     <packaging>pom</packaging>
 
     <modules>

@@ -5,7 +5,10 @@
     <groupId>com.github.rostislav-maslov.rcore</groupId>
     <artifactId>rcore</artifactId>
     <version>${revision}</version>
-    <name>rcore</name>
+
+    <name>${project.groupId}:${project.artifactId}</name>
+    <url>https://foodtechlab.io</url>
+    <description>https://foodtechlab.io</description>
 
     <modules>
         <module>rcore-domain</module>
@@ -18,8 +21,14 @@
 
     <packaging>pom</packaging>
 
+    <scm>
+        <connection>scm:git:git://github.com/rostislav-maslov/rcore.git</connection>
+        <developerConnection>scm:git:ssh://github.com:rostislav-maslov/rcore.git</developerConnection>
+        <url>http://github.com/rostislav-maslov/rcore</url>
+    </scm>
+
     <properties>
-        <revision>1.0.27-SNAPSHOT</revision>
+        <revision>1.0.27</revision>
         <delombok.output>delombok</delombok.output>
         <spring-boot.version>2.4.3</spring-boot.version>
 
@@ -28,6 +37,7 @@
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <lombok.version>1.18.24</lombok.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
     </properties>
 
     <dependencies>
@@ -68,30 +78,30 @@
     </dependencyManagement>
 
     <distributionManagement>
+<!--        <repository>-->
+<!--            <id>rcore-releases</id>-->
+<!--            <name>rcore-releases</name>-->
+<!--            <url>http://nexus.foodtech-lab.ru/repository/rcore-releases/</url>-->
+<!--        </repository>-->
+<!--        <snapshotRepository>-->
+<!--            <id>rcore-snapshots</id>-->
+<!--            <name>rcore-snapshots</name>-->
+<!--            <url>http://nexus.foodtech-lab.ru/repository/rcore-snapshots/</url>-->
+<!--        </snapshotRepository>-->
         <repository>
-            <id>rcore-releases</id>
-            <name>rcore-releases</name>
-            <url>http://nexus.foodtech-lab.ru/repository/rcore-releases/</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
         <snapshotRepository>
-            <id>rcore-snapshots</id>
-            <name>rcore-snapshots</name>
-            <url>http://nexus.foodtech-lab.ru/repository/rcore-snapshots/</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 
     <build>
-        <finalName>rcore</finalName>
+
+
         <plugins>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <includes>
-                        <include>**/*Tests.java</include>
-                    </includes>
-                </configuration>
-                <version>2.10</version>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
@@ -114,22 +124,53 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <serverId>rcore-snapshots</serverId>
-                    <nexusUrl>http://nexus.foodtech-lab.ru/repository/rcore-snapshots/</nexusUrl>
+                    <serverId>ftl-auth-lib-snapshots</serverId>
+                    <nexusUrl>
+                        https://nexus.foodtech-lab.ru/repository/ftl-auth-lib-snapshots/
+                    </nexusUrl>
                     <skipStaging>true</skipStaging>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+<!--                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>-->
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>1.4.2.Final</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${lombok-mapstruct-binding.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+
             </plugin>
             <!--            Для решения проблемы в revision-->
             <plugin>
@@ -138,6 +179,14 @@
                 <version>1.2.5</version>
                 <configuration>
                     <updatePomFile>true</updatePomFile>
+                    <pomElements>
+                        <name/>
+                        <description/>
+                        <developers/>
+                        <contributors/>
+                        <url/>
+                        <scm/>
+                    </pomElements>
                 </configuration>
                 <executions>
                     <execution>
@@ -156,6 +205,81 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-maven-plugin</artifactId>
+                <version>1.18.20.0</version>
+                <configuration>
+                    <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+                    <outputDirectory>${project.build.directory}/generated-sources/delombok</outputDirectory>
+                    <addOutputDirectory>false</addOutputDirectory>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>delombok</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <doclint>none</doclint>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <includes>
+                        <include>**/*Test*.java</include>
+                    </includes>
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                    <reportsDirectory>${project.build.directory}/test-reports</reportsDirectory>
+                </configuration>
+                <version>3.0.0-M6</version>
+            </plugin>
+
         </plugins>
     </build>
 
